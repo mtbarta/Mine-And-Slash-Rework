@@ -41,7 +41,11 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-includeBuild "Library-of-Exile-Rework"
+includeBuild("Library-of-Exile-Rework") {
+    dependencySubstitution {
+        substitute(module("com.robertx22:Library-of-Exile-Rework")).using(project(":"))
+    }
+}
 includeBuild "the_harvest"
 includeBuild("ancient_obelisks") {
     dependencySubstitution {
