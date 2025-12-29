@@ -1,0 +1,33 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[36,)"
+license = "All rights reserved"
+issueTrackerURL = "https://github.com/RobertSkalko/ancient_obelisks"
+[[mods]]
+modId = "ancient_obelisks"
+version = "1.2.3"
+displayName = "Ancient Obelisks"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/ancient-obelisks"
+logoFile = "icon.png"
+credits = ""
+authors = "mcrobertx22"
+description = '''
+Obelisks of the Ancients spawn across the world, can you conquer them?
+'''
+[[dependencies.ancient_obelisks]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.ancient_obelisks]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.4,1.20.5)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.ancient_obelisks]]
+modId = "library_of_exile"
+mandatory = true
+versionRange = "[2.1.5,)"
+ordering = "NONE"
+side = "BOTH"

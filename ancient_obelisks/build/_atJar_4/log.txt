@@ -1,0 +1,7 @@
+Java Launcher: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+Arguments: '--inJar, /home/mtbarta/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43/forge-1.20.1-47.1.43-injected.jar, --outJar, /home/mtbarta/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.30-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.30-1.20.1.jar, --logFile, accesstransform.log, --atFile, /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/ancient_obelisks/build/_atJar_4/parent_at.cfg'
+Classpath:
+ - /home/mtbarta/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/accesstransformers/8.2.1/accesstransformers-8.2.1-fatjar.jar
+Working directory: /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/ancient_obelisks/build/_atJar_4
+Main class: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================

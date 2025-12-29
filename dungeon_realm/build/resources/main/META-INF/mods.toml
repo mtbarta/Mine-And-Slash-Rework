@@ -1,0 +1,33 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[36,)"
+license = "All rights reserved"
+issueTrackerURL = "https://github.com/RobertSkalko/dungeon_realm"
+[[mods]]
+modId = "dungeon_realm"
+version = "1.1.7"
+displayName = "Dungeon Realm"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/dungeon-realm"
+logoFile = "icon.png"
+credits = ""
+authors = "mcrobertx22"
+description = '''
+Enter the realm of Infinite Dungeons!
+'''
+[[dependencies.dungeon_realm]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.dungeon_realm]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.4,1.20.5)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.dungeon_realm]]
+modId = "library_of_exile"
+mandatory = true
+versionRange = "[2.1.5,)"
+ordering = "NONE"
+side = "BOTH"

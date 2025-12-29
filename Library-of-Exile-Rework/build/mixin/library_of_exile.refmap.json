@@ -1,0 +1,52 @@
+{
+  "mappings": {
+    "com/robertx22/library_of_exile/mixins/PlayerManagerMixin": {
+      "placeNewPlayer": "Lnet/minecraft/server/players/PlayerList;m_11261_(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;)V"
+    },
+    "com/robertx22/library_of_exile/mixins/LevelMixin": {
+      "getWorldBorder": "Lnet/minecraft/world/level/Level;m_6857_()Lnet/minecraft/world/level/border/WorldBorder;"
+    },
+    "com/robertx22/library_of_exile/mixins/ChestLootGenMixin": {
+      "getRandomItems(Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;": "Lnet/minecraft/world/level/storage/loot/LootTable;m_230922_(Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;",
+      "fill": "Lnet/minecraft/world/level/storage/loot/LootTable;m_287188_(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V"
+    },
+    "com/robertx22/library_of_exile/mixins/MobEntityMixin": {
+      "finalizeSpawn": "Lnet/minecraft/world/entity/Mob;m_6518_(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/DifficultyInstance;Lnet/minecraft/world/entity/MobSpawnType;Lnet/minecraft/world/entity/SpawnGroupData;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/entity/SpawnGroupData;"
+    },
+    "com/robertx22/library_of_exile/mixins/ItemStackMixin": {
+      "getTooltipLines": "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
+    },
+    "com/robertx22/library_of_exile/mixins/EntityMixin": {
+      "getLightLevelDependentMagicValue": "Lnet/minecraft/world/entity/Entity;m_213856_()F"
+    },
+    "com/robertx22/library_of_exile/mixins/LivingEntityMixin": {
+      "actuallyHurt": "Lnet/minecraft/world/entity/LivingEntity;m_6475_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/robertx22/library_of_exile/mixins/PlayerManagerMixin": {
+        "placeNewPlayer": "Lnet/minecraft/server/players/PlayerList;m_11261_(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;)V"
+      },
+      "com/robertx22/library_of_exile/mixins/LevelMixin": {
+        "getWorldBorder": "Lnet/minecraft/world/level/Level;m_6857_()Lnet/minecraft/world/level/border/WorldBorder;"
+      },
+      "com/robertx22/library_of_exile/mixins/ChestLootGenMixin": {
+        "getRandomItems(Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;": "Lnet/minecraft/world/level/storage/loot/LootTable;m_230922_(Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;",
+        "fill": "Lnet/minecraft/world/level/storage/loot/LootTable;m_287188_(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V"
+      },
+      "com/robertx22/library_of_exile/mixins/MobEntityMixin": {
+        "finalizeSpawn": "Lnet/minecraft/world/entity/Mob;m_6518_(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/DifficultyInstance;Lnet/minecraft/world/entity/MobSpawnType;Lnet/minecraft/world/entity/SpawnGroupData;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/entity/SpawnGroupData;"
+      },
+      "com/robertx22/library_of_exile/mixins/ItemStackMixin": {
+        "getTooltipLines": "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
+      },
+      "com/robertx22/library_of_exile/mixins/EntityMixin": {
+        "getLightLevelDependentMagicValue": "Lnet/minecraft/world/entity/Entity;m_213856_()F"
+      },
+      "com/robertx22/library_of_exile/mixins/LivingEntityMixin": {
+        "actuallyHurt": "Lnet/minecraft/world/entity/LivingEntity;m_6475_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
+      }
+    }
+  }
+}

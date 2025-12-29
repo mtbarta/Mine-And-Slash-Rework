@@ -1,0 +1,33 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[36,)"
+license = "All rights reserved"
+issueTrackerURL = "https://github.com/RobertSkalko/the_harvest"
+[[mods]]
+modId = "the_harvest"
+version = "1.1.3"
+displayName = "The Harvest"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/the-harvest"
+logoFile = "icon.png"
+credits = ""
+authors = "mcrobertx22"
+description = '''
+Dimension Mod
+'''
+[[dependencies.the_harvest]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.the_harvest]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.4,1.20.5)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.the_harvest]]
+modId = "library_of_exile"
+mandatory = true
+versionRange = "[2.1.5,)"
+ordering = "NONE"
+side = "BOTH"

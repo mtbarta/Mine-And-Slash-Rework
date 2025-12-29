@@ -1,0 +1,8 @@
+JVM Args:          
+Run Args:          "--client", "/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/stripClient/output.jar", "--server", "/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/stripServer/output.jar", "--ann", "1.20.4", "--output", "/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/merge/output.jar", "--inject", "false"
+JVM:               /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+Classpath:         /home/mtbarta/.gradle/caches/modules-2/files-2.1/net.neoforged/mergetool/2.0.2/f65ce45660841dcf1a58363fdcef0dab4d5a26c8/mergetool-2.0.2-fatjar.jar
+Working Dir:       /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/merge
+Main Class:        net.neoforged.mergetool.ConsoleMerger
+Program log file:  /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/merge/log.log
+Output file:       /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/the_harvest/build/neoForm/neoFormJoined1.20.4-20231207.154220/steps/merge/output.jar

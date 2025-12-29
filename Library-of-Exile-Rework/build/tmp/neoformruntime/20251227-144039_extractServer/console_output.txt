@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+ - -jar
+ - /home/mtbarta/.gradle/caches/neoformruntime/artifacts/net/minecraftforge/installertools/1.3.2/installertools-1.3.2-fatjar.jar
+ - --task
+ - bundler_extract
+ - --input
+ - /home/mtbarta/.gradle/caches/neoformruntime/artifacts/minecraft_1.20.1_server.jar
+ - --output
+ - ./output.jar
+ - --jar-only
+--------------------------------------------------------------------------------
+
+Task: BUNDLER_EXTRACT
+Input:   /home/mtbarta/.gradle/caches/neoformruntime/artifacts/minecraft_1.20.1_server.jar
+Output:  /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/Library-of-Exile-Rework/build/tmp/neoformruntime/20251227-144039_extractServer/./output.jar
+All:     false
+JarOnly: true
+Libs:    false
+Extracted: versions/1.20.1/server-1.20.1.jar

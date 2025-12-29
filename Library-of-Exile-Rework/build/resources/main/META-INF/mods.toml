@@ -1,0 +1,28 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[36,)"
+license = "All rights reserved"
+issueTrackerURL = "https://github.com/RobertSkalko/Library-of-Exile-Rework"
+[[mods]]
+modId = "library_of_exile"
+version = "2.1.5"
+displayName = "Library of Exile"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/library-of-exile"
+logoFile = "icon.png"
+credits = ""
+authors = "mcrobertx22"
+description = '''
+Library mod for Mine and Slash and mine and slash accessories.
+'''
+[[dependencies.library_of_exile]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.library_of_exile]]
+modId = "minecraft"
+mandatory = true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[1.20.4,1.20.5)"
+ordering = "NONE"
+side = "BOTH"

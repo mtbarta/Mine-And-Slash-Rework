@@ -1,0 +1,18 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+ - -jar
+ - /home/mtbarta/.gradle/caches/modules-2/files-2.1/net.minecraftforge/mergetool/1.1.7/3d41564f78f123d64573cae7948014baf3aaba3f/mergetool-1.1.7-fatjar.jar
+ - --client
+ - /home/mtbarta/.gradle/caches/neoformruntime/intermediate_results/stripClient_b8db0b966ddc73dad41d650d69815f95ec2ce3fa_output.jar
+ - --server
+ - /home/mtbarta/.gradle/caches/neoformruntime/intermediate_results/stripServer_a7621fc4004313dff4e851edd7cff58089b358c2_output.jar
+ - --ann
+ - 1.20.1
+ - --output
+ - ./output.jar
+ - --inject
+ - false
+--------------------------------------------------------------------------------
+

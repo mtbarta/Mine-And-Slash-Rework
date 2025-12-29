@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: Library_of_Exile
+Specification-Vendor: mcrobertx22
+Specification-Version: 2.1.5
+Implementation-Title: Library-of-Exile-Rework
+Implementation-Version: 2.1.5
+Implementation-Vendor: mcrobertx22
+Built-On-Minecraft: 1.20.4
+
