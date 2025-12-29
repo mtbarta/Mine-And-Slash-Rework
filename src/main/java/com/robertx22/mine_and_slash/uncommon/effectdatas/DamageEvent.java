@@ -73,8 +73,7 @@ public class DamageEvent extends EffectEvent {
             UUID.fromString("e926df30-c376-11ea-87d0-0242ac131053"),
             Attributes.KNOCKBACK_RESISTANCE.getDescriptionId(),
             100,
-            AttributeModifier.Operation.ADDITION
-    );
+            AttributeModifier.Operation.ADDITION);
     public LivingEntity petEntity;
     public float wepdmgMulti = 1;
     public boolean absorbedCompletely = false;
@@ -110,10 +109,10 @@ public class DamageEvent extends EffectEvent {
 
             if (source instanceof Player == false) {
 
-
                 if (target instanceof Player) {
                     if (sourceData.getLevel() > targetData.getLevel()) {
-                        float penalty = LootUtils.getLevelDistancePunishmentMulti(sourceData.getLevel(), targetData.getLevel());
+                        float penalty = LootUtils.getLevelDistancePunishmentMulti(sourceData.getLevel(),
+                                targetData.getLevel());
 
                         if (penalty < 1) {
                             float dmgmulti = 2F - penalty;
@@ -124,9 +123,9 @@ public class DamageEvent extends EffectEvent {
 
                 var balance = GameBalanceConfig.get();
 
-
                 if (balance.MOB_DMG_POWER_SCALING != 1) {
-                    float multi = (float) (balance.MOB_DMG_POWER_SCALING_BASE * (float) Math.pow(balance.MOB_DMG_POWER_SCALING, sourceData.getLevel()));
+                    float multi = (float) (balance.MOB_DMG_POWER_SCALING_BASE
+                            * (float) Math.pow(balance.MOB_DMG_POWER_SCALING, sourceData.getLevel()));
                     this.addMoreMulti(Words.LVL_EXPONENT_MOB_DMG.locName(), EventData.NUMBER, multi);
                 }
 
@@ -145,8 +144,10 @@ public class DamageEvent extends EffectEvent {
                         var map = Load.mapAt(target.level(), target.blockPosition());
                         if (map != null && map.map != null) {
                             if (!map.map.getStatReq().meetsReq(map.map.lvl, Load.Unit(target))) {
-                                float minusres = map.map.getStatReq().getLackingResistNumber(map.map.lvl, Load.Unit(target));
-                                float multi = Math.max((float) (minusres * GameBalanceConfig.get().MOB_DMG_MULTI_PER_MAP_RES_REQ_LACKING), 2.0f);
+                                float minusres = map.map.getStatReq().getLackingResistNumber(map.map.lvl,
+                                        Load.Unit(target));
+                                float multi = Math.max((float) (minusres
+                                        * GameBalanceConfig.get().MOB_DMG_MULTI_PER_MAP_RES_REQ_LACKING), 2.0f);
                                 this.addMoreMulti(Words.MAP_RES_REQ_LACK_DMG_MULTI.locName(), EventData.NUMBER, multi);
                             }
                         }
@@ -156,7 +157,8 @@ public class DamageEvent extends EffectEvent {
             } else {
                 if (targetData.getLevel() > sourceData.getLevel()) {
                     if (target instanceof Player == false) {
-                        float penalty = LootUtils.getLevelDistancePunishmentMulti(sourceData.getLevel(), targetData.getLevel());
+                        float penalty = LootUtils.getLevelDistancePunishmentMulti(sourceData.getLevel(),
+                                targetData.getLevel());
                         if (penalty < 1) {
                             this.addMoreMulti(Words.DMG_TO_HIGH_LVL_MOB_DMG_MULTI.locName(), EventData.NUMBER, penalty);
                         }
@@ -223,18 +225,20 @@ public class DamageEvent extends EffectEvent {
     }
 
     /*
-    public void addBonusEleDmgFinal(DamageConversionEvent event, Elements element, float dmg) {
-        if (element == getElement()) {
-            this.getLayer(StatLayers.Offensive.FLAT_DAMAGE, EventData.NUMBER, EffectSides.Source).add(dmg);
-        } else {
-            bonusElementDamageMap.put(element, (int) (bonusElementDamageMap.getOrDefault(element, 0) + dmg));
-        }
-    }
-
+     * public void addBonusEleDmgFinal(DamageConversionEvent event, Elements
+     * element, float dmg) {
+     * if (element == getElement()) {
+     * this.getLayer(StatLayers.Offensive.FLAT_DAMAGE, EventData.NUMBER,
+     * EffectSides.Source).add(dmg);
+     * } else {
+     * bonusElementDamageMap.put(element, (int)
+     * (bonusElementDamageMap.getOrDefault(element, 0) + dmg));
+     * }
+     * }
+     * 
      */
 
     private void calcBlock() {
-
 
         if (targetData
                 .getResources()
@@ -267,7 +271,6 @@ public class DamageEvent extends EffectEvent {
         return dmg;
     }
 
-
     private void calcAttackCooldown() {
         if (data.isNumberSetup(EventData.ATTACK_COOLDOWN)) {
             return;
@@ -290,7 +293,8 @@ public class DamageEvent extends EffectEvent {
 
                         float atkpersec = attri != null ? (float) attri.getValue() : 1;
 
-                        //float secWaited = (float) (target.tickCount - target.getLastHurtByMobTimestamp()) / 20F;
+                        // float secWaited = (float) (target.tickCount -
+                        // target.getLastHurtByMobTimestamp()) / 20F;
 
                         String cdname = source.getStringUUID();
 
@@ -331,7 +335,8 @@ public class DamageEvent extends EffectEvent {
 
         float cool = data.getNumber(EventData.ATTACK_COOLDOWN).number;
 
-        // we no longer remove damage from fast clicked attacks, energy exists! dmg *= cool;
+        // we no longer remove damage from fast clicked attacks, energy exists! dmg *=
+        // cool;
 
         if (cool < 0.1F) {
             // we dont want to allow too fast mob clickings
@@ -340,7 +345,6 @@ public class DamageEvent extends EffectEvent {
         }
         return cool;
     }
-
 
     private void modifyIfArrowDamage() {
         if (attackInfo != null && attackInfo.getSource() != null) {
@@ -385,7 +389,6 @@ public class DamageEvent extends EffectEvent {
 
     public boolean allowSelfDamage = false;
 
-
     public boolean stopFriendlyFire() {
 
         if (allowSelfDamage) {
@@ -426,12 +429,12 @@ public class DamageEvent extends EffectEvent {
 
         addMobDamageMultipliers();
 
-
         if (source instanceof Player) {
             if (data.isBasicAttack()) {
                 float multi = getAttackSpeedDamageMulti();
                 if (multi > 0.8F) {
-                    float fullswing = sourceData.getUnit().getCalculatedStat(FullSwingDamage.getInstance()).getMultiplier();
+                    float fullswing = sourceData.getUnit().getCalculatedStat(FullSwingDamage.getInstance())
+                            .getMultiplier();
                     this.addMoreMulti(FullSwingDamage.getInstance(), EventData.NUMBER, fullswing);
                 }
                 this.addMoreMulti(Words.ATTACK_SPEED_MULTI.locName(), EventData.NUMBER, multi);
@@ -441,9 +444,9 @@ public class DamageEvent extends EffectEvent {
 
         // todo this should be in layers too or multis
         if (areBothPlayers()) {
-            this.addMoreMulti(Words.PVP_DMG_MULTI.locName(), EventData.NUMBER, ServerContainer.get().PVP_DMG_MULTI.get().floatValue());
+            this.addMoreMulti(Words.PVP_DMG_MULTI.locName(), EventData.NUMBER,
+                    ServerContainer.get().PVP_DMG_MULTI.get().floatValue());
         }
-
 
         if (this.data.isBasicAttack()) {
             if (this.attackInfo != null && attackInfo.weaponData != null) {
@@ -456,7 +459,6 @@ public class DamageEvent extends EffectEvent {
         }
     }
 
-
     // wait, bonus archmage dmg is applied to any bonus ele dmg??
 
     // todo this is using total ele dmg and saying only 1 ele, fuck
@@ -465,7 +467,8 @@ public class DamageEvent extends EffectEvent {
         MutableComponent ele = Component.literal(getElement().getIconNameDmg());
 
         if (info.isMixedDamage()) {
-            ele = Component.literal("\u2600" + " ").append(Words.MULTI_ELEMENT.locName()).withStyle(ChatFormatting.LIGHT_PURPLE);
+            ele = Component.literal("\u2600" + " ").append(Words.MULTI_ELEMENT.locName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE);
         }
 
         Words word = Words.DAMAGE_MESSAGE;
@@ -475,11 +478,10 @@ public class DamageEvent extends EffectEvent {
         }
 
         return word.locName(
-                        source.getDisplayName(),
-                        MMORPG.DECIMAL_FORMAT.format(info.totalDmg),
-                        ele,
-                        getDamageName()
-                )
+                source.getDisplayName(),
+                MMORPG.DECIMAL_FORMAT.format(info.totalDmg),
+                ele,
+                getDamageName())
                 .withStyle(Style.EMPTY.applyFormat(ChatFormatting.RED)
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getInfoHoverMessage(info, true))));
 
@@ -488,11 +490,11 @@ public class DamageEvent extends EffectEvent {
     public MutableComponent getInfoHoverMessage(DmgByElement info, boolean doBonusDmg) {
         // int main = info.dmgmap.getOrDefault(getElement(), 0F).intValue();
 
-
         MutableComponent msg = Component.empty();
 
         if (this.isSpell()) {
-            msg.append(Words.DAMAGE_TYPE_SPELL.locName(getSpell().locName().plainCopy()).withStyle(ChatFormatting.AQUA));
+            msg.append(
+                    Words.DAMAGE_TYPE_SPELL.locName(getSpell().locName().plainCopy()).withStyle(ChatFormatting.AQUA));
         }
         if (this.data.isBasicAttack()) {
             msg.append(Words.DAMAGE_TYPE_BASIC_ATTACK.locName().withStyle(ChatFormatting.RED));
@@ -509,7 +511,8 @@ public class DamageEvent extends EffectEvent {
 
         msg.append(Words.ELEMENTAL_DAMAGE.locName(getElement().getIconNameDmg()).withStyle(getElement().format));
 
-        msg.append(Words.BASE_DAMAGE.locName((int) this.data.getOriginalNumber(EventData.NUMBER).number).withStyle(ChatFormatting.BLUE));
+        msg.append(Words.BASE_DAMAGE.locName((int) this.data.getOriginalNumber(EventData.NUMBER).number)
+                .withStyle(ChatFormatting.BLUE));
 
         msg.append(Words.DAMAGE_INFO.locName().withStyle(ChatFormatting.RED));
 
@@ -524,13 +527,14 @@ public class DamageEvent extends EffectEvent {
 
             for (MoreMultiData multi : this.getMoreMultis()) {
                 if (multi.numberid.equals(EventData.NUMBER)) {
-                    msg.append(multi.text.append(": ").append(Component.literal("x" + MMORPG.DECIMAL_FORMAT.format(multi.multi)))).append("\n");
+                    msg.append(multi.text.append(": ")
+                            .append(Component.literal("x" + MMORPG.DECIMAL_FORMAT.format(multi.multi)))).append("\n");
                 }
             }
         }
 
-        msg.append(Words.FINAL_DAMAGE.locName(info.dmgmap.getOrDefault(getElement(), 0F).intValue()).withStyle(ChatFormatting.GOLD));
-
+        msg.append(Words.FINAL_DAMAGE.locName(info.dmgmap.getOrDefault(getElement(), 0F).intValue())
+                .withStyle(ChatFormatting.GOLD));
 
         if (doBonusDmg) {
             if (info.isMixedDamage()) {
@@ -589,14 +593,13 @@ public class DamageEvent extends EffectEvent {
         }
         if (attackInfo != null) {
             if (CompatConfig.get().damageSystem().overridesDamage) {
-                //attackInfo.setToMinimalNonZero();
+                // attackInfo.setToMinimalNonZero();
                 attackInfo.setAmount(0);
             }
         }
         if (stopFriendlyFire()) {
             return;
         }
-
 
         this.targetData.lastDamageTaken = this;
 
@@ -608,19 +611,18 @@ public class DamageEvent extends EffectEvent {
             }
             cancelDamage();
             if (source instanceof ServerPlayer) {
-                InteractionNotifier.notifyClient(getAttackType().isAttack() ? IParticleSpawnMaterial.Type.DODGE : IParticleSpawnMaterial.Type.RESIST, (ServerPlayer) source, target);
-            }  //sendDamageParticle(info);
+                InteractionNotifier.notifyClient(getAttackType().isAttack() ? IParticleSpawnMaterial.Type.DODGE
+                        : IParticleSpawnMaterial.Type.RESIST, (ServerPlayer) source, target);
+            } // sendDamageParticle(info);
 
-            //move this sound to InteractionResultHandler.
-            //SoundUtils.playSound(target, SoundEvents.SHIELD_BLOCK, 1, 1.5F);
+            // move this sound to InteractionResultHandler.
+            // SoundUtils.playSound(target, SoundEvents.SHIELD_BLOCK, 1, 1.5F);
             return;
         }
 
         float dmg = info.totalDmg;
 
-
         sendDamageMessage(info);
-
 
         if (target instanceof Player p) { // todo this code sucks
             // a getter should not modify anything
@@ -641,7 +643,6 @@ public class DamageEvent extends EffectEvent {
             return;
         }
 
-
         AttributeInstance attri = target.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 
         if (data.getBoolean(EventData.DISABLE_KNOCKBACK) || this.getAttackType() == AttackType.dot) {
@@ -650,8 +651,9 @@ public class DamageEvent extends EffectEvent {
             }
         }
 
-        DamageSource dmgsource = new DamageSource(source.level().registryAccess().registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(DAMAGE_TYPE), source, source, source.position());
-
+        DamageSource dmgsource = new DamageSource(
+                source.level().registryAccess().registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(DAMAGE_TYPE),
+                source, source, source.position());
 
         if (this.data.isSpellEffect()) {
             if (!data.getBoolean(EventData.DISABLE_KNOCKBACK) && dmg > 0 && !data.isHitAvoided()) {
@@ -666,16 +668,18 @@ public class DamageEvent extends EffectEvent {
             SoundUtils.playSound(target, sound, volume, pitch);
         }
 
-
         var config = ExileDB.getEntityConfig(target, Load.Unit(target));
 
         if (target instanceof Player == false && config != null && config.set_health_damage_override) {
             float hp = MathHelper.clamp(target.getHealth() - vanillaDamage, 0, target.getMaxHealth() + 1);
             target.setHealth(hp);
-            // todo this might create bugs but its probably better that damage actually works..
+            // todo this might create bugs but its probably better that damage actually
+            // works..
             if (target.getHealth() <= 0) {
-                ExileEvents.DAMAGE_BEFORE_CALC.callEvents(new ExileEvents.OnDamageEntity(dmgsource, vanillaDamage, target));
-                ExileEvents.DAMAGE_AFTER_CALC.callEvents(new ExileEvents.OnDamageEntity(dmgsource, vanillaDamage, target));
+                ExileEvents.DAMAGE_BEFORE_CALC
+                        .callEvents(new ExileEvents.OnDamageEntity(dmgsource, vanillaDamage, target));
+                ExileEvents.DAMAGE_AFTER_CALC
+                        .callEvents(new ExileEvents.OnDamageEntity(dmgsource, vanillaDamage, target));
                 target.die(target.damageSources().mobAttack(this.source));
             }
             if (attackInfo != null) {
@@ -709,13 +713,14 @@ public class DamageEvent extends EffectEvent {
         }
 
         if (attri.hasModifier(NO_KNOCKBACK)) {
-            attri.removeModifier(NO_KNOCKBACK);
+            attri.removeModifier(NO_KNOCKBACK.getId());
         }
 
         if (dmg > 0) {
             // todo can this be done better?
             if (this.data.isBasicAttack()) {
-                for (Entry<String, ExileEffectInstanceData> e : targetData.getStatusEffectsData().exileMap.entrySet().stream().toList()) {
+                for (Entry<String, ExileEffectInstanceData> e : targetData.getStatusEffectsData().exileMap.entrySet()
+                        .stream().toList()) {
                     if (!e.getValue().shouldRemove()) {
                         var data = e.getValue();
                         var sd = data.calcSpell;
@@ -728,7 +733,6 @@ public class DamageEvent extends EffectEvent {
                 }
             }
 
-
             if (source instanceof Player p) {
 
                 p.setLastHurtMob(target); // this allows summons to know who to attack
@@ -736,25 +740,30 @@ public class DamageEvent extends EffectEvent {
                 sourceData.getCooldowns().setOnCooldown(CooldownsData.IN_COMBAT, 20 * 10);
                 if (target instanceof Mob) {
                     if (petEntity instanceof LivingEntity && Load.Unit(petEntity).isSummon()) {
-                        GenerateThreatEvent threatEvent = new GenerateThreatEvent(petEntity, (Mob) target, ThreatGenType.deal_dmg, dmg);
+                        GenerateThreatEvent threatEvent = new GenerateThreatEvent(petEntity, (Mob) target,
+                                ThreatGenType.deal_dmg, dmg);
                         threatEvent.Activate();
                     } else {
-                        GenerateThreatEvent threatEvent = new GenerateThreatEvent((Player) source, (Mob) target, ThreatGenType.deal_dmg, dmg);
+                        GenerateThreatEvent threatEvent = new GenerateThreatEvent((Player) source, (Mob) target,
+                                ThreatGenType.deal_dmg, dmg);
                         threatEvent.Activate();
                     }
 
                 }
-                InteractionNotifier.notifyClient(IParticleSpawnMaterial.DamageInformation.fromDmgByElement(info, data.isCrit()), (ServerPlayer) source, target);
+                InteractionNotifier.notifyClient(
+                        IParticleSpawnMaterial.DamageInformation.fromDmgByElement(info, data.isCrit()),
+                        (ServerPlayer) source, target);
 
             } else if (source instanceof Mob) {
                 if (target instanceof Player) {
                     targetData.getCooldowns().setOnCooldown(CooldownsData.IN_COMBAT, 20 * 10);
 
-                    GenerateThreatEvent threatEvent = new GenerateThreatEvent((Player) target, (Mob) source, ThreatGenType.take_dmg, dmg);
+                    GenerateThreatEvent threatEvent = new GenerateThreatEvent((Player) target, (Mob) source,
+                            ThreatGenType.take_dmg, dmg);
                     threatEvent.Activate();
                 }
             }
-            //sendDamageParticle(info);
+            // sendDamageParticle(info);
 
             // target.invulnerableTime = 20;
 
@@ -805,14 +814,16 @@ public class DamageEvent extends EffectEvent {
         }
     }
 
-    // this calculates all the bonus elemental damages, uses the specific numbers for particles only, and the totalvalue for actually dealing dmg, ONCE
+    // this calculates all the bonus elemental damages, uses the specific numbers
+    // for particles only, and the totalvalue for actually dealing dmg, ONCE
     public DmgByElement calculateAllBonusElementalDamage() {
         DmgByElement info = new DmgByElement();
 
         for (Entry<Elements, Integer> entry : bonusElementDamageMap.entrySet()) {
             if (entry.getValue() > 0) {
 
-                // this how do i make a copy of the same event that it was at the start..except element
+                // this how do i make a copy of the same event that it was at the start..except
+                // element
                 DamageEvent bonus = EventBuilder.ofDamage(attackInfo, source, target, entry.getValue())
                         .setupDamage(AttackType.bonus_dmg, data.getWeaponType(), data.getStyle())
                         .set(x -> {
@@ -821,18 +832,22 @@ public class DamageEvent extends EffectEvent {
                             }
                             x.data.setBoolean(EventData.IS_BONUS_ELEMENT_DAMAGE, true);
 
-                            x.data.setBoolean(EventData.IS_BASIC_ATTACK, this.data.getBoolean(EventData.IS_BASIC_ATTACK));
-                            x.data.setBoolean(EventData.IS_ATTACK_FULLY_CHARGED, this.data.getBoolean(EventData.IS_ATTACK_FULLY_CHARGED));
-                            x.data.setupNumber(EventData.ATTACK_COOLDOWN, this.data.getNumber(EventData.ATTACK_COOLDOWN).number);
-                            x.data.setupNumber(EventData.DMG_EFFECTIVENESS, this.data.getNumber(EventData.DMG_EFFECTIVENESS).number);
+                            x.data.setBoolean(EventData.IS_BASIC_ATTACK,
+                                    this.data.getBoolean(EventData.IS_BASIC_ATTACK));
+                            x.data.setBoolean(EventData.IS_ATTACK_FULLY_CHARGED,
+                                    this.data.getBoolean(EventData.IS_ATTACK_FULLY_CHARGED));
+                            x.data.setupNumber(EventData.ATTACK_COOLDOWN,
+                                    this.data.getNumber(EventData.ATTACK_COOLDOWN).number);
+                            x.data.setupNumber(EventData.DMG_EFFECTIVENESS,
+                                    this.data.getNumber(EventData.DMG_EFFECTIVENESS).number);
                             if (wepdmgMulti != 1) {
-                                //  x.addMoreMulti(Words.WEAPON_BASIC_ATTACK_DMG_MULTI.locName(), EventData.NUMBER, wepdmgMulti);
+                                // x.addMoreMulti(Words.WEAPON_BASIC_ATTACK_DMG_MULTI.locName(),
+                                // EventData.NUMBER, wepdmgMulti);
                             }
 
                             x.setElement(entry.getKey());
                         })
                         .build();
-
 
                 bonus.initBeforeActivating();
                 bonus.calculateEffects();

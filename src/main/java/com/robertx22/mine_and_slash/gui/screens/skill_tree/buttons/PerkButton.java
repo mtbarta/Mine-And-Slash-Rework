@@ -30,6 +30,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.time.StopWatch;
 import org.joml.Matrix4f;
+import net.minecraft.client.gui.components.WidgetSprites;
 
 import java.util.List;
 
@@ -56,9 +57,12 @@ public class PerkButton extends ImageButton {
 
     public String perkid = "";
 
-    public PerkButton(SkillTreeScreen screen, PlayerData playerData, TalentTree school, PointData point, Perk perk, int x, int y) {
-        super(x, y, perk.getType().size, perk.getType().size, 0, 0, 1, ID, (action) -> {
-        });
+    public PerkButton(SkillTreeScreen screen, PlayerData playerData, TalentTree school, PointData point, Perk perk,
+            int x, int y) {
+        super(x, y, perk.getType().size, perk.getType().size,
+                new WidgetSprites(ID, ID),
+                (button) -> {
+                });
         this.perk = perk;
         this.point = point;
         this.school = school;
@@ -75,9 +79,9 @@ public class PerkButton extends ImageButton {
     public boolean isInside(int x, int y) {
 
         float scale = 2 - screen.zoom;
-        return GuiUtils.isInRect((int) (this.getX() - ((width / 4) * scale)), (int) (this.getY() - ((height / 4) * scale)), (int) (width * scale), (int) (height * scale), x, y);
+        return GuiUtils.isInRect((int) (this.getX() - ((width / 4) * scale)),
+                (int) (this.getY() - ((height / 4) * scale)), (int) (width * scale), (int) (height * scale), x, y);
     }
-
 
     private void setTooltipMOD(GuiGraphics gui, int mouseX, int mouseY) {
 
@@ -102,7 +106,7 @@ public class PerkButton extends ImageButton {
             if (screen != null) {
                 screen.setTooltipForNextRenderPass(this.getTooltip(), this.createTooltipPositioner(), true);
             }
-            //GuiUtils.renderTooltip(gui, tooltip, mouseX, mouseY);
+            // GuiUtils.renderTooltip(gui, tooltip, mouseX, mouseY);
         } else {
             setTooltip(null);
         }
@@ -111,7 +115,6 @@ public class PerkButton extends ImageButton {
     // copied from abstractbutton
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-
 
         screen.mouseRecentlyClickedTicks = 25;
         screen.pointClicked = this.point;
@@ -122,8 +125,7 @@ public class PerkButton extends ImageButton {
         if (this.active && this.visible) {
             boolean bl = this.clicked(mouseX, mouseY);
             if (bl) {
-//                ExileLog.get().log(this.getX() + "_" + getY() + " : " + perk.GUID());
-
+                // ExileLog.get().log(this.getX() + "_" + getY() + " : " + perk.GUID());
 
                 this.playDownSound(Minecraft.getInstance()
                         .getSoundManager());
@@ -157,13 +159,11 @@ public class PerkButton extends ImageButton {
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float pPartialTick) {
 
-
         if (!screen.shouldRender(getX(), getY(), screen.ctx)) {
             return;
         }
 
         setTooltipMOD(gui, mouseX, mouseY);
-
 
         gui.pose().pushPose();
 
@@ -171,12 +171,10 @@ public class PerkButton extends ImageButton {
 
         float posMulti = 1F / scale;
 
-
         float add = MathHelper.clamp(scale - 1, 0, 2);
         float off = width / -2F * add;
         gui.pose().translate(off, off, 0);
         gui.pose().scale(scale, scale, 1.0f);
-
 
         PerkStatus status = playerData.talents.getStatus(Minecraft.getInstance().player, school, point);
 
@@ -188,7 +186,6 @@ public class PerkButton extends ImageButton {
 
         var search = SkillTreeScreen.SEARCH.getValue();
 
-
         float opacity = 0.2f;
 
         if (!search.isEmpty()) {
@@ -197,14 +194,20 @@ public class PerkButton extends ImageButton {
                     opacity = 1;
                 }
             } else if (perk.stats.stream()
-                    .anyMatch(item -> item.getStat().locName().getString().toLowerCase().contains(search.toLowerCase())) || perk.locName().getString().toLowerCase().contains(search.toLowerCase())){
-                /*boolean containsSearchStat = perk.stats.stream()
-                        .anyMatch(item -> item.getStat().locName().getString().toLowerCase().contains(search.toLowerCase()));
-
-                boolean containsName = perk.locName().getString().toLowerCase().contains(search.toLowerCase());*/
+                    .anyMatch(item -> item.getStat().locName().getString().toLowerCase().contains(search.toLowerCase()))
+                    || perk.locName().getString().toLowerCase().contains(search.toLowerCase())) {
+                /*
+                 * boolean containsSearchStat = perk.stats.stream()
+                 * .anyMatch(item ->
+                 * item.getStat().locName().getString().toLowerCase().contains(search.
+                 * toLowerCase()));
+                 * 
+                 * boolean containsName =
+                 * perk.locName().getString().toLowerCase().contains(search.toLowerCase());
+                 */
                 opacity = 1F;
             } else if (search.equals(Gui.TALENT_SCREEN_SEARCH_KEYWORD_GAME_CHANGER.locName().getString())) {
-                if (perk.getType().equals(Perk.PerkType.MAJOR)){
+                if (perk.getType().equals(Perk.PerkType.MAJOR)) {
                     opacity = 1F;
                 }
             }
@@ -219,35 +222,44 @@ public class PerkButton extends ImageButton {
 
         var type = perk.type;
 
-        //gui.blit(ID, xPos(0, posMulti), yPos(0, posMulti), perk.getType().getXOffset(), status.getYOffset(), this.width, this.height);
+        // gui.blit(ID, xPos(0, posMulti), yPos(0, posMulti),
+        // perk.getType().getXOffset(), status.getYOffset(), this.width, this.height);
 
         int offcolor = (int) ((perk.getType().size - 20) / 2F);
 
-        //gui.setColor(1.0F, 1.0F, 1.0F, opacity);
+        // gui.setColor(1.0F, 1.0F, 1.0F, opacity);
 
         HashMultimap<ResourceLocation, BufferInfo> container = screen.vertexContainer.map;
 
-        //BlitOffset indicate the distance to the camera.
-        //bigger = closer
-        container.put(perk.getType().getColorTexture(status), BufferInfo.of(xPos(offcolor, posMulti), yPos(offcolor, posMulti),20, 20, -3, 0.0f, 0, 20, 20, 20, 20, gui.pose().last().pose()).withRenderInfo(new BufferInfo.RenderInfo(opacity)));
+        // BlitOffset indicate the distance to the camera.
+        // bigger = closer
+        container
+                .put(perk.getType().getColorTexture(status),
+                        BufferInfo
+                                .of(xPos(offcolor, posMulti), yPos(offcolor, posMulti), 20, 20, -3, 0.0f, 0, 20, 20, 20,
+                                        20, gui.pose().last().pose())
+                                .withRenderInfo(new BufferInfo.RenderInfo(opacity)));
 
-        container.put(perk.getType().getBorderTexture(status), BufferInfo.of(xPos(0, posMulti), yPos(0, posMulti), -2, 0, 0, this.width, this.height, this.width, this.height, gui.pose().last().pose()).withRenderInfo(new BufferInfo.RenderInfo(opacity)));
-
-
+        container.put(perk.getType().getBorderTexture(status),
+                BufferInfo
+                        .of(xPos(0, posMulti), yPos(0, posMulti), -2, 0, 0, this.width, this.height, this.width,
+                                this.height, gui.pose().last().pose())
+                        .withRenderInfo(new BufferInfo.RenderInfo(opacity)));
 
         if (search.isEmpty()) {
             opacity += 0.2F;
         }
 
+        // gui.setColor(1.0F, 1.0F, 1.0F, MathHelper.clamp(opacity, 0, 1));
 
-        //gui.setColor(1.0F, 1.0F, 1.0F, MathHelper.clamp(opacity, 0, 1));
+        container.put(perk.getIcon(),
+                BufferInfo
+                        .of(xPos(offset, posMulti), yPos(offset, posMulti), -1, 0, 0, type.iconSize, type.iconSize,
+                                type.iconSize, type.iconSize, gui.pose().last().pose())
+                        .withRenderInfo(new BufferInfo.RenderInfo(opacity)));
 
-        container.put(perk.getIcon(), BufferInfo.of(xPos(offset, posMulti), yPos(offset, posMulti), -1, 0, 0, type.iconSize, type.iconSize, type.iconSize, type.iconSize, gui.pose().last().pose()).withRenderInfo(new BufferInfo.RenderInfo(opacity)));
-
-
-
-        //   gui.pose().scale(1F / scale, 1F / scale, 1F / scale);
-        //gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        // gui.pose().scale(1F / scale, 1F / scale, 1F / scale);
+        // gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         gui.pose().popPose();
 

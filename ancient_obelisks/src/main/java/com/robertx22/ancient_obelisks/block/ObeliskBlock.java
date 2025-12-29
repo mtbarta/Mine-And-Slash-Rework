@@ -1,0 +1,180 @@
+package com.robertx22.ancient_obelisks.block;
+
+import com.robertx22.ancient_obelisks.block_entity.ObeliskBE;
+import com.robertx22.ancient_obelisks.item.ObeliskItemMapData;
+import com.robertx22.ancient_obelisks.item.ObeliskItemNbt;
+import com.robertx22.ancient_obelisks.item.ObeliskMapItem;
+import com.robertx22.ancient_obelisks.main.ObeliskEntries;
+import com.robertx22.ancient_obelisks.main.ObeliskWords;
+import com.robertx22.ancient_obelisks.main.ObelisksMain;
+import com.robertx22.ancient_obelisks.structure.ObeliskMapCapability;
+import com.robertx22.ancient_obelisks.structure.ObeliskMapData;
+import com.robertx22.library_of_exile.components.PlayerDataCapability;
+import com.robertx22.library_of_exile.dimension.MapDimensions;
+import com.robertx22.library_of_exile.utils.TeleportUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mojang.serialization.MapCodec;
+
+public class ObeliskBlock extends BaseEntityBlock {
+    public static final MapCodec<ObeliskBlock> CODEC = simpleCodec(ObeliskBlock::new);
+
+    public ObeliskBlock(Properties properties) {
+        super(properties);
+    }
+
+    public ObeliskBlock() {
+        super(BlockBehaviour.Properties.of().strength(10).noOcclusion().lightLevel(x -> 10));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+
+        List<ItemStack> all = new ArrayList<>();
+        BlockEntity blockentity = pParams.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+
+        if (blockentity instanceof ObeliskBE be) {
+            all.add(asItem().getDefaultInstance());
+        }
+
+        return all;
+    }
+
+    public static void startNewMap(Player p, ItemStack stack, ObeliskBE be) {
+
+        ObeliskItemMapData map = ObeliskItemNbt.OBELISK_MAP.loadFrom(stack);
+
+        var count = map.getOrSetStartPos(p.level(), stack);
+        var start = ObelisksMain.OBELISK_MAP_STRUCTURE.getStartFromCounter(count.x, count.z);
+        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+
+        var pdata = PlayerDataCapability.get(p);
+
+        var data = new ObeliskMapData();
+        data.item = map;
+        data.x = start.x;
+        data.z = start.z;
+
+        be.x = count.x;
+        be.z = count.z;
+
+        be.currentWorldUUID = ObeliskMapCapability.get(p.level()).data.data.uuid;
+
+
+        be.setChanged();
+
+        stack.shrink(1);
+
+        ObeliskMapCapability.get(p.level()).data.data.setData(p, data, ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+
+        pdata.mapTeleports.entranceTeleportLogic(p, ObelisksMain.DIMENSION_KEY, pos);
+
+    }
+
+    public static void joinCurrentMap(Player p, ObeliskBE be) {
+
+        var start = ObelisksMain.OBELISK_MAP_STRUCTURE.getStartFromCounter(be.x, be.z);
+        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+        var pdata = PlayerDataCapability.get(p);
+        pdata.mapTeleports.entranceTeleportLogic(p, ObelisksMain.DIMENSION_KEY, pos);
+    }
+
+
+    @Override
+    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+        if (world.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+        var be = world.getBlockEntity(pPos);
+        var obe = be instanceof ObeliskBE ? (ObeliskBE) be : null;
+        if (obe == null) {
+            ObelisksMain.debugMsg(p, "Missing Block entity");
+            return InteractionResult.SUCCESS;
+        }
+
+        boolean isMapWorld = MapDimensions.isMap(world);
+        ItemStack stack = p.getMainHandItem();
+        if (ObeliskItemNbt.OBELISK_MAP.has(stack)) {
+            ObeliskItemMapData map = ObeliskItemNbt.OBELISK_MAP.loadFrom(stack);
+
+            if (!map.relic && isMapWorld) {
+                p.sendSystemMessage(ObeliskWords.RELIC_MAPS_ONLY.get().withStyle(ChatFormatting.RED));
+                return InteractionResult.SUCCESS;
+            }
+
+            //ObelisksMain.debugMsg(p, "Trying to start new map");
+            startNewMap(p, stack, obe);
+            //ObelisksMain.debugMsg(p, "Map started");
+            return InteractionResult.SUCCESS;
+        }
+
+        if (obe.isActivated()) {
+            //ObelisksMain.debugMsg(p, "Trying to join existing map");
+            joinCurrentMap(p, obe);
+            return InteractionResult.SUCCESS;
+        }
+
+        if (isMapWorld) {
+            initMapSpecificObelisk(p, obe);
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    private static void initMapSpecificObelisk(Player p, ObeliskBE obe) {
+        if (obe.gaveMap) {
+            return;
+        }
+
+        obe.setGaveMap();
+        var map = ObeliskMapItem.blankMap(ObeliskEntries.OBELISK_MAP_ITEM.get().getDefaultInstance(), true);
+        startNewMap(p, map, obe);
+    }
+
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new ObeliskBE(pPos, pState);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return new BlockEntityTicker<T>() {
+            @Override
+            public void tick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
+                // todo
+            }
+        };
+    }
+
+}

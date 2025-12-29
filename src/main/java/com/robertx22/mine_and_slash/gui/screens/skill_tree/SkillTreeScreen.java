@@ -52,7 +52,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
     public VertexContainer vertexContainer = new VertexContainer();
     private TipsWidget tips;
 
-
     private void renderConnection(GuiGraphics graphics, PerkConnectionRender renderer) {
 
         graphics.pose().pushPose();
@@ -65,20 +64,18 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         double xadd = button1.perk.getType().size / 2F; // todo idk if this is the problem or
         double yadd = button1.perk.getType().size / 2F;
 
-
         double connectionX = button1.getX() + xadd;
         double connectionY = button1.getY() + yadd;
 
         connectionX -= ctx.scrollX;
         connectionY -= ctx.scrollY;
 
-
         graphics.pose().translate(connectionX + scrollX, connectionY + scrollY, 0);
         float rotation = getAngleBetweenButtons(button1, button2);
         graphics.pose().mulPose(Axis.ZP.rotation(rotation));
         int length = (int) getDistanceBetweenButtons(button1, button2);
 
-        //graphics.pose().scale(1F, 1.5F, 1F); // thicken it a bit
+        // graphics.pose().scale(1F, 1.5F, 1F); // thicken it a bit
 
         int off = 0;
 
@@ -93,10 +90,10 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         }
 
         HashMultimap<ResourceLocation, BufferInfo> map = this.vertexContainer.map;
-        map.put(SlashRef.id("textures/gui/skill_tree/skill_connection.png"), BufferInfo.of(0, -3, length, 6, -5, (float) 0, off, length, 6, 50, 16, graphics.pose().last().pose()));
+        map.put(SlashRef.id("textures/gui/skill_tree/skill_connection.png"),
+                BufferInfo.of(0, -3, length, 6, -5, (float) 0, off, length, 6, 50, 16, graphics.pose().last().pose()));
 
-
-        //graphics.blit(CON, 0, -3, length, 6, 0, off, length, 6, 50, 16);
+        // graphics.blit(CON, 0, -3, length, 6, 0, off, length, 6, 50, 16);
 
         graphics.pose().popPose();
     }
@@ -113,7 +110,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         return Mth.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-
     protected float getAngleBetweenButtons(PerkButton button1, PerkButton button2) {
         float x1 = button1.getX() + button1.getWidth() / 2F;
         float y1 = button1.getY() + button1.getHeight() / 2F;
@@ -129,9 +125,10 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
     public SkillTreeScreen(SchoolType type) {
         super(Minecraft.getInstance()
                 .getWindow()
-                .getGuiScaledWidth(), Minecraft.getInstance()
-                .getWindow()
-                .getGuiScaledHeight());
+                .getGuiScaledWidth(),
+                Minecraft.getInstance()
+                        .getWindow()
+                        .getGuiScaledHeight());
         this.schoolType = type;
 
     }
@@ -158,17 +155,16 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
     int ticks = 0;
 
-
     private void renderConnections(GuiGraphics gui) {
         for (PerkConnectionRender con : this.buttonConnections) {
             this.renderConnection(gui, con);
         }
     }
 
-
     public boolean shouldRender(int x, int y, PerkScreenContext ctx) {
 
-        // todo this doesnt seem to work perfect but at least it stops rendering  some offscreen buttons
+        // todo this doesnt seem to work perfect but at least it stops rendering some
+        // offscreen buttons
         if (x >= ctx.offsetX + 10 && x < ctx.offsetX + (sizeX()) * ctx.getZoomMulti() - 10) {
             if (y >= ctx.offsetY + 10 && y < ctx.offsetY + (sizeY()) * ctx.getZoomMulti() - 10) {
                 return true;
@@ -195,7 +191,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
     HashMap<AbstractWidget, PointData> originalButtonLocMap = new HashMap<>();
     HashMap<PointData, PerkButton> pointPerkButtonMap = new HashMap<>();
 
-
     public Minecraft mc = Minecraft.getInstance();
 
     PlayerData playerData = Load.player(mc.player);
@@ -204,7 +199,8 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
     private static int SEARCH_WIDTH = 100;
     private static int SEARCH_HEIGHT = 14;
-    public static EditBox SEARCH = new EditBox(Minecraft.getInstance().font, 0, 0, SEARCH_WIDTH, SEARCH_HEIGHT, Component.translatable("fml.menu.mods.search"));
+    public static EditBox SEARCH = new EditBox(Minecraft.getInstance().font, 0, 0, SEARCH_WIDTH, SEARCH_HEIGHT,
+            Component.translatable("fml.menu.mods.search"));
 
     public static boolean searchFocused() {
         if (SkillTreeScreen.SEARCH != null) {
@@ -222,24 +218,22 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
     }
 
     @Override
-    public void tick() {
-        SEARCH.tick();
-    }
-
-    @Override
     protected void init() {
         super.init();
 
         try {
 
-
             SkillTreeScreen.SEARCH.setFocused(false);
             SkillTreeScreen.SEARCH.setCanLoseFocus(true);
 
-            this.school = ExileDB.TalentTrees().getFilterWrapped(x -> x.getSchool_type().equals(this.schoolType)).list.get(0);
+            this.school = ExileDB.TalentTrees().getFilterWrapped(x -> x.getSchool_type().equals(this.schoolType)).list
+                    .get(0);
 
             refreshButtons();
-            this.tips = new TipsWidget(0, 0, 10, 10, Gui.TALENT_SCREEN_SEARCH_TIPS.locName(Gui.TALENT_SCREEN_SEARCH_KEYWORD_ALL.locName().withStyle(ChatFormatting.GOLD), Gui.TALENT_SCREEN_SEARCH_KEYWORD_GAME_CHANGER.locName().withStyle(ChatFormatting.GOLD)));
+            this.tips = new TipsWidget(0, 0, 10, 10,
+                    Gui.TALENT_SCREEN_SEARCH_TIPS.locName(
+                            Gui.TALENT_SCREEN_SEARCH_KEYWORD_ALL.locName().withStyle(ChatFormatting.GOLD),
+                            Gui.TALENT_SCREEN_SEARCH_KEYWORD_GAME_CHANGER.locName().withStyle(ChatFormatting.GOLD)));
             addWidget(tips);
 
             goToCenter();
@@ -257,12 +251,12 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
         buttonConnections = new HashSet<>(3000);
 
-
         HashSet<PerkPointPair> integers = new HashSet(3000);
         children().forEach(b -> {
             if (b instanceof PerkButton pb) {
 
-                Set<PointData> connections = this.school.calcData.connections.getOrDefault(pb.point, Collections.EMPTY_SET);
+                Set<PointData> connections = this.school.calcData.connections.getOrDefault(pb.point,
+                        Collections.EMPTY_SET);
 
                 for (PointData p : connections) {
 
@@ -283,10 +277,9 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
     }
 
-
     public void refreshButtons() {
 
-        //Watch watch = new Watch();
+        // Watch watch = new Watch();
 
         originalButtonLocMap.clear();
         pointPerkButtonMap.clear();
@@ -302,8 +295,9 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
             Perk perk = ExileDB.Perks().get(e.getValue());
 
             if (perk == null) {
-                perk = ExileDB.Perks().get(new UnknownStat().GUID()); // we show unknown stat so its visible ingame that something is wrong on the GUI
-                //continue;
+                perk = ExileDB.Perks().get(new UnknownStat().GUID()); // we show unknown stat so its visible ingame that
+                                                                      // something is wrong on the GUI
+                // continue;
             }
 
             try {
@@ -343,7 +337,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         float tx = (int) (halfx + x);
         float ty = (int) (halfy + y);
 
-
         return new Point((int) tx, (int) ty);
 
     }
@@ -363,10 +356,8 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         }
     }
 
-
     public float zoom = 0.3F;
     public float targetZoom = zoom;
-
 
     @Override
     public void onClose() {
@@ -392,7 +383,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         targetZoom = zoom;
     }
 
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
         if (scroll < 0) {
             targetZoom -= 0.1F;
@@ -424,12 +414,10 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
     public PerkScreenContext ctx = new PerkScreenContext(this);
 
-
     @Override
     public void render(GuiGraphics gui, int x, int y, float ticks) {
 
         Watch watch = new Watch();
-
 
         ctx = new PerkScreenContext(this);
 
@@ -459,10 +447,9 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
                         b.setX(xp);
                         b.setY(yp);
 
-                        //b.search = searchTerm;
+                        // b.search = searchTerm;
                     }
             }
-
 
             this.renderConnections(gui);
 
@@ -472,7 +459,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
                 addConnections();
                 mouseRecentlyClickedTicks = 0;
             }
-
 
             super.render(gui, x, y, ticks);
             // draw
@@ -484,38 +470,33 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
             e.printStackTrace();
         }
 
-
         gui.pose().scale(1F / zoom, 1F / zoom, 1F / zoom);
-
 
         this.msstring = watch.getPrint();
 
-        //watch.print(" rendering ");
+        // watch.print(" rendering ");
     }
-
 
     String msstring = "";
 
     static ResourceLocation BACKGROUND = SlashRef.guiId("skill_tree/background");
 
     public static void renderBackgroundDirt(GuiGraphics gui, Screen screen, int vOffset) {
-        //copied from Screen
+        // copied from Screen
 
         Minecraft mc = Minecraft.getInstance();
 
         // todo test
-        //gui.setColor(0.25F, 0.25F, 0.25F, 1.0F);
+        // gui.setColor(0.25F, 0.25F, 0.25F, 1.0F);
         int i = 32;
         gui.blit(BACKGROUND, 0, 0, -10, 0.0F, 0.0F, mc.screen.width, mc.screen.height, 32, 32);
-        //gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        // gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     }
-
 
     private void renderPanels(GuiGraphics gui) {
 
         Minecraft mc = Minecraft.getInstance();
-
 
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(GL11.GL_ALWAYS);
@@ -532,7 +513,6 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         int savedx = xp;
         int savedy = yp;
 
-
         int points = schoolType.getPointType().getFreePoints(mc.player);
 
         MutableComponent text = Gui.TALENT_POINTS.locName().append(points + "");
@@ -540,8 +520,10 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         int yx = 4;
 
         gui.drawString(mc.font, text, savedx + 15, yx, ChatFormatting.YELLOW.getColor());
-        text = Gui.TALENT_RESET_POINTS.locName().append(String.valueOf(this.schoolType.getPointType().getResetPoints(mc.player)));
-        gui.drawString(mc.font, text, savedx + (BG_WIDTH) - mc.font.width(text) - 15, yx, ChatFormatting.YELLOW.getColor());
+        text = Gui.TALENT_RESET_POINTS.locName()
+                .append(String.valueOf(this.schoolType.getPointType().getResetPoints(mc.player)));
+        gui.drawString(mc.font, text, savedx + (BG_WIDTH) - mc.font.width(text) - 15, yx,
+                ChatFormatting.YELLOW.getColor());
 
         int tx = savedx + BG_WIDTH;
         tx = (tx - savedx) / 2 + savedx - SEARCH_WIDTH / 2;
@@ -554,12 +536,10 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         tips.setX(tx + SkillTreeScreen.SEARCH.getWidth() - tips.getWidth() - 2);
         tips.setY(yx + (SkillTreeScreen.SEARCH.getHeight() - tips.getHeight()) / 2);
 
-
         if (MMORPG.RUN_DEV_TOOLS) {
             MutableComponent debug = Component.literal("Widgets: " + this.children().size() + " - " + msstring);
             gui.drawString(mc.font, debug, savedx + 277, yx, ChatFormatting.GREEN.getColor());
         }
-
 
     }
 

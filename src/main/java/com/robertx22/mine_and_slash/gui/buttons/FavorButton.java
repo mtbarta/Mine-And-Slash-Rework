@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class FavorButton extends ImageButton {
@@ -16,22 +18,21 @@ public class FavorButton extends ImageButton {
     Minecraft mc = Minecraft.getInstance();
 
     public FavorButton(int xPos, int yPos) {
-        super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y, 0, 0, FAVOR_BUTTON_SIZE_Y, new ResourceLocation("empty"), (button) -> {
-        });
+        super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y,
+                new WidgetSprites(new ResourceLocation("minecraft", "empty"),
+                        new ResourceLocation("minecraft", "empty")),
+                (button) -> {
+                }, Component.empty());
 
-    }
-
-    @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
     }
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+        setModTooltip();
         ResourceLocation tex = Load.player(mc.player).favor.getTexture();
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(tex, getX(), getY(), FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X);
+        gui.blit(tex, getX(), getY(), FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X,
+                FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X);
 
     }
 
@@ -39,6 +40,5 @@ public class FavorButton extends ImageButton {
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(Load.player(mc.player).favor.getTooltip())));
 
     }
-
 
 }

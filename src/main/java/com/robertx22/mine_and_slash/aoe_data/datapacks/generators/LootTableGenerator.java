@@ -1,6 +1,9 @@
 package com.robertx22.mine_and_slash.aoe_data.datapacks.generators;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.robertx22.library_of_exile.database.init.LibDatabase;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.items.GemItems;
@@ -9,12 +12,11 @@ import com.robertx22.orbs_of_crafting.register.ExileCurrency;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,9 +24,7 @@ import java.util.HashMap;
 
 public class LootTableGenerator {
 
-
     public LootTableGenerator() {
-
 
     }
 
@@ -46,8 +46,7 @@ public class LootTableGenerator {
                         + ".json");
     }
 
-
-    static Gson GSON = Deserializers.createLootTableSerializer()
+    static Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
 
@@ -59,7 +58,12 @@ public class LootTableGenerator {
                 .forEach(x -> {
                     Path target = movePath(resolve(path, x.getKey()
                             .getPath()));
-                    DataProvider.saveStable(cache, GSON.toJsonTree(x.getValue()), target);
+                    // Use codec to serialize LootTable to JsonElement
+                    JsonElement json = LootTable.CODEC.encodeStart(JsonOps.INSTANCE, x.getValue())
+                            .getOrThrow(false, error -> {
+                                throw new RuntimeException("Failed to encode loot table: " + error);
+                            });
+                    DataProvider.saveStable(cache, json, target);
                 });
 
     }

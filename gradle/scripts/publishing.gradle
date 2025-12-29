@@ -3,7 +3,7 @@ publishMods {
     file = jar.archiveFile
     changelog = file("CHANGELOG.txt").text
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
-    modLoaders.add("forge")
+    modLoaders.add("neoforge")
     displayName = "${mod_archive_name}-${minecraft_version}-v${mod_version}"
 
     curseforge {

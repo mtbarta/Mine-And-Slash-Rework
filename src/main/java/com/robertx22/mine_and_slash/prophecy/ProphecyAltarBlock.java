@@ -29,7 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class ProphecyAltarBlock extends Block {
 
     public ProphecyAltarBlock() {
-        super(BlockBehaviour.Properties.copy(Blocks.LECTERN).noOcclusion());
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.LECTERN).noOcclusion());
     }
 
     @Override
@@ -40,13 +40,15 @@ public class ProphecyAltarBlock extends Block {
         });
     }
 
-
     @Override
-    public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player p, InteractionHand pHand,
+            BlockHitResult pHit) {
 
         if (!level.isClientSide) {
 
-            if (!EntityFinder.start(p, Mob.class, p.blockPosition()).radius(ServerContainer.get().PROPHECY_SEARCH_RADIUS.get()).searchFor(AllyOrEnemy.enemies).build().isEmpty()) {
+            if (!EntityFinder.start(p, Mob.class, p.blockPosition())
+                    .radius(ServerContainer.get().PROPHECY_SEARCH_RADIUS.get()).searchFor(AllyOrEnemy.enemies).build()
+                    .isEmpty()) {
                 ExplainedResultUtil.sendErrorMessage(p, Chats.PROPHECY_ALTAR_USE_ERROR, Chats.ENEMY_TOO_CLOSE);
                 return InteractionResult.FAIL;
             }
@@ -62,26 +64,25 @@ public class ProphecyAltarBlock extends Block {
 
             Load.player(p).prophecy.regenAffixOffers();
 
-            p.sendSystemMessage(Chats.PROPHECY_ALTAR_MSG.locName().withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+            p.sendSystemMessage(
+                    Chats.PROPHECY_ALTAR_MSG.locName().withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
 
             SoundUtils.playSound(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
 
-
             level.setBlock(pPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-
 
             Load.player(p).playerDataSync.setDirty();
             Load.player(p).playerDataSync.onTickTrySync(p);
             // todo does this open before the player receives sync data packet?
             Packets.sendToClient(p, new OpenGuiPacket(OpenGuiPacket.GuiType.PICK_PROPHECY_CURSE));
 
-
-            // nothing is stored in this block, instead by clicking the altar, the player gains the options
+            // nothing is stored in this block, instead by clicking the altar, the player
+            // gains the options
 
         } else {
 
             // need to delay this for 1 tick at least
-            //ClientOnly.openProphecy();
+            // ClientOnly.openProphecy();
         }
 
         return InteractionResult.SUCCESS;

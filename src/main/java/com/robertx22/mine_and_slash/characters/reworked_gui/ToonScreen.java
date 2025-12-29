@@ -48,7 +48,7 @@ public class ToonScreen extends Screen implements INamedScreen {
         /*
         if (this.minecraft.level != null) {
             pGuiGraphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.ScreenEvent.BackgroundRendered(this, pGuiGraphics));
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.client.event.ScreenEvent.BackgroundRendered(this, pGuiGraphics));
         } else {
             this.renderDirtBackground(pGuiGraphics);
         }

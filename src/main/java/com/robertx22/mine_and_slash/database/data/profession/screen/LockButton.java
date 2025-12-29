@@ -17,21 +17,15 @@ public class LockButton extends ImageButton {
     public static int XS = 18;
     public static int YS = 18;
 
-
     Minecraft mc = Minecraft.getInstance();
     CraftingStationScreen s;
 
     public LockButton(int xPos, int yPos, CraftingStationScreen s) {
-        super(xPos, yPos, XS, YS, 0, s.getSyncedData().recipe_locked ? 18 : 0, YS, SlashRef.guiId("lockbutton"), (button) -> {
-            Packets.sendToServer(new LockTogglePacket(s.getSyncedData().getBlockPos()));
-        });
+        super(xPos, yPos, XS, YS, 0, s.getSyncedData().recipe_locked ? 18 : 0, YS, SlashRef.guiId("lockbutton"),
+                (button) -> {
+                    Packets.sendToServer(new LockTogglePacket(s.getSyncedData().getBlockPos()));
+                });
         this.s = s;
-    }
-
-    @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
     }
 
     @Override
@@ -40,7 +34,7 @@ public class LockButton extends ImageButton {
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(tex, getX(), getY(), 0, s.getSyncedData().recipe_locked ? 18 : 0, 18, 18);
 
-        //super.renderWidget(gui, mouseX, mouseY, delta);
+        // super.renderWidget(gui, mouseX, mouseY, delta);
     }
 
     public void setModTooltip() {

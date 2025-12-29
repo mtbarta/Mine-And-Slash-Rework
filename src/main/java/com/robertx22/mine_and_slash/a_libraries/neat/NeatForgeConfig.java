@@ -1,11 +1,11 @@
 package com.robertx22.mine_and_slash.a_libraries.neat;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.network.NetworkConstants;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.fml.IExtensionPoint;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+// import net.minecraftforge.network.NetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class NeatForgeConfig {
     public static void init() {
-        Pair<ForgeNeatConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeNeatConfig::new);
+        Pair<ForgeNeatConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeNeatConfig::new);
         NeatConfig.instance = specPair.getLeft();
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight(), defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash_neat_gui"));
     }
@@ -25,7 +25,7 @@ public class NeatForgeConfig {
     }
 
     public static void register() {
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (incoming, isNetwork) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(IExtensionPoint.DisplayTest.IGNORESERVERONLY, (incoming, isNetwork) -> true));
         NeatForgeConfig.init();
     }
 
@@ -54,7 +54,7 @@ public class NeatForgeConfig {
         private final ConfigValue<Boolean> enableDebugInfo;
         private final ConfigValue<List<? extends String>> blacklist;
 
-        public ForgeNeatConfig(ForgeConfigSpec.Builder builder) {
+        public ForgeNeatConfig(ModConfigSpec.Builder builder) {
             builder.push("general");
 
             maxDistance = builder.define("Max Distance", 12);

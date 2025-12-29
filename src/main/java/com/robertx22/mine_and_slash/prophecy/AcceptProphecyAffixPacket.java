@@ -10,9 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 
-public class AcceptProphecyAffixPacket extends MyPacket<AcceptProphecyPacket> {
+public class AcceptProphecyAffixPacket extends MyPacket<AcceptProphecyAffixPacket> {
 
     String id;
+
+    public AcceptProphecyAffixPacket() {
+        this.id = "";
+    }
 
     public AcceptProphecyAffixPacket(String id) {
         this.id = id;
@@ -45,7 +49,7 @@ public class AcceptProphecyAffixPacket extends MyPacket<AcceptProphecyPacket> {
                 data.affixesTaken.removeIf(x -> x == null || x.isEmpty() || !ExileDB.MapAffixes().isRegistered(x));
 
                 data.affixesTaken.add(id);
-                
+
                 data.affixOffers = new ArrayList<>();
 
                 data.numMobAffixesCanAdd--;
@@ -55,7 +59,7 @@ public class AcceptProphecyAffixPacket extends MyPacket<AcceptProphecyPacket> {
     }
 
     @Override
-    public MyPacket<AcceptProphecyPacket> newInstance() {
+    public MyPacket<AcceptProphecyAffixPacket> newInstance() {
         return new AcceptProphecyAffixPacket("");
     }
 }

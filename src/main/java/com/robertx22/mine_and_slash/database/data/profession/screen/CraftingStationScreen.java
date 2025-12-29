@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 
 // todo sepearate screens for each station
 public abstract class CraftingStationScreen extends AbstractContainerScreen<CraftingStationMenu> {
-    public ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(SlashRef.MODID, "textures/gui/crafting_table2.png");
-
+    public ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(SlashRef.MODID,
+            "textures/gui/crafting_table2.png");
 
     Profession prof;
 
@@ -41,8 +41,7 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
     public PrimaryMatInfoButton.InfoData primaryRar = new PrimaryMatInfoButton.InfoData(
             Words.PRIMARY_RARITY_MAT,
             RarityItems.RARITY_STONE.get(IRarity.COMMON_ID).get(),
-            RarityItems.RARITY_STONE.values().stream().map(x -> (Item) x.get()).toList()
-    );
+            RarityItems.RARITY_STONE.values().stream().map(x -> (Item) x.get()).toList());
 
     public CraftingStationScreen(String prof, CraftingStationMenu pMenu, Inventory pPlayerInventory, Component txt) {
         super(pMenu, pPlayerInventory, ExileDB.Professions().get(prof).locName());
@@ -71,7 +70,6 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
         return StationSyncData.SYNCED_DATA;
     }
 
-
     @Override
     protected void init() {
         super.init();
@@ -92,7 +90,7 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
     }
 
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pGuiGraphics);
+        this.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
     }
@@ -110,7 +108,6 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
 
     public void refreshRequiredMats(ProfessionRecipe recipe) {
 
-
         this.children().removeIf(x -> x instanceof ItemButton);
         this.renderables.removeIf(x -> x instanceof ItemButton);
 
@@ -123,7 +120,8 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
             var button = new ItemButton(stack, leftPos + 64 + xoff, topPos + 75 + yoff);
 
             List<Component> tip = new ArrayList<>();
-            tip.add(Component.literal(UNICODE.CUBE + " ").append(Itemtips.RECIPE_MATERIAL.locName()).append(" " + UNICODE.CUBE).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+            tip.add(Component.literal(UNICODE.CUBE + " ").append(Itemtips.RECIPE_MATERIAL.locName())
+                    .append(" " + UNICODE.CUBE).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             tip.add(Component.empty());
             button.extraText = tip;
 
@@ -135,11 +133,11 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
 
     public void refreshPossibleRecipes() {
 
-
         var all = getPossibleRecipes();
 
         String str = "";
-        for (String s : all.stream().sorted(Comparator.comparing(x -> x.GUID())).map(x -> x.GUID()).collect(Collectors.toList())) {
+        for (String s : all.stream().sorted(Comparator.comparing(x -> x.GUID())).map(x -> x.GUID())
+                .collect(Collectors.toList())) {
             str += s;
         }
 
@@ -169,7 +167,6 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
 
     public List<ProfessionRecipe> getPossibleRecipes() {
 
-
         Item v1 = null;
         Item v2 = null;
         for (Slot slot : this.menu.matslots) {
@@ -184,7 +181,8 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
         var recipes = new HashSet<>(ExileDB.Recipes().getFilterWrapped(x -> x.profession.equals(prof.GUID())).list);
 
         if (v1 != null && v2 != null) {
-            for (ProfessionRecipe rec : ExileDB.Recipes().getFilterWrapped(x -> x.profession.equals(prof.GUID())).list) {
+            for (ProfessionRecipe rec : ExileDB.Recipes()
+                    .getFilterWrapped(x -> x.profession.equals(prof.GUID())).list) {
                 if (!rec.isMadeWithPrimaryMats(v1, v2)) {
                     recipes.removeIf(x -> x.GUID().equals(rec.GUID()));
                 }
@@ -192,15 +190,19 @@ public abstract class CraftingStationScreen extends AbstractContainerScreen<Craf
         } else {
             recipes = new HashSet<>();
         }
-        recipes.addAll(ExileDB.Recipes().getFilterWrapped(x -> x.profession.equals(prof.GUID()) && x.canCraft(menu.getItems()).can).list);
+        recipes.addAll(ExileDB.Recipes()
+                .getFilterWrapped(x -> x.profession.equals(prof.GUID()) && x.canCraft(menu.getItems()).can).list);
         return recipes.stream().toList();
 
     }
 
     @Override
     protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-        pGuiGraphics.drawString(this.font, this.title, this.titleLabelX - font.width(title) / 2, this.titleLabelY, ChatFormatting.YELLOW.getColor(), false);
-        //pGuiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, ChatFormatting.WHITE.getColor(), false);
+        pGuiGraphics.drawString(this.font, this.title, this.titleLabelX - font.width(title) / 2, this.titleLabelY,
+                ChatFormatting.YELLOW.getColor(), false);
+        // pGuiGraphics.drawString(this.font, this.playerInventoryTitle,
+        // this.inventoryLabelX, this.inventoryLabelY, ChatFormatting.WHITE.getColor(),
+        // false);
     }
 
     @Override

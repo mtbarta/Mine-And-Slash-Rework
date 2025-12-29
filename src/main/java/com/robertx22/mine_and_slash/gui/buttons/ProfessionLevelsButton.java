@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
@@ -30,25 +31,21 @@ public class ProfessionLevelsButton extends ImageButton {
     Minecraft mc = Minecraft.getInstance();
 
     public ProfessionLevelsButton(int xPos, int yPos) {
-        super(xPos, yPos, SX, SY, 0, 0, SY, new ResourceLocation("empty"), (button) -> {
-        });
+        super(xPos, yPos, SX, SY,
+                new WidgetSprites(new ResourceLocation("empty"), new ResourceLocation("empty")),
+                (button) -> {
+                });
 
-    }
-
-    @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
     }
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+        setModTooltip();
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(SlashRef.guiId("profession/button"), getX(), getY(), SX, SX, SX, SX, SX, SX);
 
     }
 
-    @Override
     protected ClientTooltipPositioner createTooltipPositioner() {
         return DefaultTooltipPositioner.INSTANCE;
     }
@@ -66,28 +63,32 @@ public class ProfessionLevelsButton extends ImageButton {
 
             class cappedChecker {
                 private MutableComponent check() {
-                    if (Load.player(ClientOnly.getPlayer()).professions.getLevel(prof.GUID()) >= Load.Unit(ClientOnly.getPlayer()).getLevel()) {
+                    if (Load.player(ClientOnly.getPlayer()).professions.getLevel(prof.GUID()) >= Load
+                            .Unit(ClientOnly.getPlayer()).getLevel()) {
                         return Words.CAPPED_TO_LVL.locName();
                     } else {
                         return Component.literal("");
                     }
                 }
             }
-            var name = Gui.PROF_NAME.locName(prof.locName(), new cappedChecker().check()).withStyle(ChatFormatting.YELLOW);
+            var name = Gui.PROF_NAME.locName(prof.locName(), new cappedChecker().check())
+                    .withStyle(ChatFormatting.YELLOW);
 
             list.add(name);
-//the rest of text needed for there is written in lang, just don't want to use the TooltipUtils cuz THIS TEXT IS NOT RELATED TO TOOLTIPS.
+            // the rest of text needed for there is written in lang, just don't want to use
+            // the TooltipUtils cuz THIS TEXT IS NOT RELATED TO TOOLTIPS.
             list.add(Gui.PROF_LEVEL_AND_EXP.locName(lvl, exp, maxexp).withStyle(ChatFormatting.GREEN));
 
         }
         list.add(Component.empty());
 
-        list.add(Gui.RESTED_COMBAT_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusCombatExp)).withStyle(ChatFormatting.WHITE));
-        list.add(Gui.RESTED_PROF_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusProfExp)).withStyle(ChatFormatting.WHITE));
+        list.add(Gui.RESTED_COMBAT_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusCombatExp))
+                .withStyle(ChatFormatting.WHITE));
+        list.add(Gui.RESTED_PROF_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusProfExp))
+                .withStyle(ChatFormatting.WHITE));
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(list)));
 
     }
-
 
 }

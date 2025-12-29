@@ -22,29 +22,29 @@ public class C2SPacketRegister {
     public static void register() {
 
         int i = 100;
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new TellServerToCastSpellPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new PerkChangePacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new AllocateClassPointPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new AllocateStatPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new TellServerToCancelSpellCast(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new OpenContainerPacket(OpenContainerPacket.GuiType.SKILL_GEMS), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new OpenBackpackPacket(Backpacks.BackpackType.GEARS), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new InvGuiPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new OpenJewelsPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new CraftPacket(), i++);
+        Packets.registerClientToServerPacket(new TellServerToCastSpellPacket(), i++);
+        Packets.registerClientToServerPacket(new PerkChangePacket(), i++);
+        Packets.registerClientToServerPacket(new AllocateClassPointPacket(), i++);
+        Packets.registerClientToServerPacket(new AllocateStatPacket(), i++);
+        Packets.registerClientToServerPacket(new TellServerToCancelSpellCast(), i++);
+        Packets.registerClientToServerPacket(new OpenContainerPacket(OpenContainerPacket.GuiType.SKILL_GEMS), i++);
+        Packets.registerClientToServerPacket(new OpenBackpackPacket(Backpacks.BackpackType.GEARS), i++);
+        Packets.registerClientToServerPacket(new InvGuiPacket(), i++);
+        Packets.registerClientToServerPacket(new OpenJewelsPacket(), i++);
+        Packets.registerClientToServerPacket(new CraftPacket(), i++);
 
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new CreateCharPacket(""), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new ToonActionPacket(ToonActionButton.Action.LOAD, 0, ""), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new AcceptProphecyPacket(""), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new AcceptProphecyAffixPacket(""), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new LockTogglePacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new UnsummonPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new RequestStatCalcInfoPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new LockRecipePacket(""), i++);
+        Packets.registerClientToServerPacket(new CreateCharPacket(""), i++);
+        Packets.registerClientToServerPacket(new ToonActionPacket(ToonActionButton.Action.LOAD, 0, ""), i++);
+        Packets.registerClientToServerPacket(new AcceptProphecyPacket(""), i++);
+        Packets.registerClientToServerPacket(new AcceptProphecyAffixPacket(""), i++);
+        Packets.registerClientToServerPacket(new LockTogglePacket(), i++);
+        Packets.registerClientToServerPacket(new UnsummonPacket(), i++);
+        Packets.registerClientToServerPacket(new RequestStatCalcInfoPacket(), i++);
+        Packets.registerClientToServerPacket(new LockRecipePacket(""), i++);
 
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new BackPackLootMenuPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new QuickUsePotionPacket(), i++);
-        Packets.registerClientToServerPacket(MMORPG.NETWORK, new OpenEntityStatsRequestPacket(), i++);
+        Packets.registerClientToServerPacket(new BackPackLootMenuPacket(), i++);
+        Packets.registerClientToServerPacket(new QuickUsePotionPacket(), i++);
+        Packets.registerClientToServerPacket(new OpenEntityStatsRequestPacket(), i++);
 
 
         // Packets.registerClientToServerPacket(MMORPG.NETWORK, new SetupHotbarPacket(), i++);

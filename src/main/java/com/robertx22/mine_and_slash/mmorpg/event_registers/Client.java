@@ -4,7 +4,7 @@ import com.robertx22.mine_and_slash.event_hooks.ontick.OnClientTick;
 import com.robertx22.mine_and_slash.event_hooks.player.OnKeyPress;
 import com.robertx22.mine_and_slash.mmorpg.ForgeEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.event.TickEvent;
 
 public class Client {
 

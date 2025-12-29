@@ -11,7 +11,7 @@ import com.robertx22.mine_and_slash.mmorpg.ForgeEvents;
 import com.robertx22.mine_and_slash.uncommon.error_checks.base.ErrorChecks;
 import com.robertx22.mine_and_slash.uncommon.interfaces.data_items.Cached;
 import com.robertx22.mine_and_slash.vanilla_mc.packets.TellClientResetCaches;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.ArrayList;

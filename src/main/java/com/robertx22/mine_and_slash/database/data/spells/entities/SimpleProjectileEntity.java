@@ -40,7 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,19 +63,32 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
 
     public boolean moveTowardsEnemies = false;
 
-    private static final EntityDataAccessor<CompoundTag> SPELL_DATA = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.COMPOUND_TAG);
-    private static final EntityDataAccessor<String> ENTITY_NAME = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<Boolean> EXPIRE_ON_ENTITY_HIT = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> HIT_ALLIES = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> PIERCE = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> DEATH_TIME = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> CHAINS = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> EXPIRE_ON_BLOCK_HIT = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Float> ACCELERATION = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> YAW_VELOCITY = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> YAW_ACCELERATION = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Vector3f> FORWARD_VECTOR = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.VECTOR3);
-    private static final EntityDataAccessor<Vector3f> UP_VECTOR = SynchedEntityData.defineId(SimpleProjectileEntity.class, EntityDataSerializers.VECTOR3);
+    private static final EntityDataAccessor<CompoundTag> SPELL_DATA = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<String> ENTITY_NAME = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> EXPIRE_ON_ENTITY_HIT = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> HIT_ALLIES = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PIERCE = SynchedEntityData.defineId(SimpleProjectileEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DEATH_TIME = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> CHAINS = SynchedEntityData.defineId(SimpleProjectileEntity.class,
+            EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> EXPIRE_ON_BLOCK_HIT = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> ACCELERATION = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> YAW_VELOCITY = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> YAW_ACCELERATION = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Vector3f> FORWARD_VECTOR = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.VECTOR3);
+    private static final EntityDataAccessor<Vector3f> UP_VECTOR = SynchedEntityData
+            .defineId(SimpleProjectileEntity.class, EntityDataSerializers.VECTOR3);
 
     public Entity ignoreEntity;
 
@@ -107,7 +120,7 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
     @Override // seems to help making it hit easier?
@@ -142,7 +155,7 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     }
 
     public SimpleProjectileEntity(EntityType<? extends Entity> type, Level worldIn) {
-        super((EntityType<? extends AbstractArrow>) type, worldIn);
+        super((EntityType<? extends AbstractArrow>) type, worldIn, ItemStack.EMPTY);
         this.xTile = -1;
         this.yTile = -1;
         this.zTile = -1;
@@ -153,7 +166,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     protected void moveToImpactPosition(HitResult result) {
 
         if (result instanceof EntityHitResult enres) {
-            // the result just contains entity position, so we must clip against the AABB ourselves
+            // the result just contains entity position, so we must clip against the AABB
+            // ourselves
             AABB aabb = enres.getEntity().getBoundingBox().inflate(0.3D);
             Vec3 traceEnd = this.position().add(this.getDeltaMovement());
             Optional<Vec3> clipped = aabb.clip(this.position(), traceEnd);
@@ -292,7 +306,6 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
                 ticksInGround++;
             }
 
-
             if (this.tickCount >= this.getDeathTime()) {
                 onExpireProc(this.getCaster());
                 this.scheduleRemoval();
@@ -429,7 +442,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
 
             if (target != null) {
                 var speed = getDeltaMovement().length();
-                var direction = ProjectileCastHelper.positionToVelocity(new MyPosition(position()), new MyPosition(target.getEyePosition()));
+                var direction = ProjectileCastHelper.positionToVelocity(new MyPosition(position()),
+                        new MyPosition(target.getEyePosition()));
                 setDeltaMovement(direction.scale(speed));
                 setMotionDirty();
             }
@@ -442,8 +456,10 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
         EntityHitResult res = ProjectileUtil.getEntityHitResult(
                 this.level(), this, pos, posPlusMotion, this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(1D), (e) -> {
-                    return !e.isSpectator() && e.isPickable() && e instanceof Entity && e != this.getCaster() && e != this.ignoreEntity;
+                        .inflate(1D),
+                (e) -> {
+                    return !e.isSpectator() && e.isPickable() && e instanceof Entity && e != this.getCaster()
+                            && e != this.ignoreEntity;
                 });
 
         if (!this.entityData.get(HIT_ALLIES)) {
@@ -546,12 +562,9 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
             scheduleRemoval();
         }
 
-
         if (!level().isClientSide) {
 
-
             if (getCaster() != null) {
-
 
                 int chains = this.entityData.get(CHAINS).intValue();
 
@@ -561,7 +574,6 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
                     if (entityHit == null) {
                         chains = 0;
                     }
-
 
                     var radius = getSpellData().data.getNumber(EventData.AREA_MULTI, 1F).number;
 
@@ -583,7 +595,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
                         sd.chains_did++; // when upping chain count
                         en.init(caster, sd, holder);
                         en.entityData.set(CHAINS, chains);
-                        var vel = ProjectileCastHelper.positionToVelocity(new MyPosition(position()), new MyPosition(target.getEyePosition()));
+                        var vel = ProjectileCastHelper.positionToVelocity(new MyPosition(position()),
+                                new MyPosition(target.getEyePosition()));
                         en.setDeltaMovement(vel.normalize().multiply(speed, speed, speed));
                         level().addFreshEntity(en);
 
@@ -632,7 +645,7 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
 
         try {
 
-//            super.readCustomDataFromTag(nbt);
+            // super.readCustomDataFromTag(nbt);
 
             this.xTile = nbt.getInt("xTile");
             this.yTile = nbt.getInt("yTile");
@@ -713,7 +726,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     @Override
     public ItemStack getItem() {
         try {
-            Item item = VanillaUTIL.REGISTRY.items().get(new ResourceLocation(getSpellData().data.getString(EventData.ITEM_ID)));
+            Item item = VanillaUTIL.REGISTRY.items()
+                    .get(new ResourceLocation(getSpellData().data.getString(EventData.ITEM_ID)));
             if (item != null) {
                 return new ItemStack(item);
             }
@@ -750,7 +764,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
         this.entityData.set(EXPIRE_ON_ENTITY_HIT, holder.getOrDefault(MapField.EXPIRE_ON_ENTITY_HIT, true));
         this.entityData.set(EXPIRE_ON_BLOCK_HIT, holder.getOrDefault(MapField.EXPIRE_ON_BLOCK_HIT, true));
         this.entityData.set(HIT_ALLIES, holder.getOrDefault(MapField.HITS_ALLIES, false));
-        this.entityData.set(CHAINS, holder.getOrDefault(MapField.CHAIN_COUNT, 0D).intValue() + (int) data.data.getNumber(EventData.BONUS_CHAINS).number);
+        this.entityData.set(CHAINS, holder.getOrDefault(MapField.CHAIN_COUNT, 0D).intValue()
+                + (int) data.data.getNumber(EventData.BONUS_CHAINS).number);
 
         this.checkInsideBlocks();
 
@@ -761,10 +776,13 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
         this.moveTowardsEnemies = holder.getOrDefault(MapField.TRACKS_ENEMIES, false);
         this.speed = holder.getOrDefault(MapField.PROJECTILE_SPEED, 1D).floatValue();
 
-        this.entityData.set(ACCELERATION, holder.getOrDefault(MapField.PROJECTILE_ACCELERATION, 0D).floatValue() * getSpeedMultiplier());
+        this.entityData.set(ACCELERATION,
+                holder.getOrDefault(MapField.PROJECTILE_ACCELERATION, 0D).floatValue() * getSpeedMultiplier());
 
-        this.entityData.set(YAW_VELOCITY, holder.getOrDefault(MapField.YAW_VELOCITY, 0D).floatValue() * getYawSpeedMultiplier());
-        this.entityData.set(YAW_ACCELERATION, holder.getOrDefault(MapField.YAW_ACCELERATION, 0D).floatValue() * getYawSpeedMultiplier());
+        this.entityData.set(YAW_VELOCITY,
+                holder.getOrDefault(MapField.YAW_VELOCITY, 0D).floatValue() * getYawSpeedMultiplier());
+        this.entityData.set(YAW_ACCELERATION,
+                holder.getOrDefault(MapField.YAW_ACCELERATION, 0D).floatValue() * getYawSpeedMultiplier());
 
         data.data.setString(EventData.ITEM_ID, holder.get(MapField.ITEM));
         CompoundTag nbt = new CompoundTag();
@@ -790,7 +808,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
             setMotionDirty();
         }
         if (data.has(MapField.PROJECTILE_ACCELERATION)) {
-            entityData.set(ACCELERATION, data.get(MapField.PROJECTILE_ACCELERATION).floatValue() * getSpeedMultiplier());
+            entityData.set(ACCELERATION,
+                    data.get(MapField.PROJECTILE_ACCELERATION).floatValue() * getSpeedMultiplier());
         }
         if (data.has(MapField.PITCH)) {
             setPitch(data.get(MapField.PITCH).floatValue());
@@ -808,7 +827,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
             entityData.set(YAW_VELOCITY, data.get(MapField.YAW_VELOCITY).floatValue() * getYawSpeedMultiplier());
         }
         if (data.has(MapField.YAW_ACCELERATION)) {
-            entityData.set(YAW_ACCELERATION, data.get(MapField.YAW_ACCELERATION).floatValue() * getYawSpeedMultiplier());
+            entityData.set(YAW_ACCELERATION,
+                    data.get(MapField.YAW_ACCELERATION).floatValue() * getYawSpeedMultiplier());
         }
     }
 }

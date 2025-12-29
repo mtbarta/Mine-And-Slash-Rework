@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -28,27 +29,25 @@ public class CharacterStatsButtons extends ImageButton {
     MainHubScreen.StatType type;
 
     public CharacterStatsButtons(MainHubScreen.StatType type, int xPos, int yPos) {
-        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y, 0, 0, BUTTON_SIZE_Y, type.getIcon(), (button) -> {
+        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y,
+                new WidgetSprites(type.getIcon(), type.getIcon()),
+                (button) -> {
 
-        });
+                }, Component.empty());
         this.type = type;
     }
 
-    @Override
     protected ClientTooltipPositioner createTooltipPositioner() {
         return DefaultTooltipPositioner.INSTANCE;
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+        setModTooltip();
+
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(type.getIcon(), getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X);
+        gui.blit(type.getIcon(), getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
+                BUTTON_SIZE_X, BUTTON_SIZE_X);
 
     }
 
@@ -68,12 +67,9 @@ public class CharacterStatsButtons extends ImageButton {
             }
         }
 
-
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
 
-
     }
-
 
     public static String getStatString(Stat stat, EntityData unitdata) {
         StatData data = unitdata.getUnit().getCalculatedStat(stat);
@@ -84,7 +80,8 @@ public class CharacterStatsButtons extends ImageButton {
         if (stat instanceof IUsableStat) {
             IUsableStat usable = (IUsableStat) stat;
 
-            String value = NumberUtils.format(usable.getUsableValue(unitdata.getUnit(), (int) data.getValue(), unitdata.getLevel()) * 100);
+            String value = NumberUtils.format(
+                    usable.getUsableValue(unitdata.getUnit(), (int) data.getValue(), unitdata.getLevel()) * 100);
 
             str += value + "%";
 
@@ -104,7 +101,6 @@ public class CharacterStatsButtons extends ImageButton {
 
     }
 
-
     public static String getHubStatString(Stat stat, EntityData unitdata) {
         StatData data = unitdata.getUnit().getCalculatedStat(stat);
 
@@ -114,7 +110,8 @@ public class CharacterStatsButtons extends ImageButton {
         if (stat instanceof IUsableStat) {
             IUsableStat usable = (IUsableStat) stat;
 
-            String value = NumberUtils.format(usable.getUsableValue(unitdata.getUnit(), (int) data.getValue(), unitdata.getLevel()) * 100);
+            String value = NumberUtils.format(
+                    usable.getUsableValue(unitdata.getUnit(), (int) data.getValue(), unitdata.getLevel()) * 100);
 
             str += value;
         } else {

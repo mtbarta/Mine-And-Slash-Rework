@@ -7,17 +7,11 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.vanilla_mc.items.gearitems.baubles.ItemNecklace;
 import com.robertx22.mine_and_slash.vanilla_mc.items.gearitems.baubles.ItemRing;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -46,35 +40,13 @@ public class CurioEvents {
         });
     }
 
-    public static void attachCapability(AttachCapabilitiesEvent<ItemStack> evt){
-        Item item = evt.getObject().getItem();
-        ResourceLocation key = BuiltInRegistries.ITEM.getKey(item);
-        if (!key.getNamespace().equals(SlashRef.MODID)) return;
-        if (!(item instanceof ItemNecklace || item instanceof ItemRing || item instanceof OmenItem)) return;
-        //copy from charm of undying
-        //also see https://docs.illusivesoulworks.com/curios/items/curio-creation#attaching-an-icurio-capability
-        ICurio curio = new ICurio() {
-            @Override
-            public ItemStack getStack() {
-                return evt.getObject();
-            }
-
-            @Override
-            public boolean canEquipFromUse(SlotContext ctx) {
-                return true;
-            }
-        };
-        ICapabilityProvider provider = new ICapabilityProvider() {
-            private final LazyOptional<ICurio> curioOpt = LazyOptional.of(() -> curio);
-
-            @Nonnull
-            @Override
-            public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap,
-                                                     @Nullable Direction side) {
-                return CuriosCapability.ITEM.orEmpty(cap, curioOpt);
-            }
-        };
-        evt.addCapability(CuriosCapability.ID_ITEM, provider);
-    }
+    // Note: In NeoForge, ICurio capabilities are registered differently.
+    // Items that need Curio functionality should implement ICurioItem directly.
+    // The ItemNecklace, ItemRing, and OmenItem classes should implement ICurioItem
+    // to provide Curio functionality. This method is kept for reference but may
+    // no longer be needed if items properly implement ICurioItem.
+    // 
+    // If you need to register items programmatically, use CuriosApi.registerCurio()
+    // during mod initialization instead of AttachCapabilitiesEvent.
 
 }

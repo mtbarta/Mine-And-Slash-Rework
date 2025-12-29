@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +27,6 @@ public class PrimaryMatInfoButton extends ImageButton {
 
     public static class InfoData {
 
-
         public Words word;
         public Item icon;
         public List<Item> allPossibleItems;
@@ -41,9 +41,10 @@ public class PrimaryMatInfoButton extends ImageButton {
     InfoData info;
 
     public PrimaryMatInfoButton(InfoData info, int xPos, int yPos) {
-        super(xPos, yPos, XS, YS, 0, 0, YS, SlashRef.guiId(""), (button) -> {
-
-        });
+        super(xPos, yPos, XS, YS,
+                new WidgetSprites(SlashRef.guiId(""), SlashRef.guiId("")),
+                (button) -> {
+                });
         this.info = info;
     }
 
@@ -55,7 +56,6 @@ public class PrimaryMatInfoButton extends ImageButton {
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-
 
         ResourceLocation tex = SlashRef.guiId("primary_info");
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -75,7 +75,8 @@ public class PrimaryMatInfoButton extends ImageButton {
         for (Item item : this.info.allPossibleItems) {
             count++;
             if (count < 10) {
-                list.add(Component.literal(" - ").append(item.getName(item.getDefaultInstance())).withStyle(ChatFormatting.YELLOW));
+                list.add(Component.literal(" - ").append(item.getName(item.getDefaultInstance()))
+                        .withStyle(ChatFormatting.YELLOW));
             } else {
                 cut = true;
             }
@@ -86,12 +87,13 @@ public class PrimaryMatInfoButton extends ImageButton {
 
         list.add(Component.literal(""));
 
-        list.addAll(ExileTooltipUtils.splitLongText(Itemtips.PRIMARY_PROFESSION_MAT_INFO.locName().withStyle(ChatFormatting.RED)));
+        list.addAll(ExileTooltipUtils
+                .splitLongText(Itemtips.PRIMARY_PROFESSION_MAT_INFO.locName().withStyle(ChatFormatting.RED)));
 
         list.add(Itemtips.PRIMARY_PROFESSION_USE_JEI.locName().withStyle(ChatFormatting.GREEN));
 
-
-        this.setTooltip(Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
+        this.setTooltip(
+                Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
     }
 
 }

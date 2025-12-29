@@ -15,8 +15,9 @@ public class WikiEntryList extends ObjectSelectionList<WikiEntry> {
     public static int HEIGHT = 50;
     NewWikiScreen screen;
 
-    public WikiEntryList(NewWikiScreen screen, Minecraft mc, int pWidth, int pHeight, int pY0, int pY1, int pItemHeight) {
-        super(mc, pWidth, pHeight, 48, screen.height - 64, 36);
+    public WikiEntryList(NewWikiScreen screen, Minecraft mc, int pWidth, int pHeight, int pY0, int pY1,
+            int pItemHeight) {
+        super(mc, pWidth, pHeight, 48, screen.height - 64);
         this.screen = screen;
 
         tryFilter("");

@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,10 +35,9 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
     public String profession;
 
     public ProfessionBlock(String profession) {
-        super(Properties.copy(Blocks.CRAFTING_TABLE).noOcclusion());
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE).noOcclusion());
         this.profession = profession;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-
 
     }
 
@@ -82,8 +82,8 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
         return all;
     }
 
-
-    // we can't use this for dropping the inventory because cancelling blockplacing event then dupes items with this..
+    // we can't use this for dropping the inventory because cancelling blockplacing
+    // event then dupes items with this..
     @Override
     public void onRemove(BlockState pState, Level level, BlockPos p, BlockState pNewState, boolean pIsMoving) {
 
@@ -97,7 +97,8 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player p, InteractionHand pHand,
+            BlockHitResult pHit) {
 
         if (!pLevel.isClientSide) {
             ProfessionBlockEntity be = (ProfessionBlockEntity) pLevel.getBlockEntity(pPos);
@@ -125,8 +126,10 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> type) {
-        return createTickerHelper(type, SlashBlockEntities.PROFESSION.get(), pLevel.isClientSide ? null : ProfessionBlock::serverTick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+            BlockEntityType<T> type) {
+        return createTickerHelper(type, SlashBlockEntities.PROFESSION.get(),
+                pLevel.isClientSide ? null : ProfessionBlock::serverTick);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ProfessionBlockEntity be) {

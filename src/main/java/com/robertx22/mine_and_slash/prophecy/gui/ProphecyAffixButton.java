@@ -10,6 +10,7 @@ import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -27,7 +28,9 @@ public class ProphecyAffixButton extends ImageButton {
     Info info;
 
     public ProphecyAffixButton(MapAffix data, Info info, boolean canTake, int x, int y) {
-        super(x, y, 16, 16, 0, 0, 1, ID, (action) -> {
+        super(x, y, 16, 16, 
+            new WidgetSprites(ID, ID), // Using same sprite for normal and hovered states
+            (action) -> {
             if (canTake) {
                 //Packets.sendToServer(new AcceptProphecyAffixPacket(data.GUID()));
                 //Minecraft.getInstance().setScreen(null);
@@ -38,7 +41,7 @@ public class ProphecyAffixButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         pGuiGraphics.blit(SlashRef.guiId("prophecy/icon"), getX(), getY(), 0, 0, 16, 16, 16, 16);
 
         var stats = data.getStats(100, Load.Unit(ClientOnly.getPlayer()).getLevel());

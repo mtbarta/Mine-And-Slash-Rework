@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -32,7 +33,9 @@ public class MainHubButton extends ImageButton {
     boolean right;
 
     public MainHubButton(boolean isright, ResourceLocation loc, INamedScreen screen, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, ySize, loc, (button) -> {
+        super(xPos, yPos, xSize, ySize, 
+            new WidgetSprites(loc, loc), // Using same sprite for normal and hovered states
+            (button) -> {
             if (screen instanceof IContainerNamedScreen) {
                 IContainerNamedScreen con = (IContainerNamedScreen) screen;
                 con.openContainer();
@@ -53,14 +56,13 @@ public class MainHubButton extends ImageButton {
 
     }
 
-    @Override
     protected ClientTooltipPositioner createTooltipPositioner() {
         return DefaultTooltipPositioner.INSTANCE;
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
+        super.renderWidget(gui, x, y, ticks);
 
 
         if (right) {

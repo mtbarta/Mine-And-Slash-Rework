@@ -19,6 +19,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -33,15 +34,15 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
     public static int xSize = 20;
     public static int ySize = 20;
 
-
     private StatData stat;
     private StatInfoType type;
     private LivingEntity target;
 
     public StatInfoButton(StatScreen screen, StatInfoType type, StatData stat, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, 0, SlashRef.guiId("stat_gui/info_button"), xSize, ySize, (button) -> {
-
-        });
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(SlashRef.guiId("stat_gui/info_button"), SlashRef.guiId("stat_gui/info_button")),
+                (button) -> {
+                });
 
         this.type = type;
         this.stat = stat;
@@ -51,7 +52,6 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
     @Override
     public void render(GuiGraphics gui, int x, int y, float ticks) {
         super.render(gui, x, y, ticks);
-
 
         if (stat == null || stat.GetStat() == null) {
             return;
@@ -106,7 +106,8 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
             @Override
             public boolean shouldShow(StatData data) {
-                return data.getMoreStatTypeMulti() != 1 && data.GetStat().getMultiUseType() == Stat.MultiUseType.MULTIPLICATIVE_DAMAGE;
+                return data.getMoreStatTypeMulti() != 1
+                        && data.GetStat().getMultiUseType() == Stat.MultiUseType.MULTIPLICATIVE_DAMAGE;
             }
 
             @Override
@@ -117,7 +118,10 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
         USABLE_VALUE("usable_value", true) {
             @Override
             public MutableComponent getRenderText(StatData data, EntityData unit) {
-                return Component.literal(data.GetStat() instanceof IUsableStat u ? NumberUtils.singleDigitFloat(u.getUsableValue(unit.getUnit(), (int) data.getValue(), unit.getLevel()) * 100F) + "%" : "");
+                return Component.literal(data.GetStat() instanceof IUsableStat u
+                        ? NumberUtils.singleDigitFloat(
+                                u.getUsableValue(unit.getUnit(), (int) data.getValue(), unit.getLevel()) * 100F) + "%"
+                        : "");
             }
 
             @Override
@@ -138,7 +142,8 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
             @Override
             public MutableComponent getRenderText(StatData data, EntityData unit) {
-                return Component.literal(data.GetStat().getMinCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
+                return Component
+                        .literal(data.GetStat().getMinCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
             }
 
             @Override
@@ -154,7 +159,8 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
             @Override
             public MutableComponent getRenderText(StatData data, EntityData unit) {
-                return Component.literal(data.GetStat().getDefaultSoftCap() + "" + (data.GetStat().IsPercent() ? "%" : ""));
+                return Component
+                        .literal(data.GetStat().getDefaultSoftCap() + "" + (data.GetStat().IsPercent() ? "%" : ""));
             }
 
             @Override
@@ -170,7 +176,8 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
             @Override
             public MutableComponent getRenderText(StatData data, EntityData unit) {
-                return Component.literal(data.GetStat().getHardCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
+                return Component
+                        .literal(data.GetStat().getHardCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
             }
 
             @Override
@@ -178,7 +185,6 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
                 return Arrays.asList(Words.HardcapInfo.locName());
             }
         },
-
 
         INFO("info", true) {
             @Override
@@ -200,7 +206,6 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
                 t.add(Component.literal("Id: ").append(stat.GUID()));
 
-
                 // todo ideally all stats should be reworked into this one or similar
 
                 if (stat instanceof DatapackStat d) {
@@ -215,7 +220,6 @@ public class StatInfoButton extends ImageButton implements IStatInfoButton {
 
         public String id;
         public boolean hasIcon = false;
-
 
         StatInfoType(String id, boolean hasIcon) {
             this.id = id;

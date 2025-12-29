@@ -11,8 +11,8 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,7 +36,8 @@ public class Row implements IParticleRenderStrategy {
     }
 
     @Override
-    public void setupParticle(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera, float partialTick, PoseStack posestack) {
+    public void setupParticle(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera,
+            float partialTick, PoseStack posestack) {
         Vec3 cameraPos = camera.getPosition();
         Vec3 pos = particle.getPos();
         Vec3 original = particle.getOriginalPosition();
@@ -53,12 +54,14 @@ public class Row implements IParticleRenderStrategy {
     }
 
     @Override
-    public void renderDamage(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera, float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
-        IParticleRenderMaterial.multipleElements material = (IParticleRenderMaterial.multipleElements)mat;
+    public void renderDamage(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera,
+            float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
+        IParticleRenderMaterial.multipleElements material = (IParticleRenderMaterial.multipleElements) mat;
 
         List<Pair<Elements, String>> mat1 = material.getMat();
         boolean crit = material.isCrit();
-        MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers()
+                .bufferSource();
 
         float startFrom = 0.0f;
 
@@ -77,27 +80,29 @@ public class Row implements IParticleRenderStrategy {
             String damage = damageFormat.apply(number);
 
             ChatFormatting format = element.format;
-            MutableComponent mutableComponent = MutableComponent.create(new LiteralContents(damage)).withStyle(format);
+            MutableComponent mutableComponent = Component.literal(damage).withStyle(format);
             if (crit) {
                 mutableComponent.withStyle(ChatFormatting.BOLD);
             }
 
             int thisWidth = Minecraft.getInstance().font.width(mutableComponent);
-            RenderUtils.renderComponent(posestack, mutableComponent, startFrom + usedWidth, format.getColor(), multibuffersource$buffersource);
+            RenderUtils.renderComponent(posestack, mutableComponent, startFrom + usedWidth, format.getColor(),
+                    multibuffersource$buffersource);
 
             usedWidth += thisWidth;
         }
 
-
     }
 
     @Override
-    public void renderNullifiedDamage(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera, float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
+    public void renderNullifiedDamage(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer,
+            Camera camera, float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
         new Default().renderNullifiedDamage(particle, vertexConsumer, camera, partialTick, posestack, mat);
     }
 
     @Override
-    public void renderHeal(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera, float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
+    public void renderHeal(ExileInteractionResultParticle particle, VertexConsumer vertexConsumer, Camera camera,
+            float partialTick, PoseStack posestack, IParticleRenderMaterial mat) {
         new Default().renderHeal(particle, vertexConsumer, camera, partialTick, posestack, mat);
     }
 
@@ -106,9 +111,9 @@ public class Row implements IParticleRenderStrategy {
         return 0;
     }
 
-    private static Vec3 limitDistance(Vec3 pos){
+    private static Vec3 limitDistance(Vec3 pos) {
         double maxDistance = 6.0d;
-        if (pos.length() >= maxDistance){
+        if (pos.length() >= maxDistance) {
             Vec3 normalize = pos.normalize();
             return normalize.scale(maxDistance);
         }

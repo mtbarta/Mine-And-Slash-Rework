@@ -36,7 +36,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class HealthBarRenderer {
 
     private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("#.##");
     private static final TagKey<EntityType<?>> FORGE_BOSS_TAG =
-            TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge", "bosses"));
+            TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
     private static final TagKey<EntityType<?>> FABRIC_BOSS_TAG =
             TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
     private static final int magicShieldColor = FastColor.ARGB32.color(190, 66, 241, 224);
@@ -171,7 +171,7 @@ public class HealthBarRenderer {
             return false;
         }
 
-        var id = ForgeRegistries.ENTITY_TYPES.getKey(living.getType());
+        var id = BuiltInRegistries.ENTITY_TYPE.getKey(living.getType());
         if (NeatConfig.instance.blacklist().contains(id.toString())) {
             return false;
         }
@@ -352,7 +352,7 @@ public class HealthBarRenderer {
                     mc.font.drawInBatch(percStr, (int) (halfSize / healthValueTextScale) - mc.font.width(percStr) / 2.0F, h, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
                 }
                 if (NeatConfig.instance.enableDebugInfo() && mc.options.renderDebug) {
-                    var id = ForgeRegistries.ENTITY_TYPES.getKey(living.getType());
+                    var id = BuiltInRegistries.ENTITY_TYPE.getKey(living.getType());
                     mc.font.drawInBatch("ID: \"" + id + "\"", 0, h + 16, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
                 }
                 poseStack.popPose();

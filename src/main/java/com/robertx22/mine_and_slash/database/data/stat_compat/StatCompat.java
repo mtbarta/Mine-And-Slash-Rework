@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -58,7 +58,7 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
     }
 
     private Attribute getAttribute() {
-        return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute_id));
+        return BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(attribute_id));
     }
 
     public boolean isAttributeCompat() {
@@ -74,7 +74,7 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
         if (ExileDB.Stats().get(mns_stat_id) instanceof AttributeStat) {
             return null;
         }
-        Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(enchant_id));
+        Enchantment ench = BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchant_id));
 
         float value = 0;
 

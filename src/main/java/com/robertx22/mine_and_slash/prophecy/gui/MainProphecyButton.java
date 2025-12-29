@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -26,28 +27,24 @@ public class MainProphecyButton extends ImageButton {
     Minecraft mc = Minecraft.getInstance();
 
     public MainProphecyButton(int xPos, int yPos) {
-        super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y, 0, 0, FAVOR_BUTTON_SIZE_Y, new ResourceLocation("empty"), (button) -> {
-        });
+        super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y,
+                new WidgetSprites(
+                        new ResourceLocation(SlashRef.MODID, "textures/gui/prophecy/main_button.png"),
+                        new ResourceLocation(SlashRef.MODID, "textures/gui/prophecy/main_button.png")),
+                (button) -> {
+                });
 
-    }
-
-    @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
     }
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(SlashRef.guiId("prophecy/button"), getX(), getY(), FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X);
-
+        setModTooltip();
+        super.render(gui, mouseX, mouseY, delta);
     }
 
     public void setModTooltip() {
 
         var data = Load.player(mc.player).prophecy;
-
 
         List<MutableComponent> list = new ArrayList<>();
 
@@ -57,14 +54,12 @@ public class MainProphecyButton extends ImageButton {
 
         list.add(Component.literal(""));
 
-        //list.add(Words.CURRENT_PROPHECY_CURRENCY.locName(Coin.PROPHECY.getTotalFromInventory(mc.player)));
-        //list.add(Words.AVG_LVL.locName(data.getAverageLevel()));
-        //list.add(Words.AVG_TIER.locName(data.getAverageTier()));
-
+        // list.add(Words.CURRENT_PROPHECY_CURRENCY.locName(Coin.PROPHECY.getTotalFromInventory(mc.player)));
+        // list.add(Words.AVG_LVL.locName(data.getAverageLevel()));
+        // list.add(Words.AVG_TIER.locName(data.getAverageTier()));
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(list)));
 
     }
-
 
 }

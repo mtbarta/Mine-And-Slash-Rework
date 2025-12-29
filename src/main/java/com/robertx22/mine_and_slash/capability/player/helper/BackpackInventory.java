@@ -36,7 +36,6 @@ public class BackpackInventory extends MyInventory {
         return false;
     }
 
-    @Override
     protected void moveItemToOccupiedSlotsWithSameType(ItemStack stack) {
         for (int slot = 0; slot < getContainerSize(); slot++) {
             ItemStack existing = this.getItem(slot);
@@ -49,7 +48,6 @@ public class BackpackInventory extends MyInventory {
         }
     }
 
-    @Override
     protected void moveItemsBetweenStacks(ItemStack source, ItemStack destination) {
         int maxStack = Math.min(getMaxStackSize(), getMaxStackSize(destination));
         int amount = Math.min(source.getCount(), maxStack - destination.getCount());

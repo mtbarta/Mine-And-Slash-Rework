@@ -24,9 +24,10 @@ public class HubStatButton extends ImageButton {
 
     public static int xSize = 41;
     public static int ySize = 20;
-    public static ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/hub_stat_button_left.png");
-    public static ResourceLocation RIGHT = new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/hub_stat_button_right.png");
-
+    public static ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID,
+            "textures/gui/main_hub/hub_stat_button_left.png");
+    public static ResourceLocation RIGHT = new ResourceLocation(SlashRef.MODID,
+            "textures/gui/main_hub/hub_stat_button_right.png");
 
     StatData stat;
     boolean right;
@@ -46,9 +47,8 @@ public class HubStatButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
-
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
+        super.renderWidget(gui, x, y, ticks);
 
         if (stat == null || stat.GetStat() == null) {
             return;
@@ -56,12 +56,12 @@ public class HubStatButton extends ImageButton {
 
         if (this.isHovered()) {
             List<Component> tooltip = new ArrayList<>();
-            var text = stat.GetStat().locName().append(": " + CharacterStatsButtons.getStatString(stat.GetStat(), Load.Unit(ClientOnly.getPlayer())));
+            var text = stat.GetStat().locName().append(
+                    ": " + CharacterStatsButtons.getStatString(stat.GetStat(), Load.Unit(ClientOnly.getPlayer())));
             tooltip.add(text);
             this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
 
         }
-
 
         int iconX = 0;
         int iconY = 0;
@@ -92,18 +92,16 @@ public class HubStatButton extends ImageButton {
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(tex, getX(), getY(), 0, 0, xSize, ySize, xSize, ySize);
 
-
         String stattext = CharacterStatsButtons.getHubStatString(stat.GetStat(), Load.Unit(ClientOnly.getPlayer()));
 
-        // gui.drawCenteredString(Minecraft.getInstance().font, stattext, getX() + numX, getY() + numY, ChatFormatting.YELLOW.getColor());
-
+        // gui.drawCenteredString(Minecraft.getInstance().font, stattext, getX() + numX,
+        // getY() + numY, ChatFormatting.YELLOW.getColor());
 
         GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 0.75F, stattext, ChatFormatting.YELLOW);
 
         RenderUtils.render16Icon(gui, stat.GetStat().getIconForRendering(), getX() + iconX - 8, getY() + iconY - 8);
 
-        //gui.blit(tex, iconX, iconY, 0, 0, 16, ySize, xSize, ySize);
-
+        // gui.blit(tex, iconX, iconY, 0, 0, 16, ySize, xSize, ySize);
 
     }
 

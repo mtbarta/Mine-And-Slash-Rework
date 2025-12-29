@@ -54,24 +54,25 @@ import com.robertx22.test.test2.SchemaTest;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import com.robertx22.library_of_exile.main.Packets;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+// import net.neoforged.neoforge.network.NetworkRegistry;
+// import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -118,19 +119,25 @@ public class MMORPG {
 
 
     private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(SlashRef.MODID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    // TODO: Refactor Network for NeoForge 1.20.4
+    // public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
+    //         new ResourceLocation(SlashRef.MODID, "main"),
+    //         () -> PROTOCOL_VERSION,
+    //         PROTOCOL_VERSION::equals,
+    //         PROTOCOL_VERSION::equals
+    // );
 
-    public MMORPG() {
+    public MMORPG(IEventBus bus) {
 
         SchemaTest.run();
 
-        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         OrderedModConstructor.register(new MnsConstructor(SlashRef.MODID), bus);
+
+        bus.addListener((RegisterPayloadHandlerEvent event) -> {
+            Packets.setRegistrar(event.registrar(SlashRef.MODID).versioned(PROTOCOL_VERSION));
+        });
+
+        SlashCapabilities.register();
 
         if (MMORPG.RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(SlashRef.MODID);
@@ -162,28 +169,21 @@ public class MMORPG {
         });
 
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-
-            NeatForgeConfig.register();
-
-            ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec, NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
-            bus.addListener(ClientInit::onInitializeClient);
-
-            ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
-                KeybindsRegister.register(x);
-            });
-
-            //bus.addListener(KeybindsRegister::register);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
-                RenderRegister.regRenders(x);
-            });
-
+        // DistExecutor removed, registered directly
+        // NeatForgeConfig.register(); // Todo check if safe
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec, NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
+        bus.addListener(ClientInit::onInitializeClient);
+        ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
+                 KeybindsRegister.register(x);
+        });
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
+                 RenderRegister.regRenders(x);
         });
 
 
         bus.addListener(this::commonSetupEvent);
         bus.addListener(this::interMod);
-        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, CurioEvents::attachCapability);
+        NeoForge.EVENT_BUS.addGenericListener(ItemStack.class, CurioEvents::attachCapability);
         ItemTooltipsRegister.init();
 
         CurioEvents.reg();
@@ -255,9 +255,6 @@ public class MMORPG {
     public void commonSetupEvent(FMLCommonSetupEvent event) {
 
         ProfessionRecipes.init();
-
-
-        SlashCapabilities.register();
 
     }
 

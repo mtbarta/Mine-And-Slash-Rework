@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -19,30 +20,28 @@ public class CardPickButton extends ImageButton {
 
     Minecraft mc = Minecraft.getInstance();
     ICard card;
+    ResourceLocation texture;
 
     public CardPickButton(ICard card, int xPos, int yPos) {
-        super(xPos, yPos, SIZE_X, SIZE_Y, 0, 0, 0, SlashRef.guiId("pick_card"), (button) -> {
-            card.onClick(ClientOnly.getPlayer());
-            Minecraft.getInstance().setScreen(null);
-        });
+        super(xPos, yPos, SIZE_X, SIZE_Y,
+                new WidgetSprites(SlashRef.guiId("pick_card"), SlashRef.guiId("pick_card")),
+                (button) -> {
+                    card.onClick(ClientOnly.getPlayer());
+                    Minecraft.getInstance().setScreen(null);
+                });
         this.card = card;
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+        setModTooltip();
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(this.resourceLocation, getX(), getY(), 0, 0, SIZE_X, SIZE_Y);
+        gui.blit(this.texture, getX(), getY(), 0, 0, SIZE_X, SIZE_Y);
         ResourceLocation tex = card.getIcon();
         gui.blit(tex, getX() + 45, getY() + 38, iconSize, iconSize, iconSize, iconSize, iconSize, iconSize);
 
-        gui.drawString(mc.font, card.getName(), this.getX() + SIZE_X / 2 - mc.font.width(card.getName()) / 2, getY() + 20, ChatFormatting.RED.getColor());
-
+        gui.drawString(mc.font, card.getName(), this.getX() + SIZE_X / 2 - mc.font.width(card.getName()) / 2,
+                getY() + 20, ChatFormatting.RED.getColor());
 
         var tip = TextUTIL.mergeList(card.getScreenText(mc.player));
 
@@ -56,13 +55,12 @@ public class CardPickButton extends ImageButton {
             }
         }
 
-        gui.drawWordWrap(mc.font, tip, this.getX() + SIZE_X / 2 - max / 2, getY() + 100, 96, ChatFormatting.YELLOW.getColor());
+        gui.drawWordWrap(mc.font, tip, this.getX() + SIZE_X / 2 - max / 2, getY() + 100, 96,
+                ChatFormatting.YELLOW.getColor());
     }
-
 
     public void setModTooltip() {
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(card.getTooltip(mc.player))));
     }
-
 
 }

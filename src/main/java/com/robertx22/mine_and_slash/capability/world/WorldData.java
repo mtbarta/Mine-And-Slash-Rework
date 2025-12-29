@@ -1,48 +1,34 @@
 package com.robertx22.mine_and_slash.capability.world;
 
 import com.robertx22.dungeon_realm.main.DungeonMain;
-import com.robertx22.library_of_exile.components.ICap;
 import com.robertx22.library_of_exile.dimension.MapDataFinder;
 import com.robertx22.library_of_exile.dimension.MapDimensionInfo;
 import com.robertx22.library_of_exile.utils.LoadSave;
+import com.robertx22.library_of_exile.components.ICap;
 import com.robertx22.mine_and_slash.maps.MapData;
 import com.robertx22.mine_and_slash.maps.MnsMapDataHolder;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashAttachments;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 
 public class WorldData implements ICap {
 
 
     public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "world");
-    public static Capability<WorldData> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
-    });
-
-    transient final LazyOptional<WorldData> supp = LazyOptional.of(() -> this);
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == INSTANCE) {
-            return supp.cast();
-        }
-        return LazyOptional.empty();
-
-    }
 
     public static WorldData get(Level level) {
         if (level.isClientSide) {
             return new WorldData(level);
         }
 
-        return level.getServer().overworld().getCapability(INSTANCE).orElse(new WorldData(level));
+        return level.getServer().overworld().getData(SlashAttachments.WORLD_DATA);
     }
 
 

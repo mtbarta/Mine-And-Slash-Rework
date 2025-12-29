@@ -25,15 +25,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
+
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
+import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,12 +55,14 @@ public class ClientInit {
         AtomicInteger sounds = new AtomicInteger();
 
         // todo
-        // experimental fix for massive 1 min lag after joining a map. No clue what causes it
+        // experimental fix for massive 1 min lag after joining a map. No clue what
+        // causes it
         ForgeEvents.registerForgeEvent(PlaySoundEvent.class, x -> {
             var p = ClientOnly.getPlayer();
             if (p != null && p.tickCount < (20 * 5)) {
                 if (p.level().dimension().location().equals(DungeonMain.DIMENSION_KEY)) {
-                    //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Sounds blocked: " + sounds + " - " + x.getName()));
+                    // Minecraft.getInstance().player.sendSystemMessage(Component.literal("Sounds
+                    // blocked: " + sounds + " - " + x.getName()));
                     sounds.getAndIncrement();
                     x.setSound(null); // forge wtf.. not cancellable but set nullable?
                 }
@@ -69,12 +71,10 @@ public class ClientInit {
             }
         });
 
-
         var todisable = Arrays.asList(
                 VanillaGuiOverlay.ARMOR_LEVEL,
                 VanillaGuiOverlay.MOUNT_HEALTH,
-                VanillaGuiOverlay.PLAYER_HEALTH
-        );
+                VanillaGuiOverlay.PLAYER_HEALTH);
 
         ForgeEvents.registerForgeEvent(RenderGuiOverlayEvent.class, x -> {
             if (ClientConfigs.getConfig().GUI_POSITION.get() == GuiPosition.OVER_VANILLA) {
@@ -84,7 +84,6 @@ public class ClientInit {
             }
 
         });
-
 
         ForgeEvents.registerForgeEvent(RenderTooltipEvent.GatherComponents.class, x -> {
 
@@ -98,25 +97,29 @@ public class ClientInit {
                         gems.add(socket);
                     }
 
-
                     int e = 0;
                     if (!gems.isEmpty()) {
 
                         List<Either<FormattedText, TooltipComponent>> list = x.getTooltipElements();
                         for (int i = 0; i < list.size(); i++) {
                             Optional<FormattedText> o = list.get(i).left();
-                            if (o.isPresent() && o.get() instanceof Component comp && comp.getContents() instanceof LiteralContents tc) {
-                                if (tc.text().contains("[SOCKET_PLACEHOLDER]")) {
+                            if (o.isPresent() && o.get() instanceof Component comp) {
+                                if (comp.getString().contains("[SOCKET_PLACEHOLDER]")) {
                                     if (e < gems.size()) {
                                         if (!new StatRangeInfo(ModRange.hide()).shouldShowDescriptions()) {
-                                            list.set(i, Either.right(new SocketTooltip.SocketComponent(x.getItemStack(), Collections.singletonList(gems.get(e)))));
+                                            list.set(i, Either.right(new SocketTooltip.SocketComponent(x.getItemStack(),
+                                                    Collections.singletonList(gems.get(e)))));
                                         } else {
-                                            list.set(i, Either.right(new SocketTooltip.SocketComponent(x.getItemStack(), Collections.singletonList(gems.get(e)))));
+                                            list.set(i, Either.right(new SocketTooltip.SocketComponent(x.getItemStack(),
+                                                    Collections.singletonList(gems.get(e)))));
                                             int finalI = i;
                                             list.get(i + 1).left().ifPresent(formattedText -> {
-                                                if (formattedText instanceof Component && formattedText.getString().contains("[SOCKET_PLACEHOLDER]")) {
-                                                    String replaced = formattedText.getString().replace("[SOCKET_PLACEHOLDER]", "");
-                                                    MutableComponent desc = Component.literal(replaced).withStyle(ChatFormatting.BLUE);
+                                                if (formattedText instanceof Component
+                                                        && formattedText.getString().contains("[SOCKET_PLACEHOLDER]")) {
+                                                    String replaced = formattedText.getString()
+                                                            .replace("[SOCKET_PLACEHOLDER]", "");
+                                                    MutableComponent desc = Component.literal(replaced)
+                                                            .withStyle(ChatFormatting.BLUE);
                                                     list.set(finalI + 1, Either.left(desc));
                                                 }
                                             });
@@ -138,7 +141,8 @@ public class ClientInit {
         ForgeEvents.registerForgeEvent(RenderLivingEvent.class, x -> {
             for (DamageParticle p : DamageParticleRenderer.PARTICLES) {
                 Minecraft mc = Minecraft.getInstance();
-                DamageParticleRenderer.renderNameTag(mc.getEntityRenderDispatcher().camera, p.renderString, p, x.getPoseStack(), x.getPartialTick(), x.getMultiBufferSource());
+                DamageParticleRenderer.renderNameTag(mc.getEntityRenderDispatcher().camera, p.renderString, p,
+                        x.getPoseStack(), x.getPartialTick(), x.getMultiBufferSource());
                 p.tick();
             }
 
@@ -149,7 +153,6 @@ public class ClientInit {
 
         ClientSetup.setup();
         Client.register();
-
 
     }
 }

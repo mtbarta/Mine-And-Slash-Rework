@@ -10,6 +10,7 @@ import com.robertx22.library_of_exile.utils.TextUTIL;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -25,10 +26,11 @@ public class StatIconAndNumberButton extends ImageButton {
     private LivingEntity target;
 
     public StatIconAndNumberButton(StatScreen screen, StatData stat, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, 0, SlashRef.guiId("stat_gui/stat_icon"), xSize, ySize, (button) -> {
-            screen.setInfo(stat);
-
-        });
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(SlashRef.guiId("stat_gui/stat_icon"), SlashRef.guiId("stat_gui/stat_icon")),
+                (button) -> {
+                    screen.setInfo(stat);
+                });
 
         this.stat = stat;
         this.target = screen.getTarget();
@@ -38,21 +40,20 @@ public class StatIconAndNumberButton extends ImageButton {
     public void render(GuiGraphics gui, int x, int y, float ticks) {
         super.render(gui, x, y, ticks);
 
-
         if (stat == null || stat.GetStat() == null) {
             return;
         }
 
         if (this.isHoveredOrFocused()) {
             List<Component> tooltip = new ArrayList<>();
-            var text = stat.GetStat().locName().append(": " + CharacterStatsButtons.getStatString(stat.GetStat(), Load.Unit(target)));
+            var text = stat.GetStat().locName()
+                    .append(": " + CharacterStatsButtons.getStatString(stat.GetStat(), Load.Unit(target)));
             tooltip.add(text);
 
             tooltip.addAll(stat.GetStat().getCutDescTooltip());
 
             this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
         }
-
 
         int iconX = 5;
         int iconY = 5;
@@ -62,11 +63,11 @@ public class StatIconAndNumberButton extends ImageButton {
 
         String stattext = ((int) stat.getValue()) + "";
 
+        RenderUtils.render16Icon(gui, stat.GetStat().getIconForRenderingInGroup(), getX() + iconX - 4,
+                getY() + iconY - 3);
 
-        RenderUtils.render16Icon(gui, stat.GetStat().getIconForRenderingInGroup(), getX() + iconX - 4, getY() + iconY - 3);
-
-        GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 1F, stattext, stat.GetStat().getStatGuiTooltipNumberColor(stat));
-
+        GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 1F, stattext,
+                stat.GetStat().getStatGuiTooltipNumberColor(stat));
 
     }
 

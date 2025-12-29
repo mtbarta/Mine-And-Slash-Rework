@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
 import java.util.function.Function;
@@ -127,7 +127,7 @@ public class MapHolder {
     }
 
     public SoundEvent getSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(get(MapField.SOUND)));
+        return BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation(get(MapField.SOUND)));
     }
 
     public EntityFinder.SelectionType getSelectionType() {

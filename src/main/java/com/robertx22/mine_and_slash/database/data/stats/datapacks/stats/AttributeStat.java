@@ -24,7 +24,8 @@ public class AttributeStat extends BaseDatapackStat {
     public AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
     public boolean cut_by_hundred = true;
 
-    public AttributeStat(String id, String locname, UUID uuid, Attribute attribute, boolean perc, AttributeModifier.Operation operation, boolean cut) {
+    public AttributeStat(String id, String locname, UUID uuid, Attribute attribute, boolean perc,
+            AttributeModifier.Operation operation, boolean cut) {
         super(SER_ID);
         this.id = id;
         this.operation = operation;
@@ -61,14 +62,13 @@ public class AttributeStat extends BaseDatapackStat {
                 uuid,
                 attributeId,
                 val,
-                operation
-        );
+                operation);
 
         AttributeInstance atri = en.getAttribute(attribute);
 
         if (atri != null) {
             if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
+                atri.removeModifier(mod.getId()); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
             }
             atri.addTransientModifier(mod);
         }

@@ -10,8 +10,9 @@ public class FilterEntryList extends ObjectSelectionList<FilterEntryButton> {
 
     FilterSelectScreen screen;
 
-    public FilterEntryList(FilterSelectScreen screen, Minecraft mc, int pWidth, int pHeight, int pY0, int pY1, int pItemHeight) {
-        super(mc, pWidth, pHeight, pY0, pY1, pItemHeight);
+    public FilterEntryList(FilterSelectScreen screen, Minecraft mc, int pWidth, int pHeight, int pY0, int pY1,
+            int pItemHeight) {
+        super(mc, pWidth, pHeight, pY0, pY1);
         this.screen = screen;
 
         reloadAllEntries();
@@ -19,7 +20,6 @@ public class FilterEntryList extends ObjectSelectionList<FilterEntryButton> {
     }
 
     private List<GroupFilterEntry> currentlyDisplayedLevels = new ArrayList<>();
-
 
     private void reloadAllEntries() {
 

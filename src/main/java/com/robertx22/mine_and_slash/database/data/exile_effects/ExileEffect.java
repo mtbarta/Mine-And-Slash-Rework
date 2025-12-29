@@ -30,7 +30,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +83,7 @@ public class ExileEffect implements JsonExileRegistry<ExileEffect>, IAutoGson<Ex
 
     public Item getEffectDisplayItem() {
         var id = SlashRef.id("mob_effects/" + GUID());
-        return ForgeRegistries.ITEMS.getValue(id);
+        return BuiltInRegistries.ITEM.get(id);
     }
 
     @Override

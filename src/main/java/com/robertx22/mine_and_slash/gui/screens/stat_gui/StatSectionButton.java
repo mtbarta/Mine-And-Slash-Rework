@@ -5,6 +5,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -15,13 +16,14 @@ public class StatSectionButton extends ImageButton {
     public static int xSize = 16;
     public static int ySize = 16;
 
-
     StatGuiGroupSection sec;
 
     public StatSectionButton(StatScreen screen, StatGuiGroupSection sec, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, 0, sec.getIcon(), xSize, ySize, (button) -> {
-            screen.showStats(sec.getStats(screen.getTarget()), true);
-        });
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(sec.getIcon(), sec.getIcon()),
+                (button) -> {
+                    screen.showStats(sec.getStats(screen.getTarget()), true);
+                });
 
         this.sec = sec;
     }

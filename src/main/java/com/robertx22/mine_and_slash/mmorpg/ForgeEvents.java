@@ -1,10 +1,10 @@
 package com.robertx22.mine_and_slash.mmorpg;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.event.IModBusEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.event.IModBusEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ public class ForgeEvents {
                     .getModEventBus()
                     .addListener(priority, event);
         } else {
-            MinecraftForge.EVENT_BUS.addListener(priority, event);
+            NeoForge.EVENT_BUS.addListener(priority, event);
         }
     }
 

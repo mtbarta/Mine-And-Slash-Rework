@@ -9,7 +9,7 @@ import com.robertx22.mine_and_slash.database.data.profession.all.Professions;
 import com.robertx22.mine_and_slash.database.data.profession.screen.CraftingStationMenu;
 import com.robertx22.mine_and_slash.mmorpg.registers.deferred_wrapper.Def;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -21,11 +21,11 @@ public class SlashContainers {
     public static void init() {
 
 
-        addStation(Professions.SALVAGING, () -> IForgeMenuType.create((x, y, z) -> new CraftingStationMenu(Professions.SALVAGING, x, y)));
-        addStation(Professions.GEAR_CRAFTING, () -> IForgeMenuType.create((x, y, z) -> new CraftingStationMenu(Professions.GEAR_CRAFTING, x, y)));
-        addStation(Professions.ALCHEMY, () -> IForgeMenuType.create((x, y, z) -> new CraftingStationMenu(Professions.ALCHEMY, x, y)));
-        addStation(Professions.COOKING, () -> IForgeMenuType.create((x, y, z) -> new CraftingStationMenu(Professions.COOKING, x, y)));
-        addStation(Professions.INFUSING, () -> IForgeMenuType.create((x, y, z) -> new CraftingStationMenu(Professions.INFUSING, x, y)));
+        addStation(Professions.SALVAGING, () -> IMenuTypeExtension.create((x, y, z) -> new CraftingStationMenu(Professions.SALVAGING, x, y)));
+        addStation(Professions.GEAR_CRAFTING, () -> IMenuTypeExtension.create((x, y, z) -> new CraftingStationMenu(Professions.GEAR_CRAFTING, x, y)));
+        addStation(Professions.ALCHEMY, () -> IMenuTypeExtension.create((x, y, z) -> new CraftingStationMenu(Professions.ALCHEMY, x, y)));
+        addStation(Professions.COOKING, () -> IMenuTypeExtension.create((x, y, z) -> new CraftingStationMenu(Professions.COOKING, x, y)));
+        addStation(Professions.INFUSING, () -> IMenuTypeExtension.create((x, y, z) -> new CraftingStationMenu(Professions.INFUSING, x, y)));
 
         addBackpackTab(BackpackType.GEARS);
         addBackpackTab(BackpackType.MAPS);
@@ -43,11 +43,11 @@ public class SlashContainers {
     }
 
     static void addBackpackTab(BackpackType type) {
-        addBackpackTab(type, () -> IForgeMenuType.create((id, pInv, buf) -> new BackpackMenu(type, id, pInv)));
+        addBackpackTab(type, () -> IMenuTypeExtension.create((id, pInv, buf) -> new BackpackMenu(type, id, pInv)));
     }
 
-    public static RegObj<MenuType<SkillGemsMenu>> SKILL_GEMS = Def.container("runeword", () -> IForgeMenuType.create((x, y, z) -> new SkillGemsMenu(x, y)));
+    public static RegObj<MenuType<SkillGemsMenu>> SKILL_GEMS = Def.container("runeword", () -> IMenuTypeExtension.create((x, y, z) -> new SkillGemsMenu(x, y)));
 
-    public static RegObj<MenuType<JewelsMenu>> JEWEL = Def.container("jewel", () -> IForgeMenuType.create((id, pInv, buf) -> new JewelsMenu(id, pInv)));
+    public static RegObj<MenuType<JewelsMenu>> JEWEL = Def.container("jewel", () -> IMenuTypeExtension.create((id, pInv, buf) -> new JewelsMenu(id, pInv)));
 
 }

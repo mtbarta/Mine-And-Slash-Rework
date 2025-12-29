@@ -38,9 +38,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -302,7 +302,7 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         var list = new ArrayList<ExactStatData>();
 
         for (Map.Entry<Enchantment, Integer> en : stack.getAllEnchantments().entrySet()) {
-            var id = ForgeRegistries.ENCHANTMENTS.getKey(en.getKey()).toString();
+            var id = BuiltInRegistries.ENCHANTMENT.getKey(en.getKey()).toString();
             // todo this could be cached
             for (StatCompat compat : ExileDB.StatCompat().getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
                 var result = compat.getEnchantCompatResult(Arrays.asList(stack), lvl);
@@ -332,7 +332,7 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         var stacks = gears.stream().map(x -> x.stack).collect(Collectors.toList());
 
         for (Enchantment enchant : enchants) {
-            var id = ForgeRegistries.ENCHANTMENTS.getKey(enchant).toString();
+            var id = BuiltInRegistries.ENCHANTMENT.getKey(enchant).toString();
 
             for (StatCompat compat : ExileDB.StatCompat().getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
                 var result = compat.getEnchantCompatResult(stacks, lvl);

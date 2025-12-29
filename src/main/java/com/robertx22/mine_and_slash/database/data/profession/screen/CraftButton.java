@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -31,23 +32,20 @@ public class CraftButton extends ImageButton {
     Minecraft mc = Minecraft.getInstance();
 
     public CraftButton(int xPos, int yPos, CraftingStationScreen be) {
-        super(xPos, yPos, XS, YS, 0, 0, YS, SlashRef.guiId("craftbutton"), (button) -> {
-            Packets.sendToServer(new CraftPacket(be.getSyncedData().getBlockPos()));
-        });
+        super(xPos, yPos, XS, YS,
+                new WidgetSprites(SlashRef.guiId("craftbutton"), SlashRef.guiId("craftbutton")),
+                (button) -> {
+                    Packets.sendToServer(new CraftPacket(be.getSyncedData().getBlockPos()));
+                });
         pbe = be;
-    }
-
-    @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
     }
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
         ResourceLocation tex = SlashRef.guiId("craftbutton");
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(tex, getX(), getY(), 0, (pbe.getSyncedData().craftingState == Crafting_State.ACTIVE || pbe.getSyncedData().craftingState == Crafting_State.IDLE) ? 0 : 19, 18, 19);
+        gui.blit(tex, getX(), getY(), 0, (pbe.getSyncedData().craftingState == Crafting_State.ACTIVE
+                || pbe.getSyncedData().craftingState == Crafting_State.IDLE) ? 0 : 19, 18, 19);
     }
 
     public void setModTooltip() {
@@ -66,16 +64,18 @@ public class CraftButton extends ImageButton {
         }
 
         if (lvl > owner) {
-            list.add(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(prof.locName(), lvl, owner).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+            list.add(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(prof.locName(), lvl, owner)
+                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         } else {
-            if (pbe.getSyncedData().craftingState == Crafting_State.ACTIVE || pbe.getSyncedData().craftingState == Crafting_State.IDLE)
+            if (pbe.getSyncedData().craftingState == Crafting_State.ACTIVE
+                    || pbe.getSyncedData().craftingState == Crafting_State.IDLE)
                 list.add(Gui.STATION_STOP_CRAFTING.locName().withStyle(ChatFormatting.DARK_AQUA));
             else
                 list.add(Gui.STATION_START_CRAFTING.locName().withStyle(ChatFormatting.DARK_AQUA));
         }
 
-
-        this.setTooltip(Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
+        this.setTooltip(
+                Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
     }
 
 }

@@ -16,28 +16,27 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SpellHotbarOverlay {
 
-
     public static ResourceLocation getHotbarTex(OverlayType type) {
-        return hotbarTex(type == OverlayType.SPELL_HOTBAR_HORIZONTAL, ClientConfigs.getConfig().HOTBAR_SWAPPING.get(), SpellKeybind.IS_ON_SECONd_HOTBAR ? 2 : 1);
+        return hotbarTex(type == OverlayType.SPELL_HOTBAR_HORIZONTAL, ClientConfigs.getConfig().HOTBAR_SWAPPING.get(),
+                SpellKeybind.IS_ON_SECONd_HOTBAR ? 2 : 1);
     }
 
     static ResourceLocation hotbarTex(Boolean horizontal, Boolean swap, Integer swapnum) {
         String swaptex = swap ? "_swap" + swapnum : "";
         String horizontaltex = horizontal ? "_horizontal" : "";
-        return new ResourceLocation(SlashRef.MODID, "textures/gui/spells/hotbar/" + "hotbar" + swaptex + horizontaltex + ".png");
+        return new ResourceLocation(SlashRef.MODID,
+                "textures/gui/spells/hotbar/" + "hotbar" + swaptex + horizontaltex + ".png");
     }
 
     Minecraft mc = Minecraft.getInstance();
-
 
     public void onHudRender(GuiGraphics gui, OverlayConfig config, OverlayType type) {
 
         try {
 
-            if (mc.options.renderDebug) {
+            if (mc.getDebugOverlay().showDebugScreen()) {
                 return;
             }
             if (mc.player.isSpectator()) {
@@ -62,10 +61,10 @@ public class SpellHotbarOverlay {
                 int place = i;
                 int xp = x + 3;
                 int yp = y + 3;
-                list.add(new SpellOnHotbarRender(type == OverlayType.SPELL_HOTBAR_HORIZONTAL, place, gui, xp, yp)) ;
+                list.add(new SpellOnHotbarRender(type == OverlayType.SPELL_HOTBAR_HORIZONTAL, place, gui, xp, yp));
             }
-            if (ClientConfigs.getConfig().HIDE_SPELL_HOTBAR_WHEN_NO_SPELL.get()){
-                if (list.stream().anyMatch(spell -> spell.spell != null)){
+            if (ClientConfigs.getConfig().HIDE_SPELL_HOTBAR_WHEN_NO_SPELL.get()) {
+                if (list.stream().anyMatch(spell -> spell.spell != null)) {
                     renderHotbarBackground(type, type.getSize(), gui, x, y);
                     list.forEach(SpellOnHotbarRender::render);
                 }
@@ -81,7 +80,6 @@ public class SpellHotbarOverlay {
         }
 
     }
-
 
     private void renderHotbarBackground(OverlayType type, PointData size, GuiGraphics gui, int x, int y) {
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);

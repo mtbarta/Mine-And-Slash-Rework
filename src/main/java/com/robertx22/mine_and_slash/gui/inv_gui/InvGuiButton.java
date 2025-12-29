@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -27,40 +28,32 @@ public class InvGuiButton extends ImageButton {
     Minecraft mc = Minecraft.getInstance();
     GuiItemData data;
 
-
     public InvGuiButton(GuiItemData data, int xPos, int yPos) {
-        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y, 0, 0, BUTTON_SIZE_Y, TEX, (button) -> {
-            if (!data.isEmpty()) {
-                Packets.sendToServer(new InvGuiPacket(data));
-                data.getAction().clientAction(ClientOnly.getPlayer(), data);
-            }
+        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y,
+                new WidgetSprites(TEX, TEX), // Using same sprite for normal and hovered states
+                (button) -> {
+                    if (!data.isEmpty()) {
+                        Packets.sendToServer(new InvGuiPacket(data));
+                        data.getAction().clientAction(ClientOnly.getPlayer(), data);
+                    }
 
-        });
+                }, Component.empty()); // Empty component for button text
         this.data = data;
 
     }
 
-    @Override
     protected ClientTooltipPositioner createTooltipPositioner() {
         return DefaultTooltipPositioner.INSTANCE;
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
+
         if (data.isEmpty()) {
             return;
         }
 
         setModTooltip();
-
-
-        super.render(gui, mouseX, mouseY, delta);
-
-    }
-
-    @Override
-    public void renderWidget(GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
-
 
         if (data.getAction().getBackGroundIcon() != null) {
             gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -75,16 +68,12 @@ public class InvGuiButton extends ImageButton {
 
         List<Component> tooltip = new ArrayList<>();
 
-
         for (Object c : data.getAction().getTooltip(mc.player)) {
             tooltip.add((Component) c);
         }
 
-
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
 
-
     }
-
 
 }

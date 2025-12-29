@@ -30,10 +30,8 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
         super(pEntityType, pLevel);
     }
 
-
     protected AbstractArrow getArrow(ItemStack pArrowStack, float pVelocity) {
         return ProjectileUtil.getMobArrow(this, pArrowStack, pVelocity);
-
 
     }
 
@@ -65,10 +63,12 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
             autoAimingRangedAttack(pTarget);
         } else {
 
-            ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem)));
+            ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this,
+                    item -> item instanceof net.minecraft.world.item.BowItem)));
             AbstractArrow abstractarrow = this.getArrow(itemstack, pDistanceFactor);
             if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-                abstractarrow = ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrow);
+                abstractarrow = ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem())
+                        .customArrow(abstractarrow, itemstack);
             double d0 = pTarget.getX() - this.getX();
             double d1 = pTarget.getY(0.3333333333333333D) - abstractarrow.getY();
             double d2 = pTarget.getZ() - this.getZ();
@@ -79,7 +79,6 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
         }
     }
 
-
     /**
      * Launches a Wither skull toward (par2, par4, par6)
      */
@@ -87,14 +86,14 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
 
         SoundUtils.playSound(this, SoundEvents.ARROW_SHOOT, 1, 0.2F);
 
-
         AutoAimingProj en = SlashEntities.AUTO_AIMING_SKELETON_SKULL.get().create(level());
 
         en.setOwner(this);
 
         en.setPosRaw(getX(), getEyeY(), getZ());
 
-        en.setDeltaMovement(ProjectileCastHelper.positionToVelocity(new MyPosition(getEyePosition()), new MyPosition(target.getEyePosition())));
+        en.setDeltaMovement(ProjectileCastHelper.positionToVelocity(new MyPosition(getEyePosition()),
+                new MyPosition(target.getEyePosition())));
 
         en.target = target;
         en.speed = 2;
@@ -113,7 +112,6 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
     @Override
     protected void registerGoals() {
 
-
         if (usesMelee()) {
             this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
         }
@@ -126,11 +124,12 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
         this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-        //this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        // this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 
         this.targetSelector.addGoal(3, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, x -> canAttack(x)));
+        this.targetSelector.addGoal(5,
+                new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, x -> canAttack(x)));
     }
 
     public Entity focusEntity = null;
@@ -165,11 +164,6 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
 
         return aggroRadius >= distance;
 
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     @Override

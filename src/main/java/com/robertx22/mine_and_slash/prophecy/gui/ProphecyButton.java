@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
 
 public class ProphecyButton extends ImageButton {
@@ -17,14 +18,15 @@ public class ProphecyButton extends ImageButton {
     ProphecyData data;
     ResourceLocation iconTexture;
 
-
     public ProphecyButton(ProphecyData data, boolean canTake, int x, int y) {
-        super(x, y, 16, 16, 0, 0, 1, DEFAULT_ID, (action) -> {
-            if (canTake) {
-                Packets.sendToServer(new AcceptProphecyPacket(data.uuid));
-                Minecraft.getInstance().setScreen(null);
-            }
-        });
+        super(x, y, 16, 16,
+                new WidgetSprites(DEFAULT_ID, DEFAULT_ID),
+                (action) -> {
+                    if (canTake) {
+                        Packets.sendToServer(new AcceptProphecyPacket(data.uuid));
+                        Minecraft.getInstance().setScreen(null);
+                    }
+                });
         this.data = data;
         this.iconTexture = getIconForProphecyType(data);
     }
@@ -42,7 +44,6 @@ public class ProphecyButton extends ImageButton {
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(data.getTooltip())));
 
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-
 
     }
 }

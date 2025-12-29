@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -18,8 +19,10 @@ public class BigSchoolButton extends ImageButton {
     SpellSchoolScreen scren;
 
     public BigSchoolButton(SpellSchoolScreen scren, int xPos, int yPos) {
-        super(xPos, yPos, SIZE, SIZE, 0, 0, 0, SlashRef.guiId(""), (button) -> {
-        });
+        super(xPos, yPos, SIZE, SIZE,
+                new WidgetSprites(SlashRef.guiId(""), SlashRef.guiId("")),
+                (button) -> {
+                });
         this.scren = scren;
     }
 
@@ -32,7 +35,7 @@ public class BigSchoolButton extends ImageButton {
         var school = scren.currentSchool();
 
         if (school != null) {
-            this.renderTexture(pGuiGraphics, school.getIconLoc(), this.getX(), this.getY(), 0, 0, this.yDiffTex, SIZE, SIZE, SIZE, SIZE);
+            pGuiGraphics.blit(school.getIconLoc(), this.getX(), this.getY(), 0, 0, SIZE, SIZE, SIZE, SIZE);
 
             if (this.isHoveredOrFocused()) {
                 List<Component> tooltip = new ArrayList<>();
@@ -41,6 +44,5 @@ public class BigSchoolButton extends ImageButton {
             }
         }
     }
-
 
 }

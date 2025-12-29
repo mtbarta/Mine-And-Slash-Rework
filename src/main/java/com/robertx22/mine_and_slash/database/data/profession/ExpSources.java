@@ -24,7 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,7 +85,7 @@ public class ExpSources {
             }
             if (type == Type.ENTITY) {
                 if (obj instanceof EntityType in) {
-                    return ForgeRegistries.ENTITY_TYPES.getKey(in).equals(new ResourceLocation(id));
+                    return BuiltInRegistries.ENTITY_TYPE.getKey(in).equals(new ResourceLocation(id));
                 }
             }
 

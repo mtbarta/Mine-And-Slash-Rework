@@ -1,6 +1,6 @@
 package com.robertx22.mine_and_slash.uncommon;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.EnchantedItemTrigger;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -17,11 +17,8 @@ public interface IShapedRecipe {
         return ShapedRecipeBuilder.shaped(RecipeCategory.MISC, pro, i);
     }
 
-    default CriterionTriggerInstance trigger() {
+    default Criterion<?> trigger() {
         return EnchantedItemTrigger.TriggerInstance.enchantedItem();
     }
 
 }
-
-
-

@@ -8,6 +8,7 @@ import com.robertx22.mine_and_slash.database.data.spells.spell_classes.SpellCtx;
 import com.robertx22.mine_and_slash.mixin_ducks.FallingBlockAccessor;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashEntities;
 import com.robertx22.mine_and_slash.uncommon.effectdatas.rework.EventData;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -25,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 
 import java.util.ArrayList;
 
@@ -85,7 +86,7 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this, Block.getId(this.getBlockState()));
     }
 
     @Override

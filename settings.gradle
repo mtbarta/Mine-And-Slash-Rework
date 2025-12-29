@@ -10,6 +10,24 @@ pluginManagement {
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven {
+            name = 'NeoForgeGeneral'
+            url = 'https://maven.neoforged.net/releases'
+        }
+          maven {
+            // location of the maven that hosts JEI files since January 2023
+            name = "Jared's maven"
+            url = "https://maven.blamejared.com/"
+        }
+        maven {
+            // location of a maven mirror for JEI files, as a fallback
+            name = "ModMaven"
+            url = "https://modmaven.dev"
+        }
+        maven {
+            name = "Curios"
+            url = uri("https://maven.theillusivec4.top/")
+        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -20,16 +38,12 @@ pluginManagement {
             filter { includeGroupAndSubgroups('org.spongepowered') }
         }
         exclusiveContent {
-            forRepositories(
-                    maven {
-                        name = 'ParchmentMC'
-                        url = 'https://maven.parchmentmc.org/'
-                    },
-                    maven {
-                        name = "NeoForge"
-                        url = 'https://maven.neoforged.net/releases'
-                    }
-            )
+            forRepository {
+                maven {
+                    name = 'ParchmentMC'
+                    url = 'https://maven.parchmentmc.org/'
+                }
+            }
             filter { includeGroup('org.parchmentmc.data') }
         }
     }

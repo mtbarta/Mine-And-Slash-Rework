@@ -1,7 +1,7 @@
 package com.robertx22.mine_and_slash.uncommon.utilityclasses;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 import java.util.function.Supplier;
 

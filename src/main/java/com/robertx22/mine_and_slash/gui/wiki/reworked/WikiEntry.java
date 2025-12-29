@@ -9,10 +9,11 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
-
-import static net.minecraft.client.gui.components.AbstractWidget.WIDGETS_LOCATION;
+import net.minecraft.resources.ResourceLocation;
 
 public class WikiEntry extends ObjectSelectionList.Entry<WikiEntry> {
+
+    private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("minecraft", "widget/button");
 
     BestiaryEntry entry;
     WikiEntryList list;
@@ -21,13 +22,11 @@ public class WikiEntry extends ObjectSelectionList.Entry<WikiEntry> {
         this.list = wikiEntryList;
         this.entry = entry;
 
-
     }
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 
-      
         if (list.screen.selectedEntry == entry) {
             list.screen.selectedEntry = null;
         } else {
@@ -41,23 +40,13 @@ public class WikiEntry extends ObjectSelectionList.Entry<WikiEntry> {
         return Component.empty();
     }
 
-    private int getTextureY(int pMouseX, int pMouseY) {
-        int i = 1;
-        if (this.isMouseOver(pMouseX, pMouseY)) {
-            i = 0;
-        } else if (this.isFocused()) {
-            i = 2;
-        }
-        return 46 + i * 20;
-    }
-
     @Override
-    public void render(GuiGraphics gui, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pHovering, float pPartialTick) {
-
+    public void render(GuiGraphics gui, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX,
+            int pMouseY, boolean pHovering, float pPartialTick) {
 
         // taken from abstractbutton
         if (this.list.screen.selectedEntry == this.entry || this.isMouseOver(pMouseX, pMouseY)) {
-            gui.blitNineSliced(WIDGETS_LOCATION, pLeft - 1, pTop - 1, pWidth + 20, 20, 20, 4, pWidth, 20, 0, this.getTextureY(pMouseX, pMouseY));
+            gui.blitSprite(WIDGETS_LOCATION, pLeft - 1, pTop - 1, pWidth + 20, 20);
         }
 
         if (this.isMouseOver(pMouseX, pMouseY)) {

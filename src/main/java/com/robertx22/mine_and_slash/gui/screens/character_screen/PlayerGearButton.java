@@ -9,7 +9,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +28,9 @@ public class PlayerGearButton extends ImageButton {
     Player player;
 
     public PlayerGearButton(Player player, BaseScreen screen, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, ySize + 1, TEX, (button) -> {
+        super(xPos, yPos, xSize, ySize, 
+            new WidgetSprites(TEX, TEX), // Using same sprite for normal and hovered states  
+            (button) -> {
         });
         this.player = player;
         this.screen = screen;
@@ -50,8 +55,8 @@ public class PlayerGearButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
+        super.renderWidget(gui, x, y, ticks);
 
         MutableComponent str = Gui.MAINHUB_LEVEL.locName().append(String.valueOf(Load.Unit(player).getLevel()));
 
@@ -59,7 +64,9 @@ public class PlayerGearButton extends ImageButton {
 
 
         // player 3d view
-        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, this.getX() + 50, this.getY() + 77, 30, (float) (getX() + 51) - x, (float) (getY() + 75 - 50) - y, player);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(gui, this.getX() + 50, this.getY() + 77, 
+                this.getX() + 50, this.getY() + 77, 30, 
+                (float) (getX() + 51) - x, (float) (getY() + 75 - 50) - y, 0f, player);
 
         gui.drawString(mc.font, str, this.getX() + xSize / 2 - mc.font.width(str) / 2, this.getY() + 6, ChatFormatting.YELLOW.getColor());
 

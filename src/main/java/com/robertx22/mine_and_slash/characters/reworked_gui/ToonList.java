@@ -4,7 +4,6 @@ import com.robertx22.mine_and_slash.characters.CharacterData;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 
 import java.util.ArrayList;
@@ -17,9 +16,8 @@ public class ToonList extends ObjectSelectionList<ToonEntry> {
     ToonScreen screen;
 
     public ToonList(ToonScreen screen, Minecraft mc, int pWidth, int pHeight, int pY0, int pY1, int pItemHeight) {
-        super(mc, pWidth, pHeight, 48, screen.height - 64, 36);
+        super(mc, pWidth, pHeight, 48, screen.height - 64);
         this.screen = screen;
-
 
         reloadAllEntries();
 
@@ -27,7 +25,6 @@ public class ToonList extends ObjectSelectionList<ToonEntry> {
     }
 
     private List<ToonData> all = new ArrayList<>();
-
 
     private void reloadAllEntries() {
 
@@ -39,12 +36,5 @@ public class ToonList extends ObjectSelectionList<ToonEntry> {
             addEntry(new ToonEntry(this, data));
         }
     }
-
-
-    @Override
-    protected void renderBackground(GuiGraphics pGuiGraphics) {
-        pGuiGraphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-    }
-
 
 }

@@ -61,6 +61,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -74,16 +75,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class MainHubScreen extends BaseScreen implements INamedScreen {
-    private static final ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/buttons_backwards.png");
+    private static final ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID,
+            "textures/gui/main_hub/buttons_backwards.png");
     static ResourceLocation RIGHT = new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/buttons.png");
 
     static int sizeX = 256;
     static int sizeY = 219;
 
     Minecraft mc = Minecraft.getInstance();
-
 
     public enum StatType {
         RESOURCE("resource"),
@@ -104,7 +104,6 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
             return new ResourceLocation(SlashRef.MODID, "textures/gui/stat_groups/" + id + ".png");
         }
     }
-
 
     public static List<List<Stat>> leftStats = new ArrayList<>();
     public static List<List<Stat>> rightStats = new ArrayList<>();
@@ -138,7 +137,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         }
 
         var v = Load.Unit(Minecraft.getInstance().player).getUnit().getStats().stats.values().stream()
-                .filter(x -> x.isNotZero() && x.GetStat() != null && x.GetStat().show_in_gui && !x.GetStat().is_long && list.stream().noneMatch(e -> e.GUID().equals(x.getId())))
+                .filter(x -> x.isNotZero() && x.GetStat() != null && x.GetStat().show_in_gui && !x.GetStat().is_long
+                        && list.stream().noneMatch(e -> e.GUID().equals(x.getId())))
                 .map(t -> t.GetStat()).collect(Collectors.toList());
 
         if (!STAT_MAP.containsKey(type)) {
@@ -150,29 +150,41 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
     static {
 
-        addTo(StatType.RESOURCE, Arrays.asList(Health.getInstance(), HealthRegen.getInstance(), MagicShield.getInstance(), MagicShieldRegen.getInstance(), Mana.getInstance(), ManaRegen.getInstance(), Energy.getInstance(), EnergyRegen.getInstance()));
+        addTo(StatType.RESOURCE,
+                Arrays.asList(Health.getInstance(), HealthRegen.getInstance(), MagicShield.getInstance(),
+                        MagicShieldRegen.getInstance(), Mana.getInstance(), ManaRegen.getInstance(),
+                        Energy.getInstance(), EnergyRegen.getInstance()));
         addTo(StatType.RESOURCE, Arrays.asList(DatapackStats.STR, DatapackStats.INT, DatapackStats.DEX));
 
         addTo(StatType.DAMAGE, Arrays.asList(WeaponDamage.getInstance(), SkillDamage.getInstance()));
         addTo(StatType.DAMAGE, OffenseStats.STYLE_DAMAGE.getAll());
-        addTo(StatType.DAMAGE, Arrays.asList(OffenseStats.ACCURACY.get(), OffenseStats.CRIT_CHANCE.get(), OffenseStats.CRIT_DAMAGE.get()));
-        addTo(StatType.DAMAGE, Arrays.asList(SpellChangeStats.COOLDOWN_REDUCTION.get(), SpellChangeStats.CAST_SPEED.get()));
+        addTo(StatType.DAMAGE, Arrays.asList(OffenseStats.ACCURACY.get(), OffenseStats.CRIT_CHANCE.get(),
+                OffenseStats.CRIT_DAMAGE.get()));
+        addTo(StatType.DAMAGE,
+                Arrays.asList(SpellChangeStats.COOLDOWN_REDUCTION.get(), SpellChangeStats.CAST_SPEED.get()));
 
-        addTo(StatType.ELE_DAMAGE, OffenseStats.ELEMENTAL_DAMAGE.getAll().stream().filter(x -> x.getElement().isValid()).collect(Collectors.toList()));
+        addTo(StatType.ELE_DAMAGE, OffenseStats.ELEMENTAL_DAMAGE.getAll().stream().filter(x -> x.getElement().isValid())
+                .collect(Collectors.toList()));
         // addTo(StatType.ELE_DAMAGE, Stats.ELEMENTAL_ANY_WEAPON_DAMAGE.getAll());
-        addTo(StatType.ELE_DAMAGE, OffenseStats.ELEMENTAL_SPELL_DAMAGE.getAll().stream().filter(x -> x.getElement().isValid()).collect(Collectors.toList()));
+        addTo(StatType.ELE_DAMAGE, OffenseStats.ELEMENTAL_SPELL_DAMAGE.getAll().stream()
+                .filter(x -> x.getElement().isValid()).collect(Collectors.toList()));
         addTo(StatType.ELE_DAMAGE, Arrays.asList(ArmorPenetration.getInstance()));
         addTo(StatType.ELE_DAMAGE, new ElementalPenetration(Elements.Elemental).generateAllSingleVariations());
 
-        addTo(StatType.DEFENSE, Arrays.asList(Armor.getInstance(), DodgeRating.getInstance(), BlockChance.getInstance()));
+        addTo(StatType.DEFENSE,
+                Arrays.asList(Armor.getInstance(), DodgeRating.getInstance(), BlockChance.getInstance()));
         addTo(StatType.DEFENSE, Arrays.asList(DefenseStats.DAMAGE_RECEIVED.get()));
         addTo(StatType.DEFENSE, Arrays.asList(DefenseStats.DAMAGE_REDUCTION.get()));
         addTo(StatType.DEFENSE, Arrays.asList(DefenseStats.DAMAGE_REDUCTION_CHANCE.get()));
         addTo(StatType.DEFENSE, new ElementalResist(Elements.Elemental).generateAllSingleVariations());
         addTo(StatType.DEFENSE, new MaxElementalResist(Elements.Elemental).generateAllSingleVariations());
 
-        addTo(StatType.RECOVERY, Arrays.asList(ResourceStats.HEAL_STRENGTH.get(), ResourceStats.HEALING_RECEIVED.get()));
-        addTo(StatType.RECOVERY, Arrays.asList(ResourceStats.LIFESTEAL.get(), ResourceStats.MANASTEAL.get(), ResourceStats.SPELL_LIFESTEAL.get(), ResourceStats.SPELL_MSSTEAL.get(), ResourceStats.DOT_LIFESTEAL.get()));
+        addTo(StatType.RECOVERY,
+                Arrays.asList(ResourceStats.HEAL_STRENGTH.get(), ResourceStats.HEALING_RECEIVED.get()));
+        addTo(StatType.RECOVERY,
+                Arrays.asList(ResourceStats.LIFESTEAL.get(), ResourceStats.MANASTEAL.get(),
+                        ResourceStats.SPELL_LIFESTEAL.get(), ResourceStats.SPELL_MSSTEAL.get(),
+                        ResourceStats.DOT_LIFESTEAL.get()));
         addTo(StatType.RECOVERY, ResourceStats.RESOURCE_ON_HIT.getAll());
         addTo(StatType.RECOVERY, ResourceStats.RESOURCE_ON_KILL.getAll());
         addTo(StatType.RECOVERY, Arrays.asList(ResourceStats.INCREASED_LEECH.get()));
@@ -180,11 +192,15 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         addRemaining(StatType.MISC);
 
-        leftStats.add(Arrays.asList(Health.getInstance(), MagicShield.getInstance(), Mana.getInstance(), Energy.getInstance()));
-        leftStats.add(Arrays.asList(HealthRegen.getInstance(), MagicShieldRegen.getInstance(), ManaRegen.getInstance(), EnergyRegen.getInstance()));
+        leftStats.add(Arrays.asList(Health.getInstance(), MagicShield.getInstance(), Mana.getInstance(),
+                Energy.getInstance()));
+        leftStats.add(Arrays.asList(HealthRegen.getInstance(), MagicShieldRegen.getInstance(), ManaRegen.getInstance(),
+                EnergyRegen.getInstance()));
 
-        rightStats.add(Arrays.asList(new ElementalResist(Elements.Fire), new ElementalResist(Elements.Cold), new ElementalResist(Elements.Nature), new ElementalResist(Elements.Shadow)));
-        rightStats.add(Arrays.asList(OffenseStats.CRIT_CHANCE.get(), OffenseStats.CRIT_DAMAGE.get(), Armor.getInstance(), DodgeRating.getInstance()));
+        rightStats.add(Arrays.asList(new ElementalResist(Elements.Fire), new ElementalResist(Elements.Cold),
+                new ElementalResist(Elements.Nature), new ElementalResist(Elements.Shadow)));
+        rightStats.add(Arrays.asList(OffenseStats.CRIT_CHANCE.get(), OffenseStats.CRIT_DAMAGE.get(),
+                Armor.getInstance(), DodgeRating.getInstance()));
 
     }
 
@@ -216,15 +232,13 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
     public void init() {
         super.init();
 
-
         this.clearWidgets();
 
-        //this.children.clear();
+        // this.children.clear();
 
         // CORE STATS
         int xpos = guiLeft + 75;
         int ypos = guiTop + 25;
-
 
         xpos = guiLeft + 78;
         ypos = guiTop + 105;
@@ -241,10 +255,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         ypos += YSEP;
         publicAddButton(new AllocateStatButton(AllAttributes.DEX_ID, xpos, ypos));
 
-
         xpos = guiLeft + 12;
         ypos = guiTop + 90;
-
 
         // hub buttons
 
@@ -273,10 +285,9 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         leftButtons.add(new OpenInvGuiScreen(Words.Configs, "configs", GuiInventoryGrids.ofConfigs()));
         leftButtons.add(new StatScreen(ClientOnly.getPlayer()));
 
-
-        publicAddButton(new FavorButton(guiLeft + sizeX / 2 - FavorButton.FAVOR_BUTTON_SIZE_X / 2, guiTop - FavorButton.FAVOR_BUTTON_SIZE_Y));
+        publicAddButton(new FavorButton(guiLeft + sizeX / 2 - FavorButton.FAVOR_BUTTON_SIZE_X / 2,
+                guiTop - FavorButton.FAVOR_BUTTON_SIZE_Y));
         publicAddButton(new ProfessionLevelsButton(guiLeft + sizeX / 2 - ProfessionLevelsButton.SX / 2, guiTop + 147));
-
 
         int x = guiLeft + sizeX - 1;
         int y = guiTop + 20;
@@ -285,7 +296,6 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
             publicAddButton(new MainHubButton(true, RIGHT, screen, x, y));
             y += MainHubButton.ySize + 0;
         }
-
 
         x = guiLeft - MainHubButton.xSize;
         y = guiTop + 20;
@@ -324,7 +334,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
             addStatButton(true, statx, staty, stat);
             statx -= (HubStatButton.xSize + 5);
         }
-        publicAddButton(new PlayerGearButton(mc.player, this, this.guiLeft + MainHubScreen.sizeX / 2 - PlayerGearButton.xSize / 2, this.guiTop + 10));
+        publicAddButton(new PlayerGearButton(mc.player, this,
+                this.guiLeft + MainHubScreen.sizeX / 2 - PlayerGearButton.xSize / 2, this.guiTop + 10));
 
     }
 
@@ -348,30 +359,29 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         loc = BACKGROUND;
 
-
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         gui.blit(loc, mc.getWindow()
-                        .getGuiScaledWidth() / 2 - sizeX / 2,
+                .getGuiScaledWidth() / 2 - sizeX / 2,
                 mc.getWindow()
-                        .getGuiScaledHeight() / 2 - sizeY / 2, 0, 0, sizeX, sizeY
-        );
+                        .getGuiScaledHeight() / 2 - sizeY / 2,
+                0, 0, sizeX, sizeY);
 
         super.render(gui, x, y, ticks);
-
 
         int p = PlayerPointsType.STATS.getFreePoints(mc.player);
         if (p > 0) {
             MutableComponent points = Gui.STATS_POINTS.locName().append(String.valueOf(p));
-            gui.drawString(mc.font, points, guiLeft + 40 - mc.font.width(points) / 2, guiTop + 10, ChatFormatting.GREEN.getColor());
+            gui.drawString(mc.font, points, guiLeft + 40 - mc.font.width(points) / 2, guiTop + 10,
+                    ChatFormatting.GREEN.getColor());
         }
 
         int lvl = Load.player(mc.player).miscInfo.area_lvl;
         MutableComponent areaLevel = Gui.AREA_LEVEL.locName().append(String.valueOf(lvl));
-        gui.drawString(mc.font, areaLevel, guiLeft + sizeX / 2 - mc.font.width(areaLevel) / 2, guiTop + sizeY + 5, ChatFormatting.YELLOW.getColor());
+        gui.drawString(mc.font, areaLevel, guiLeft + sizeX / 2 - mc.font.width(areaLevel) / 2, guiTop + sizeY + 5,
+                ChatFormatting.YELLOW.getColor());
 
     }
-
 
     static int PLUS_BUTTON_SIZE_X = 13;
     static int PLUS_BUTTON_SIZE_Y = 13;
@@ -384,14 +394,15 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         Stat stat;
 
         public AllocateStatButton(String stat, int xPos, int yPos) {
-            super(xPos, yPos, SIZEX, SIZEY, 0, 0, SIZEY, BUTTON_TEX, (button) -> {
-                //  Packets.sendToServer(new AllocateStatPacket(ExileDB.Stats()                        .get(stat)));
-            });
+            super(xPos, yPos, SIZEX, SIZEY,
+                    new WidgetSprites(BUTTON_TEX, BUTTON_TEX),
+                    (button) -> {
+                        // Packets.sendToServer(new AllocateStatPacket(ExileDB.Stats() .get(stat)));
+                    });
             this.stat = ExileDB.Stats()
                     .get(stat);
         }
 
-        @Override
         protected ClientTooltipPositioner createTooltipPositioner() {
             return DefaultTooltipPositioner.INSTANCE;
         }
@@ -420,7 +431,6 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         public void setTooltipMod() {
 
-
             Minecraft mc = Minecraft.getInstance();
 
             List<Component> tooltip = new ArrayList<>();
@@ -438,9 +448,7 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
             setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
         }
 
-
-        @Override
-        public void render(GuiGraphics gui, int x, int y, float f) {
+        public void renderWidget(GuiGraphics gui, int x, int y, float f) {
 
             setTooltipMod();
 
@@ -455,7 +463,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
             RenderUtils.render16Icon(gui, stat.getIconForRendering(), this.getX() - 17, this.getY() + 1);
 
-            gui.drawCenteredString(mc.font, txt, this.getX() + SIZEX + 13, this.getY() + 5, ChatFormatting.WHITE.getColor());
+            gui.drawCenteredString(mc.font, txt, this.getX() + SIZEX + 13, this.getY() + 5,
+                    ChatFormatting.WHITE.getColor());
 
         }
 
@@ -466,7 +475,4 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
     }
 
-
 }
-
-

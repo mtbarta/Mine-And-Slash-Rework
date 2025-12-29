@@ -29,6 +29,7 @@ import com.robertx22.mine_and_slash.event_hooks.player.OnLogin;
 import com.robertx22.mine_and_slash.loot.LootModifiersList;
 import com.robertx22.mine_and_slash.mmorpg.MMORPG;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashAttachments;
 import com.robertx22.mine_and_slash.saveclasses.CustomExactStatsData;
 import com.robertx22.mine_and_slash.saveclasses.item_classes.GearItemData;
 import com.robertx22.mine_and_slash.saveclasses.unit.MobData;
@@ -72,10 +73,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,25 +85,12 @@ import java.util.UUID;
 public class EntityData implements ICap, INeededForClient {
 
     public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "entity_data");
-    public static Capability<EntityData> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
-    });
+
 
     public static EntityData get(LivingEntity entity) {
-        return entity.getCapability(INSTANCE)
-                .orElse(null);
+        return entity.getData(SlashAttachments.ENTITY_DATA);
     }
 
-    transient final LazyOptional<EntityData> supp = LazyOptional.of(() -> this);
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == INSTANCE) {
-            return supp.cast();
-        }
-
-        return LazyOptional.empty();
-
-    }
 
     public EntityData(LivingEntity entity) {
         this.entity = entity;

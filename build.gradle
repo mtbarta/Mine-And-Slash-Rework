@@ -1,91 +1,32 @@
 plugins {
     id 'java-library'
-    id 'net.neoforged.moddev.legacyforge' version "2.0.107"
+    id 'net.neoforged.gradle.userdev' version "7.0.145"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
-//archivesBaseName = "${mod_archive_name}-${minecraft_version}"
 version = project.mod_version
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
-}
-
-mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
-
-    config("${mod_id}.mixins.json")
-}
+group = project.maven_group
 
 base {
     archivesName = "${mod_archive_name}-${minecraft_version}"
 }
 
-sourceSets.main.resources{
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+}
+
+sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude '.cache/**'
 }
 
-legacyForge {
-    version = "${minecraft_version}-${forge_version}"
-
-    //validateAccessTransformers = true
-
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
-    }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
-    runs {
-        client {
-            client()
-            setDevLogin(false)
-        }
-        client2 {
-            client()
-            programArguments.addAll('--username', 'Dev2')
-        }
-        data {
-            data()
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-        }
-        server {
-            server()
-        }
-
-
-    }
-
-    runs.configureEach {
-        def capitalizedName = name.capitalize()
-
-        project.tasks.named("run${capitalizedName}", JavaExec) {
-            def toolchain = project.extensions.getByType(JavaToolchainService)
-            javaLauncher.set(
-                    toolchain.launcherFor {
-                        it.languageVersion.set(JavaLanguageVersion.of(17))
-                        //this will force your jvm as JBR
-                        //why? cuz JBR allow you to do more operation when hot swap, even add method!
-                        it.vendor.set(JvmVendorSpec.JETBRAINS)
-                    }
-            )
-        }
-
-        // Enable Enhanced Class Redefinition (JBR)
-        jvmArguments.add("-XX:+AllowEnhancedClassRedefinition")
-    }
-
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
 repositories {
-
     maven { url = "https://maven.theillusivec4.top/" } // curios
     maven { url = "https://maven.kosmx.dev/" } // player animations
     maven {
@@ -96,33 +37,9 @@ repositories {
             includeGroup "mezz.jei"
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = 'Sponge'
-                url = 'https://repo.spongepowered.org/repository/maven-public'
-            }
-        }
-        filter { includeGroupAndSubgroups('org.spongepowered') }
-    }
-    exclusiveContent {
-        forRepositories(
-                maven {
-                    name = 'ParchmentMC'
-                    url = 'https://maven.parchmentmc.org/'
-                },
-                maven {
-                    name = "NeoForge"
-                    url = 'https://maven.neoforged.net/releases'
-                }
-        )
-        filter { includeGroup('org.parchmentmc.data') }
-    }
-
     maven {
         url = "https://api.modrinth.com/maven"
     }
-
     exclusiveContent {
         forRepository {
             maven {
@@ -136,40 +53,21 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    implementation "net.neoforged:neoforge:${neo_version}"
 
+    compileOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
+    runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
+    implementation("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
 
-    modCompileOnly ("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    modRuntimeOnly ("top.theillusivec4.curios:curios-forge:${curios_version}")
-
-    modCompileOnly("mezz.jei:jei-1.20.1-common-api:${project.jei_version}") //API for compile
-    modCompileOnly("mezz.jei:jei-1.20.1-forge-api:${project.jei_version}") //API for compile
-    modRuntimeOnly("mezz.jei:jei-1.20.1-forge:${project.jei_version}") //Full for runtime
-
-    modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
-
-    //this is directly from the include build!
-    //can't find this when you build your project? please read this: https://www.freecodecamp.org/news/how-to-use-git-submodules/#:~:text=How%20to%20Clone%20a%20Repository%20with%20a%20Git%20Submodule
-    //I've already add mahj's repo as submodule, you just need to init it!
-    //and also, you'll need to add your own fork as remote(except mahj), because you can just push the commit to mahj's repo!
-    //you need to push to your fork first, and then open a PR!
-    //everytime you change the version of lib, you need to change the version of this too!
-    modImplementation("com.robertx22:Library-of-Exile-Rework:${project.exile_library_version}")
-    modImplementation("com.robertx22:ancient-obelisks:${project.ancient_obelisks_version}")
-    modImplementation("com.robertx22:the_harvest:${project.the_harvest_version}")
-    modImplementation("com.robertx22:dungeon_realm:${project.dungeon_realm_version}")
-    //modImplementation("maven.modrinth:library-of-exile:${project.exile_library_version}")
+    implementation("com.robertx22:Library-of-Exile-Rework:${project.exile_library_version}")
+    implementation("com.robertx22:ancient-obelisks:${project.ancient_obelisks_version}")
+    implementation("com.robertx22:the_harvest:${project.the_harvest_version}")
+    implementation("com.robertx22:dungeon_realm:${project.dungeon_realm_version}")
 }
 
-
 jar {
-
-    finalizedBy('reobfJar')
-    manifest.attributes([
-            "MixinConfigs": "${mod_id}.mixins.json"
-    ])
-
-
     manifest {
         attributes([
                 'Specification-Title'   : mod_archive_name,
@@ -196,12 +94,12 @@ processResources {
             "mod_website_link"        : mod_website_link,
             "mod_display_name"        : mod_display_name,
             "mod_author"              : mod_author,
-            "forge_version"           : forge_version,
+            "neo_version"             : neo_version,
             "exile_library_version"   : exile_library_version,
             "dungeon_realm_version"   : dungeon_realm_version,
             "ancient_obelisks_version": ancient_obelisks_version,
             "the_harvest_version"     : the_harvest_version,
-            'group'                   : project.group, //Else we target the task's group.
+            'group'                   : project.group,
             'minecraft_version'       : minecraft_version,
             'mod_name'                : mod_archive_name,
             'description'             : project.description,
@@ -224,30 +122,17 @@ processResources {
 }
 
 int getPackFormat() {
-    switch (minecraft_version) {
-        case "1.18.2": return 8
-        case "1.19.2": return 9
-        case "1.19.3": return 12
-        case "1.19.4": return 13
-        case "1.20.1": return 15
-        case "1.20.2": return 18
-        case "1.20.3": return 22
-        case "1.20.4": return 22
-        default: return 6
-    }
+     return 18 // 1.20.2
 }
 
-
 publishMods {
-
     file = jar.archiveFile
     changelog = file("CHANGELOG.txt").text
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
-    modLoaders.add("forge")
+    modLoaders.add("neoforge")
     displayName = "${mod_archive_name}-${minecraft_version}-v${mod_version}"
 
     curseforge {
-        //this will not block the build process even you don't have the file
         accessToken = file("key.properties").exists() ? file("key.properties").text : ""
         projectId = "${curse_id}"
         minecraftVersions.add("${minecraft_version}")
@@ -278,13 +163,3 @@ publishMods {
         requires { slug = "ancient-obelisks" }
     }
 }
-/*
-wiki {
-    docs {
-        mutils {
-            root = file("docs")
-        }
-    }
-}
-*/
-

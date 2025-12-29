@@ -30,10 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
+import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashAttachments;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,23 +44,9 @@ public class PlayerData implements ICap {
 
 
     public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "player_data");
-    public static Capability<PlayerData> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
-    });
 
     public static PlayerData get(LivingEntity entity) {
-        return entity.getCapability(INSTANCE)
-                .orElse(null);
-    }
-
-    transient final LazyOptional<PlayerData> supp = LazyOptional.of(() -> this);
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == INSTANCE) {
-            return supp.cast();
-        }
-        return LazyOptional.empty();
-
+        return entity.getData(SlashAttachments.PLAYER_DATA);
     }
 
 
