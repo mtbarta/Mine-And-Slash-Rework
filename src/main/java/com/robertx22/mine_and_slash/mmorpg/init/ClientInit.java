@@ -76,7 +76,7 @@ public class ClientInit {
                 VanillaGuiOverlay.MOUNT_HEALTH,
                 VanillaGuiOverlay.PLAYER_HEALTH);
 
-        ForgeEvents.registerForgeEvent(RenderGuiOverlayEvent.class, x -> {
+        ForgeEvents.registerForgeEvent(RenderGuiOverlayEvent.Pre.class, x -> {
             if (ClientConfigs.getConfig().GUI_POSITION.get() == GuiPosition.OVER_VANILLA) {
                 if (todisable.stream().anyMatch(e -> e.id().equals(x.getOverlay().id()))) {
                     x.setCanceled(true);

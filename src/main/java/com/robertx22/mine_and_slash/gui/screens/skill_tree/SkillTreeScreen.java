@@ -383,11 +383,12 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         targetZoom = zoom;
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
-        if (scroll < 0) {
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (scrollY < 0) {
             targetZoom -= 0.1F;
         }
-        if (scroll > 0) {
+        if (scrollY > 0) {
             targetZoom += 0.1F;
         }
 

@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.TooltipFlag;
@@ -23,11 +24,10 @@ public class RecipeButton extends ImageButton {
 
     Minecraft mc = Minecraft.getInstance();
 
-
     ProfessionRecipe recipe;
 
     public RecipeButton(CraftingStationScreen screen, ProfessionRecipe recipe, int xPos, int yPos) {
-        super(xPos, yPos, XS, YS, 0, 0, YS, SlashRef.guiId(""), (button) -> {
+        super(xPos, yPos, XS, YS, new WidgetSprites(SlashRef.guiId(""), SlashRef.guiId("")), (button) -> {
             Packets.sendToServer(new LockRecipePacket(recipe.GUID()));
             screen.refreshRequiredMats(recipe);
         });
@@ -35,19 +35,15 @@ public class RecipeButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-
+        setModTooltip();
         gui.renderFakeItem(recipe.toResultStackForJei(), getX(), getY());
 
-        //   ResourceLocation tex = SlashRef.guiId("craftbutton");
+        // ResourceLocation tex = SlashRef.guiId("craftbutton");
         // gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        //gui.blit(tex, getX(), getY(), 0, (pbe.getSyncedData().craftingState == Crafting_State.ACTIVE || pbe.getSyncedData().craftingState == Crafting_State.IDLE) ? 0 : 19, 18, 19);
+        // gui.blit(tex, getX(), getY(), 0, (pbe.getSyncedData().craftingState ==
+        // Crafting_State.ACTIVE || pbe.getSyncedData().craftingState ==
+        // Crafting_State.IDLE) ? 0 : 19, 18, 19);
     }
 
     public void setModTooltip() {
@@ -57,7 +53,8 @@ public class RecipeButton extends ImageButton {
             list.add((MutableComponent) l);
         }
 
-        this.setTooltip(Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
+        this.setTooltip(
+                Tooltip.create(ExileTooltipUtils.joinMutableComps(list.listIterator(), Component.literal("\n"))));
     }
 
 }

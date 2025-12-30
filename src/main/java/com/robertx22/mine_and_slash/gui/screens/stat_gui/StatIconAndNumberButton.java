@@ -37,9 +37,7 @@ public class StatIconAndNumberButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
-
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
         if (stat == null || stat.GetStat() == null) {
             return;
         }

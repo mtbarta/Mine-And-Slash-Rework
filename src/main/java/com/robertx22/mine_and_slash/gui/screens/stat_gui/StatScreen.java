@@ -44,7 +44,6 @@ public class StatScreen extends BaseScreen implements INamedScreen {
         this.target = target;
     }
 
-
     @Override
     public void render(GuiGraphics gui, int x, int y, float ticks) {
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -58,7 +57,9 @@ public class StatScreen extends BaseScreen implements INamedScreen {
 
             boolean neatDraw = NeatConfig.draw;
             NeatConfig.draw = false; // don't draw health bar
-            InventoryScreen.renderEntityInInventoryFollowsMouse(gui, paperDollX, paperDollY, 30, mouseOffsetX, mouseOffsetY, target);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(gui, paperDollX, paperDollY, paperDollX, paperDollY, 30,
+                    mouseOffsetX,
+                    mouseOffsetY, 0f, target);
             NeatConfig.draw = neatDraw;
 
             Component nameText = HealthBarRenderer.getNameString(target, target, mc);
@@ -67,7 +68,8 @@ public class StatScreen extends BaseScreen implements INamedScreen {
             gui.drawString(mc.font, nameText, nameTextX, nameTextY, ChatFormatting.WHITE.getColor());
         }
 
-        gui.blit(BG, mc.getWindow().getGuiScaledWidth() / 2 - sizeX / 2, mc.getWindow().getGuiScaledHeight() / 2 - sizeY / 2, 0, 0, sizeX, sizeY);
+        gui.blit(BG, mc.getWindow().getGuiScaledWidth() / 2 - sizeX / 2,
+                mc.getWindow().getGuiScaledHeight() / 2 - sizeY / 2, 0, 0, sizeX, sizeY);
         super.render(gui, x, y, ticks);
 
         SEARCH.setX(this.guiLeft - (SEARCH_WIDTH / 2) + sizeX / 2);
@@ -80,19 +82,17 @@ public class StatScreen extends BaseScreen implements INamedScreen {
     public static EditBox SEARCH = new EditBox(Minecraft.getInstance().font, 0, 0, SEARCH_WIDTH, SEARCH_HEIGHT,
             Component.translatable("fml.menu.mods.search"));
 
-
     int currentElement = 0;
     public List<Stat> stats = new ArrayList<>();
     public List<Stat> searched = new ArrayList<>();
-    //   int elementsAmount = 1;
-
+    // int elementsAmount = 1;
 
     public void setupStatButtons() {
         this.renderables.removeIf(x -> x instanceof EditBox == false);
         this.children().removeIf(x -> x instanceof EditBox == false);
 
-        //    this.children().clear();
-        //  this.renderables.clear();
+        // this.children().clear();
+        // this.renderables.clear();
 
         int secX = guiLeft + 9;
         int secY = guiTop + 18;
@@ -102,14 +102,13 @@ public class StatScreen extends BaseScreen implements INamedScreen {
             secY += StatSectionButton.ySize + 2;
         }
 
-
-        //  this.children().removeIf(x -> x instanceof StatPanelButton || x instanceof StatIconAndNumberButton);
+        // this.children().removeIf(x -> x instanceof StatPanelButton || x instanceof
+        // StatIconAndNumberButton);
 
         int x = this.guiLeft + 30;
         int y = this.guiTop + 16;
         int yNavigation = y;
         int xNavigation = this.guiLeft + this.sizeX;
-
 
         int spaceleft = 143;
         int yNavigationDownOffset = spaceleft;
@@ -140,22 +139,22 @@ public class StatScreen extends BaseScreen implements INamedScreen {
 
         }
 
-
         if (currentElement > 0) {
             this.publicAddButton(new StatDirectionNavigationButton(this, xNavigation, yNavigation, 1, false));
         }
 
         if (currentElement + addedAmount < searched.size()) {
-            this.publicAddButton(new StatDirectionNavigationButton(this, xNavigation, yNavigation + yNavigationDownOffset - StatDirectionNavigationButton.ySize, 1, true));
+            this.publicAddButton(new StatDirectionNavigationButton(this, xNavigation,
+                    yNavigation + yNavigationDownOffset - StatDirectionNavigationButton.ySize, 1, true));
         }
     }
 
     @Override
-    public boolean mouseScrolled(double num1, double num2, double num3) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 
-        this.setCurrentElement((int) (currentElement - num3));
+        this.setCurrentElement((int) (currentElement - scrollY));
 
-        return super.mouseScrolled(num1, num2, num3);
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 
     }
 
@@ -164,14 +163,12 @@ public class StatScreen extends BaseScreen implements INamedScreen {
         setupStatButtons();
     }
 
-
     // todo
 
     public void setInfo(StatData stat) {
 
         this.renderables.removeIf(x -> x instanceof IStatInfoButton);
         this.children().removeIf(x -> x instanceof IStatInfoButton);
-
 
         int x = guiLeft + 38;
         int y = guiTop + 172;
@@ -185,12 +182,6 @@ public class StatScreen extends BaseScreen implements INamedScreen {
 
     }
 
-    @Override
-    public void tick() {
-        SEARCH.tick();
-
-    }
-
     public void showStats(List<Stat> stats, boolean replaceSaved) {
 
         if (replaceSaved) {
@@ -201,14 +192,14 @@ public class StatScreen extends BaseScreen implements INamedScreen {
 
         setupStatButtons();
 
-
     }
 
     public List<Stat> getAllStats() {
 
         if (true) {
 
-            var stats = Load.Unit(target).getUnit().getStats().stats.values().stream().filter(x -> x.GetStat().show_in_gui).map(x -> x.GetStat()).collect(Collectors.toList());
+            var stats = Load.Unit(target).getUnit().getStats().stats.values().stream()
+                    .filter(x -> x.GetStat().show_in_gui).map(x -> x.GetStat()).collect(Collectors.toList());
 
             var ungrouped = stats.stream().filter(x -> !x.gui_group.isValid()).collect(Collectors.toList());
             List<Stat> grouped = new ArrayList<>();
@@ -225,7 +216,8 @@ public class StatScreen extends BaseScreen implements INamedScreen {
             return all;
         }
 
-        return Arrays.asList(new ElementalResist(Elements.Physical), DodgeRating.getInstance(), Armor.getInstance(), Health.getInstance(), Mana.getInstance());
+        return Arrays.asList(new ElementalResist(Elements.Physical), DodgeRating.getInstance(), Armor.getInstance(),
+                Health.getInstance(), Mana.getInstance());
     }
 
     public LivingEntity getTarget() {
@@ -235,7 +227,6 @@ public class StatScreen extends BaseScreen implements INamedScreen {
     @Override
     protected void init() {
         super.init();
-
 
         SEARCH.setFocused(false);
         SEARCH.setCanLoseFocus(true);
@@ -247,7 +238,6 @@ public class StatScreen extends BaseScreen implements INamedScreen {
                 return name.toLowerCase(Locale.ROOT).contains(x.toLowerCase(Locale.ROOT));
             }).collect(Collectors.toList()), false);
         });
-
 
         showStats(StatGuiGroupSection.CORE.getStats(target), true);
 

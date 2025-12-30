@@ -55,7 +55,7 @@ public class VanillaStatData {
             if (en.getAttribute(attri)
                     .hasModifier(mod)) {
                 en.getAttribute(attri)
-                        .removeModifier(mod);
+                        .removeModifier(mod.getId());
             }
         }
     }

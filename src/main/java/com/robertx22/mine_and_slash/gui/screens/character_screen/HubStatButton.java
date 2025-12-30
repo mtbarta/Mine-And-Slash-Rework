@@ -12,8 +12,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.gui.components.WidgetSprites;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -33,17 +33,14 @@ public class HubStatButton extends ImageButton {
     boolean right;
 
     public HubStatButton(boolean isright, StatData stat, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 0, 0, ySize, isright ? RIGHT : LEFT, (button) -> {
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(isright ? RIGHT : LEFT, isright ? RIGHT : LEFT),
+                (button) -> {
 
-        });
+                });
 
         this.right = isright;
         this.stat = stat;
-    }
-
-    @Override
-    protected ClientTooltipPositioner createTooltipPositioner() {
-        return DefaultTooltipPositioner.INSTANCE;
     }
 
     @Override

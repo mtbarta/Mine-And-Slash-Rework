@@ -29,7 +29,8 @@ public class BackpackMenu extends AbstractContainerMenu {
         this(type, pContainerId, inv.player, inv, new BackpackInventory(inv.player, type));
     }
 
-    public BackpackMenu(Backpacks.BackpackType type, int pContainerId, Player player, Container playerINV, Container backpackINV) {
+    public BackpackMenu(Backpacks.BackpackType type, int pContainerId, Player player, Container playerINV,
+            Container backpackINV) {
         super(SlashContainers.BACKPACK_TABS.get(type).get(), pContainerId);
         this.player = player;
         this.type = type;
@@ -58,7 +59,6 @@ public class BackpackMenu extends AbstractContainerMenu {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
@@ -115,7 +115,7 @@ public class BackpackMenu extends AbstractContainerMenu {
                     break;
                 }
 
-                slot = (Slot)this.slots.get(i);
+                slot = (Slot) this.slots.get(i);
                 itemstack = slot.getItem();
                 if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack)) {
                     int amountToTake = Math.min(stack.getCount(), amountLeftToTake);
@@ -162,7 +162,7 @@ public class BackpackMenu extends AbstractContainerMenu {
                     break;
                 }
 
-                slot = (Slot)this.slots.get(i);
+                slot = (Slot) this.slots.get(i);
                 itemstack = slot.getItem();
                 if (itemstack.isEmpty() && slot.mayPlace(stack)) {
                     int amount = Math.min(stack.getCount(), Math.min(slot.getMaxStackSize(), amountLeftToTake));
@@ -181,29 +181,6 @@ public class BackpackMenu extends AbstractContainerMenu {
         }
 
         return flag;
-    }
-
-    // Make right click take only up to 32
-    @Override
-    protected boolean tryItemClickBehaviourOverride(Player player, ClickAction action, Slot slot, ItemStack clickedItem, ItemStack carriedItem) {
-        if (super.tryItemClickBehaviourOverride(player, action, slot, clickedItem, carriedItem)) {
-            return true;
-        }
-
-        if (!clickedItem.isEmpty() && slot.mayPickup(player) && carriedItem.isEmpty() && action == ClickAction.SECONDARY) {
-            int count = (Math.min(clickedItem.getCount(), clickedItem.getMaxStackSize()) + 1) / 2;
-
-            Optional<ItemStack> optional = slot.tryRemove(count, Integer.MAX_VALUE, player);
-
-            optional.ifPresent((taken) -> {
-                this.setCarried(taken);
-                slot.onTake(player, taken);
-            });
-
-            return true;
-        }
-
-        return false;
     }
 
     public class BackpackSlot extends Slot {
@@ -234,11 +211,11 @@ public class BackpackMenu extends AbstractContainerMenu {
     }
 
     @Override
-	public void setSynchronizer(ContainerSynchronizer synchronizer) {
-		if (player instanceof ServerPlayer serverPlayer) {
-			super.setSynchronizer(new BackpackSynchronizer(serverPlayer));
-		} else {
+    public void setSynchronizer(ContainerSynchronizer synchronizer) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            super.setSynchronizer(new BackpackSynchronizer(serverPlayer));
+        } else {
             super.setSynchronizer(synchronizer);
         }
-	}
+    }
 }

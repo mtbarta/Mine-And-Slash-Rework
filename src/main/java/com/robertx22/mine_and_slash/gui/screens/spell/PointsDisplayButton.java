@@ -37,11 +37,6 @@ public class PointsDisplayButton extends ImageButton {
     }
 
     @Override
-    protected ClientTooltipPositioner createTooltipPositioner() {
-        return DefaultTooltipPositioner.INSTANCE;
-    }
-
-    @Override
     public void renderWidget(GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
 
         var p = ClientOnly.getPlayer();

@@ -29,7 +29,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainerHolder {
+    public static final MapCodec<ProfessionBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.STRING.fieldOf("profession").forGetter(b -> b.profession)).apply(instance, ProfessionBlock::new));
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public String profession;
@@ -38,7 +45,11 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
         super(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE).noOcclusion());
         this.profession = profession;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
 
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override

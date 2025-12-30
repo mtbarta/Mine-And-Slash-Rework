@@ -11,12 +11,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.List;
 import java.util.Locale;
 
-
 public class NeatForgeConfig {
     public static void init() {
         Pair<ForgeNeatConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeNeatConfig::new);
         NeatConfig.instance = specPair.getLeft();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight(), defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash_neat_gui"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight(),
+                defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash_neat_gui"));
     }
 
     public static String defaultConfigName(ModConfig.Type type, String modId) {
@@ -25,7 +25,9 @@ public class NeatForgeConfig {
     }
 
     public static void register() {
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(IExtensionPoint.DisplayTest.IGNORESERVERONLY, (incoming, isNetwork) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
+                () -> new IExtensionPoint.DisplayTest(() -> IExtensionPoint.DisplayTest.IGNORESERVERONLY,
+                        (incoming, isNetwork) -> true));
         NeatForgeConfig.init();
     }
 
@@ -79,7 +81,8 @@ public class NeatForgeConfig {
             showOnlyFocused = builder.define("Only show the health bar for the entity looked at", false);
             showFullHealth = builder.define("Show entities with full health", true);
             enableDebugInfo = builder.define("Show Debug Info with F3", true);
-            blacklist = builder.comment("Blacklist uses entity IDs, not their display names. Use F3 to see them in the Neat bar.")
+            blacklist = builder
+                    .comment("Blacklist uses entity IDs, not their display names. Use F3 to see them in the Neat bar.")
                     .defineList("Blacklist", NeatConfig.DEFAULT_DISABLED, a -> true);
 
             builder.pop();

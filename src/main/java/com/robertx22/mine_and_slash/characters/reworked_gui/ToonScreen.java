@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class ToonScreen extends Screen implements INamedScreen {
 
-
     protected EditBox searchBox;
 
     private ToonList list;
@@ -25,10 +24,10 @@ public class ToonScreen extends Screen implements INamedScreen {
 
     public ToonData selectedEntry = null;
 
-
     private void refreshFilterButtons() {
 
-        this.children().stream().filter(x -> x instanceof ToonActionButton).collect(Collectors.toList()).forEach(e -> this.removeWidget(e));
+        this.children().stream().filter(x -> x instanceof ToonActionButton).collect(Collectors.toList())
+                .forEach(e -> this.removeWidget(e));
 
         int x = width - ToonActionButton.WIDTH - 25;
         int y = 55;
@@ -42,55 +41,34 @@ public class ToonScreen extends Screen implements INamedScreen {
 
     }
 
-    @Override
-    public void renderBackground(GuiGraphics pGuiGraphics) {
-        super.renderBackground(pGuiGraphics);
-        /*
-        if (this.minecraft.level != null) {
-            pGuiGraphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.client.event.ScreenEvent.BackgroundRendered(this, pGuiGraphics));
-        } else {
-            this.renderDirtBackground(pGuiGraphics);
-        }
-
-         */
-
-    }
-
-    @Override
-    public void tick() {
-        this.searchBox.tick();
-    }
-
-    //  public Checkbox searchTooltipsCheckbox;
+    // public Checkbox searchTooltipsCheckbox;
 
     // gotta call add filter button first or it cant be clicked for some reason
     @Override
     protected void init() {
 
-
         this.clearWidgets();
 
         refreshFilterButtons();
 
-        this.searchBox = new EditBox(this.font, this.width / 2 - 100, 22, 200, 20, this.searchBox, Component.translatable("selectWorld.search"));
+        this.searchBox = new EditBox(this.font, this.width / 2 - 100, 22, 200, 20, this.searchBox,
+                Component.translatable("selectWorld.search"));
         this.searchBox.setResponder((p_232980_) -> {
 
         });
 
         this.list = new ToonList(this, this.minecraft, this.width, this.height, 48, this.height - 64, 36);
 
-
         this.addWidget(this.searchBox);
 
         this.addWidget(this.list);
-
 
     }
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers) ? true : this.searchBox.keyPressed(pKeyCode, pScanCode, pModifiers);
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers) ? true
+                : this.searchBox.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
     @Override
@@ -112,11 +90,10 @@ public class ToonScreen extends Screen implements INamedScreen {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
     }
 
-
     @Override
     public void removed() {
         if (this.list != null) {
-            //  this.list.children().forEach(WorldSelectionList.Entry::close);
+            // this.list.children().forEach(WorldSelectionList.Entry::close);
         }
 
     }

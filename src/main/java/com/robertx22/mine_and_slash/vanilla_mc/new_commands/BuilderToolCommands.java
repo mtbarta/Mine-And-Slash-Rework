@@ -10,13 +10,16 @@ import com.robertx22.mine_and_slash.vanilla_mc.commands.CommandRefs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.StructureUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.StructureBlockEntity;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +45,8 @@ public class BuilderToolCommands {
                 Player p = enarg.get(e);
 
                 if (!p.isCreative()) {
-                    p.sendSystemMessage(Component.literal("You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
+                    p.sendSystemMessage(Component.literal(
+                            "You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
                     return;
                 }
                 ServerLevel world = (ServerLevel) p.level();
@@ -56,8 +60,9 @@ public class BuilderToolCommands {
                     for (int z = 0; z < radius; z++) {
                         var cpos = new ChunkPos(cp.x + x, cp.z + z);
                         var fpos = cpos.getBlockAt(0, pos.getY(), 0);
-                        //world.setBlock(fpos, Blocks.STRUCTURE_BLOCK.defaultBlockState(), 2);
-                        StructureUtils.createNewEmptyStructureBlock(x + "_" + z, fpos, new BlockPos(16, height, 16), Rotation.NONE, world);
+                        // world.setBlock(fpos, Blocks.STRUCTURE_BLOCK.defaultBlockState(), 2);
+                        StructureUtils.createNewEmptyStructureBlock(x + "_" + z, fpos, new BlockPos(16, height, 16),
+                                Rotation.NONE, world);
                     }
                 }
             });
@@ -79,7 +84,8 @@ public class BuilderToolCommands {
                 Player p = enarg.get(e);
 
                 if (!p.isCreative()) {
-                    p.sendSystemMessage(Component.literal("You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
+                    p.sendSystemMessage(Component.literal(
+                            "You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
                     return;
                 }
                 var world = p.level();
@@ -94,14 +100,22 @@ public class BuilderToolCommands {
                     z = 0;
                     for (String room : dungeon.data.getRoomList(type)) {
                         var aroom = new DungeonRoom(dungeon.getDungeonData().folder, room, type);
-                        var roomPos = new BlockPos(cp.getMinBlockX() + (i * 20), pos.getY(), cp.getMaxBlockZ() + (z * 20));
+                        var roomPos = new BlockPos(cp.getMinBlockX() + (i * 20), pos.getY(),
+                                cp.getMaxBlockZ() + (z * 20));
 
                         world.setBlock(roomPos, Blocks.STRUCTURE_BLOCK.defaultBlockState(), 2);
 
                         if (world.getBlockEntity(roomPos) instanceof StructureBlockEntity be) {
                             be.setStructureName(aroom.loc);
                             be.setStructurePos(new BlockPos(0, 0, 0).above().north());
-                            be.loadStructure((ServerLevel) world);
+                            // Load and place structure using StructureManager (modern API)
+                            var structureManager = ((ServerLevel) world).getStructureManager();
+                            StructureTemplate template = structureManager.getOrCreate(aroom.loc);
+                            if (template != null) {
+                                var settings = new StructurePlaceSettings();
+                                template.placeInWorld((ServerLevel) world, roomPos, roomPos, settings,
+                                        ((ServerLevel) world).random, 2);
+                            }
                         }
 
                         z++;
@@ -109,8 +123,8 @@ public class BuilderToolCommands {
                     i++;
                 }
 
-                p.sendSystemMessage(Component.literal("Use the load_nearby_structures command if you want to load them too."));
-
+                p.sendSystemMessage(
+                        Component.literal("Use the load_nearby_structures command if you want to load them too."));
 
             });
 
@@ -129,12 +143,12 @@ public class BuilderToolCommands {
                 Player p = enarg.get(e);
 
                 if (!p.isCreative()) {
-                    p.sendSystemMessage(Component.literal("You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
+                    p.sendSystemMessage(Component.literal(
+                            "You must be in creative mode to use this command. This is extra safety to make sure this command isn't usable accidentally."));
                     return;
                 }
 
                 var world = p.level();
-
 
                 List<ChunkPos> terrainChunks = new ArrayList<>();
                 terrainChunks.add(new ChunkPos(p.blockPosition()));
@@ -153,7 +167,18 @@ public class BuilderToolCommands {
 
                     for (Map.Entry<BlockPos, BlockEntity> en : bes.entrySet()) {
                         if (en.getValue() instanceof StructureBlockEntity be) {
-                            be.loadStructure((ServerLevel) world);
+                            // Load and place structure using StructureManager (modern API)
+                            var structureManager = ((ServerLevel) world).getStructureManager();
+                            var structureNameLoc = be.getStructureName();
+                            if (structureNameLoc != null) {
+                                StructureTemplate template = structureManager
+                                        .getOrCreate(new ResourceLocation(structureNameLoc));
+                                if (template != null) {
+                                    var settings = new StructurePlaceSettings();
+                                    template.placeInWorld((ServerLevel) world, en.getKey(), en.getKey(), settings,
+                                            ((ServerLevel) world).random, 2);
+                                }
+                            }
                         }
                     }
                 }

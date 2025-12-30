@@ -38,12 +38,9 @@ public class ProphecyButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         pGuiGraphics.blit(iconTexture, getX(), getY(), 0, 0, 16, 16, 16, 16);
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(data.getTooltip())));
-
-        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-
     }
 }

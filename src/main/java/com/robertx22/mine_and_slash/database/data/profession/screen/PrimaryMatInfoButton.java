@@ -49,14 +49,8 @@ public class PrimaryMatInfoButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        super.render(gui, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-
+        setModTooltip();
         ResourceLocation tex = SlashRef.guiId("primary_info");
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(tex, getX(), getY(), 0, 0, 18, 17, 18, 17);

@@ -29,9 +29,7 @@ public class StatSectionButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
-
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
         if (this.isHoveredOrFocused()) {
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(sec.locName().withStyle(ChatFormatting.GOLD));
