@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class LearnClassPointButton extends ImageButton {
 
@@ -38,13 +38,15 @@ public class LearnClassPointButton extends ImageButton {
 
     Perk perk;
 
-
     public LearnClassPointButton(SpellSchoolScreen screen, Perk perk, int xPos, int yPos) {
-        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y, 0, 0, BUTTON_SIZE_Y, SPELL_SLOT, (button) -> {
+        super(xPos, yPos, BUTTON_SIZE_X, BUTTON_SIZE_Y,
+                new WidgetSprites(SPELL_SLOT, SPELL_SLOT),
+                (button) -> {
 
-            //    Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(), perk, AllocateClassPointPacket.ACTION.ALLOCATE));
+                    // Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(),
+                    // perk, AllocateClassPointPacket.ACTION.ALLOCATE));
 
-        });
+                });
         this.screen = screen;
         this.perk = perk;
 
@@ -58,10 +60,12 @@ public class LearnClassPointButton extends ImageButton {
             if (bl) {
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
                 if (button == 0) {
-                    Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(), perk, AllocateClassPointPacket.ACTION.ALLOCATE));
+                    Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(), perk,
+                            AllocateClassPointPacket.ACTION.ALLOCATE));
                 }
                 if (button == 1) {
-                    Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(), perk, AllocateClassPointPacket.ACTION.REMOVE));
+                    Packets.sendToServer(new AllocateClassPointPacket(screen.currentSchool(), perk,
+                            AllocateClassPointPacket.ACTION.REMOVE));
                 }
                 this.onClick(mouseX, mouseY);
                 return true;
@@ -73,7 +77,7 @@ public class LearnClassPointButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
         if (this.isHovered()) {
             setModTooltip();
         }
@@ -81,15 +85,17 @@ public class LearnClassPointButton extends ImageButton {
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         if (perk.isSpell()) {
-            gui.blit(SPELL_SLOT, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X);
+            gui.blit(SPELL_SLOT, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
+                    BUTTON_SIZE_X, BUTTON_SIZE_X);
         } else {
-            gui.blit(PASSIVE, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X);
+            gui.blit(PASSIVE, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
+                    BUTTON_SIZE_X);
         }
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(perk.getIcon(), getX() + 1, getY() + 1, 16, 16, 16, 16, 16, 16);
-        gui.blit(OVERLAY, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X);
-
+        gui.blit(OVERLAY, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
+                BUTTON_SIZE_X);
 
         int currentlvl = Load.player(mc.player).ascClass.getLevel(perk.GUID());
 
@@ -121,17 +127,12 @@ public class LearnClassPointButton extends ImageButton {
             }
         }
 
-
         String lvltext = currentlvl + "/" + maxlvl;
-        TextUtils.renderText(gui, 0.8F, lvltext, getX() + BUTTON_SIZE_X / 2, (int) (getY() + BUTTON_SIZE_Y * 0.85F), color);
-
-        super.render(gui, mouseX, mouseY, delta);
-
-    }
-
-    @Override
-    public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        // this.renderTexture(pGuiGraphics, this.resourceLocation, this.getX(), this.getY(), this.xTexStart, this.yTexStart, this.yDiffTex, this.width, this.height, this.textureWidth, this.textureHeight);
+        TextUtils.renderText(gui, 0.8F, lvltext, getX() + BUTTON_SIZE_X / 2, (int) (getY() + BUTTON_SIZE_Y * 0.85F),
+                color);
+        // this.renderTexture(pGuiGraphics, this.resourceLocation, this.getX(),
+        // this.getY(), this.xTexStart, this.yTexStart, this.yDiffTex, this.width,
+        // this.height, this.textureWidth, this.textureHeight);
     }
 
     public void setModTooltip() {
@@ -142,20 +143,11 @@ public class LearnClassPointButton extends ImageButton {
 
         tooltip.addAll(perk.GetTooltipString(info));
 
-
         int reqlvl = screen.currentSchool().getLevelNeededToAllocate(screen.currentSchool().perks.get(perk.GUID()));
         tooltip.add(Chats.REQ_LVL.locName(reqlvl).withStyle(ChatFormatting.RED));
 
-
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
 
-
     }
-
-    @Override
-    protected ClientTooltipPositioner createTooltipPositioner() {
-        return DefaultTooltipPositioner.INSTANCE;
-    }
-
 
 }

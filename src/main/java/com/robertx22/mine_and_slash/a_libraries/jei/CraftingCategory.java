@@ -12,7 +12,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.extensions.IExtendableRecipeCategory;
-import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRecipe, ICraftingCategoryExtension> {
+public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRecipe, IProfessionCategoryExtension> {
     public static final int width = 116;
     public static final int height = 54;
 
@@ -36,7 +36,7 @@ public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRec
 
     public static final ResourceLocation RECIPE_GUI_VANILLA = new ResourceLocation(ModIds.JEI_ID, TEXTURE_GUI_VANILLA);
 
-    ICraftingCategoryExtension recipeExtension;
+    IProfessionCategoryExtension recipeExtension;
 
     RecipeType<ProfessionRecipe> type;
     Component word;
@@ -83,14 +83,16 @@ public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRec
     }
 
     @Override
-    public void draw(ProfessionRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(ProfessionRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX,
+            double mouseY) {
         int recipeWidth = this.getWidth();
         int recipeHeight = this.getHeight();
         recipeExtension.drawInfo(recipeWidth, recipeHeight, guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    public List<Component> getTooltipStrings(ProfessionRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(ProfessionRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX,
+            double mouseY) {
 
         List<Component> list = new ArrayList<>();
 
@@ -117,16 +119,20 @@ public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRec
     }
 
     @Override
-    public <R extends ProfessionRecipe> void addCategoryExtension(Class<? extends R> recipeClass, Function<R, ? extends ICraftingCategoryExtension> extensionFactory) {
+    public <R extends ProfessionRecipe> void addCategoryExtension(Class<? extends R> recipeClass,
+            Function<R, ? extends IProfessionCategoryExtension> extensionFactory) {
 
         // todo wtf is this
 
-        //     recipeExtension.addRecipeExtensionFactory(recipeClass, null, extensionFactory);
+        // recipeExtension.addRecipeExtensionFactory(recipeClass, null,
+        // extensionFactory);
     }
 
     @Override
-    public <R extends ProfessionRecipe> void addCategoryExtension(Class<? extends R> recipeClass, Predicate<R> extensionFilter, Function<R, ? extends ICraftingCategoryExtension> extensionFactory) {
-        //  recipeExtension.addRecipeExtensionFactory(recipeClass, extensionFilter, extensionFactory);
+    public <R extends ProfessionRecipe> void addCategoryExtension(Class<? extends R> recipeClass,
+            Predicate<R> extensionFilter, Function<R, ? extends IProfessionCategoryExtension> extensionFactory) {
+        // recipeExtension.addRecipeExtensionFactory(recipeClass, extensionFilter,
+        // extensionFactory);
     }
 
     @Override

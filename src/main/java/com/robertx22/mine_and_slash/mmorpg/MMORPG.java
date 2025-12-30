@@ -15,7 +15,6 @@ import com.robertx22.library_of_exile.registry.register_info.SeriazableRegistrat
 import com.robertx22.library_of_exile.registry.util.ExileRegistryUtil;
 import com.robertx22.library_of_exile.utils.Watch;
 import com.robertx22.mine_and_slash.a_libraries.curios.CurioEvents;
-import com.robertx22.mine_and_slash.a_libraries.curios.RefCurios;
 import com.robertx22.mine_and_slash.a_libraries.neat.NeatForgeConfig;
 import com.robertx22.mine_and_slash.aoe_data.database.stat_conditions.StatConditions;
 import com.robertx22.mine_and_slash.aoe_data.database.stat_effects.StatEffects;
@@ -52,19 +51,14 @@ import com.robertx22.mine_and_slash.uncommon.effectdatas.rework.condition.StatCo
 import com.robertx22.mine_and_slash.uncommon.interfaces.data_items.VanillaRarities;
 import com.robertx22.test.test2.SchemaTest;
 import net.minecraft.ChatFormatting;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import com.robertx22.library_of_exile.main.Packets;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -100,7 +94,8 @@ public class MMORPG {
 
     // idk how else to pass arguments to a method reference
     public static void createMnsLangFile() {
-        TranslationBuilder.of(SlashRef.MODID).name(ExileTranslation.item(SlashItems.RELIC.get(), ChatFormatting.GREEN + "Dungeon Relic")).build();
+        TranslationBuilder.of(SlashRef.MODID)
+                .name(ExileTranslation.item(SlashItems.RELIC.get(), ChatFormatting.GREEN + "Dungeon Relic")).build();
 
         // todo eventually i'll replace the entire old CreateLangFile class
         ExileLangFile.createFile(SlashRef.MODID, CreateLangFile.create());
@@ -111,20 +106,19 @@ public class MMORPG {
         return NumberFormat.getInstance().format(num);
     }
 
-
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
-
-    public static boolean RUN_DEV_TOOLS_REMOVE_WHEN_DONE = RUN_DEV_TOOLS; // this exists to stop me from making dumb mistakes when testing and forgetting about it
-
+    public static boolean RUN_DEV_TOOLS_REMOVE_WHEN_DONE = RUN_DEV_TOOLS; // this exists to stop me from making dumb
+                                                                          // mistakes when testing and forgetting about
+                                                                          // it
 
     private static final String PROTOCOL_VERSION = "1";
     // TODO: Refactor Network for NeoForge 1.20.4
     // public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
-    //         new ResourceLocation(SlashRef.MODID, "main"),
-    //         () -> PROTOCOL_VERSION,
-    //         PROTOCOL_VERSION::equals,
-    //         PROTOCOL_VERSION::equals
+    // new ResourceLocation(SlashRef.MODID, "main"),
+    // () -> PROTOCOL_VERSION,
+    // PROTOCOL_VERSION::equals,
+    // PROTOCOL_VERSION::equals
     // );
 
     public MMORPG(IEventBus bus) {
@@ -145,10 +139,9 @@ public class MMORPG {
 
         Watch watch = new Watch();
 
-
         ModLoadingContext.get()
-                .registerConfig(ModConfig.Type.SERVER, ServerContainer.spec, NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash"));
-
+                .registerConfig(ModConfig.Type.SERVER, ServerContainer.spec,
+                        NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash"));
 
         ExileEvents.CHECK_IF_DEV_TOOLS_SHOULD_RUN.register(new EventConsumer<ExileEvents.OnCheckIsDevToolsRunning>() {
             @Override
@@ -168,26 +161,24 @@ public class MMORPG {
             x.register(SocketTooltip.SocketComponent.class, SocketTooltip::new);
         });
 
-
         // DistExecutor removed, registered directly
         // NeatForgeConfig.register(); // Todo check if safe
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec, NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec,
+                NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
         bus.addListener(ClientInit::onInitializeClient);
         ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
-                 KeybindsRegister.register(x);
+            KeybindsRegister.register(x);
         });
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
-                 RenderRegister.regRenders(x);
-        });
-
+        FMLJavaModLoadingContext.get().getModEventBus()
+                .addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
+                    RenderRegister.regRenders(x);
+                });
 
         bus.addListener(this::commonSetupEvent);
         bus.addListener(this::interMod);
-        NeoForge.EVENT_BUS.addGenericListener(ItemStack.class, CurioEvents::attachCapability);
         ItemTooltipsRegister.init();
 
         CurioEvents.reg();
-
 
         ModTags.init();
 
@@ -196,14 +187,13 @@ public class MMORPG {
         StatConditions.loadClass();
         Stats.loadClass();
 
-        //ExileDBInit.initRegistries();
-        //SpecialStats.init();
-
+        // ExileDBInit.initRegistries();
+        // SpecialStats.init();
 
         MapField.init();
         EffectCondition.init();
         SlashItemTags.init();
-        //   ExileDBInit.registerAllItems(); // after config registerAll
+        // ExileDBInit.registerAllItems(); // after config registerAll
         CommonEvents.register();
 
         C2SPacketRegister.register();
@@ -238,17 +228,19 @@ public class MMORPG {
         MineAndSlashEventsInit.initEvents();
     }
 
-
     public void interMod(InterModEnqueueEvent event) {
 
-
-/*
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(RefCurio.RING).size(2).build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(RefCurio.NECKLACE).size(1).build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(RefCurio.OMEN).size(1).build());
-*/
+        /*
+         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
+         * SlotTypeMessage.Builder(RefCurio.RING).size(2).build());
+         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
+         * SlotTypeMessage.Builder(RefCurio.NECKLACE).size(1).build());
+         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
+         * SlotTypeMessage.Builder(RefCurio.OMEN).size(1).build());
+         */
         ModLoadingContext.get()
-                .registerConfig(ModConfig.Type.SERVER, CompatConfig.spec, NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash_compatibility"));
+                .registerConfig(ModConfig.Type.SERVER, CompatConfig.spec,
+                        NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash_compatibility"));
 
     }
 
@@ -257,6 +249,5 @@ public class MMORPG {
         ProfessionRecipes.init();
 
     }
-
 
 }

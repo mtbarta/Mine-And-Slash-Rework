@@ -16,7 +16,8 @@ import net.minecraft.world.entity.player.Player;
 public class RPGGuiOverlay {
 
     static ResourceLocation BASETEX = new ResourceLocation(SlashRef.MODID, "textures/gui/overlay/base.png");
-    static ResourceLocation MANA_RESERVE = new ResourceLocation(SlashRef.MODID, "textures/gui/overlay/mana_reserve.png");
+    static ResourceLocation MANA_RESERVE = new ResourceLocation(SlashRef.MODID,
+            "textures/gui/overlay/mana_reserve.png");
 
     public RPGGuiOverlay() {
         super();
@@ -38,23 +39,20 @@ public class RPGGuiOverlay {
         SCREEN, OVERLAY;
     }
 
-
     public void onHudRender(GuiGraphics gui) {
 
         try {
 
-
             if (mc.player == null) {
                 return;
             }
-            if (mc.options.renderDebug || mc.player.isSpectator()) {
+            if (mc.getDebugOverlay().showDebugScreen() || mc.player.isSpectator()) {
                 return;
             }
 
             if (ClientConfigs.getConfig().PLAYER_GUI_TYPE.get() == PlayerGUIs.NONE) {
                 return;
             }
-
 
             Player en = mc.player;
             EntityData data = Load.Unit(en);
@@ -88,7 +86,6 @@ public class RPGGuiOverlay {
                         }
                     });
 
-
             int off = 0;
 
             if (BarGuiType.MAGIC_SHIELD.shouldRender(data, mc.player)) {
@@ -96,9 +93,9 @@ public class RPGGuiOverlay {
             }
 
             if (ClientConfigs.getConfig().GUI_POSITION.get() == GuiPosition.TOP_LEFT) {
-                //  EffectsOverlay.render(18, 63 + off, mc.player, gui, true);
+                // EffectsOverlay.render(18, 63 + off, mc.player, gui, true);
             } else {
-//                EffectsOverlay.render(5, 63, mc.player, gui, true);
+                // EffectsOverlay.render(5, 63, mc.player, gui, true);
 
             }
 

@@ -35,8 +35,7 @@ public class OnServerTick {
             UUID.fromString("3fb10485-f309-128f-afc6-a23b0d6cf4c1"),
             BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MOVEMENT_SPEED).toString(),
             -0.5,
-            AttributeModifier.Operation.MULTIPLY_TOTAL
-    );
+            AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     public static void onEndTick(ServerPlayer player) {
         try {
@@ -46,7 +45,6 @@ public class OnServerTick {
             EntityData unitdata = Load.Unit(player);
             PlayerData playerData = Load.player(player);
 
-
             if (player.level() instanceof ServerLevel sw) {
 
                 WorldUtils.ifMapData(sw, player.blockPosition()).ifPresent(map -> {
@@ -54,7 +52,8 @@ public class OnServerTick {
                     if (player.tickCount % 20 == 0) {
                         if (map != null && map.map != null) {
                             if (!map.map.getStatReq().meetsReq(map.map.lvl, unitdata)) {
-                                //float minusres = map.map.getStatReq().getLackingResistNumber(map.map.lvl, unitdata);
+                                // float minusres = map.map.getStatReq().getLackingResistNumber(map.map.lvl,
+                                // unitdata);
                                 player.hurt(player.damageSources().generic(), player.getMaxHealth() * 0.1F);
                             }
                         }
@@ -73,7 +72,6 @@ public class OnServerTick {
                     }
 
                 });
-
 
                 playerData.spellCastingData.onTimePass(player);
                 unitdata.didStatCalcThisTickForPlayer = false;
@@ -97,20 +95,22 @@ public class OnServerTick {
                 }
 
                 if (age % (20 * 10) == 0) {
-                    playerData.miscInfo.area_lvl = LevelUtils.determineLevel(null, player.level(), player.blockPosition(), player, false).getLevel();
+                    playerData.miscInfo.area_lvl = LevelUtils
+                            .determineLevel(null, player.level(), player.blockPosition(), player, false).getLevel();
                 }
 
                 AttributeInstance atri = player.getAttribute(Attributes.MOVEMENT_SPEED);
                 if (atri != null) {
                     if (playerData.spellCastingData.isCasting() && playerData.spellCastingData.castTickLeft > 0) {
                         if (!atri.hasModifier(CASTING_SPEED_SLOW)) {
-                            if (playerData.spellCastingData.getSpellBeingCast() != null && playerData.spellCastingData.getSpellBeingCast().config.slows_when_casting) {
+                            if (playerData.spellCastingData.getSpellBeingCast() != null
+                                    && playerData.spellCastingData.getSpellBeingCast().config.slows_when_casting) {
                                 atri.addTransientModifier(CASTING_SPEED_SLOW);
                             }
                         }
                     } else {
                         if (atri.hasModifier(CASTING_SPEED_SLOW)) {
-                            atri.removeModifier(CASTING_SPEED_SLOW);
+                            atri.removeModifier(CASTING_SPEED_SLOW.getId());
                         }
                     }
                 }
@@ -135,40 +135,39 @@ public class OnServerTick {
                     }
                 }
 
-
                 if (age % 20 == 0) {
 
                     playerData.buff.onTick(player, 20);
-
 
                     playerData.favor.onSecond(player);
 
                     if (unitdata
                             .getResources()
                             .getEnergy() < unitdata
-                            .getUnit()
-                            .energyData()
-                            .getValue() / 10) {
+                                    .getUnit()
+                                    .energyData()
+                                    .getValue() / 10) {
                         if (CompatConfig.get().energyPenalty()) {
                             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 3, 2));
                             player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 3, 2));
                         }
                     }
 
-
                     if (player.getY() < (double) (player.level().getMinBuildHeight() - 64)) {
                         // if player is in the void bellow the world, stop regen
                     } else {
 
                         if (!ResourceType.mana.isFull(unitdata)) {
-                            RestoreResourceEvent mana = EventBuilder.ofRestore(player, player, ResourceType.mana, RestoreType.regen, 0)
+                            RestoreResourceEvent mana = EventBuilder
+                                    .ofRestore(player, player, ResourceType.mana, RestoreType.regen, 0)
                                     .build();
                             mana.Activate();
                         }
 
                         if (!player.isBlocking()) {
                             if (!ResourceType.energy.isFull(unitdata)) {
-                                RestoreResourceEvent energy = EventBuilder.ofRestore(player, player, ResourceType.energy, RestoreType.regen, 0)
+                                RestoreResourceEvent energy = EventBuilder
+                                        .ofRestore(player, player, ResourceType.energy, RestoreType.regen, 0)
                                         .build();
                                 energy.Activate();
                             }
@@ -181,7 +180,8 @@ public class OnServerTick {
                         }
 
                         if (!ResourceType.magic_shield.isFull(unitdata)) {
-                            RestoreResourceEvent msevent = EventBuilder.ofRestore(player, player, ResourceType.magic_shield, RestoreType.regen, 0)
+                            RestoreResourceEvent msevent = EventBuilder
+                                    .ofRestore(player, player, ResourceType.magic_shield, RestoreType.regen, 0)
                                     .build();
                             msevent.Activate();
                         }
@@ -189,8 +189,9 @@ public class OnServerTick {
                         boolean canHeal = player.getFoodData().getFoodLevel() >= 1;
 
                         if (canHeal) {
-                            if (true) { //if (player.getHealth() < player.getMaxHealth()) {
-                                RestoreResourceEvent hpevent = EventBuilder.ofRestore(player, player, ResourceType.health, RestoreType.regen, 0)
+                            if (true) { // if (player.getHealth() < player.getMaxHealth()) {
+                                RestoreResourceEvent hpevent = EventBuilder
+                                        .ofRestore(player, player, ResourceType.health, RestoreType.regen, 0)
                                         .build();
                                 hpevent.Activate();
                             }
@@ -211,6 +212,5 @@ public class OnServerTick {
         }
 
     }
-
 
 }

@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -18,25 +19,35 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 
 public class BackpackQuickLootButton extends ImageButton {
     static ResourceLocation TEXTURE = SlashRef.id("textures/gui/backpack_button.png");
+
     public BackpackQuickLootButton(int pX, int pY, ContainerScreen screen) {
-        super(pX + ClientConfigs.getConfig().QUICK_LOOT_BUTTON_X_OFFSET.get(), pY + ClientConfigs.getConfig().QUICK_LOOT_BUTTON_Y_OFFSET.get(), 14, 14, 0, 0, 16, TEXTURE, 16, 32, x -> Packets.sendToServer(new BackPackLootMenuPacket(Screen.hasShiftDown() ? BackPackLootMenuPacket.Mode.DROP : BackPackLootMenuPacket.Mode.LOOT)), Gui.MASTER_BACKPACK_LOOT_BUTTON.locName());
+        super(pX + ClientConfigs.getConfig().QUICK_LOOT_BUTTON_X_OFFSET.get(),
+                pY + ClientConfigs.getConfig().QUICK_LOOT_BUTTON_Y_OFFSET.get(),
+                14, 14,
+                new WidgetSprites(TEXTURE, TEXTURE),
+                x -> Packets.sendToServer(new BackPackLootMenuPacket(
+                        Screen.hasShiftDown() ? BackPackLootMenuPacket.Mode.DROP : BackPackLootMenuPacket.Mode.LOOT)),
+                Gui.MASTER_BACKPACK_LOOT_BUTTON.locName());
 
     }
 
     @Override
     public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.renderWidget(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-        if (Screen.hasShiftDown()){
+        if (Screen.hasShiftDown()) {
             this.setTooltip(Tooltip.create(Gui.MASTER_BACKPACK_LOOT_BUTTON_2.locName()));
         } else {
             this.setTooltip(Tooltip.create(Gui.MASTER_BACKPACK_LOOT_BUTTON.locName()));
         }
     }
 
-    public static void addLootButton(ScreenEvent.Init event){
-        if (!(event instanceof ScreenEvent.Init.Post)) return;
-        if (Minecraft.getInstance().screen instanceof ContainerScreen containerScreen && ClientConfigs.getConfig().ENABLE_QUICK_LOOT_BUTTON.get()){
-            event.addListener(new BackpackQuickLootButton(containerScreen.getGuiLeft() + containerScreen.getXSize(), containerScreen.getGuiTop(), containerScreen));
+    public static void addLootButton(ScreenEvent.Init event) {
+        if (!(event instanceof ScreenEvent.Init.Post))
+            return;
+        if (Minecraft.getInstance().screen instanceof ContainerScreen containerScreen
+                && ClientConfigs.getConfig().ENABLE_QUICK_LOOT_BUTTON.get()) {
+            event.addListener(new BackpackQuickLootButton(containerScreen.getGuiLeft() + containerScreen.getXSize(),
+                    containerScreen.getGuiTop(), containerScreen));
         }
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.components.WidgetSprites;
 
 public class LockButton extends ImageButton {
 
@@ -21,7 +22,7 @@ public class LockButton extends ImageButton {
     CraftingStationScreen s;
 
     public LockButton(int xPos, int yPos, CraftingStationScreen s) {
-        super(xPos, yPos, XS, YS, 0, s.getSyncedData().recipe_locked ? 18 : 0, YS, SlashRef.guiId("lockbutton"),
+        super(xPos, yPos, XS, YS, new WidgetSprites(SlashRef.guiId("lockbutton"), SlashRef.guiId("lockbutton")),
                 (button) -> {
                     Packets.sendToServer(new LockTogglePacket(s.getSyncedData().getBlockPos()));
                 });

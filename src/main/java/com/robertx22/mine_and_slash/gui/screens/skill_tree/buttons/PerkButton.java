@@ -26,6 +26,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.time.StopWatch;
@@ -104,7 +105,7 @@ public class PerkButton extends ImageButton {
 
             Screen screen = Minecraft.getInstance().screen;
             if (screen != null) {
-                screen.setTooltipForNextRenderPass(this.getTooltip(), this.createTooltipPositioner(), true);
+                screen.setTooltipForNextRenderPass(this.getTooltip(), DefaultTooltipPositioner.INSTANCE, true);
             }
             // GuiUtils.renderTooltip(gui, tooltip, mouseX, mouseY);
         } else {

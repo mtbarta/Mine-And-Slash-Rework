@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -23,23 +24,27 @@ public class StatPanelButton extends ImageButton {
     public static int xSize = 163;
     public static int ySize = 20;
 
-
     StatData stat;
 
-
     public StatPanelButton(StatScreen screen, StatData stat, int xPos, int yPos) {
-        super(xPos, yPos, stat.GetStat().gui_group.isValid() ? xSize : xSize - StatIconAndNumberButton.xSize, ySize, 0, 0, 0, stat.GetStat().gui_group.isValid() ? SlashRef.guiId("stat_gui/group_stat_panel") : SlashRef.guiId("stat_gui/single_stat_panel"), xSize, ySize, (button) -> {
-            screen.setInfo(stat);
-        });
+        super(xPos, yPos, stat.GetStat().gui_group.isValid() ? xSize : xSize - StatIconAndNumberButton.xSize, ySize,
+                new WidgetSprites(
+                        stat.GetStat().gui_group.isValid() ? SlashRef.guiId("stat_gui/group_stat_panel")
+                                : SlashRef.guiId("stat_gui/single_stat_panel"),
+                        stat.GetStat().gui_group.isValid() ? SlashRef.guiId("stat_gui/group_stat_panel")
+                                : SlashRef.guiId("stat_gui/single_stat_panel")),
+                (button) -> {
+                    screen.setInfo(stat);
+                });
 
         var data = Load.Unit(screen.getTarget());
-
 
         if (stat.GetStat().gui_group.isValid()) {
             int i = 0;
             for (Stat st : stat.GetStat().gui_group.getSameGroupStats()) {
                 var statdata = data.getUnit().getCalculatedStat(st);
-                screen.publicAddButton(new StatIconAndNumberButton(screen, statdata, getX() + (i * (StatIconAndNumberButton.xSize + 15)), getY() + ySize));
+                screen.publicAddButton(new StatIconAndNumberButton(screen, statdata,
+                        getX() + (i * (StatIconAndNumberButton.xSize + 15)), getY() + ySize));
                 i++;
             }
         } else {
@@ -51,9 +56,7 @@ public class StatPanelButton extends ImageButton {
     }
 
     @Override
-    public void render(GuiGraphics gui, int x, int y, float ticks) {
-        super.render(gui, x, y, ticks);
-
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
         if (this.isHoveredOrFocused()) {
             List<MutableComponent> tooltip = new ArrayList<>();
             tooltip.add(Words.PressForMoreInfo.locName());
@@ -63,8 +66,8 @@ public class StatPanelButton extends ImageButton {
         if (stat == null || stat.GetStat() == null) {
             return;
         }
-        //gui.blit(this.resourceLocation, getX(), getY(), 0, 0, this.width, height, width, height);
-
+        // gui.blit(this.resourceLocation, getX(), getY(), 0, 0, this.width, height,
+        // width, height);
 
         int iconX = 2;
         int iconY = 2;
@@ -72,7 +75,8 @@ public class StatPanelButton extends ImageButton {
         int numX = 23;
         int numY = 6;
 
-        String stattext = stat.GetStat().gui_group.isValid() ? stat.GetStat().gui_group.locName().getString() : stat.GetStat().locName().getString();
+        String stattext = stat.GetStat().gui_group.isValid() ? stat.GetStat().gui_group.locName().getString()
+                : stat.GetStat().locName().getString();
 
         int maxlength = 20;
         if (stattext.length() >= maxlength) {
@@ -81,10 +85,11 @@ public class StatPanelButton extends ImageButton {
 
         RenderUtils.render16Icon(gui, stat.GetStat().getIconForRenderingWithDefault(), getX() + iconX, getY() + iconY);
 
-        gui.drawString(Minecraft.getInstance().font, Component.literal(stattext), getX() + numX, getY() + numY, ChatFormatting.AQUA.getColor());
+        gui.drawString(Minecraft.getInstance().font, Component.literal(stattext), getX() + numX, getY() + numY,
+                ChatFormatting.AQUA.getColor());
 
-//        GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 1F, stattext, ChatFormatting.YELLOW);
-
+        // GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 1F, stattext,
+        // ChatFormatting.YELLOW);
 
     }
 

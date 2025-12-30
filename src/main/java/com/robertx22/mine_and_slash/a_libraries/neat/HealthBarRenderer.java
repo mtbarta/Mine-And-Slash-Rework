@@ -53,10 +53,10 @@ import java.util.stream.Collectors;
 public class HealthBarRenderer {
 
     private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("#.##");
-    private static final TagKey<EntityType<?>> FORGE_BOSS_TAG =
-            TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
-    private static final TagKey<EntityType<?>> FABRIC_BOSS_TAG =
-            TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
+    private static final TagKey<EntityType<?>> FORGE_BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE,
+            new ResourceLocation("c", "bosses"));
+    private static final TagKey<EntityType<?>> FABRIC_BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE,
+            new ResourceLocation("c", "bosses"));
     private static final int magicShieldColor = FastColor.ARGB32.color(190, 66, 241, 224);
     private static final int magicShieldShadowColor = makeShadowColor(magicShieldColor);
 
@@ -69,10 +69,13 @@ public class HealthBarRenderer {
         double distance = pos.getLocation().distanceTo(positionVector);
 
         Vec3 lookVector = e.getLookAngle();
-        Vec3 reachVector = positionVector.add(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance);
+        Vec3 reachVector = positionVector.add(lookVector.x * finalDistance, lookVector.y * finalDistance,
+                lookVector.z * finalDistance);
 
         List<Entity> entitiesInBoundingBox = e.level().getEntities(e,
-                e.getBoundingBox().inflate(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance)
+                e.getBoundingBox()
+                        .inflate(lookVector.x * finalDistance, lookVector.y * finalDistance,
+                                lookVector.z * finalDistance)
                         .expandTowards(1F, 1F, 1F));
         double minDistance = distance;
 
@@ -154,7 +157,7 @@ public class HealthBarRenderer {
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
-        return FastColor.ARGB32.color(a, r*61/100, g*61/100, b*61/100);
+        return FastColor.ARGB32.color(a, r * 61 / 100, g * 61 / 100, b * 61 / 100);
     }
 
     private static boolean isBoss(Entity entity) {
@@ -166,7 +169,6 @@ public class HealthBarRenderer {
             return false;
         }
 
-
         if ((!NeatConfig.instance.renderInF1() && !Minecraft.renderNames()) || !NeatConfig.draw) {
             return false;
         }
@@ -175,7 +177,6 @@ public class HealthBarRenderer {
         if (NeatConfig.instance.blacklist().contains(id.toString())) {
             return false;
         }
-
 
         float distance = living.distanceTo(cameraEntity);
         if (distance > NeatConfig.instance.maxDistance()
@@ -206,7 +207,8 @@ public class HealthBarRenderer {
                 case ALWAYS -> visible;
                 case NEVER -> false;
                 case HIDE_FOR_OTHER_TEAMS ->
-                        cameraTeam == null ? visible : livingTeam.isAlliedTo(cameraTeam) && (livingTeam.canSeeFriendlyInvisibles() || visible);
+                    cameraTeam == null ? visible
+                            : livingTeam.isAlliedTo(cameraTeam) && (livingTeam.canSeeFriendlyInvisibles() || visible);
                 case HIDE_FOR_OWN_TEAM -> cameraTeam == null ? visible : !livingTeam.isAlliedTo(cameraTeam) && visible;
             };
         }
@@ -218,7 +220,9 @@ public class HealthBarRenderer {
 
         if (e instanceof LivingEntity en) {
             return Load.Unit(en).getStatusEffectsData().exileMap.entrySet().stream()
-                    .map(x -> Pair.of(EffectIcon.of(ExileDB.ExileEffects().get(x.getKey()).getTexture(), x.getValue().stacks), x.getValue().ticks_left))
+                    .map(x -> Pair.of(
+                            EffectIcon.of(ExileDB.ExileEffects().get(x.getKey()).getTexture(), x.getValue().stacks),
+                            x.getValue().ticks_left))
                     .sorted((x, y) -> -Integer.compare(x.getValue(), y.getValue()))
                     .map(Pair::getLeft)
                     .filter(x -> x.location() != null)
@@ -229,10 +233,11 @@ public class HealthBarRenderer {
     }
 
     public static void hookRender(Entity entity, PoseStack poseStack, MultiBufferSource buffers,
-                                  Quaternionf cameraOrientation) {
+            Quaternionf cameraOrientation) {
         final Minecraft mc = Minecraft.getInstance();
 
-        if (!(entity instanceof LivingEntity living) || (!living.getPassengers().isEmpty() && living.getPassengers().get(0) instanceof LivingEntity)) {
+        if (!(entity instanceof LivingEntity living)
+                || (!living.getPassengers().isEmpty() && living.getPassengers().get(0) instanceof LivingEntity)) {
             // TODO handle mob stacks properly
             return;
         }
@@ -269,10 +274,14 @@ public class HealthBarRenderer {
         if (NeatConfig.instance.drawBackground()) {
 
             VertexConsumer builder = buffers.getBuffer(renderType);
-            builder.vertex(poseStack.last().pose(), -halfSize - padding, -bgHeight, 0.01F).color(0, 0, 0, 64).uv(0.0F, 0.0F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), -halfSize - padding, barHeight + padding, 0.01F).color(0, 0, 0, 64).uv(0.0F, 0.5F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), halfSize + padding, barHeight + padding, 0.01F).color(0, 0, 0, 64).uv(1.0F, 0.5F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), halfSize + padding, -bgHeight, 0.01F).color(0, 0, 0, 64).uv(1.0F, 0.0F).uv2(light).endVertex();
+            builder.vertex(poseStack.last().pose(), -halfSize - padding, -bgHeight, 0.01F).color(0, 0, 0, 64)
+                    .uv(0.0F, 0.0F).uv2(light).endVertex();
+            builder.vertex(poseStack.last().pose(), -halfSize - padding, barHeight + padding, 0.01F).color(0, 0, 0, 64)
+                    .uv(0.0F, 0.5F).uv2(light).endVertex();
+            builder.vertex(poseStack.last().pose(), halfSize + padding, barHeight + padding, 0.01F).color(0, 0, 0, 64)
+                    .uv(1.0F, 0.5F).uv2(light).endVertex();
+            builder.vertex(poseStack.last().pose(), halfSize + padding, -bgHeight, 0.01F).color(0, 0, 0, 64)
+                    .uv(1.0F, 0.0F).uv2(light).endVertex();
         }
 
         // Health Bar
@@ -281,7 +290,6 @@ public class HealthBarRenderer {
         int maxHealthPlusMagicShield = HealthUtils.getMaxHealthPlusMagicShield(living);
         float healthBarPercent = HealthUtils.getHealthBarPercent(living);
         float healthHalfSize = halfSize * healthBarPercent;
-
 
         float healthPart = Math.min(1f, currentHealth * 1f / currentHealthPlusMagicShield);
 
@@ -295,24 +303,35 @@ public class HealthBarRenderer {
             float healthLayerZ = 0.001f;
             float backgroundLayerZ = 0.002f;
 
-            //health
+            // health
             builder.vertex(poseInHere, -halfSize, 0, healthLayerZ).color(argb).uv(0.0F, 0.75F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize, barHeight, healthLayerZ).color(argbShadow).uv(0.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, 0.001F).color(argbShadow).uv(1.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ).color(argb).uv(1.0F, 0.75F).uv2(light).endVertex();
+            builder.vertex(poseInHere, -halfSize, barHeight, healthLayerZ).color(argbShadow).uv(0.0F, 1.0F).uv2(light)
+                    .endVertex();
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, 0.001F).color(argbShadow)
+                    .uv(1.0F, 1.0F).uv2(light).endVertex();
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ).color(argb)
+                    .uv(1.0F, 0.75F).uv2(light).endVertex();
 
-            //magic shield
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ).color(magicShieldColor).uv(0.0F, 0.75F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, healthLayerZ).color(magicShieldShadowColor).uv(0.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, barHeight, healthLayerZ).color(magicShieldShadowColor).uv(1.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, 0, healthLayerZ).color(magicShieldColor).uv(1.0F, 0.75F).uv2(light).endVertex();
+            // magic shield
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ)
+                    .color(magicShieldColor).uv(0.0F, 0.75F).uv2(light).endVertex();
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, healthLayerZ)
+                    .color(magicShieldShadowColor).uv(0.0F, 1.0F).uv2(light).endVertex();
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, barHeight, healthLayerZ)
+                    .color(magicShieldShadowColor).uv(1.0F, 1.0F).uv2(light).endVertex();
+            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, 0, healthLayerZ).color(magicShieldColor)
+                    .uv(1.0F, 0.75F).uv2(light).endVertex();
 
             // Blank part of the bar
             if (healthHalfSize < halfSize) {
-                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, 0, backgroundLayerZ).color(0, 0, 0, 127).uv(0.0F, 0.5F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, barHeight, backgroundLayerZ).color(0, 0, 0, 127).uv(0.0F, 0.75F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), halfSize, barHeight, backgroundLayerZ).color(0, 0, 0, 127).uv(1.0F, 0.75F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), halfSize, 0, backgroundLayerZ).color(0, 0, 0, 127).uv(1.0F, 0.5F).uv2(light).endVertex();
+                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, 0, backgroundLayerZ)
+                        .color(0, 0, 0, 127).uv(0.0F, 0.5F).uv2(light).endVertex();
+                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, barHeight, backgroundLayerZ)
+                        .color(0, 0, 0, 127).uv(0.0F, 0.75F).uv2(light).endVertex();
+                builder.vertex(poseStack.last().pose(), halfSize, barHeight, backgroundLayerZ).color(0, 0, 0, 127)
+                        .uv(1.0F, 0.75F).uv2(light).endVertex();
+                builder.vertex(poseStack.last().pose(), halfSize, 0, backgroundLayerZ).color(0, 0, 0, 127)
+                        .uv(1.0F, 0.5F).uv2(light).endVertex();
             }
         }
 
@@ -326,7 +345,8 @@ public class HealthBarRenderer {
                 poseStack.pushPose();
                 poseStack.translate(-halfSize, -4.5F, 0F);
                 poseStack.scale(textScale, textScale, textScale);
-                mc.font.drawInBatch(name, 0, 0, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
+                mc.font.drawInBatch(name, 0, 0, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL,
+                        black, light);
                 poseStack.popPose();
             }
 
@@ -341,19 +361,25 @@ public class HealthBarRenderer {
 
                 if (NeatConfig.instance.showCurrentHP()) {
                     String hpStr = MMORPG.formatBigNumber(currentHealthPlusMagicShield);
-                    mc.font.drawInBatch(hpStr, 2, h, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
+                    mc.font.drawInBatch(hpStr, 2, h, white, false, poseStack.last().pose(), buffers,
+                            Font.DisplayMode.NORMAL, black, light);
                 }
                 if (NeatConfig.instance.showMaxHP()) {
                     String maxHpStr = ChatFormatting.BOLD + MMORPG.formatBigNumber(maxHealthPlusMagicShield);
-                    mc.font.drawInBatch(maxHpStr, (int) (halfSize / healthValueTextScale * 2) - mc.font.width(maxHpStr) - 2, h, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
+                    mc.font.drawInBatch(maxHpStr,
+                            (int) (halfSize / healthValueTextScale * 2) - mc.font.width(maxHpStr) - 2, h, white, false,
+                            poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
                 }
                 if (NeatConfig.instance.showPercentage()) {
                     String percStr = (int) (100 * healthBarPercent) + "%";
-                    mc.font.drawInBatch(percStr, (int) (halfSize / healthValueTextScale) - mc.font.width(percStr) / 2.0F, h, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
+                    mc.font.drawInBatch(percStr,
+                            (int) (halfSize / healthValueTextScale) - mc.font.width(percStr) / 2.0F, h, white, false,
+                            poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
                 }
-                if (NeatConfig.instance.enableDebugInfo() && mc.options.renderDebug) {
+                if (NeatConfig.instance.enableDebugInfo() && mc.getDebugOverlay().showDebugScreen()) {
                     var id = BuiltInRegistries.ENTITY_TYPE.getKey(living.getType());
-                    mc.font.drawInBatch("ID: \"" + id + "\"", 0, h + 16, white, false, poseStack.last().pose(), buffers, Font.DisplayMode.NORMAL, black, light);
+                    mc.font.drawInBatch("ID: \"" + id + "\"", 0, h + 16, white, false, poseStack.last().pose(), buffers,
+                            Font.DisplayMode.NORMAL, black, light);
                 }
                 poseStack.popPose();
             }
@@ -362,22 +388,22 @@ public class HealthBarRenderer {
         poseStack.popPose(); // Remove globalScale
 
         // Icons
-        if (!icons.isEmpty()){
+        if (!icons.isEmpty()) {
             final int size = 8;
             final float iconInterval = size * 0.2f;
             poseStack.pushPose();
             poseStack.scale(-globalScale, -globalScale, 1);
             poseStack.translate(halfSize + padding, bgHeight, 0);
             float horizontalOffset = icons.size() * size + (icons.size() - 1) * iconInterval;
-            //todo: haven't handle the case like entity has insane amount of effects.
+            // todo: haven't handle the case like entity has insane amount of effects.
             // it will make the icon exceed the left of health bar.
             poseStack.translate(-horizontalOffset, 0, 0);
             for (int i = 0; i < icons.size(); i++) {
-                if (i != 0) poseStack.translate(size + iconInterval, 0, 0);
+                if (i != 0)
+                    poseStack.translate(size + iconInterval, 0, 0);
                 icons.get(i).renderOnHealthBar(poseStack, buffers, size);
 
             }
-
 
             poseStack.popPose();
         }
@@ -405,7 +431,6 @@ public class HealthBarRenderer {
         Component name = living.getDisplayName();
         Component suffix = CommonComponents.EMPTY;
 
-
         for (MobAffix affix : Load.Unit(entity).getAffixData().getAffixes()) {
 
             if (affix.type.isPrefix()) {
@@ -427,12 +452,13 @@ public class HealthBarRenderer {
         }
         List<Component> rarity1 = List.of(rarity, prefix, name, suffix);
         for (Component component : rarity1) {
-            if (component instanceof MutableComponent){
+            if (component instanceof MutableComponent) {
                 ((MutableComponent) component).withStyle(rarityColor);
             }
         }
         Component[] array = rarity1.toArray(Component[]::new);
-        return Formatter.MOB_NAME_TEMPLATE.locName((Object[]) ArrayUtils.addFirst(array, level)).withStyle(ChatFormatting.YELLOW);
+        return Formatter.MOB_NAME_TEMPLATE.locName((Object[]) ArrayUtils.addFirst(array, level))
+                .withStyle(ChatFormatting.YELLOW);
     }
 
 }

@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
+import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashAttachments;
 
 public class Load {
 
@@ -29,19 +30,19 @@ public class Load {
     }
 
     public static EntityData Unit(Entity entity) {
-        return entity.getCapability(EntityData.INSTANCE).orElse(new EntityData((LivingEntity) entity));
+        return entity.getData(SlashAttachments.ENTITY_DATA);
     }
 
     public static PlayerData player(Player player) {
-        return player.getCapability(PlayerData.INSTANCE).orElse(new PlayerData(player));
+        return player.getData(SlashAttachments.PLAYER_DATA);
     }
 
     public static PlayerBackpackData backpacks(Player player) {
-        return player.getCapability(PlayerBackpackData.INSTANCE).orElse(null);
+        return player.getData(SlashAttachments.PLAYER_BACKPACK_DATA);
     }
 
     public static WorldData worldData(Level l) {
-        return l.getServer().overworld().getCapability(WorldData.INSTANCE).orElse(null);
+        return l.getServer().overworld().getData(SlashAttachments.WORLD_DATA);
     }
 
     // todo add connected maps
@@ -54,7 +55,7 @@ public class Load {
     }
 
     public static ChunkCap chunkData(LevelChunk c) {
-        return c.getCapability(ChunkCap.INSTANCE).orElseGet(null);
+        return c.getData(SlashAttachments.CHUNK_CAP);
     }
 
 }
