@@ -14,16 +14,14 @@ public class ObeliskMobTierStats {
     public static UUID DMG = UUID.fromString("012d5bd9-4917-4747-b188-1f8da6871133");
     public static UUID HP = UUID.fromString("19719d5f-e800-468b-839c-b907f9ab89ab");
 
-
     public static AttributeModifier hpMod(int tier) {
         float hp = ObeliskConfig.get().MOB_HP_PER_TIER.get().floatValue() * tier;
 
         AttributeModifier mod = new AttributeModifier(
                 HP,
-                Attributes.MAX_HEALTH.getDescriptionId(),
-                hp,
-                AttributeModifier.Operation.MULTIPLY_TOTAL
-        );
+                "mob_tier_hp",
+                (double) hp,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         return mod;
     }
 
@@ -32,13 +30,11 @@ public class ObeliskMobTierStats {
 
         AttributeModifier mod = new AttributeModifier(
                 DMG,
-                Attributes.ATTACK_DAMAGE.getDescriptionId(),
-                dmg,
-                AttributeModifier.Operation.MULTIPLY_TOTAL
-        );
+                "mob_tier_dmg",
+                (double) dmg,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         return mod;
     }
-
 
     public static void tryApply(LivingEntity en, ObeliskMapData data) {
 
@@ -46,16 +42,14 @@ public class ObeliskMobTierStats {
             int tier = data.item.tier;
 
             if (tier > 0) {
-                var attributes = en.getAttributes();
-
                 AttributeInstance maxHealthAttribute = en.getAttribute(Attributes.MAX_HEALTH);
-                if (!attributes.hasModifier(Attributes.MAX_HEALTH, HP) && maxHealthAttribute != null) {
+                if (maxHealthAttribute != null && maxHealthAttribute.getModifier(HP) == null) {
                     maxHealthAttribute.addPermanentModifier(hpMod(tier));
                     en.setHealth((int) maxHealthAttribute.getValue());
                 }
 
                 AttributeInstance attackDamageAttribute = en.getAttribute(Attributes.ATTACK_DAMAGE);
-                if (!attributes.hasModifier(Attributes.ATTACK_DAMAGE, DMG) && attackDamageAttribute != null) {
+                if (attackDamageAttribute != null && attackDamageAttribute.getModifier(DMG) == null) {
                     attackDamageAttribute.addPermanentModifier(dmgMod(tier));
                 }
             }

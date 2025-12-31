@@ -35,13 +35,12 @@ public class ObeliskItemMapData {
 
     public boolean relic = false;
 
-
     public List<Component> getTierTooltip() {
         List<Component> all = new ArrayList<>();
         if (tier > 0) {
             all.add(ObeliskWords.OBELISK_TIER_X.get(tier).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
-            all.add(AttributeMobAffix.getTooltip(Attributes.MAX_HEALTH, ObeliskMobTierStats.hpMod(tier)));
-            all.add(AttributeMobAffix.getTooltip(Attributes.ATTACK_DAMAGE, ObeliskMobTierStats.dmgMod(tier)));
+            all.add(AttributeMobAffix.getTooltip(Attributes.MAX_HEALTH.value(), ObeliskMobTierStats.hpMod(tier)));
+            all.add(AttributeMobAffix.getTooltip(Attributes.ATTACK_DAMAGE.value(), ObeliskMobTierStats.dmgMod(tier)));
         }
         return all;
 
@@ -88,7 +87,6 @@ public class ObeliskItemMapData {
     public List<Component> getAffixesTooltip() {
 
         List<Component> all = new ArrayList<>();
-
 
         for (int i = 0; i < maxWaves; i++) {
 

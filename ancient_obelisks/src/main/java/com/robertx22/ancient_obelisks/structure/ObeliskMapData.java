@@ -42,7 +42,6 @@ public class ObeliskMapData {
     public boolean canSpawnRewards = false;
     public boolean spawnedRewards = false;
 
-
     public float getTotalRewardChance() {
         float chance = mob_kills * ObeliskConfig.get().LOOT_CHANCE_PER_MOB_KILL.get().floatValue();
         chance *= item.getLootMulti();
@@ -51,9 +50,9 @@ public class ObeliskMapData {
     }
 
     public List<LivingEntity> getAllLivingMobs(Level world, BlockPos pos) {
-        return world.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 35, 30, 35)).stream().filter(x -> ObeliskEntityCapability.get(x).data.isObeSpawn).collect(Collectors.toList());
+        return world.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 35, 30, 35)).stream()
+                .filter(x -> ObeliskEntityCapability.get(x).data.isObeSpawn).collect(Collectors.toList());
     }
-
 
     public void tryStartNewWave(Level world, BlockPos pos) {
 
@@ -77,19 +76,20 @@ public class ObeliskMapData {
             mobsLeftForWave *= multi;
         }
 
-
         for (Player p : ObelisksMain.OBELISK_MAP_STRUCTURE.getAllPlayersInMap(world, pos)) {
             if (currentWave == (item.maxWaves - 1)) {
-                p.sendSystemMessage(ObeliskWords.LAST_WAVE.get(currentWave).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                p.sendSystemMessage(
+                        ObeliskWords.LAST_WAVE.get(currentWave).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             } else {
-                p.sendSystemMessage(ObeliskWords.WAVE_X_STARTING.get(currentWave + 1).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                p.sendSystemMessage(ObeliskWords.WAVE_X_STARTING.get(currentWave + 1).withStyle(ChatFormatting.RED,
+                        ChatFormatting.BOLD));
             }
             for (ExileAffixData affix : this.item.getAffixesForWave(currentWave)) {
-                p.sendSystemMessage(ObeliskWords.NEW_WAVE_AFFIX.get(affix.getAffix().getPrefixedName(affix.perc)).withStyle(ChatFormatting.LIGHT_PURPLE));
+                p.sendSystemMessage(ObeliskWords.NEW_WAVE_AFFIX.get(affix.getAffix().getPrefixedName(affix.perc))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
     }
-
 
     public void waveLogicSecond(Level world, BlockPos pos) {
         if (currentWave >= (item.maxWaves - 1)) {
@@ -103,20 +103,16 @@ public class ObeliskMapData {
             tryStartNewWave(world, pos);
         }
 
-
         if (mobsLeftForWave > 0) {
-
 
             // todo on configs with 100% spawn chance this is useless
             float spawnChance = ObeliskConfig.get().MOB_SPAWN_CHANCE.get() * item.getSpawnRateMulti();
-
 
             var data = LibMapCap.getData(world, pos);
             if (data != null) {
                 float multi = 1F + data.relicStats.get(ObeliskRelicStats.INSTANCE.MOB_SPAWN_CHANCE.get()) / 100F;
                 spawnChance *= multi;
             }
-
 
             if (RandomUtils.roll(spawnChance)) {
                 int toSpawn = ObeliskConfig.get().MOB_SPAWNS_PER_SECOND.get();
@@ -130,7 +126,8 @@ public class ObeliskMapData {
 
                 for (int i = 0; i < toSpawn; i++) {
                     var mob = RandomUtils.weightedRandom(mobs.mobs);
-                    spawnMob(world, pos.offset(RandomUtils.randomFromList(dirs).getNormal().multiply(2)), mob.getType());
+                    spawnMob(world, pos.offset(RandomUtils.randomFromList(dirs).getNormal().multiply(2)),
+                            mob.getType());
                 }
             }
         }
@@ -145,7 +142,8 @@ public class ObeliskMapData {
         en.setPos(pos.getX(), pos.getY(), pos.getZ());
 
         if (en instanceof Mob mob) {
-            mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND, (SpawnGroupData) null, (CompoundTag) null);
+            mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND,
+                    (SpawnGroupData) null);
         }
 
         world.addFreshEntity(en);

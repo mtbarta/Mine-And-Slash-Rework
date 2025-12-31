@@ -1,0 +1,166 @@
+tasks.register("printCompileClasspath") { doLast { configurations.compileClasspath.files.each { println it } } }
+plugins {
+    id 'java-library'
+    id 'net.neoforged.gradle.userdev' version "7.0.145"
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = "${mod_archive_name}-${minecraft_version}"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+minecraft {
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache/**'
+}
+
+repositories {
+    maven { url = "https://maven.theillusivec4.top/" } // curios
+    maven { url = "https://maven.kosmx.dev/" } // player animations
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup "mezz.jei"
+        }
+    }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    compileOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
+    runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
+    implementation("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
+
+    implementation("com.robertx22:Library-of-Exile-Rework:${project.exile_library_version}")
+    implementation("com.robertx22:ancient-obelisks:${project.ancient_obelisks_version}")
+    implementation("com.robertx22:the_harvest:${project.the_harvest_version}")
+    implementation("com.robertx22:dungeon_realm:${project.dungeon_realm_version}")
+}
+
+jar {
+    manifest {
+        attributes([
+                'Specification-Title'   : mod_archive_name,
+                'Specification-Vendor'  : mod_author,
+                'Specification-Version' : project.jar.archiveVersion,
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': project.jar.archiveVersion,
+                'Implementation-Vendor' : mod_author,
+                'Built-On-Minecraft'    : minecraft_version
+        ])
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    int pack_format = getPackFormat()
+    var expandProps = [
+            "mod_version"             : mod_version,
+            "mod_id"                  : mod_id,
+            "mod_issues_link"         : mod_issues_link,
+            "mod_website_link"        : mod_website_link,
+            "mod_display_name"        : mod_display_name,
+            "mod_author"              : mod_author,
+            "neo_version"             : neo_version,
+            "exile_library_version"   : exile_library_version,
+            "dungeon_realm_version"   : dungeon_realm_version,
+            "ancient_obelisks_version": ancient_obelisks_version,
+            "the_harvest_version"     : the_harvest_version,
+            'group'                   : project.group,
+            'minecraft_version'       : minecraft_version,
+            'mod_name'                : mod_archive_name,
+            'description'             : project.description,
+            "pack_format"             : pack_format
+    ]
+
+    var jsonExpandProps = expandProps.collectEntries {
+        key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
+    }
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand expandProps
+    }
+
+    filesMatching(['pack.mcmeta', '*.mixins.json']) {
+        expand jsonExpandProps
+    }
+
+    inputs.properties(expandProps)
+}
+
+int getPackFormat() {
+     return 41 // 1.20.5
+}
+
+publishMods {
+    file = jar.archiveFile
+    changelog = file("CHANGELOG.txt").text
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
+    modLoaders.add("neoforge")
+    displayName = "${mod_archive_name}-${minecraft_version}-v${mod_version}"
+
+    curseforge {
+        accessToken = file("key.properties").exists() ? file("key.properties").text : ""
+        projectId = "${curse_id}"
+        minecraftVersions.add("${minecraft_version}")
+        minecraftVersions.add("1.20")
+    }
+
+    modrinth {
+        accessToken = file("modrinth_key.properties").exists() ? file("modrinth_key.properties").text : ""
+        projectId = "${modrinth_id}"
+        minecraftVersions.add("${minecraft_version}")
+        minecraftVersions.add("1.20")
+    }
+
+    curseforge {
+        requires { slug = "library-of-exile" }
+        requires { slug = "curios" }
+        requires { slug = "playeranimator" }
+        requires { slug = "dungeon-realm" }
+        requires { slug = "the-harvest" }
+        requires { slug = "ancient-obelisks" }
+    }
+    modrinth {
+        requires { slug = "library-of-exile" }
+        requires { slug = "curios" }
+        requires { slug = "playeranimator" }
+        requires { slug = "dungeon-realm" }
+        requires { slug = "the-harvest" }
+        requires { slug = "ancient-obelisks" }
+    }
+}

@@ -80,7 +80,6 @@ public class ObelisksMain {
         return new ResourceLocation(MODID, id);
     }
 
-
     // other
     public static ObeliskMapStructure OBELISK_MAP_STRUCTURE = new ObeliskMapStructure();
     public static MapDimensionInfo MAP = new MapDimensionInfo(
@@ -89,14 +88,12 @@ public class ObelisksMain {
             MapContentType.SIDE_CONTENT,
             Arrays.asList(),
             new ObeliskMobValidator(),
-            new MapDimensionConfigDefaults(3, 2)
-    ) {
+            new MapDimensionConfigDefaults(3, 2)) {
         @Override
         public void clearMapDataOnFolderWipe(MinecraftServer minecraftServer) {
             ObeliskMapCapability.get(minecraftServer.overworld()).data = new ObeliskWorldData();
         }
     };
-
 
     public static void debugMsg(Player p, String s) {
         if (p.isCreative()) {
@@ -112,7 +109,6 @@ public class ObelisksMain {
         // DistExecutor removed
         bus.addListener(this::clientSetup);
 
-
         new MapRegisterBuilder(MAP)
                 .chunkGenerator(new EventConsumer<MapChunkGenEvent>() {
                     @Override
@@ -124,7 +120,6 @@ public class ObelisksMain {
                 }, id("obelisk_chunk_gen"))
                 .build();
 
-
         if (RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(ObelisksMain.MODID);
 
@@ -135,12 +130,14 @@ public class ObelisksMain {
 
         ApiForgeEvents.registerForgeEvent(GatherDataEvent.class, event -> {
             var output = event.getGenerator().getPackOutput();
-            var chestsLootTables = new LootTableProvider.SubProviderEntry(ObeliskLootTables.ObeliskLootTableProvider::new, LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables));
+            var chestsLootTables = new LootTableProvider.SubProviderEntry(
+                    ObeliskLootTables.ObeliskLootTableProvider::new, LootContextParamSets.CHEST);
+            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+                    event.getLookupProvider());
             event.getGenerator().addProvider(true, provider);
 
             if (RUN_DEV_TOOLS) {
-                // todo this doesnt seem to gen here?   ObeliskDatabase.generateJsons();
+                // todo this doesnt seem to gen here? ObeliskDatabase.generateJsons();
             }
 
             try {
@@ -151,19 +148,17 @@ public class ObelisksMain {
             }
         });
 
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ObeliskConfig.SPEC);
 
-
         bus.addListener(this::commonSetupEvent);
-
 
         ExileEvents.GRAB_MOB_AFFIXES.register(new EventConsumer<GrabMobAffixesEvent>() {
             @Override
             public void accept(GrabMobAffixesEvent e) {
                 var map = MapDimensions.getInfo(e.en.level());
                 if (map != null && map.dimensionId.equals(DIMENSION_KEY)) {
-                    var mapdata = ObeliskMapCapability.get(e.en.level()).data.data.getData(OBELISK_MAP_STRUCTURE, e.en.blockPosition());
+                    var mapdata = ObeliskMapCapability.get(e.en.level()).data.data.getData(OBELISK_MAP_STRUCTURE,
+                            e.en.blockPosition());
                     if (mapdata != null) {
                         for (int i = 0; i < mapdata.currentWave + 1; i++) {
                             for (ExileAffixData affix : mapdata.item.getAffixesForWave(i)) {
@@ -186,7 +181,6 @@ public class ObelisksMain {
             }
         });
 
-
         ObeliskEntries.CREATIVE_TAB.register(MODID, () -> new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 2)
                 .icon(() -> ObeliskEntries.OBELISK_ITEM.get().getDefaultInstance())
                 .title(ObeliskWords.CREATIVE_TAB.get().withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
@@ -202,7 +196,6 @@ public class ObelisksMain {
                 })
                 .build());
 
-
         ObeliskCommands.init();
         ObeliskRewardLogic.init();
 
@@ -211,13 +204,15 @@ public class ObelisksMain {
             public void accept(ExileEvents.OnChestLooted e) {
                 try {
 
-                    float chance = (float) (ObeliskConfig.get().OBELISK_SPAWN_CHANCE_ON_CHEST_LOOT.get() * ObeliskConfig.get().getDimChanceMulti(e.player.level()));
+                    float chance = (float) (ObeliskConfig.get().OBELISK_SPAWN_CHANCE_ON_CHEST_LOOT.get()
+                            * ObeliskConfig.get().getDimChanceMulti(e.player.level()));
                     if (RandomUtils.roll(chance)) {
                         if (!MapDimensions.isMap(e.player.level())) {
                             var empty = mygetEmptySlotsRandomized(e.inventory, new Random());
                             if (!empty.isEmpty()) {
                                 int index = RandomUtils.randomFromList(empty);
-                                var map = ObeliskMapItem.blankMap(ObeliskEntries.OBELISK_MAP_ITEM.get().getDefaultInstance(), false);
+                                var map = ObeliskMapItem
+                                        .blankMap(ObeliskEntries.OBELISK_MAP_ITEM.get().getDefaultInstance(), false);
                                 e.inventory.setItem(index, map);
                             }
                         }
@@ -227,7 +222,6 @@ public class ObelisksMain {
                 }
             }
         });
-
 
         IdentifiableItems.register(ObeliskEntries.OBELISK_MAP_ITEM.getId(), new IdentifiableItems.Config() {
             @Override
@@ -240,7 +234,6 @@ public class ObelisksMain {
                 ObeliskMapItem.blankMap(stack, false);
             }
         });
-
 
         System.out.println("Ancient Obelisks loaded.");
 
@@ -280,7 +273,6 @@ public class ObelisksMain {
 
     public void commonSetupEvent(FMLCommonSetupEvent event) {
 
-
         ComponentInit.reg();
 
         // AttachCapabilitiesEvent listeners removed
@@ -296,7 +288,8 @@ public class ObelisksMain {
         @Override
         public MobList getPredeterminedRandomINTERNAL(Random random, Level level, ChunkPos pos) {
             var dungeon = OBELISK_MAP_STRUCTURE.getObelisk(pos);
-            return LibDatabase.MobLists().getFilterWrapped(x -> dungeon.mob_list_tag_check.matches(x).can).random(random.nextDouble());
+            return LibDatabase.MobLists().getFilterWrapped(x -> dungeon.mob_list_tag_check.matches(x).can)
+                    .random(random.nextDouble());
         }
     };
 }

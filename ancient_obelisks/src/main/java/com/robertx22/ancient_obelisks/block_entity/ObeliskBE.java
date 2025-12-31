@@ -3,6 +3,7 @@ package com.robertx22.ancient_obelisks.block_entity;
 import com.robertx22.ancient_obelisks.main.ObeliskEntries;
 import com.robertx22.ancient_obelisks.structure.ObeliskMapCapability;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,8 +39,8 @@ public class ObeliskBE extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(@Nonnull CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(@Nonnull CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
         nbt.putBoolean("gave", gaveMap);
         nbt.putInt("xp", x);
         nbt.putInt("zp", z);
@@ -48,8 +49,8 @@ public class ObeliskBE extends BlockEntity {
     }
 
     @Override
-    public void load(@Nonnull CompoundTag pTag) {
-        super.load(pTag);
+    protected void loadAdditional(@Nonnull CompoundTag pTag, HolderLookup.Provider registries) {
+        super.loadAdditional(pTag, registries);
         this.gaveMap = pTag.getBoolean("gave");
         this.x = pTag.getInt("xp");
         this.z = pTag.getInt("zp");

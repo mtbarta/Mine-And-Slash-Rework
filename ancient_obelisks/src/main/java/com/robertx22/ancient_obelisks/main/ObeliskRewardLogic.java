@@ -8,7 +8,9 @@ import com.robertx22.library_of_exile.main.ApiForgeEvents;
 import com.robertx22.library_of_exile.utils.RandomUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -73,12 +75,12 @@ public class ObeliskRewardLogic {
         for (int i = 0; i < chests; i++) {
             var cpos = findNearbyFreeChestPos(world, pos);
             if (cpos != null) {
-                spawnChest(world, cpos, ObeliskLootTables.LOOT);
+                spawnChest(world, cpos, ObeliskLootTables.LOOT_TABLE_KEY);
             }
         }
     }
 
-    public static void spawnChest(Level world, BlockPos pos, ResourceLocation loottable) {
+    public static void spawnChest(Level world, BlockPos pos, ResourceKey<LootTable> loottable) {
 
         world.setBlock(pos, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
 
@@ -89,10 +91,12 @@ public class ObeliskRewardLogic {
     }
 
     public static BlockPos findNearbyFreeChestPos(Level world, BlockPos pos) {
-        return findNearbyFreeChestPos(world, pos, state -> !state.isAir() && !state.is(Blocks.CHEST) && !state.is(ObeliskEntries.OBELISK_REWARD_BLOCK.get()), 1);
+        return findNearbyFreeChestPos(world, pos, state -> !state.isAir() && !state.is(Blocks.CHEST)
+                && !state.is(ObeliskEntries.OBELISK_REWARD_BLOCK.get()), 1);
     }
 
-    public static BlockPos findNearbyFreeChestPos(Level world, BlockPos pos, Predicate<BlockState> groundCheck, int freeBlocks) {
+    public static BlockPos findNearbyFreeChestPos(Level world, BlockPos pos, Predicate<BlockState> groundCheck,
+            int freeBlocks) {
         BlockPos nearest = null;
         int rad = 5;
         for (int x = -rad; x < rad; x++) {

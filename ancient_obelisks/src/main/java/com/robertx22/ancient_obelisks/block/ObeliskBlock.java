@@ -16,6 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -70,7 +71,8 @@ public class ObeliskBlock extends BaseEntityBlock {
 
         var count = map.getOrSetStartPos(p.level(), stack);
         var start = ObelisksMain.OBELISK_MAP_STRUCTURE.getStartFromCounter(count.x, count.z);
-        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE,
+                start.getMiddleBlockPosition(5));
 
         var pdata = PlayerDataCapability.get(p);
 
@@ -84,12 +86,12 @@ public class ObeliskBlock extends BaseEntityBlock {
 
         be.currentWorldUUID = ObeliskMapCapability.get(p.level()).data.data.uuid;
 
-
         be.setChanged();
 
         stack.shrink(1);
 
-        ObeliskMapCapability.get(p.level()).data.data.setData(p, data, ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+        ObeliskMapCapability.get(p.level()).data.data.setData(p, data, ObelisksMain.OBELISK_MAP_STRUCTURE,
+                start.getMiddleBlockPosition(5));
 
         pdata.mapTeleports.entranceTeleportLogic(p, ObelisksMain.DIMENSION_KEY, pos);
 
@@ -98,14 +100,48 @@ public class ObeliskBlock extends BaseEntityBlock {
     public static void joinCurrentMap(Player p, ObeliskBE be) {
 
         var start = ObelisksMain.OBELISK_MAP_STRUCTURE.getStartFromCounter(be.x, be.z);
-        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+        var pos = TeleportUtils.getSpawnTeleportPos(ObelisksMain.OBELISK_MAP_STRUCTURE,
+                start.getMiddleBlockPosition(5));
         var pdata = PlayerDataCapability.get(p);
         pdata.mapTeleports.entranceTeleportLogic(p, ObelisksMain.DIMENSION_KEY, pos);
     }
 
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player p,
+            InteractionHand hand, BlockHitResult hit) {
+        if (world.isClientSide) {
+            return ObeliskItemNbt.OBELISK_MAP.has(stack) ? ItemInteractionResult.SUCCESS
+                    : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        var be = world.getBlockEntity(pos);
+        var obe = be instanceof ObeliskBE ? (ObeliskBE) be : null;
+        if (obe == null) {
+            ObelisksMain.debugMsg(p, "Missing Block entity");
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        boolean isMapWorld = MapDimensions.isMap(world);
+        if (ObeliskItemNbt.OBELISK_MAP.has(stack)) {
+            ObeliskItemMapData map = ObeliskItemNbt.OBELISK_MAP.loadFrom(stack);
+
+            if (!map.relic && isMapWorld) {
+                p.sendSystemMessage(ObeliskWords.RELIC_MAPS_ONLY.get().withStyle(ChatFormatting.RED));
+                return ItemInteractionResult.SUCCESS;
+            }
+
+            // ObelisksMain.debugMsg(p, "Trying to start new map");
+            startNewMap(p, stack, obe);
+            // ObelisksMain.debugMsg(p, "Map started");
+            return ItemInteractionResult.SUCCESS;
+        }
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
 
     @Override
-    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    protected InteractionResult useWithoutItem(BlockState pState, Level world, BlockPos pPos, Player p,
+            BlockHitResult pHit) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         }
@@ -117,23 +153,9 @@ public class ObeliskBlock extends BaseEntityBlock {
         }
 
         boolean isMapWorld = MapDimensions.isMap(world);
-        ItemStack stack = p.getMainHandItem();
-        if (ObeliskItemNbt.OBELISK_MAP.has(stack)) {
-            ObeliskItemMapData map = ObeliskItemNbt.OBELISK_MAP.loadFrom(stack);
-
-            if (!map.relic && isMapWorld) {
-                p.sendSystemMessage(ObeliskWords.RELIC_MAPS_ONLY.get().withStyle(ChatFormatting.RED));
-                return InteractionResult.SUCCESS;
-            }
-
-            //ObelisksMain.debugMsg(p, "Trying to start new map");
-            startNewMap(p, stack, obe);
-            //ObelisksMain.debugMsg(p, "Map started");
-            return InteractionResult.SUCCESS;
-        }
 
         if (obe.isActivated()) {
-            //ObelisksMain.debugMsg(p, "Trying to join existing map");
+            // ObelisksMain.debugMsg(p, "Trying to join existing map");
             joinCurrentMap(p, obe);
             return InteractionResult.SUCCESS;
         }
@@ -156,7 +178,6 @@ public class ObeliskBlock extends BaseEntityBlock {
         startNewMap(p, map, obe);
     }
 
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new ObeliskBE(pPos, pState);
@@ -168,7 +189,8 @@ public class ObeliskBlock extends BaseEntityBlock {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+            BlockEntityType<T> pBlockEntityType) {
         return new BlockEntityTicker<T>() {
             @Override
             public void tick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {

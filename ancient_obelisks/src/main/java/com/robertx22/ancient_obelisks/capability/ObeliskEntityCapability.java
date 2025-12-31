@@ -12,6 +12,7 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import net.minecraft.core.HolderLookup;
 
 public class ObeliskEntityCapability implements INBTSerializable<CompoundTag> {
     public static final ResourceLocation RESOURCE = new ResourceLocation(ObelisksMain.MODID, "entity_data");
@@ -28,7 +29,7 @@ public class ObeliskEntityCapability implements INBTSerializable<CompoundTag> {
 
     public ObeliskEntityData data = new ObeliskEntityData();
 
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var nbt = new CompoundTag();
         try {
             LoadSave.Save(data, nbt, "data");
@@ -38,9 +39,10 @@ public class ObeliskEntityCapability implements INBTSerializable<CompoundTag> {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         try {
-            this.data = LoadSave.loadOrBlank(ObeliskEntityData.class, new ObeliskEntityData(), nbt, "data", new ObeliskEntityData());
+            this.data = LoadSave.loadOrBlank(ObeliskEntityData.class, new ObeliskEntityData(), nbt, "data",
+                    new ObeliskEntityData());
         } catch (Exception e) {
             e.printStackTrace();
         }

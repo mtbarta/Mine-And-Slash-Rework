@@ -9,23 +9,28 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.function.BiConsumer;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
 
 public class ObeliskLootTables {
 
     public static ResourceLocation LOOT = ObelisksMain.id("obelisk_loot");
-  
+
+    public static final ResourceKey<LootTable> LOOT_TABLE_KEY = ResourceKey.create(Registries.LOOT_TABLE, LOOT);
 
     public static class ObeliskLootTableProvider implements LootTableSubProvider {
 
         @Override
-        public void generate(BiConsumer<ResourceLocation, LootTable.Builder> output) {
+        public void generate(HolderLookup.Provider registries,
+                BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
 
             var essB = LootTable.lootTable()
                     .withPool(LootPool.lootPool().setRolls(UniformGenerator.between(3, 6))
                             .add(LootItem.lootTableItem(ObeliskEntries.ENVY.get()))
                             .add(LootItem.lootTableItem(ObeliskEntries.WRATH.get()))
-                            .add(LootItem.lootTableItem(ObeliskEntries.GREED.get()))
-                    ).withPool(
+                            .add(LootItem.lootTableItem(ObeliskEntries.GREED.get())))
+                    .withPool(
                             LootPool.lootPool().setRolls(UniformGenerator.between(3, 6))
                                     .add(LootItem.lootTableItem(Items.DIAMOND))
                                     .add(LootItem.lootTableItem(Items.GOLD_INGOT))
@@ -33,11 +38,9 @@ public class ObeliskLootTables {
                                     .add(LootItem.lootTableItem(Items.LAPIS_LAZULI))
                                     .add(LootItem.lootTableItem(Items.REDSTONE))
                                     .add(LootItem.lootTableItem(Items.COAL))
-                                    .add(LootItem.lootTableItem(Items.COPPER_INGOT))
-                    );
+                                    .add(LootItem.lootTableItem(Items.COPPER_INGOT)));
 
-            output.accept(LOOT, essB);
-
+            output.accept(LOOT_TABLE_KEY, essB);
 
         }
     }
