@@ -18,7 +18,7 @@ public class MapDimensions {
     }
 
     public static boolean isMap(Level world) {
-        var dim = world.dimensionTypeId().location();
+        var dim = world.dimension().location();
         boolean is = isMap(dim);
         return is;
     }
@@ -32,7 +32,7 @@ public class MapDimensions {
     }
 
     public static MapDimensionInfo getInfo(Level world) {
-        return getInfo(world.dimensionTypeId().location());
+        return getInfo(world.dimension().location());
     }
 
     public static void register(MapDimensionInfo info) {

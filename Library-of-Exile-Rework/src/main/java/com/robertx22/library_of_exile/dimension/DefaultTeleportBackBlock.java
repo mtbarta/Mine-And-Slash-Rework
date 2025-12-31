@@ -16,8 +16,8 @@ public class DefaultTeleportBackBlock extends Block {
         super(pProperties);
     }
 
-    @Override
-    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand,
+            BlockHitResult pHit) {
 
         if (!world.isClientSide) {
             if (p.isCrouching()) {

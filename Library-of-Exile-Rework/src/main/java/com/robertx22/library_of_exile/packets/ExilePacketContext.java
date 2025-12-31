@@ -15,10 +15,7 @@ public class ExilePacketContext {
     }
 
     public Player getPlayer() {
-        // ctx.player() returns a Player directly in newer versions, checking if method exists?
-        // Error said: "incompatible types: Optional<Player> cannot be converted to Player"
-        // So strict 1.20.4 probably returns Optional.
-        return ctx.player().orElse(null);
+        return ctx.player();
     }
 
     public <T extends MyPacket<T>> void reply(T msg) {

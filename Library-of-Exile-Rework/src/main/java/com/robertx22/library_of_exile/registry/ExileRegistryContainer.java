@@ -10,7 +10,7 @@ import com.robertx22.library_of_exile.registry.register_info.ExileRegistrationIn
 import com.robertx22.library_of_exile.registry.register_info.RegistrationInfoData;
 import com.robertx22.library_of_exile.utils.RandomUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
@@ -43,8 +43,7 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
     }
 
     List<C> fromDatapacks = null;
-    FriendlyByteBuf cachedBuf = null;
-
+    RegistryFriendlyByteBuf cachedBuf = null;
 
     public void sendUpdatePacket(ServerPlayer player) {
         if (type.ser == null) {
@@ -56,7 +55,8 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
 
         Preconditions.checkNotNull(cachedBuf, type.id + " error, cachedbuf is null!!!");
 
-        Packets.sendToClient(player, new EfficientRegistryPacket(this.type, Database.getRegistry(type).getFromDatapacks()));
+        Packets.sendToClient(player,
+                new EfficientRegistryPacket(this.type, Database.getRegistry(type).getFromDatapacks()));
 
     }
 
@@ -66,8 +66,9 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
         getFromDatapacks();
 
         if (fromDatapacks != null && !fromDatapacks.isEmpty()) {
-            cachedBuf = new FriendlyByteBuf(Unpooled.buffer());
-            // save the packetbytebuf, this should save at least 0.1 sec for each time anyone logs in.
+            cachedBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null);
+            // save the packetbytebuf, this should save at least 0.1 sec for each time
+            // anyone logs in.
             // SUPER important for big mmorpg servers!
 
             new EfficientRegistryPacket(type, Database.getRegistry(type).getFromDatapacks()).saveToData(cachedBuf);
@@ -144,11 +145,11 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
         this.emptyDefault = emptyDefault;
     }
 
-
     private void tryLogEmptyRegistry() {
         if (errorIfEmpty) {
             if (map.isEmpty()) {
-                if (this.dataPacksAreRegistered) { // dont error for client side stuff if datapacks have yet to arrive from packets
+                if (this.dataPacksAreRegistered) { // dont error for client side stuff if datapacks have yet to arrive
+                                                   // from packets
                     if (emptyRegistries.contains(this.type.id)) {
 
                         emptyRegistries.add(this.type.id);
@@ -183,7 +184,6 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
         return list;
     }
 
-
     public C getFromSerializables(DataGenKey<C> key) {
         return this.serializables.get(key.GUID());
     }
@@ -198,7 +198,9 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
 
         if (map.isEmpty() && serializables.isEmpty()) {
             if (!accessedEarly) {
-                throw new RuntimeException("\n Accessed slash registry earlier than datapacks are loaded, returning empty: " + guid + "\n");
+                throw new RuntimeException(
+                        "\n Accessed slash registry earlier than datapacks are loaded, returning empty: " + guid
+                                + "\n");
             }
             accessedEarly = true;
             return this.getDefault();
@@ -217,7 +219,9 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
             if (logMissingEntryOnAccess) {
                 if (accessorErrosAletedFor.contains(guid) == false) {
                     logRegistryError(
-                            "GUID Error: " + guid + " of type: " + type.id + " doesn't exist. This is either " + "a removed/renamed old registry, or robertx22 forgot to include it in an " + "update" + ".");
+                            "GUID Error: " + guid + " of type: " + type.id + " doesn't exist. This is either "
+                                    + "a removed/renamed old registry, or robertx22 forgot to include it in an "
+                                    + "update" + ".");
                     accessorErrosAletedFor.add(guid);
                 }
             }
@@ -270,7 +274,6 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
         return map.containsKey(guid);
     }
 
-
     public void register(C c, ExileRegistrationInfo info) {
 
         Preconditions.checkNotNull(info);
@@ -297,18 +300,21 @@ public class ExileRegistryContainer<C extends ExileRegistry> {
 
     private void tryLogAddition(C c) {
 
-        //   if (logAdditionsToRegistry /*&& ModConfig.get().Server.LOG_REGISTRY_ENTRIES*/// todo
-           /*
-           System.out.println(
-                "[Age of Exile Registry Addition]: " + c.GUID() + " to " + type.toString() + " registry");
-        }
-        */
+        // if (logAdditionsToRegistry /*&&
+        // ModConfig.get().Server.LOG_REGISTRY_ENTRIES*/// todo
+        /*
+         * System.out.println(
+         * "[Age of Exile Registry Addition]: " + c.GUID() + " to " + type.toString() +
+         * " registry");
+         * }
+         */
 
     }
 
     public void addSerializable(C entry, ExileRegistrationInfo info) {
         if (serializables.containsKey(entry.GUID())) {
-            ExileLog.get().warn("Entry of type: " + entry.getExileRegistryType().id + " already exists as seriazable: " + entry.GUID());
+            ExileLog.get().warn("Entry of type: " + entry.getExileRegistryType().id + " already exists as seriazable: "
+                    + entry.GUID());
         }
         this.serializables.put(entry.GUID(), entry);
         this.unRegister(entry);

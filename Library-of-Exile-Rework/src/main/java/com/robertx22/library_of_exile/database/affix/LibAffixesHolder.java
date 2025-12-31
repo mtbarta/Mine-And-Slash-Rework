@@ -25,37 +25,43 @@ public class LibAffixesHolder extends ExileKeyHolder<ExileMobAffix> {
     }
 
     public ExileKey<ExileMobAffix, KeyInfo> FAST_MOBS = ExileKey.ofId(this, "fast_mobs", x -> {
-        var data = PotionMobAffix.Data.ofPermanent(MobEffects.MOVEMENT_SPEED, new AffixNumberRange(1, 2));
+        var data = PotionMobAffix.Data.ofPermanent(MobEffects.MOVEMENT_SPEED.value(), new AffixNumberRange(1, 2));
         var translation = AffixTranslation.ofPermanentPotion(Ref.MODID);
         return new PotionMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> PERIODIC_SPEEDY_MOBS = ExileKey.ofId(this, "periodic_speedy_mobs", x -> {
-        var data = PotionMobAffix.Data.of5sEvery10s(MobEffects.MOVEMENT_SPEED, new AffixNumberRange(3, 6));
+        var data = PotionMobAffix.Data.of5sEvery10s(MobEffects.MOVEMENT_SPEED.value(), new AffixNumberRange(3, 6));
         var translation = AffixTranslation.ofPotion(Ref.MODID);
         return new PotionMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> PERIODIC_INVISIBILITY = ExileKey.ofId(this, "periodic_invis", x -> {
-        var data = PotionMobAffix.Data.of5sEvery10s(MobEffects.INVISIBILITY, new AffixNumberRange(1, 1));
+        var data = PotionMobAffix.Data.of5sEvery10s(MobEffects.INVISIBILITY.value(), new AffixNumberRange(1, 1));
         var translation = AffixTranslation.ofPotion(Ref.MODID);
         return new PotionMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> PERIODIC_LEVITATION = ExileKey.ofId(this, "periodic_levitate", x -> {
-        var data = PotionMobAffix.Data.of1sEvery10s(MobEffects.LEVITATION, new AffixNumberRange(1, 1));
+        var data = PotionMobAffix.Data.of1sEvery10s(MobEffects.LEVITATION.value(), new AffixNumberRange(1, 1));
         var translation = AffixTranslation.ofPotion(Ref.MODID);
         return new PotionMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> KNOCKBACK_IMMUNE = ExileKey.ofId(this, "knockback_immune", x -> {
-        var data = AttributeMobAffix.Data.of(Attributes.KNOCKBACK_RESISTANCE, UUID.fromString("9bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADDITION, new AffixNumberRange(1, 1));
+        var data = AttributeMobAffix.Data.of(Attributes.KNOCKBACK_RESISTANCE.value(),
+                UUID.fromString("9bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADD_VALUE,
+                new AffixNumberRange(1, 1));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> HIGH_HEALTH = ExileKey.ofId(this, "high_health", x -> {
-        var data = AttributeMobAffix.Data.of(Attributes.MAX_HEALTH, UUID.fromString("8bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.MULTIPLY_TOTAL, new AffixNumberRange(0.25F, 0.5F));
+        var data = AttributeMobAffix.Data.of(Attributes.MAX_HEALTH.value(),
+                UUID.fromString("8bedbca3-44e3-4d99-acf3-7a8407b39339"),
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, new AffixNumberRange(0.25F, 0.5F));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> HIGH_KNOCKBACK = ExileKey.ofId(this, "high_knockback", x -> {
-        var data = AttributeMobAffix.Data.of(Attributes.ATTACK_KNOCKBACK, UUID.fromString("7bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADDITION, new AffixNumberRange(1, 3));
+        var data = AttributeMobAffix.Data.of(Attributes.ATTACK_KNOCKBACK.value(),
+                UUID.fromString("7bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADD_VALUE,
+                new AffixNumberRange(1, 3));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });

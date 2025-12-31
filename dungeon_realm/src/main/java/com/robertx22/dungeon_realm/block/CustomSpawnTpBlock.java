@@ -21,15 +21,14 @@ public class CustomSpawnTpBlock extends Block {
 
     Supplier<MapStructure> structure;
 
-
     public CustomSpawnTpBlock(Supplier<MapStructure> structure) {
         super(BlockBehaviour.Properties.of().strength(2).noOcclusion());
         this.structure = structure;
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
-
+    public InteractionResult useWithoutItem(BlockState pState, Level level, BlockPos pPos, Player p,
+            BlockHitResult pHit) {
 
         if (!level.isClientSide) {
 
@@ -37,7 +36,7 @@ public class CustomSpawnTpBlock extends Block {
                 // can this happen?
                 return InteractionResult.SUCCESS;
             }
-            
+
             DungeonMain.ifMapData(level, pPos).ifPresent(x -> {
                 MapStructure<?> mapStructure = structure.get();
                 if (mapStructure.isInside((ServerLevel) level, pPos)) {
@@ -50,7 +49,7 @@ public class CustomSpawnTpBlock extends Block {
                     } else {
                         pos = TeleportUtils.getSpawnTeleportPos(mapStructure, pPos);
                     }
-                    var dim = level.dimensionTypeId().location();
+                    var dim = level.dimension().location();
                     PlayerDataCapability.get(p).mapTeleports.teleportToMap(p, dim, dim, pos);
                 }
             });

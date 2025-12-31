@@ -1,6 +1,6 @@
 package com.robertx22.library_of_exile.database.affix.base;
 
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import com.robertx22.library_of_exile.events.base.ExileEvents;
 import com.robertx22.library_of_exile.main.ApiForgeEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,12 +12,11 @@ public class MobAffixEvents {
         // mob on spawn affix should be enough like this
         // player affixes need more work, i'll leave that for later
 
-
-        ApiForgeEvents.registerForgeEvent(LivingEvent.LivingTickEvent.class, event ->
-        {
+        ApiForgeEvents.registerForgeEvent(EntityTickEvent.Post.class, event -> {
             try {
-            if (!(event.getEntity() instanceof LivingEntity)) return;
-            LivingEntity en = (LivingEntity) event.getEntity();
+                if (!(event.getEntity() instanceof LivingEntity))
+                    return;
+                LivingEntity en = (LivingEntity) event.getEntity();
                 if (en.level().isClientSide) {
                     return;
                 }
@@ -34,16 +33,16 @@ public class MobAffixEvents {
                         ExileEvents.GRAB_MOB_AFFIXES.callEvents(e);
 
                         // test
-                        // var d = new ExileAffixData(LibAffixesHolder.INSTANCE.KNOCKBACK_IMMUNE.GUID(), 100);
-                        //e.allAffixes.add(d);
-                        //d.getAffix().getApplyStrategy().applyManually(d, en);
+                        // var d = new ExileAffixData(LibAffixesHolder.INSTANCE.KNOCKBACK_IMMUNE.GUID(),
+                        // 100);
+                        // e.allAffixes.add(d);
+                        // d.getAffix().getApplyStrategy().applyManually(d, en);
 
                         for (ExileAffixData data : e.allAffixes) {
                             data.getAffix().getApplyStrategy().onEverySecond(data, en);
                         }
                     }
                 }
-
 
             } catch (Exception ex) {
                 ex.printStackTrace();

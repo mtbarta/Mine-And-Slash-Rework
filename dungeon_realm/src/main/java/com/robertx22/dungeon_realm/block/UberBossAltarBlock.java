@@ -31,8 +31,8 @@ public class UberBossAltarBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
-
+    public InteractionResult useWithoutItem(BlockState pState, Level level, BlockPos pPos, Player p,
+            BlockHitResult pHit) {
 
         if (!level.isClientSide) {
 
@@ -46,7 +46,8 @@ public class UberBossAltarBlock extends Block {
                         LivingEntity en = (LivingEntity) type.create(level);
                         en.setPos(new MyPosition(pPos).add(0, 1, 0));
 
-                        p.sendSystemMessage(uber.getTranslation(TranslationType.DESCRIPTION).getTranslatedName().withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                        p.sendSystemMessage(uber.getTranslation(TranslationType.DESCRIPTION).getTranslatedName()
+                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                         SoundUtils.playSound(p, SoundEvents.WITHER_SPAWN);
                         level.setBlock(pPos, Blocks.AIR.defaultBlockState(), 0);
 
@@ -60,9 +61,7 @@ public class UberBossAltarBlock extends Block {
                             mob.setPersistenceRequired();
                         }
 
-
                     });
-
 
                 }
             } catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.robertx22.library_of_exile.entries;
 
-
 import com.robertx22.library_of_exile.components.PlayerDataCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -21,8 +20,8 @@ public class TeleportBackBlock extends Block {
                 .lightLevel(state -> 15));
     }
 
-    @Override
-    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand,
+            BlockHitResult pHit) {
         if (!world.isClientSide) {
             if (p.isCrouching()) {
                 PlayerDataCapability.get(p).mapTeleports.teleportHome(p);

@@ -1,6 +1,7 @@
 package com.robertx22.library_of_exile.dimension;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.robertx22.library_of_exile.events.base.EventConsumer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,16 +17,18 @@ public class MapChunkGens {
 
     }
 
-    //Simple empty chunk gen all my small map-dimension mods can use
+    // Simple empty chunk gen all my small map-dimension mods can use
     // the map stuff is generated in the event
     public static void registerMapChunkGenerator(ResourceLocation id, EventConsumer<MapChunkGenEvent> e) {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        DeferredRegister<Codec<? extends ChunkGenerator>> DEF = DeferredRegister.create(Registries.CHUNK_GENERATOR, id.getNamespace());
+        DeferredRegister<MapCodec<? extends ChunkGenerator>> DEF = DeferredRegister.create(Registries.CHUNK_GENERATOR,
+                id.getNamespace());
 
         DEF.register(bus);
-        
-        DeferredHolder<Codec<? extends ChunkGenerator>, Codec<? extends ChunkGenerator>> CHUNK_GEN = DEF.register(id.getPath(), () -> MapChunkGenerator.CODEC);
+
+        DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> CHUNK_GEN = DEF
+                .register(id.getPath(), () -> MapChunkGenerator.MAP_CODEC);
 
         MapGenEvents.MAP_CHUNK_GEN.register(e);
 

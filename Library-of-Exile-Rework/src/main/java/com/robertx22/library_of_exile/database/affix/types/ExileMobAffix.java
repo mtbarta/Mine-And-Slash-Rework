@@ -26,8 +26,12 @@ import net.minecraft.world.entity.player.Player;
 import java.util.Locale;
 import java.util.UUID;
 
-public abstract class ExileMobAffix implements JsonExileRegistry<ExileMobAffix>, GsonCustomSer<ExileMobAffix>, ITranslated {
-    public static AttributeMobAffix SERIALIZER = new AttributeMobAffix(Affects.MOB, "", 0, AttributeMobAffix.Data.of(Attributes.ARMOR, UUID.randomUUID(), AttributeModifier.Operation.ADDITION, new AffixNumberRange(1, 1)), AffixTranslation.ofAttribute(Ref.MODID));
+public abstract class ExileMobAffix
+        implements JsonExileRegistry<ExileMobAffix>, GsonCustomSer<ExileMobAffix>, ITranslated {
+    public static AttributeMobAffix SERIALIZER = new AttributeMobAffix(
+            Affects.MOB, "", 0, AttributeMobAffix.Data.of(Attributes.ARMOR.value(), UUID.randomUUID(),
+                    AttributeModifier.Operation.ADD_VALUE, new AffixNumberRange(1, 1)),
+            AffixTranslation.ofAttribute(Ref.MODID));
 
     public ExileMobAffix(String serializer, Affects affects, String id, int weight, AffixTranslation translation) {
         this.affects = affects;
@@ -79,12 +83,12 @@ public abstract class ExileMobAffix implements JsonExileRegistry<ExileMobAffix>,
 
         @Override
         public TranslationBuilder createTranslationBuilder() {
-            return TranslationBuilder.of(Ref.MODID).name(ExileTranslation.of(Ref.MODID + ".word." + name().toLowerCase(Locale.ROOT), name));
+            return TranslationBuilder.of(Ref.MODID)
+                    .name(ExileTranslation.of(Ref.MODID + ".word." + name().toLowerCase(Locale.ROOT), name));
         }
 
         public abstract boolean is(LivingEntity en);
     }
-
 
     public abstract ApplyStrategy getApplyStrategy();
 
@@ -103,7 +107,7 @@ public abstract class ExileMobAffix implements JsonExileRegistry<ExileMobAffix>,
 
     public MutableComponent getPrefixedName(int perc) {
         var prefix = Component.literal("[").append(
-                        affects.getTranslation(TranslationType.NAME).getTranslatedName())
+                affects.getTranslation(TranslationType.NAME).getTranslatedName())
                 .append("] - ");
         prefix.withStyle(affects.color);
 

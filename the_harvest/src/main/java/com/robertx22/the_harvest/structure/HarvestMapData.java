@@ -38,7 +38,6 @@ public class HarvestMapData {
 
     public Long tileTicker = 0L;
 
-
     public void onStartMap(Player p) {
 
         this.mobsLeft = HarvestConfig.get().MAX_TOTAL_MOB_SPAWNS.get();
@@ -46,9 +45,9 @@ public class HarvestMapData {
     }
 
     public List<LivingEntity> getAllLivingMobs(Level world, BlockPos pos) {
-        return world.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 30, 30, 30)).stream().filter(x -> HarvestEntityCap.get(x).data.isHarvestSpawn).collect(Collectors.toList());
+        return world.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 30, 30, 30)).stream()
+                .filter(x -> HarvestEntityCap.get(x).data.isHarvestSpawn).collect(Collectors.toList());
     }
-
 
     // todo this isnt the best idea
     void tickSecond(Level world, BlockPos pos) {
@@ -72,12 +71,12 @@ public class HarvestMapData {
                 } else {
                     for (Player p : HarvestMain.HARVEST_MAP_STRUCTURE.getAllPlayersInMap(world, pos)) {
                         int secleft = (ticksLeft) / 20;
-                        actionBar((ServerPlayer) p, HarvestWords.HARVEST_TIME_REMAINING.get(secleft).withStyle(ChatFormatting.GREEN));
+                        actionBar((ServerPlayer) p,
+                                HarvestWords.HARVEST_TIME_REMAINING.get(secleft).withStyle(ChatFormatting.GREEN));
                     }
                 }
             }
         }
-
 
     }
 
@@ -131,7 +130,8 @@ public class HarvestMapData {
         en.setPos(pos.getX(), pos.getY(), pos.getZ());
 
         if (en instanceof Mob mob) {
-            mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND, (SpawnGroupData) null, (CompoundTag) null);
+            mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND,
+                    (SpawnGroupData) null);
         }
 
         world.addFreshEntity(en);

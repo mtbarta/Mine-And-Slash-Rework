@@ -1,6 +1,6 @@
 package com.robertx22.mine_and_slash.itemstack;
 
-import com.robertx22.library_of_exile.utils.ItemstackDataSaver;
+import com.robertx22.library_of_exile.components.ComponentDataSaver;
 import com.robertx22.mine_and_slash.database.data.omen.OmenData;
 import com.robertx22.mine_and_slash.maps.MapItemData;
 import com.robertx22.mine_and_slash.saveclasses.item_classes.GearItemData;
@@ -19,10 +19,8 @@ public class StackKeys {
     public static StackKey<CustomItemData> CUSTOM = of(StackSaving.CUSTOM_DATA);
     public static StackKey<DroppedItemData> DROPPED = of(StackSaving.DROPPED);
 
-
-    private static <T> StackKey<T> of(ItemstackDataSaver<T> saver) {
-        return new StackKey<>(saver.GUID(), x -> new StackData<>(x, saver));
+    private static <T> StackKey<T> of(ComponentDataSaver<T> saver) {
+        return new StackKey<>(saver.getId(), x -> new StackData<>(x, saver));
     }
-
 
 }

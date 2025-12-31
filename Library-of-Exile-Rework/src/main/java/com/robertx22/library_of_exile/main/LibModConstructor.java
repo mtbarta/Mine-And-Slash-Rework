@@ -49,8 +49,7 @@ public class LibModConstructor extends OrderedModConstructor {
                 Modifications.INSTANCE,
                 Requirements.INSTANCE,
                 Orbs.INSTANCE,
-                OrbEdits.INSTANCE
-        );
+                OrbEdits.INSTANCE);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class LibModConstructor extends OrderedModConstructor {
         bus.addListener(this::registerPayloads);
     }
 
-    public void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent event) {
+    public void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) {
         Packets.setRegistrar(event.registrar(Ref.MODID));
         // Register packets now that registrar is set
         // C2SPacketRegister.register();

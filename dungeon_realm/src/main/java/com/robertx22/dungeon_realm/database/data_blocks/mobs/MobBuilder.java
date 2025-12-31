@@ -50,16 +50,16 @@ public class MobBuilder {
         }
 
         DungeonMain.ifMapData(world, p).ifPresent(x -> {
-            if(this.mobEntityData.isDungeonMob) {
+            if (this.mobEntityData.isDungeonMob) {
                 x.mobSpawnCount += amount;
-                if(this.mobEntityData.isPackMob) {
+                if (this.mobEntityData.isPackMob) {
                     x.processedPackDataBlockCount++;
                 } else {
                     x.processedMobDataBlockCount++;
                 }
             } else if (this.mobEntityData.isDungeonEliteMob) {
                 x.eliteSpawnCount += amount;
-                if(this.mobEntityData.isPackMob) {
+                if (this.mobEntityData.isPackMob) {
                     x.processedElitePackDataBlockCount++;
                 } else {
                     x.processedEliteDataBlockCount++;
@@ -82,9 +82,9 @@ public class MobBuilder {
 
         T mob = (T) type.create(world);
 
-        mob.finalizeSpawn((ServerLevelAccessor) world, world.getCurrentDifficultyAt(p), MobSpawnType.REINFORCEMENT, null, null);
+        mob.finalizeSpawn((ServerLevelAccessor) world, world.getCurrentDifficultyAt(p), MobSpawnType.REINFORCEMENT,
+                null);
         mob.setPos(vec.x(), vec.y(), vec.z());
-
 
         var prepare = new PrepareDungeonMobEditsEvent(mob, dataBlock);
         DungeonExileEvents.PREPARE_DUNGEON_MOB_SPAWN.callEvents(prepare);

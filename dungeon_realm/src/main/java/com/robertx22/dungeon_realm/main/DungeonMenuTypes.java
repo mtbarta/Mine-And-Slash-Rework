@@ -15,9 +15,11 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class DungeonMenuTypes {
-    public static final DeferredHolder<MenuType<?>, MenuType<MapDeviceMenu>> MAP_DEVICE_MENU_TYPE = registerMenuType("map_device_menu", MapDeviceMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MapDeviceMenu>> MAP_DEVICE_MENU_TYPE = registerMenuType(
+            "map_device_menu", MapDeviceMenu::new);
 
-    public static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
+    public static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(
+            String name, IContainerFactory<T> factory) {
         return DungeonEntries.MENUS.register(name, () -> IMenuTypeExtension.create(factory));
     }
 
@@ -25,11 +27,11 @@ public class DungeonMenuTypes {
         DungeonEntries.MENUS.register(eventBus);
     }
 
-    @Mod.EventBusSubscriber(modid = "dungeon_realm", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @net.neoforged.fml.common.EventBusSubscriber(modid = "dungeon_realm", bus = net.neoforged.fml.common.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            event.enqueueWork(() -> MenuScreens.register(MAP_DEVICE_MENU_TYPE.get(), MapDeviceScreen::new));
+        public static void onClientSetup(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+            event.register(MAP_DEVICE_MENU_TYPE.get(), MapDeviceScreen::new);
         }
     }
 }

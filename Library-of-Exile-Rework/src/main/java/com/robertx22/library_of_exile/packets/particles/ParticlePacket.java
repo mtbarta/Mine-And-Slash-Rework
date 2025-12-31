@@ -5,7 +5,7 @@ import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.library_of_exile.utils.LoadSave;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class ParticlePacket extends MyPacket<ParticlePacket> {
@@ -24,18 +24,18 @@ public class ParticlePacket extends MyPacket<ParticlePacket> {
     }
 
     @Override
-    public ResourceLocation id() {
+    public ResourceLocation getIdentifier() {
         return new ResourceLocation(Ref.MODID, "particle");
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         data = LoadSave.Load(ParticlePacketData.class, ParticlePacketData.empty(), tag.readNbt(), LOC);
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         CompoundTag nbt = new CompoundTag();
         LoadSave.Save(data, nbt, LOC);
         tag.writeNbt(nbt);

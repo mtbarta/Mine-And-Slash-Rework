@@ -35,8 +35,8 @@ public class MapChestMB extends MapDataBlock {
 
         boolean isTrapped = key.contains("trap");
 
-        ResourceLocation table = DungeonLootTables.randomMapLoot();
-
+        net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> table = DungeonLootTables
+                .randomMapLoot();
 
         createChest(world, pos, isTrapped, table);
         DungeonMain.ifMapData(world, pos).ifPresent(x -> {
@@ -45,7 +45,8 @@ public class MapChestMB extends MapDataBlock {
         });
     }
 
-    public static void createChest(Level world, BlockPos pos, boolean trapped, ResourceLocation table) {
+    public static void createChest(Level world, BlockPos pos, boolean trapped,
+            net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> table) {
 
         if (trapped) {
             world.setBlock(pos, Blocks.TRAPPED_CHEST.defaultBlockState(), 2);

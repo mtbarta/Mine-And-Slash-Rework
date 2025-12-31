@@ -13,12 +13,13 @@ import com.robertx22.library_of_exile.registry.ExileRegistryType;
 import com.robertx22.library_of_exile.registry.JsonExileRegistry;
 import com.robertx22.library_of_exile.registry.register_info.ClientSyncRegistration;
 import com.robertx22.library_of_exile.registry.serialization.ISerializable;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
-public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry> extends MyPacket<EfficientRegistryPacket<T>> {
+public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry>
+        extends MyPacket<EfficientRegistryPacket<T>> {
     public static final JsonParser PARSER = new JsonParser();
 
     public static ResourceLocation ID = new ResourceLocation(Ref.MODID, "eff_reg");
@@ -36,12 +37,12 @@ public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry
     }
 
     @Override
-    public ResourceLocation id() {
+    public ResourceLocation getIdentifier() {
         return ID;
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
 
         this.type = ExileRegistryType.get(buf.readUtf());
 
@@ -58,7 +59,7 @@ public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
 
         buf.writeUtf(type.id);
         buf.writeVarInt(this.items.size());
@@ -79,7 +80,8 @@ public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry
             x.registerToExileRegistry(ClientSyncRegistration.INSTANCE);
         });
 
-        ExileLog.get().onlyInConsole("Efficient " + type.id + " reg load on client success with: " + reg.getSize() + " entries.");
+        ExileLog.get().onlyInConsole(
+                "Efficient " + type.id + " reg load on client success with: " + reg.getSize() + " entries.");
 
     }
 

@@ -24,27 +24,26 @@ import java.util.UUID;
 
 public class AttributeMobAffix extends ExileMobAffix {
 
-
     public static record Data(String attribute_id,
-                              String uuid,
-                              AttributeModifier.Operation operation,
-                              AffixNumberRange number_range) {
+            String uuid,
+            AttributeModifier.Operation operation,
+            AffixNumberRange number_range) {
 
         public static Data of(Attribute attribute, UUID uuid, AttributeModifier.Operation op, AffixNumberRange num) {
             return new Data(BuiltInRegistries.ATTRIBUTE.getKey(attribute).toString(), uuid.toString(), op, num);
         }
     }
 
-
     public Data data;
 
     public static class Lazy {
         public transient LazyClass<UUID> lazyUUID;
-        public transient LazyClass<Attribute> lazyAttribute;
+        public transient LazyClass<net.minecraft.core.Holder<Attribute>> lazyAttribute;
 
         public Lazy(AttributeMobAffix affix) {
             lazyUUID = new LazyClass<>(() -> UUID.fromString(affix.data.uuid));
-            lazyAttribute = new LazyClass<>(() -> BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(affix.data.attribute_id)));
+            lazyAttribute = new LazyClass<>(
+                    () -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(affix.data.attribute_id)).get());
         }
     }
 
@@ -60,15 +59,15 @@ public class AttributeMobAffix extends ExileMobAffix {
         this.data = data;
     }
 
+    public static final java.text.DecimalFormat ATTRIBUTE_MODIFIER_FORMAT = new java.text.DecimalFormat("#.##");
 
     public AttributeModifier getModifier(int perc) {
         var num = data.number_range.getNumber(perc);
         AttributeModifier mod = new AttributeModifier(
-                LAZY.get(this).lazyUUID.get(),
+                LAZY.get(this).lazyUUID.get(), // Reverting to UUID
                 data.attribute_id,
-                num,
-                data.operation
-        );
+                (double) num,
+                data.operation);
         return mod;
     }
 
@@ -78,7 +77,7 @@ public class AttributeMobAffix extends ExileMobAffix {
         AttributeInstance atri = en.getAttribute(LAZY.get(this).lazyAttribute.get());
         if (atri != null) {
             if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod.getId());
+                atri.removeModifier(mod);
             }
             atri.addPermanentModifier(mod);
         }
@@ -89,17 +88,15 @@ public class AttributeMobAffix extends ExileMobAffix {
         AttributeInstance atri = en.getAttribute(LAZY.get(this).lazyAttribute.get());
         if (atri != null) {
             if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod.getId());
+                atri.removeModifier(mod);
             }
         }
     }
-
 
     @Override
     public Class<AttributeMobAffix> getClassForSerialization() {
         return AttributeMobAffix.class;
     }
-
 
     @Override
     public ApplyStrategy getApplyStrategy() {
@@ -108,10 +105,10 @@ public class AttributeMobAffix extends ExileMobAffix {
 
     @Override
     public MutableComponent getParamName(int perc) {
-        return getTooltip(LAZY.get(this).lazyAttribute.get(), getModifier(perc));
+        var mod = getModifier(perc);
+        return getTooltip(LAZY.get(this).lazyAttribute.get().value(), mod);
 
     }
-
 
     // copied from itemstack, hopefully better code exists in future versions
     public static MutableComponent getTooltip(Attribute a, AttributeModifier mod) {
@@ -121,11 +118,12 @@ public class AttributeMobAffix extends ExileMobAffix {
 
         for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entrySet()) {
             AttributeModifier attributemodifier = entry.getValue();
-            double d0 = attributemodifier.getAmount();
+            double d0 = attributemodifier.amount();
             boolean flag = false;
 
             double d1;
-            if (attributemodifier.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
+            if (attributemodifier.operation() != AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                    && attributemodifier.operation() != AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
                 if (entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE)) {
                     d1 = d0 * 10.0D;
                 } else {
@@ -136,12 +134,25 @@ public class AttributeMobAffix extends ExileMobAffix {
             }
 
             if (flag) {
-                return CommonComponents.space().append(Component.translatable("attribute.modifier.equals." + attributemodifier.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(entry.getKey().getDescriptionId()))).withStyle(ChatFormatting.DARK_GREEN);
+                return CommonComponents.space()
+                        .append(Component.translatable(
+                                "attribute.modifier.equals." + attributemodifier.operation().id(),
+                                ATTRIBUTE_MODIFIER_FORMAT.format(d1),
+                                Component.translatable(entry.getKey().getDescriptionId())))
+                        .withStyle(ChatFormatting.DARK_GREEN);
             } else if (d0 > 0.0D) {
-                return Component.translatable("attribute.modifier.plus." + attributemodifier.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(entry.getKey().getDescriptionId())).withStyle(ChatFormatting.BLUE);
+                return Component
+                        .translatable("attribute.modifier.plus." + attributemodifier.operation().id(),
+                                ATTRIBUTE_MODIFIER_FORMAT.format(d1),
+                                Component.translatable(entry.getKey().getDescriptionId()))
+                        .withStyle(ChatFormatting.BLUE);
             } else if (d0 < 0.0D) {
                 d1 *= -1.0D;
-                return Component.translatable("attribute.modifier.take." + attributemodifier.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(entry.getKey().getDescriptionId())).withStyle(ChatFormatting.RED);
+                return Component
+                        .translatable("attribute.modifier.take." + attributemodifier.operation().id(),
+                                ATTRIBUTE_MODIFIER_FORMAT.format(d1),
+                                Component.translatable(entry.getKey().getDescriptionId()))
+                        .withStyle(ChatFormatting.RED);
             }
         }
 

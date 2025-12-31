@@ -6,7 +6,7 @@ import com.robertx22.library_of_exile.components.PlayerCapabilities;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.main.Ref;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -26,19 +26,19 @@ public class SyncPlayerCapToClient extends MyPacket<SyncPlayerCapToClient> {
     }
 
     @Override
-    public ResourceLocation id() {
+    public ResourceLocation getIdentifier() {
         return new ResourceLocation(Ref.MODID, "syncplayercap");
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         capid = tag.readUtf(100);
         nbt = tag.readNbt();
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(capid, 100);
         tag.writeNbt(nbt);
 
@@ -66,4 +66,3 @@ public class SyncPlayerCapToClient extends MyPacket<SyncPlayerCapToClient> {
         return new SyncPlayerCapToClient();
     }
 }
-

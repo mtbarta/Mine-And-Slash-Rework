@@ -10,14 +10,14 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class HarvestBE extends BlockEntity {
 
-
     public boolean gaveMap = false;
     public int x = -1;
     public int z = -1;
     public String currentWorldUUID = "";
 
     public boolean isActivated() {
-        if (currentWorldUUID.isEmpty() || !currentWorldUUID.equals(HarvestMapCap.get(ServerLifecycleHooks.getCurrentServer().overworld()).data.data.uuid)) {
+        if (currentWorldUUID.isEmpty() || !currentWorldUUID
+                .equals(HarvestMapCap.get(ServerLifecycleHooks.getCurrentServer().overworld()).data.data.uuid)) {
             return false;
         }
         return x != -1 || z != -1;
@@ -34,8 +34,8 @@ public class HarvestBE extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, net.minecraft.core.HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
         nbt.putBoolean("gave", gaveMap);
         nbt.putInt("xp", x);
         nbt.putInt("zp", z);
@@ -44,8 +44,8 @@ public class HarvestBE extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    public void loadAdditional(CompoundTag pTag, net.minecraft.core.HolderLookup.Provider provider) {
+        super.loadAdditional(pTag, provider);
         this.gaveMap = pTag.getBoolean("gave");
         this.x = pTag.getInt("xp");
         this.z = pTag.getInt("zp");

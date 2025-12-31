@@ -5,6 +5,7 @@ import com.robertx22.the_harvest.main.HarvestMain;
 
 public class HarvestItemNbt {
 
-    public static ItemstackDataSaver<HarvestItemMapData> HARVEST_MAP = new ItemstackDataSaver<>(HarvestMain.MODID + "_map", HarvestItemMapData.class, () -> new HarvestItemMapData());
+    public static ItemstackDataSaver<HarvestItemMapData> HARVEST_MAP = ItemstackDataSaver
+            .createWithGson(HarvestMain.MODID + "_map", HarvestItemMapData.class, () -> new HarvestItemMapData());
 
 }

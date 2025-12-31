@@ -1,6 +1,7 @@
 package com.robertx22.library_of_exile.dimension;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -29,12 +30,10 @@ import java.util.concurrent.Executor;
 
 public class MapChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<MapChunkGenerator> CODEC = RecordCodecBuilder.create((b) ->
-    {
+    public static final Codec<MapChunkGenerator> CODEC = RecordCodecBuilder.create((b) -> {
         var group = b.group(
                 FlatLevelGeneratorSettings.CODEC.fieldOf("settings").forGetter(x -> x.settings),
-                ExtraCodecs.NON_EMPTY_STRING.fieldOf("map_id").forGetter(x -> x.mapId)
-        );
+                ExtraCodecs.NON_EMPTY_STRING.fieldOf("map_id").forGetter(x -> x.mapId));
 
         return group.apply(b, b.stable((x, y) -> new MapChunkGenerator(x, y)));
     });
@@ -49,18 +48,22 @@ public class MapChunkGenerator extends ChunkGenerator {
         this.mapId = mapid;
     }
 
+    public static final MapCodec<MapChunkGenerator> MAP_CODEC = CODEC.fieldOf("generator");
+
     @Override
-    protected Codec<? extends ChunkGenerator> codec() {
-        return CODEC;
+    protected MapCodec<? extends ChunkGenerator> codec() {
+        return MAP_CODEC;
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
+    public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager,
+            StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
 
     }
 
     @Override
-    public void buildSurface(WorldGenRegion pLevel, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk) {
+    public void buildSurface(WorldGenRegion pLevel, StructureManager pStructureManager, RandomState pRandom,
+            ChunkAccess pChunk) {
         var event = new MapChunkGenEvent(pRandom, pLevel.getServer().getStructureManager(), pChunk, pLevel, mapId);
         MapGenEvents.MAP_CHUNK_GEN.callEvents(event);
     }
@@ -70,10 +73,10 @@ public class MapChunkGenerator extends ChunkGenerator {
 
     }
 
-
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom, StructureManager pStructureManager, ChunkAccess pChunk) {
-        //makeBase(pChunk);
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom,
+            StructureManager pStructureManager, ChunkAccess pChunk) {
+        // makeBase(pChunk);
         BlockState blockstate = Blocks.BEDROCK.defaultBlockState();
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         for (int i = pChunk.getMinBuildHeight(); i < pChunk.getHeight(); ++i) {
@@ -114,11 +117,12 @@ public class MapChunkGenerator extends ChunkGenerator {
 
     @Override
     public NoiseColumn getBaseColumn(int pX, int pZ, LevelHeightAccessor pHeight, RandomState pRandom) {
-        return new NoiseColumn(pHeight.getMinBuildHeight(), this.settings.getLayers().stream().limit((long) pHeight.getHeight()).map((p_204549_) -> {
-            return p_204549_ == null ? Blocks.AIR.defaultBlockState() : p_204549_;
-        }).toArray((p_204543_) -> {
-            return new BlockState[p_204543_];
-        }));
+        return new NoiseColumn(pHeight.getMinBuildHeight(),
+                this.settings.getLayers().stream().limit((long) pHeight.getHeight()).map((p_204549_) -> {
+                    return p_204549_ == null ? Blocks.AIR.defaultBlockState() : p_204549_;
+                }).toArray((p_204543_) -> {
+                    return new BlockState[p_204543_];
+                }));
     }
 
     @Override
@@ -128,7 +132,9 @@ public class MapChunkGenerator extends ChunkGenerator {
 
     // overriding this should stop all structure spawns..?
     @Override
-    public void createStructures(RegistryAccess pRegistryAccess, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager) {
+    public void createStructures(RegistryAccess pRegistryAccess, ChunkGeneratorStructureState pStructureState,
+            StructureManager pStructureManager, ChunkAccess pChunk,
+            StructureTemplateManager pStructureTemplateManager) {
 
     }
 

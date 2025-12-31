@@ -11,7 +11,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.Event;
@@ -41,22 +41,18 @@ public class ApiForgeEvents {
 
         registerForgeEvent(LivingAttackEvent.class, event -> {
             ExileEvents.OnDamageEntity after = ExileEvents.DAMAGE_BEFORE_CALC.callEvents(
-                    new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity())
-            );
+                    new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity()));
             if (after.canceled) {
                 event.setCanceled(true);
             }
             // todo is needed? event.setAmount(after.damage);
         }, EventPriority.HIGHEST);
 
-
         registerForgeEvent(LivingDamageEvent.class, event -> {
             ExileEvents.OnDamageEntity after = ExileEvents.DAMAGE_AFTER_CALC.callEvents(
-                    new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity())
-            );
+                    new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity()));
             event.setAmount(after.damage);
         }, EventPriority.LOWEST);
-
 
         registerForgeEvent(EntityJoinLevelEvent.class, event -> {
             if (event.getEntity() instanceof LivingEntity en) {
@@ -64,20 +60,22 @@ public class ApiForgeEvents {
             }
         });
 
-        registerForgeEvent(LivingEvent.LivingTickEvent.class, event -> {
-            LivingEntity entity = event.getEntity();
+        registerForgeEvent(EntityTickEvent.Post.class, event -> {
+            if (!(event.getEntity() instanceof LivingEntity))
+                return;
+            LivingEntity entity = (LivingEntity) event.getEntity();
             if (entity.tickCount == 20) {
                 EntityInfoComponent.get(entity).spawnInit(entity);
             }
             ExileEvents.LIVING_ENTITY_TICK.callEvents(new ExileEvents.OnEntityTick(entity));
         });
 
-
         registerForgeEvent(LivingDeathEvent.class, event -> {
             if (event.getEntity() instanceof Player == false && event.getSource()
                     .getEntity() instanceof LivingEntity) {
-                ExileEvents.MOB_DEATH.callEvents(new ExileEvents.OnMobDeath(event.getEntity(), (LivingEntity) event.getSource()
-                        .getEntity()));
+                ExileEvents.MOB_DEATH
+                        .callEvents(new ExileEvents.OnMobDeath(event.getEntity(), (LivingEntity) event.getSource()
+                                .getEntity()));
             }
         });
 
@@ -89,7 +87,6 @@ public class ApiForgeEvents {
         registerForgeEvent(ServerStartedEvent.class, event -> {
             CommonInit.onDatapacksReloaded();
         });
-
 
         registerForgeEvent(AddReloadListenerEvent.class, event -> {
             CommonInit.onDatapacksReloaded();

@@ -34,7 +34,7 @@ public class SavedPlayerMapTeleports {
 
     // teleports to maps
     public void entranceTeleportLogic(Player p, ResourceLocation to, BlockPos topos) {
-        ResourceLocation from = p.level().dimensionTypeId().location();
+        ResourceLocation from = p.level().dimension().location();
         teleportToMap(p, from, to, topos);
     }
 
@@ -42,7 +42,7 @@ public class SavedPlayerMapTeleports {
     // points are deleted when used or when you teleport from home again
     public void exitTeleportLogic(Player p) {
 
-        ResourceLocation from = p.level().dimensionTypeId().location();
+        ResourceLocation from = p.level().dimension().location();
 
         boolean fromMap = MapDimensions.isMap(from);
 

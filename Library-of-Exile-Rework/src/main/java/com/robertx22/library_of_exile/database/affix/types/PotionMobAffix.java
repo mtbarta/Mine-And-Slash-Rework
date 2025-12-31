@@ -17,69 +17,71 @@ import net.minecraft.core.registries.BuiltInRegistries;
 
 public class PotionMobAffix extends ExileMobAffix {
 
-
     public static record Data(String status_effect_id,
-                              AffixNumberRange amplifer,
-                              AffixNumberRange duration_ticks,
-                              int apply_every_x_seconds) {
+            AffixNumberRange amplifer,
+            AffixNumberRange duration_ticks,
+            int apply_every_x_seconds) {
 
-        public static Data of(MobEffect effect, AffixNumberRange amp, AffixNumberRange durationTicks, int apply_every_x_seconds) {
-            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, durationTicks, apply_every_x_seconds);
+        public static Data of(MobEffect effect, AffixNumberRange amp, AffixNumberRange durationTicks,
+                int apply_every_x_seconds) {
+            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, durationTicks,
+                    apply_every_x_seconds);
         }
 
         public static Data of5sEvery10s(MobEffect effect, AffixNumberRange amp) {
-            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, new AffixNumberRange(20 * 5, 20 * 5), 10);
+            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp,
+                    new AffixNumberRange(20 * 5, 20 * 5), 10);
         }
 
         public static Data of3sEvery10s(MobEffect effect, AffixNumberRange amp) {
-            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, new AffixNumberRange(20 * 3, 20 * 3), 10);
+            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp,
+                    new AffixNumberRange(20 * 3, 20 * 3), 10);
         }
 
         public static Data of1sEvery10s(MobEffect effect, AffixNumberRange amp) {
-            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, new AffixNumberRange(20 * 1, 20 * 1), 10);
+            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp,
+                    new AffixNumberRange(20 * 1, 20 * 1), 10);
         }
 
         public static Data ofPermanent(MobEffect effect, AffixNumberRange amp) {
-            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp, new AffixNumberRange(20 * 10, 20 * 10), 10);
+            return new Data(BuiltInRegistries.MOB_EFFECT.getKey(effect).toString(), amp,
+                    new AffixNumberRange(20 * 10, 20 * 10), 10);
         }
 
-
-        public MobEffect getEffect() {
-            return BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(status_effect_id));
+        public net.minecraft.core.Holder<MobEffect> getEffect() {
+            return BuiltInRegistries.MOB_EFFECT.getHolderOrThrow(net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.MOB_EFFECT, new ResourceLocation(status_effect_id)));
         }
     }
 
-
     public Data data;
-
 
     public PotionMobAffix(Affects affects, String id, int weight, Data data, AffixTranslation t) {
         super("potion_mob_affix", affects, id, weight, t);
         this.data = data;
     }
 
-
     public void tryApply(int perc, LivingEntity en) {
 
         if (en.tickCount % (20 * data.apply_every_x_seconds) == 0) {
-            var instance = new MobEffectInstance(data.getEffect(), data.duration_ticks.getInt(perc), data.amplifer.getInt(perc));
+            var instance = new MobEffectInstance(data.getEffect(), data.duration_ticks.getInt(perc),
+                    data.amplifer.getInt(perc));
             en.addEffect(instance);
         }
     }
-
 
     @Override
     public Class<PotionMobAffix> getClassForSerialization() {
         return PotionMobAffix.class;
     }
 
-
     @Override
     public ApplyStrategy getApplyStrategy() {
         return PotionApplyStrategy.INSTANCE;
     }
 
-    // we don't need to require them to localize EVERY single potion affix separately
+    // we don't need to require them to localize EVERY single potion affix
+    // separately
     @Override
     public TranslationBuilder createTranslationBuilder() {
         return TranslationBuilder.of(modid).name(ExileTranslation.of(modid + "." + "potion_mob_affix", locName));
@@ -88,9 +90,10 @@ public class PotionMobAffix extends ExileMobAffix {
     @Override
     public MutableComponent getParamName(int perc) {
         int sec = (int) (data.duration_ticks.getInt(perc) / 20);
-        return getTranslation(TranslationType.NAME).getTranslatedName(data.getEffect().getDisplayName(), data.amplifer.getInt(perc), sec, data.apply_every_x_seconds)
+        return getTranslation(TranslationType.NAME)
+                .getTranslatedName(data.getEffect().value().getDisplayName(), data.amplifer.getInt(perc), sec,
+                        data.apply_every_x_seconds)
                 .withStyle(ChatFormatting.GREEN);
     }
-
 
 }

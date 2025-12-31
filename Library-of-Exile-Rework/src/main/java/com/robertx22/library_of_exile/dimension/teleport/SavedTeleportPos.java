@@ -27,7 +27,7 @@ public class SavedTeleportPos {
 
     public void setFrom(Player p) {
         this.pos = p.blockPosition().asLong();
-        this.dim = p.level().dimensionTypeId().location().toString();
+        this.dim = p.level().dimension().location().toString();
     }
 
     public boolean isEmpty() {

@@ -19,21 +19,17 @@ public class HarvestConfig {
         CONFIG = specPair.getLeft();
     }
 
-
     public ModConfigSpec.DoubleValue MAP_SPAWN_CHANCE_ON_CHEST_LOOT;
 
     public ModConfigSpec.DoubleValue LOOT_TABLE_CHANCE_PER_MOB;
 
     public ModConfigSpec.ConfigValue<List<? extends String>> DIMENSION_CHANCE_MULTI;
 
-
     public ModConfigSpec.IntValue MAX_TOTAL_MOB_SPAWNS;
-
 
     public static HarvestConfig get() {
         return CONFIG;
     }
-
 
     public HashMap<String, Float> dimChanceMap = new HashMap<>();
 
@@ -49,9 +45,8 @@ public class HarvestConfig {
         return dimChanceMap;
     }
 
-
     public float getDimChanceMulti(Level level) {
-        String dimid = level.dimensionTypeId().location().toString();
+        String dimid = level.dimension().location().toString();
         var map = getDimChanceMap();
         return map.getOrDefault(dimid, 1F);
     }
@@ -67,7 +62,6 @@ public class HarvestConfig {
         MAX_TOTAL_MOB_SPAWNS = b.comment("Max mobs spawned in a harvest arena")
                 .defineInRange("MAX_TOTAL_MOB_SPAWNS", 200, 20, 2000);
 
-
         MAP_SPAWN_CHANCE_ON_CHEST_LOOT = b
                 .comment("When you loot new chests with loot tables, harvest maps have a chance to spawn as extra loot")
                 .defineInRange("MAP_SPAWN_CHANCE_ON_CHEST_LOOT", 5F, 0, 100);
@@ -76,9 +70,7 @@ public class HarvestConfig {
                 .comment("Mobs inside the harvest have a chance to drop this loot table as a bonus")
                 .defineInRange("LOOT_TABLE_CHANCE_PER_MOB", 5F, 0, 100);
 
-
         b.pop();
     }
-
 
 }

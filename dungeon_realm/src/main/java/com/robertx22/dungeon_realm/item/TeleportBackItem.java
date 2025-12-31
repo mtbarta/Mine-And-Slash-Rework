@@ -41,40 +41,43 @@ public class TeleportBackItem extends Item {
         return InteractionResultHolder.success(stack);
     }
 
-
-    // todo this had BUGS, idk why but finish using is casted AGAIN after the player is teleported
+    // todo this had BUGS, idk why but finish using is casted AGAIN after the player
+    // is teleported
 
     /*
-    @Override
-    public UseAnim getUseAnimation(ItemStack pStack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack pStack) {
-        return 20 * 2;
-    }
-
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level pLevel, LivingEntity en) {
-        if (!pLevel.isClientSide) {
-            if (en instanceof ServerPlayer p) {
-                if (!MapDimensions.isMap(pLevel)) {
-                    p.sendSystemMessage(DungeonWords.USABLE_ONLY_IN_DUNGEON_REALM.get().withStyle(ChatFormatting.RED));
-                    return stack;
-                }
-                PlayerDataCapability.get(p).mapTeleports.teleportHome(p);
-                stack.shrink(1);
-
-            }
-        }
-        return stack;
-    }
-
+     * @Override
+     * public UseAnim getUseAnimation(ItemStack pStack) {
+     * return UseAnim.BOW;
+     * }
+     * 
+     * @Override
+     * public int getUseDuration(ItemStack pStack) {
+     * return 20 * 2;
+     * }
+     * 
+     * @Override
+     * public ItemStack finishUsingItem(ItemStack stack, Level pLevel, LivingEntity
+     * en) {
+     * if (!pLevel.isClientSide) {
+     * if (en instanceof ServerPlayer p) {
+     * if (!MapDimensions.isMap(pLevel)) {
+     * p.sendSystemMessage(DungeonWords.USABLE_ONLY_IN_DUNGEON_REALM.get().withStyle
+     * (ChatFormatting.RED));
+     * return stack;
+     * }
+     * PlayerDataCapability.get(p).mapTeleports.teleportHome(p);
+     * stack.shrink(1);
+     * 
+     * }
+     * }
+     * return stack;
+     * }
+     * 
      */
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(DungeonWords.HOME_PEARL_DESC.get().withStyle(ChatFormatting.BLUE));
     }
 

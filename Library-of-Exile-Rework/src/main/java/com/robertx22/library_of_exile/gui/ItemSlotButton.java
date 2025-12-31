@@ -1,6 +1,5 @@
 package com.robertx22.library_of_exile.gui;
 
-
 import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.utils.RenderUtils;
 import com.robertx22.library_of_exile.utils.TextUTIL;
@@ -13,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.world.item.Item;
 
 public class ItemSlotButton extends ImageButton {
 
@@ -36,8 +36,6 @@ public class ItemSlotButton extends ImageButton {
 
     }
 
-
-
     public ItemSlotButton(ItemStack stack, int xPos, int yPos, Button.OnPress onclick) {
         super(xPos + 1, yPos + 1, xSize, ySize, new WidgetSprites(buttonLoc, buttonLoc), onclick);
         this.stack = stack;
@@ -46,7 +44,8 @@ public class ItemSlotButton extends ImageButton {
     @Override
     public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         // todo would this work?
-        setTooltip(Tooltip.create(TextUTIL.mergeList(stack.getTooltipLines(mc.player, TooltipFlag.NORMAL))));
+        setTooltip(Tooltip.create(TextUTIL
+                .mergeList(stack.getTooltipLines(Item.TooltipContext.of(mc.level), mc.player, TooltipFlag.NORMAL))));
 
         RenderUtils.renderStack(pGuiGraphics, stack, this.getX(), this.getY());
 
@@ -54,42 +53,41 @@ public class ItemSlotButton extends ImageButton {
     }
 
     /*
-    @Override
-    public void renderButton(MatrixStack matrix, int x, int y, float ticks) {
-
-        if (renderFancyBorder) {
-            mc.getTextureManager()
-                    .bind(fancyBorderLoc);
-            blit(matrix, this.x - 2, this.y - 2, 0, 0, FX, FY);
-        }
-
-        RenderUtils.renderStack(stack, this.x, this.y);
-
-    }
-
-     */
-
-
-    /*
-    @Override
-    public void renderToolTip(GuiGraphics matrix, int x, int y) {
-        if (!stack.isEmpty()) {
-            if (isInside(x, y)) {
-                List<ITextComponent> tooltip = new ArrayList<>();
-                tooltip.addAll(stack.getTooltipLines(mc.player, ITooltipFlag.TooltipFlags.NORMAL));
-                GuiUtils.renderTooltip(matrix, tooltip, x, y);
-            }
-        }
-    }
-
+     * @Override
+     * public void renderButton(MatrixStack matrix, int x, int y, float ticks) {
+     * 
+     * if (renderFancyBorder) {
+     * mc.getTextureManager()
+     * .bind(fancyBorderLoc);
+     * blit(matrix, this.x - 2, this.y - 2, 0, 0, FX, FY);
+     * }
+     * 
+     * RenderUtils.renderStack(stack, this.x, this.y);
+     * 
+     * }
+     * 
      */
 
     /*
-    public boolean isInside(int x, int y) {
-        return GuiUtils.isInRect(this.x, this.y, xSize, ySize, x, y);
-    }
+     * @Override
+     * public void renderToolTip(GuiGraphics matrix, int x, int y) {
+     * if (!stack.isEmpty()) {
+     * if (isInside(x, y)) {
+     * List<ITextComponent> tooltip = new ArrayList<>();
+     * tooltip.addAll(stack.getTooltipLines(mc.player,
+     * ITooltipFlag.TooltipFlags.NORMAL));
+     * GuiUtils.renderTooltip(matrix, tooltip, x, y);
+     * }
+     * }
+     * }
+     * 
+     */
 
-
+    /*
+     * public boolean isInside(int x, int y) {
+     * return GuiUtils.isInRect(this.x, this.y, xSize, ySize, x, y);
+     * }
+     * 
+     * 
      */
 }
-

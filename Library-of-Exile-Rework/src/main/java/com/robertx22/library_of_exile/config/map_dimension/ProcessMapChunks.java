@@ -55,16 +55,19 @@ public class ProcessMapChunks {
             ChunkAccess c = level.getChunk(cpos.x, cpos.z);
 
             if (c instanceof LevelChunk chunk) {
-                //var chunkdata = Load.chunkData(chunk);
-                // var cap = chunk.getCapability(LibChunkCap.INSTANCE).orElse(new LibChunkCap(chunk));
+                // var chunkdata = Load.chunkData(chunk);
+                // var cap = chunk.getCapability(LibChunkCap.INSTANCE).orElse(new
+                // LibChunkCap(chunk));
                 var cap = chunk.getData(LibAttachments.LIB_CHUNK_CAP.get());
-                // getData ensures creation if copyOnDeath etc defaults? No, builder definition handles factory.
+                // getData ensures creation if copyOnDeath etc defaults? No, builder definition
+                // handles factory.
                 // Assuming chunk.getData returns non-null if initialized.
 
                 if (!cap.mapGenData.generatedData(info.structure)) {
                     cap.mapGenData.setGeneratedData(info.structure);
                     generateData(level, chunk);
-                    ExileEvents.PROCESS_CHUNK_DATA.callEvents(new ExileEvents.OnProcessChunkData(p, info.structure, cpos));
+                    ExileEvents.PROCESS_CHUNK_DATA
+                            .callEvents(new ExileEvents.OnProcessChunkData(p, info.structure, cpos));
                 }
             }
         }
@@ -80,7 +83,6 @@ public class ProcessMapChunks {
             }
         }
     }
-
 
     public static void spawnDataFromChunk(Level level, LevelChunk chunk, ChunkProcessType type) {
 
@@ -112,7 +114,8 @@ public class ProcessMapChunks {
 
                     ChunkProcessType type = ChunkProcessType.NORMAL;
 
-                    var be = LibDatabase.MapDataBlocks().getList().stream().filter(e -> e.matches(text, tilePos, level, nbt)).findFirst();
+                    var be = LibDatabase.MapDataBlocks().getList().stream()
+                            .filter(e -> e.matches(text, tilePos, level, nbt)).findFirst();
 
                     if (be.isPresent()) {
                         type = be.get().process_on;
@@ -130,7 +133,8 @@ public class ProcessMapChunks {
         }
     }
 
-    public static void generateSingleData(Level level, LevelChunk chunk, ChunkProcessType type, BlockPos tilePos, CompoundTag data, String text) {
+    public static void generateSingleData(Level level, LevelChunk chunk, ChunkProcessType type, BlockPos tilePos,
+            CompoundTag data, String text) {
 
         if (!text.isEmpty()) {
 
@@ -159,10 +163,12 @@ public class ProcessMapChunks {
             if (!skip) {
                 if (any) {
                     // only set to air if the processor didnt turn it into another block
-                    if (level.getBlockState(tilePos).getBlock() == Blocks.STRUCTURE_BLOCK || level.getBlockState(tilePos).getBlock() == Blocks.COMMAND_BLOCK) {
-                        //level.destroyBlock(tilePos, false);
-                        //  level.removeBlockEntity(tilePos);
-                        // level.setBlock(tilePos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL); // delete data block
+                    if (level.getBlockState(tilePos).getBlock() == Blocks.STRUCTURE_BLOCK
+                            || level.getBlockState(tilePos).getBlock() == Blocks.COMMAND_BLOCK) {
+                        // level.destroyBlock(tilePos, false);
+                        // level.removeBlockEntity(tilePos);
+                        // level.setBlock(tilePos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL); //
+                        // delete data block
                     }
                 } else {
                     level.removeBlock(tilePos, false);
@@ -170,7 +176,8 @@ public class ProcessMapChunks {
 
                     if (!oldComplex) {
                         // let's not error on these..
-                        ExileLog.get().warn("Data block with id: " + text + " matched no processors! " + tilePos.toString());
+                        ExileLog.get()
+                                .warn("Data block with id: " + text + " matched no processors! " + tilePos.toString());
                     }
                     var info = MapDimensions.getInfo(level);
                     if (info != null) {
@@ -187,7 +194,7 @@ public class ProcessMapChunks {
         // todo first convert to invis data blocks
 
         if (be instanceof StructureBlockEntity struc) {
-            CompoundTag nbt = struc.saveWithoutMetadata();
+            CompoundTag nbt = struc.saveWithoutMetadata(struc.getLevel().registryAccess());
             return nbt.getString("metadata");
         }
         if (be instanceof CommandBlockEntity cb) {

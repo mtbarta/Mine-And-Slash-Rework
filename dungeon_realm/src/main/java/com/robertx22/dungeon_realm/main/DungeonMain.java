@@ -47,7 +47,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -101,16 +101,14 @@ public class DungeonMain {
             MapContentType.PRIMARY_CONTENT,
             Arrays.asList(ARENA, UBER_ARENA, REWARD_ROOM),
             new DungeonMobValidator(),
-            new MapDimensionConfigDefaults(3, 1)
-    ) {
+            new MapDimensionConfigDefaults(3, 1)) {
 
         @Override
         public void clearMapDataOnFolderWipe(MinecraftServer minecraftServer) {
-            
+
             DungeonMapCapability.get(minecraftServer.overworld()).data = new DungeonWorldData();
         }
     };
-
 
     public DungeonMain(IEventBus bus) {
         OrderedModConstructor.register(new DungeonModConstructor(DungeonMain.MODID), bus);
@@ -133,7 +131,6 @@ public class DungeonMain {
                 }, id("dungeon_chunk_gen"))
                 .build();
 
-
         if (RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(DungeonMain.MODID);
 
@@ -144,10 +141,11 @@ public class DungeonMain {
 
         ApiForgeEvents.registerForgeEvent(GatherDataEvent.class, event -> {
             var output = event.getGenerator().getPackOutput();
-            var chestsLootTables = new LootTableProvider.SubProviderEntry(DungeonLootTables.DungeonLootTableProvider::new, LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables));
+            var chestsLootTables = new LootTableProvider.SubProviderEntry(
+                    DungeonLootTables.DungeonLootTableProvider::new, LootContextParamSets.CHEST);
+            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+                    event.getLookupProvider());
             event.getGenerator().addProvider(true, provider);
-
 
             try {
                 // .. why does this not work otherwise?
@@ -174,7 +172,8 @@ public class DungeonMain {
                 try {
 
                     if (!MapDimensions.isMap(e.player.level())) {
-                        float chance = (float) (DungeonConfig.get().DUNGEON_MAP_SPAWN_CHANCE_ON_CHEST_LOOT.get() * DungeonConfig.get().getDimChanceMulti(e.player.level()));
+                        float chance = (float) (DungeonConfig.get().DUNGEON_MAP_SPAWN_CHANCE_ON_CHEST_LOOT.get()
+                                * DungeonConfig.get().getDimChanceMulti(e.player.level()));
                         if (RandomUtils.roll(chance)) {
                             var empty = mygetEmptySlotsRandomized(e.inventory, new Random());
                             if (!empty.isEmpty()) {
@@ -215,7 +214,7 @@ public class DungeonMain {
             @Override
             public void identify(Player player, ItemStack stack) {
                 var newstack = DungeonMapItem.newRandomMapItemStack(new DungeonMapGenSettings());
-                stack.setTag(newstack.getTag());
+                stack.applyComponents(newstack.getComponentsPatch());
             }
         });
 
@@ -242,7 +241,6 @@ public class DungeonMain {
         return list;
     }
 
-
     public static Optional<DungeonMapData> ifMapData(Level level, BlockPos pos) {
         return DungeonMapCapability.DATA_GETTER.ifMapData(level, pos, true);
     }
@@ -256,7 +254,6 @@ public class DungeonMain {
     }
 
     public void commonSetupEvent(FMLCommonSetupEvent event) {
-
 
         ComponentInit.reg();
 
@@ -272,7 +269,9 @@ public class DungeonMain {
         @Override
         public MobList getPredeterminedRandomINTERNAL(Random random, Level level, ChunkPos pos) {
             var dungeon = MAIN_DUNGEON_STRUCTURE.getMap(pos).dungeon;
-            return LibDatabase.MobLists().getFilterWrapped(x -> dungeon.getDungeonData().mob_list_tag_check.matches(x).can).random(random.nextDouble());
+            return LibDatabase.MobLists()
+                    .getFilterWrapped(x -> dungeon.getDungeonData().mob_list_tag_check.matches(x).can)
+                    .random(random.nextDouble());
         }
     };
 }

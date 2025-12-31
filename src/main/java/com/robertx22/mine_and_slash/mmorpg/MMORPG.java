@@ -57,7 +57,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import com.robertx22.library_of_exile.main.Packets;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -127,7 +127,7 @@ public class MMORPG {
 
         OrderedModConstructor.register(new MnsConstructor(SlashRef.MODID), bus);
 
-        bus.addListener((RegisterPayloadHandlerEvent event) -> {
+        bus.addListener((RegisterPayloadHandlersEvent event) -> {
             Packets.setRegistrar(event.registrar(SlashRef.MODID).versioned(PROTOCOL_VERSION));
         });
 

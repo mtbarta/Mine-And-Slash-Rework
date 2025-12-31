@@ -32,16 +32,18 @@ public class RewardRoomChestMB extends MapDataBlock {
             int current = nbt.getInt("reward_chests");
 
             if (current++ < rar.reward_chests) {
-                MapChestMB.createChest(world, pos, false, new ResourceLocation(rar.loot_table));
+                MapChestMB.createChest(world, pos, false, net.minecraft.resources.ResourceKey.create(
+                        net.minecraft.core.registries.Registries.LOOT_TABLE, new ResourceLocation(rar.loot_table)));
                 nbt.putInt("reward_chests", current);
             } else {
                 world.removeBlock(pos, false);
-                //world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                // world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 
                 // this was ancient code.. why was it here?
-                //world.removeBlockEntity((pos)); // dont drop chest loot. this is a big problem if u remove this line
-                //world.removeBlock(pos, false);   // don't drop loot
-                //world.removeBlockEntity(pos);
+                // world.removeBlockEntity((pos)); // dont drop chest loot. this is a big
+                // problem if u remove this line
+                // world.removeBlock(pos, false); // don't drop loot
+                // world.removeBlockEntity(pos);
             }
         });
 
@@ -49,6 +51,7 @@ public class RewardRoomChestMB extends MapDataBlock {
 
     @Override
     public WikiEntry getWikiEntry() {
-        return WikiEntry.of("This chest is a bit special, when you enter the reward room it will only spawn x amount of chests depending on your map finish rarity/score.");
+        return WikiEntry.of(
+                "This chest is a bit special, when you enter the reward room it will only spawn x amount of chests depending on your map finish rarity/score.");
     }
 }

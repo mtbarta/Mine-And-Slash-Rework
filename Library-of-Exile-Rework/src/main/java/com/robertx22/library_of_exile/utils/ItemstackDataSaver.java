@@ -1,22 +1,25 @@
 package com.robertx22.library_of_exile.utils;
 
+import com.robertx22.library_of_exile.components.ComponentDataSaver;
 import com.robertx22.library_of_exile.registry.IGUID;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
-
 
 public class ItemstackDataSaver<T> implements IGUID {
 
     String id;
     Class<T> clazz;
     Supplier<T> constructor;
+    ComponentDataSaver<T> componentSaver;
 
-    public ItemstackDataSaver(String id, Class<T> clazz, Supplier<T> constructor) {
+    public ItemstackDataSaver(String id, Class<T> clazz, Supplier<T> constructor,
+            Supplier<DataComponentType<T>> componentTypeSupplier) {
         this.id = id;
         this.clazz = clazz;
         this.constructor = constructor;
+        this.componentSaver = new ComponentDataSaver<>(id, clazz, constructor, componentTypeSupplier);
 
         if (AllItemStackSavers.ALL.stream()
                 .noneMatch(x -> x.GUID()
@@ -24,6 +27,18 @@ public class ItemstackDataSaver<T> implements IGUID {
             AllItemStackSavers.ALL.add(this);
         }
 
+    }
+
+    /**
+     * Creates a new ItemstackDataSaver using GSON for serialization.
+     * This provides backward compatibility for existing data classes.
+     */
+    public static <T> ItemstackDataSaver<T> createWithGson(String id, Class<T> clazz, Supplier<T> constructor) {
+        return new ItemstackDataSaver<>(id, clazz, constructor,
+                () -> com.robertx22.library_of_exile.components.DataComponentCodecs.createUnregistered(
+                        com.robertx22.library_of_exile.components.DataComponentCodecs.createGsonCodec(clazz),
+                        com.robertx22.library_of_exile.components.DataComponentCodecs.createGsonStreamCodec(clazz,
+                                constructor)));
     }
 
     public Supplier<T> getConstructor() {
@@ -35,29 +50,18 @@ public class ItemstackDataSaver<T> implements IGUID {
     }
 
     public boolean has(ItemStack stack) {
-        return stack != null && stack.hasTag() && stack.getTag()
-                .contains(id);
+        return componentSaver.has(stack);
     }
 
     public void removeFrom(ItemStack stack) {
-        if (stack != null && stack.hasTag()) {
-            stack.getTag().remove(id);
-        }
+        componentSaver.removeFrom(stack);
     }
 
     public T loadFrom(ItemStack stack) {
-
         if (stack == null) {
             return null;
         }
-        if (!stack.hasTag()) {
-            return null;
-        }
-
-        T object = LoadSave.Load(clazz, constructor.get(), stack.getTag(), id);
-
-        return object;
-
+        return componentSaver.loadFrom(stack);
     }
 
     public void saveTo(ItemStack stack, T object) {
@@ -68,14 +72,7 @@ public class ItemstackDataSaver<T> implements IGUID {
         if (stack == null) {
             return;
         }
-
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
-        }
-        if (object != null) {
-            LoadSave.Save(object, stack.getTag(), id);
-        }
-
+        componentSaver.saveToObject(stack, object);
     }
 
     @Override

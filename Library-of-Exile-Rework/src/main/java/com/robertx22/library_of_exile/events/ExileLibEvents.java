@@ -11,7 +11,7 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.LinkedHashSet;
@@ -22,8 +22,7 @@ public class ExileLibEvents {
 
     public static void init() {
 
-        ApiForgeEvents.registerForgeEvent(PlayerEvent.PlayerLoggedInEvent.class, event ->
-        {
+        ApiForgeEvents.registerForgeEvent(PlayerEvent.PlayerLoggedInEvent.class, event -> {
             Player player = event.getEntity();
 
             if (player.level().isClientSide) {
@@ -34,7 +33,8 @@ public class ExileLibEvents {
                 if (!JsonExileRegistry.NOT_LOADED_JSONS_MAP.isEmpty()) {
                     int count = 0;
                     String hovertext = "";
-                    for (Map.Entry<ExileRegistryType, Set<ResourceLocation>> en : JsonExileRegistry.NOT_LOADED_JSONS_MAP.entrySet()) {
+                    for (Map.Entry<ExileRegistryType, Set<ResourceLocation>> en : JsonExileRegistry.NOT_LOADED_JSONS_MAP
+                            .entrySet()) {
                         for (ResourceLocation s : en.getValue()) {
                             hovertext += en.getKey().id + ": " + s.toString() + "\n";
                             count++;
@@ -43,9 +43,9 @@ public class ExileLibEvents {
 
                     var hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(hovertext));
 
-                    player.sendSystemMessage(Component.literal("Datapack Error: " + count + " Jsons errored while loading.").withStyle(
-                            Style.EMPTY.withHoverEvent(hover)
-                    ));
+                    player.sendSystemMessage(
+                            Component.literal("Datapack Error: " + count + " Jsons errored while loading.").withStyle(
+                                    Style.EMPTY.withHoverEvent(hover)));
 
                 }
                 // idk if this one is ever called, but better be safe
@@ -56,7 +56,8 @@ public class ExileLibEvents {
                     int count = 0;
 
                     String hovertext = "";
-                    for (Map.Entry<ExileRegistryType, Set<String>> en : JsonExileRegistry.INVALID_JSONS_MAP.entrySet()) {
+                    for (Map.Entry<ExileRegistryType, Set<String>> en : JsonExileRegistry.INVALID_JSONS_MAP
+                            .entrySet()) {
                         for (String s : en.getValue()) {
                             hovertext += en.getKey().id + ": " + s + "\n";
                             count++;
@@ -66,27 +67,31 @@ public class ExileLibEvents {
 
                     var hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(hovertext));
 
-                    player.sendSystemMessage(Component.literal("[DATAPACK ERROR]: " + count + " Jsons were marked as wrong with automatic error checking. Datapacks of these mods are affected:").withStyle(
-                            Style.EMPTY.withHoverEvent(hover).applyFormats(ChatFormatting.RED)
-                    ));
+                    player.sendSystemMessage(Component.literal("[DATAPACK ERROR]: " + count
+                            + " Jsons were marked as wrong with automatic error checking. Datapacks of these mods are affected:")
+                            .withStyle(
+                                    Style.EMPTY.withHoverEvent(hover).applyFormats(ChatFormatting.RED)));
                     for (String modName : modNames) {
-                        player.sendSystemMessage(Component.literal(" - " + modName).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+                        player.sendSystemMessage(Component.literal(" - " + modName).withStyle(ChatFormatting.YELLOW,
+                                ChatFormatting.BOLD));
                     }
                 }
 
-
-                if (!JsonExileRegistry.INVALID_JSONS_MAP.isEmpty() || !JsonExileRegistry.NOT_LOADED_JSONS_MAP.isEmpty()) {
+                if (!JsonExileRegistry.INVALID_JSONS_MAP.isEmpty()
+                        || !JsonExileRegistry.NOT_LOADED_JSONS_MAP.isEmpty()) {
 
                     player.sendSystemMessage(Component.literal("Check the log file for more info.")
                             .withStyle(ChatFormatting.YELLOW));
-                    player.sendSystemMessage(Component.literal("THIS MEANS YOUR DATAPACKS ARE LIKELY BROKEN AND MIGHT BUG IN-GAME UNLESS FIXED")
+                    player.sendSystemMessage(Component
+                            .literal("THIS MEANS YOUR DATAPACKS ARE LIKELY BROKEN AND MIGHT BUG IN-GAME UNLESS FIXED")
                             .withStyle(ChatFormatting.LIGHT_PURPLE));
 
-                    player.sendSystemMessage(Component.literal(UNICODE.STAR + " " + "If you're playing a Modpack, updating these mods will result in errors. wait for the modpack to update.")
+                    player.sendSystemMessage(Component.literal(UNICODE.STAR + " "
+                            + "If you're playing a Modpack, updating these mods will result in errors. wait for the modpack to update.")
                             .withStyle(ChatFormatting.AQUA));
-                    player.sendSystemMessage(Component.literal(UNICODE.STAR + " " + "If you made the datapacks yourself, use the Info from the log file to help you fix the jsons.")
+                    player.sendSystemMessage(Component.literal(UNICODE.STAR + " "
+                            + "If you made the datapacks yourself, use the Info from the log file to help you fix the jsons.")
                             .withStyle(ChatFormatting.AQUA));
-
 
                 }
 
@@ -95,11 +100,10 @@ public class ExileLibEvents {
             }
         });
 
-        ApiForgeEvents.registerForgeEvent(TickEvent.PlayerTickEvent.class, event ->
-        {
-            Player p = event.player;
+        ApiForgeEvents.registerForgeEvent(PlayerTickEvent.Post.class, event -> {
+            Player p = event.getEntity();
 
-            if (p.level().isClientSide || event.phase != TickEvent.Phase.END) {
+            if (p.level().isClientSide) {
                 return;
             }
             if (!p.isAlive() || p.tickCount < 10) {

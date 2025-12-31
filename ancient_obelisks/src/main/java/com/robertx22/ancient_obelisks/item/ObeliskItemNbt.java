@@ -5,6 +5,7 @@ import com.robertx22.library_of_exile.utils.ItemstackDataSaver;
 
 public class ObeliskItemNbt {
 
-    public static ItemstackDataSaver<ObeliskItemMapData> OBELISK_MAP = new ItemstackDataSaver<>(ObelisksMain.MODID + "_obelisk", ObeliskItemMapData.class, () -> new ObeliskItemMapData());
+    public static ItemstackDataSaver<ObeliskItemMapData> OBELISK_MAP = ItemstackDataSaver
+            .createWithGson(ObelisksMain.MODID + "_obelisk", ObeliskItemMapData.class, () -> new ObeliskItemMapData());
 
 }

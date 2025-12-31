@@ -2,7 +2,7 @@ package com.robertx22.mine_and_slash.itemstack;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.robertx22.library_of_exile.utils.ItemstackDataSaver;
+import com.robertx22.library_of_exile.components.ComponentDataSaver;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -11,16 +11,14 @@ public class StackData<T> {
 
     ExileStack stack;
 
-
-    public StackData(ExileStack stack, ItemstackDataSaver<T> saver) {
+    public StackData(ExileStack stack, ComponentDataSaver<T> saver) {
         this.stack = stack;
         this.saver = saver;
 
         stack.map.put(getId(), this);
     }
 
-
-    private ItemstackDataSaver<T> saver;
+    private ComponentDataSaver<T> saver;
 
     private Supplier<T> getterNon = () -> saver.loadFrom(stack.getStack());
     private Supplier<T> getter = Suppliers.memoize(getterNon);
@@ -30,7 +28,7 @@ public class StackData<T> {
     }
 
     public String getId() {
-        return saver.GUID();
+        return saver.getId();
     }
 
     public T getOrCreate() {
@@ -95,6 +93,5 @@ public class StackData<T> {
     public void resetGetterCache() {
         getter = Suppliers.memoize(getterNon);
     }
-
 
 }

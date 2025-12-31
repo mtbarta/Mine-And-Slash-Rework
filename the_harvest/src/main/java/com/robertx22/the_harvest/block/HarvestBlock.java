@@ -65,7 +65,6 @@ public class HarvestBlock extends BaseEntityBlock {
         return all;
     }
 
-
     public static void startNewMap(Player p, ItemStack stack, HarvestBE be) {
 
         HarvestItemMapData map = HarvestItemNbt.HARVEST_MAP.loadFrom(stack);
@@ -93,7 +92,8 @@ public class HarvestBlock extends BaseEntityBlock {
 
         stack.shrink(1);
 
-        HarvestMapCap.get(p.level()).data.data.setData(p, data, HarvestMain.HARVEST_MAP_STRUCTURE, start.getMiddleBlockPosition(5));
+        HarvestMapCap.get(p.level()).data.data.setData(p, data, HarvestMain.HARVEST_MAP_STRUCTURE,
+                start.getMiddleBlockPosition(5));
 
         pdata.mapTeleports.entranceTeleportLogic(p, HarvestMain.DIMENSION_KEY, pos);
 
@@ -107,9 +107,9 @@ public class HarvestBlock extends BaseEntityBlock {
         pdata.mapTeleports.entranceTeleportLogic(p, HarvestMain.DIMENSION_KEY, pos);
     }
 
-
     @Override
-    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult useWithoutItem(BlockState pState, Level world, BlockPos pPos, Player p,
+            BlockHitResult pHit) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         }
@@ -132,9 +132,9 @@ public class HarvestBlock extends BaseEntityBlock {
                 return InteractionResult.SUCCESS;
             }
 
-            //HarvestMain.debugMsg(p, "Trying to start new map");
+            // HarvestMain.debugMsg(p, "Trying to start new map");
             startNewMap(p, stack, obe);
-            //HarvestMain.debugMsg(p, "Map started");
+            // HarvestMain.debugMsg(p, "Map started");
             return InteractionResult.SUCCESS;
         }
 
@@ -161,7 +161,6 @@ public class HarvestBlock extends BaseEntityBlock {
         startNewMap(p, map, obe);
     }
 
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new HarvestBE(pPos, pState);
@@ -173,7 +172,8 @@ public class HarvestBlock extends BaseEntityBlock {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+            BlockEntityType<T> pBlockEntityType) {
         return new BlockEntityTicker<T>() {
             @Override
             public void tick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {

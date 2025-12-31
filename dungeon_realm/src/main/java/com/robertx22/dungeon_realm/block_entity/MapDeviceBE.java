@@ -22,14 +22,14 @@ import java.util.List;
 
 public class MapDeviceBE extends BlockEntity implements ContainerListener {
 
-
     public boolean gaveMap = false;
     public BlockPos pos = null;
 
     public String currentWorldUUID = "";
 
     public boolean isActivated() {
-        if (currentWorldUUID.isEmpty() || !currentWorldUUID.equals(DungeonMapCapability.getFromServer().data.data.uuid)) {
+        if (currentWorldUUID.isEmpty()
+                || !currentWorldUUID.equals(DungeonMapCapability.getFromServer().data.data.uuid)) {
             return false;
         }
 
@@ -50,7 +50,6 @@ public class MapDeviceBE extends BlockEntity implements ContainerListener {
 
     public SimpleContainer inv = new SimpleContainer(27);
 
-
     public List<ExactRelicStat> getAllValidRelicStats() {
         HashMap<String, Integer> map = new HashMap<>();
 
@@ -58,7 +57,6 @@ public class MapDeviceBE extends BlockEntity implements ContainerListener {
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack stack = inv.getItem(i);
-
 
             try {
                 if (!stack.isEmpty() && DungeonItemNbt.RELIC.has(stack)) {
@@ -88,30 +86,53 @@ public class MapDeviceBE extends BlockEntity implements ContainerListener {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, net.minecraft.core.HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
         nbt.putBoolean("gave", gaveMap);
         if (pos != null) {
             nbt.putLong("spawnpos", pos.asLong());
         }
 
-        nbt.put("inv", inv.createTag());
+        net.minecraft.nbt.ListTag listtag = new net.minecraft.nbt.ListTag();
+        for (int i = 0; i < this.inv.getContainerSize(); ++i) {
+            ItemStack itemstack = this.inv.getItem(i);
+            if (!itemstack.isEmpty()) {
+                CompoundTag compoundtag = new CompoundTag();
+                compoundtag.putByte("Slot", (byte) i);
+                listtag.add(itemstack.save(provider, compoundtag));
+            }
+        }
+        nbt.put("inv", listtag);
+
         nbt.putString("uid", currentWorldUUID);
 
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    protected void loadAdditional(CompoundTag pTag, net.minecraft.core.HolderLookup.Provider provider) {
+        super.loadAdditional(pTag, provider);
         this.gaveMap = pTag.getBoolean("gave");
         if (pTag.contains("spawnpos")) {
             this.pos = BlockPos.of(pTag.getLong("spawnpos"));
         }
-        inv.fromTag(pTag.getList("inv", 10)); // todo care when porting
+
+        if (pTag.contains("inv")) {
+            net.minecraft.nbt.ListTag listtag = pTag.getList("inv", 10);
+            this.inv.removeAllItems();
+            for (int i = 0; i < listtag.size(); ++i) {
+                CompoundTag compoundtag = listtag.getCompound(i);
+                int j = compoundtag.getByte("Slot") & 255;
+                if (j < this.inv.getContainerSize()) {
+                    this.inv.setItem(j, ItemStack.parse(provider, compoundtag).orElse(ItemStack.EMPTY));
+                }
+            }
+        }
+
         this.currentWorldUUID = pTag.getString("uid");
     }
 
-    // this i think allows me to make sure the inventory + block entity is dirty easily
+    // this i think allows me to make sure the inventory + block entity is dirty
+    // easily
     @Override
     public void containerChanged(Container pContainer) {
         this.setChanged();

@@ -87,7 +87,8 @@ public class HarvestMain {
     // other
     public static HarvestMapStructure HARVEST_MAP_STRUCTURE = new HarvestMapStructure();
     public static MapDimensionInfo MAP = new MapDimensionInfo(
-            DIMENSION_KEY, HARVEST_MAP_STRUCTURE, MapContentType.SIDE_CONTENT, Arrays.asList(), new HarvestMobValidator(),
+            DIMENSION_KEY, HARVEST_MAP_STRUCTURE, MapContentType.SIDE_CONTENT, Arrays.asList(),
+            new HarvestMobValidator(),
             new MapDimensionConfigDefaults(3, 2)) {
         @Override
         public void clearMapDataOnFolderWipe(MinecraftServer minecraftServer) {
@@ -95,7 +96,6 @@ public class HarvestMain {
 
         }
     };
-
 
     public static void debugMsg(Player p, String s) {
         if (p.isCreative()) {
@@ -111,7 +111,6 @@ public class HarvestMain {
         // DistExecutor removed, client setup registered directly
         bus.addListener(this::clientSetup);
 
-
         new MapRegisterBuilder(MAP)
                 .chunkGenerator(new EventConsumer<MapChunkGenEvent>() {
                     @Override
@@ -123,7 +122,6 @@ public class HarvestMain {
                 }, id("harvest_chunk_gen"))
                 .build();
 
-
         if (RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(HarvestMain.MODID);
 
@@ -134,12 +132,14 @@ public class HarvestMain {
 
         ApiForgeEvents.registerForgeEvent(GatherDataEvent.class, event -> {
             var output = event.getGenerator().getPackOutput();
-            var chestsLootTables = new LootTableProvider.SubProviderEntry(HarvestLootTables.Provider::new, LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables));
+            var chestsLootTables = new LootTableProvider.SubProviderEntry(HarvestLootTables.Provider::new,
+                    LootContextParamSets.CHEST);
+            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+                    event.getLookupProvider());
             event.getGenerator().addProvider(true, provider);
 
             if (RUN_DEV_TOOLS) {
-                // todo this doesnt seem to gen here?   ObeliskDatabase.generateJsons();
+                // todo this doesnt seem to gen here? ObeliskDatabase.generateJsons();
             }
 
             try {
@@ -150,12 +150,9 @@ public class HarvestMain {
             }
         });
 
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, HarvestConfig.SPEC);
 
-
         bus.addListener(this::commonSetupEvent);
-
 
         HarvestEntries.CREATIVE_TAB.register(MODID, () -> new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 2)
                 .icon(() -> HarvestEntries.HARVEST_ITEM.get().getDefaultInstance())
@@ -172,7 +169,6 @@ public class HarvestMain {
                 })
                 .build());
 
-
         HarvestCommands.init();
 
         ExileEvents.ON_CHEST_LOOTED.register(new EventConsumer<ExileEvents.OnChestLooted>() {
@@ -180,13 +176,15 @@ public class HarvestMain {
             public void accept(ExileEvents.OnChestLooted e) {
                 try {
 
-                    float chance = (float) (HarvestConfig.get().MAP_SPAWN_CHANCE_ON_CHEST_LOOT.get() * HarvestConfig.get().getDimChanceMulti(e.player.level()));
+                    float chance = (float) (HarvestConfig.get().MAP_SPAWN_CHANCE_ON_CHEST_LOOT.get()
+                            * HarvestConfig.get().getDimChanceMulti(e.player.level()));
                     if (RandomUtils.roll(chance)) {
                         if (!MapDimensions.isMap(e.player.level())) {
                             var empty = mygetEmptySlotsRandomized(e.inventory, new Random());
                             if (!empty.isEmpty()) {
                                 int index = RandomUtils.randomFromList(empty);
-                                var map = HarvestMapItem.blankMap(HarvestEntries.HARVEST_MAP_ITEM.get().getDefaultInstance(), false);
+                                var map = HarvestMapItem
+                                        .blankMap(HarvestEntries.HARVEST_MAP_ITEM.get().getDefaultInstance(), false);
                                 e.inventory.setItem(index, map);
                             }
                         }
@@ -196,7 +194,6 @@ public class HarvestMain {
                 }
             }
         });
-
 
         IdentifiableItems.register(HarvestEntries.HARVEST_MAP_ITEM.getId(), new IdentifiableItems.Config() {
             @Override
@@ -209,7 +206,6 @@ public class HarvestMain {
                 HarvestMapItem.blankMap(stack, false);
             }
         });
-
 
         ApiForgeEvents.registerForgeEvent(LivingDeathEvent.class, event -> {
             if (event.getEntity().level().isClientSide) {
@@ -230,15 +226,20 @@ public class HarvestMain {
 
     }
 
-    //copied from livingentity
+    // copied from livingentity
     // maybe put in lib mod
-    protected void dropFromLootTable(LivingEntity en, ResourceLocation table, DamageSource pDamageSource) {
-        ResourceLocation resourcelocation = table;
-        LootTable loottable = en.level().getServer().getLootData().getLootTable(resourcelocation);
+    protected void dropFromLootTable(LivingEntity en, net.minecraft.resources.ResourceKey<LootTable> table,
+            DamageSource pDamageSource) {
+        LootTable loottable = en.level().registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.LOOT_TABLE)
+                .get(table);
+        if (loottable == null)
+            return;
         LootParams.Builder lootparams$builder = (new LootParams.Builder((ServerLevel) en.level()))
                 .withParameter(LootContextParams.THIS_ENTITY, en)
                 .withParameter(LootContextParams.ORIGIN, en.position())
-                .withParameter(LootContextParams.DAMAGE_SOURCE, pDamageSource).withOptionalParameter(LootContextParams.KILLER_ENTITY, pDamageSource.getEntity())
+                .withParameter(LootContextParams.DAMAGE_SOURCE, pDamageSource)
+                .withOptionalParameter(LootContextParams.KILLER_ENTITY, pDamageSource.getEntity())
                 .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, pDamageSource.getDirectEntity());
         LootParams lootparams = lootparams$builder.create(LootContextParamSets.ENTITY);
         loottable.getRandomItems(lootparams, en.getLootTableSeed(), en::spawnAtLocation);
@@ -278,10 +279,10 @@ public class HarvestMain {
 
     public void commonSetupEvent(FMLCommonSetupEvent event) {
 
-
         ComponentInit.reg();
 
-        // Legacy AttachCapabilitiesEvent listeners removed - use Data Attachments (HarvestAttachments) instead.
+        // Legacy AttachCapabilitiesEvent listeners removed - use Data Attachments
+        // (HarvestAttachments) instead.
 
     }
 
@@ -294,7 +295,8 @@ public class HarvestMain {
         @Override
         public MobList getPredeterminedRandomINTERNAL(Random random, Level level, ChunkPos pos) {
             var arena = HARVEST_MAP_STRUCTURE.getArena(pos);
-            return LibDatabase.MobLists().getFilterWrapped(x -> arena.mob_list_tag_check.matches(x).can).random(random.nextDouble());
+            return LibDatabase.MobLists().getFilterWrapped(x -> arena.mob_list_tag_check.matches(x).can)
+                    .random(random.nextDouble());
         }
     };
 }

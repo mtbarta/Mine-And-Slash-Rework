@@ -113,9 +113,10 @@ public class MapDeviceBlock extends BaseEntityBlock {
 
             var count = map.getOrSetStartPos(p.level(), stack);
             var start = DungeonMain.MAIN_DUNGEON_STRUCTURE.getStartFromCounter(count.x, count.z);
-            var pos = TeleportUtils.getSpawnTeleportPos(DungeonMain.MAIN_DUNGEON_STRUCTURE, start.getMiddleBlockPosition(5));
+            var pos = TeleportUtils.getSpawnTeleportPos(DungeonMain.MAIN_DUNGEON_STRUCTURE,
+                    start.getMiddleBlockPosition(5));
 
-            //var pdata = PlayerDataCapability.get(p);
+            // var pdata = PlayerDataCapability.get(p);
 
             var data = new DungeonMapData();
             data.item = map;
@@ -123,7 +124,9 @@ public class MapDeviceBlock extends BaseEntityBlock {
             data.z = start.z;
             data.dungeon = map.dungeon;
             if (data.dungeon == null || data.dungeon.isEmpty()) {
-                data.dungeon = DungeonMapItem.GetRandomDungeonGUID(); //TODO: so this is just backwards support, but apparently we can never remove it to support old maps without predefined dungeon...
+                data.dungeon = DungeonMapItem.GetRandomDungeonGUID(); // TODO: so this is just backwards support, but
+                                                                      // apparently we can never remove it to support
+                                                                      // old maps without predefined dungeon...
             }
 
             be.pos = pos;
@@ -131,15 +134,15 @@ public class MapDeviceBlock extends BaseEntityBlock {
 
             be.setChanged();
 
-
             var libdata = new LibMapData();
             libdata.relicStats = RelicStatsContainer.calculate(be.getAllValidRelicStats());
 
             data.bonusContents.setupOnMapStart(stack, libdata, p);
 
-
-            DungeonMapCapability.get(p.level()).data.data.setData(p, data, DungeonMain.MAIN_DUNGEON_STRUCTURE, start.getMiddleBlockPosition(5));
-            LibMapCap.get(p.level()).data.setData(p, libdata, DungeonMain.MAIN_DUNGEON_STRUCTURE, start.getMiddleBlockPosition(5));
+            DungeonMapCapability.get(p.level()).data.data.setData(p, data, DungeonMain.MAIN_DUNGEON_STRUCTURE,
+                    start.getMiddleBlockPosition(5));
+            LibMapCap.get(p.level()).data.setData(p, libdata, DungeonMain.MAIN_DUNGEON_STRUCTURE,
+                    start.getMiddleBlockPosition(5));
 
             // todo
             var event = new OnStartMapEvent(p, stack, start, DungeonMain.MAP);
@@ -148,9 +151,9 @@ public class MapDeviceBlock extends BaseEntityBlock {
             stack.shrink(1);
 
             if (joinCurrentMap(p, be)) {
-                p.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, DungeonMain.DIMENSION_KEY)).setBlock(pos.south(), DungeonEntries.MAP_DEVICE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
+                p.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, DungeonMain.DIMENSION_KEY)).setBlock(
+                        pos.south(), DungeonEntries.MAP_DEVICE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,7 +178,8 @@ public class MapDeviceBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level world, BlockPos pPos, Player p, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult useWithoutItem(BlockState pState, Level world, BlockPos pPos, Player p,
+            BlockHitResult pHit) {
 
         if (!world.isClientSide) {
             var be = world.getBlockEntity(pPos);
@@ -222,7 +226,6 @@ public class MapDeviceBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new MapDeviceBE(pPos, pState);
@@ -234,7 +237,8 @@ public class MapDeviceBlock extends BaseEntityBlock {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+            BlockEntityType<T> pBlockEntityType) {
         return new BlockEntityTicker<T>() {
             @Override
             public void tick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
