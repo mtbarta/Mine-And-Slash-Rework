@@ -9,6 +9,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.items.GemItems;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.items.RuneItems;
 import com.robertx22.orbs_of_crafting.register.ExileCurrency;
+import net.minecraft.core.Holder;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -59,10 +60,8 @@ public class LootTableGenerator {
                     Path target = movePath(resolve(path, x.getKey()
                             .getPath()));
                     // Use codec to serialize LootTable to JsonElement
-                    JsonElement json = LootTable.CODEC.encodeStart(JsonOps.INSTANCE, x.getValue())
-                            .getOrThrow(false, error -> {
-                                throw new RuntimeException("Failed to encode loot table: " + error);
-                            });
+                    JsonElement json = LootTable.CODEC.encodeStart(JsonOps.INSTANCE, Holder.direct(x.getValue()))
+                            .getOrThrow(error -> new RuntimeException("Failed to encode loot table: " + error));
                     DataProvider.saveStable(cache, json, target);
                 });
 

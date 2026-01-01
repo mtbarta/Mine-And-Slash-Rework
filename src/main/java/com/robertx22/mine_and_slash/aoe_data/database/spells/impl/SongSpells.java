@@ -19,69 +19,82 @@ import net.minecraft.world.item.Items;
 import java.util.Arrays;
 
 public class SongSpells implements ExileRegistryInit {
-    public static String POWER_CHORD = "power_chord";
-    public static String RITARDANDO = "ritardando";
-    public static String RESONANCE = "resonance";
+        public static String POWER_CHORD = "power_chord";
+        public static String RITARDANDO = "ritardando";
+        public static String RESONANCE = "resonance";
 
-    @Override
-    public void registerAll() {
+        @Override
+        public void registerAll() {
 
-        SpellBuilder.of(POWER_CHORD, PlayStyle.INT, SpellConfiguration.Builder.instant(7, 15)
+                SpellBuilder.of(POWER_CHORD, PlayStyle.INT, SpellConfiguration.Builder.instant(7, 15)
                                 .setSwingArm()
                                 .applyCastSpeedToCooldown(), "Power Chord",
-                        Arrays.asList(SpellTags.projectile, SpellTags.damage, SpellTags.song, SpellTags.PHYSICAL))
-                .manualDesc(
-                        "Throw out a ball of music, dealing " + SpellCalcs.POWER_CHORD.getLocDmgTooltip()
-                                + " " + Elements.Physical.getIconNameDmg() + " and charming enemies, reducing their defenses.")
-                .weaponReq(CastingWeapon.MAGE_WEAPON)
-                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
-                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D, 1D, SlashEntities.SIMPLE_PROJECTILE.get(), 20D, false)))
-                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
-                .onExpire(PartBuilder.damageInAoe(SpellCalcs.POWER_CHORD, Elements.Physical, 1.5D)
-                        .addActions(SpellAction.EXILE_EFFECT.giveSeconds(ModEffects.CHARM, 6)))
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 1D))
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 1D))
-                .build();
+                                Arrays.asList(SpellTags.projectile, SpellTags.damage, SpellTags.song,
+                                                SpellTags.PHYSICAL))
+                                .manualDesc(
+                                                "Throw out a ball of music, dealing "
+                                                                + SpellCalcs.POWER_CHORD.getLocDmgTooltip()
+                                                                + " " + Elements.Physical.getIconNameDmg()
+                                                                + " and charming enemies, reducing their defenses.")
+                                .weaponReq(CastingWeapon.MAGE_WEAPON)
+                                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
+                                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D, 1D,
+                                                SlashEntities.SIMPLE_PROJECTILE.get(), 20D, false)))
+                                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
+                                .onExpire(PartBuilder.damageInAoe(SpellCalcs.POWER_CHORD, Elements.Physical, 1.5D)
+                                                .addActions(SpellAction.EXILE_EFFECT.giveSeconds(ModEffects.CHARM, 6)))
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 1D))
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 1D))
+                                .build();
 
-        SpellBuilder.of(RITARDANDO, PlayStyle.INT, SpellConfiguration.Builder.instant(7, 100)
+                SpellBuilder.of(RITARDANDO, PlayStyle.INT, SpellConfiguration.Builder.instant(7, 100)
                                 .setSwingArm()
                                 .applyCastSpeedToCooldown(), "Ritardando",
-                        Arrays.asList(SpellTags.projectile, SpellTags.damage, SpellTags.song, SpellTags.PHYSICAL))
-                .manualDesc(
-                        "Throw out a slow wave of sound, exploding upon contact and dealing " + SpellCalcs.RITARDANDO.getLocDmgTooltip()
-                                + " " + Elements.Physical.getIconNameDmg() + " and slowing enemies in an area.")
-                .weaponReq(CastingWeapon.MAGE_WEAPON)
-                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
-                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D, 0.25D, SlashEntities.SIMPLE_PROJECTILE.get(), 80D, false)))
-                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
-                .onExpire(PartBuilder.damageInAoe(SpellCalcs.RITARDANDO, Elements.Physical, 3D)
-                        .addActions(SpellAction.EXILE_EFFECT.giveSeconds(ModEffects.SLOW, 3)))
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 3D))
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 3D))
-                .build();
+                                Arrays.asList(SpellTags.projectile, SpellTags.damage, SpellTags.song,
+                                                SpellTags.PHYSICAL))
+                                .manualDesc(
+                                                "Throw out a slow wave of sound, exploding upon contact and dealing "
+                                                                + SpellCalcs.RITARDANDO.getLocDmgTooltip()
+                                                                + " " + Elements.Physical.getIconNameDmg()
+                                                                + " and slowing enemies in an area.")
+                                .weaponReq(CastingWeapon.MAGE_WEAPON)
+                                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
+                                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D,
+                                                0.25D, SlashEntities.SIMPLE_PROJECTILE.get(), 80D, false)))
+                                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
+                                .onExpire(PartBuilder.damageInAoe(SpellCalcs.RITARDANDO, Elements.Physical, 3D)
+                                                .addActions(SpellAction.EXILE_EFFECT.giveSeconds(ModEffects.SLOW, 3)))
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 3D))
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 3D))
+                                .build();
 
-        SpellBuilder.of(RESONANCE, PlayStyle.INT, SpellConfiguration.Builder.multiCast(7, 20, 30, 3)
+                SpellBuilder.of(RESONANCE, PlayStyle.INT, SpellConfiguration.Builder.multiCast(7, 20, 30, 3)
                                 .setSwingArm().setChargesAndRegen("resonance", 3, 20 * 30)
                                 .applyCastSpeedToCooldown(), "Resonance",
-                        Arrays.asList(SpellTags.projectile, SpellTags.area, SpellTags.damage, SpellTags.song, SpellTags.PHYSICAL))
-                .manualDesc(
-                        "Throw out a ball of music, dealing " + SpellCalcs.RESONANCE.getLocDmgTooltip()
-                                + " " + Elements.Physical.getIconNameDmg() + ". Hits against charmed enemies explode.")
-                .weaponReq(CastingWeapon.MAGE_WEAPON)
-                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
-                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D, 1D, SlashEntities.SIMPLE_PROJECTILE.get(), 20D, false)))
-                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
+                                Arrays.asList(SpellTags.projectile, SpellTags.area, SpellTags.damage, SpellTags.song,
+                                                SpellTags.PHYSICAL))
+                                .manualDesc(
+                                                "Throw out a ball of music, dealing "
+                                                                + SpellCalcs.RESONANCE.getLocDmgTooltip()
+                                                                + " " + Elements.Physical.getIconNameDmg()
+                                                                + ". Hits against charmed enemies explode.")
+                                .weaponReq(CastingWeapon.MAGE_WEAPON)
+                                .onCast(PartBuilder.playSound(SoundEvents.SNOWBALL_THROW, 1D, 1D))
+                                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.create(Items.AIR, 1D, 1D,
+                                                SlashEntities.SIMPLE_PROJECTILE.get(), 20D, false)))
+                                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.NOTE, 2D, 0.15D))
 
-                .onExpire(PartBuilder.damageInAoe(SpellCalcs.RESONANCE, Elements.Physical, 1.5D))
+                                .onExpire(PartBuilder.damageInAoe(SpellCalcs.RESONANCE, Elements.Physical, 1.5D))
 
-                .onExpire(PartBuilder.damageInAoeIfCharmed(SpellCalcs.RESONANCE, Elements.Physical, 3D)
-                        .addPerEntityHit(PartBuilder.aoeParticles(ParticleTypes.NOTE, 100D, 1D))
-                        .addPerEntityHit(PartBuilder.aoeParticles(ParticleTypes.EXPLOSION, 1D, 0.1D))
-                        .addPerEntityHit(PartBuilder.playSound(SoundEvents.GENERIC_EXPLODE, 1D, 1d))
-                )
+                                .onExpire(PartBuilder.damageInAoeIfCharmed(SpellCalcs.RESONANCE, Elements.Physical, 3D)
+                                                .addPerEntityHit(PartBuilder.aoeParticles(ParticleTypes.NOTE, 100D, 1D))
+                                                .addPerEntityHit(PartBuilder.aoeParticles(ParticleTypes.EXPLOSION, 1D,
+                                                                0.1D))
+                                                .addPerEntityHit(PartBuilder.playSound(
+                                                                SoundEvents.GENERIC_EXPLODE.value(), 1D, 1d)))
 
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 1D))
-                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 1D))
-                .build();
-    }
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.ENCHANTED_HIT, 10D, 1D))
+                                .onExpire(PartBuilder.aoeParticles(ParticleTypes.NOTE, 20D, 1D))
+                                .build();
+        }
 }

@@ -100,6 +100,11 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     private Float cachedYawSpeedMultiplier = null;
 
     @Override
+    protected ItemStack getDefaultPickupItem() {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     protected ItemStack getPickupItem() {
         return ItemStack.EMPTY;
     }
@@ -108,12 +113,10 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
         return true;
     }
 
-    @Override
     public Iterable<ItemStack> getArmorSlots() {
         return new ArrayList<>();
     }
 
-    @Override
     public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
@@ -676,21 +679,21 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(SPELL_DATA, new CompoundTag());
-        this.entityData.define(ENTITY_NAME, "");
-        this.entityData.define(EXPIRE_ON_ENTITY_HIT, true);
-        this.entityData.define(EXPIRE_ON_BLOCK_HIT, true);
-        this.entityData.define(HIT_ALLIES, false);
-        this.entityData.define(PIERCE, false);
-        this.entityData.define(DEATH_TIME, 100);
-        this.entityData.define(CHAINS, 0);
-        this.entityData.define(ACCELERATION, 0f);
-        this.entityData.define(YAW_VELOCITY, 0f);
-        this.entityData.define(YAW_ACCELERATION, 0f);
-        this.entityData.define(FORWARD_VECTOR, new Vector3f());
-        this.entityData.define(UP_VECTOR, new Vector3f());
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SPELL_DATA, new CompoundTag());
+        builder.define(ENTITY_NAME, "");
+        builder.define(EXPIRE_ON_ENTITY_HIT, true);
+        builder.define(EXPIRE_ON_BLOCK_HIT, true);
+        builder.define(HIT_ALLIES, false);
+        builder.define(PIERCE, false);
+        builder.define(DEATH_TIME, 100);
+        builder.define(CHAINS, 0);
+        builder.define(ACCELERATION, 0f);
+        builder.define(YAW_VELOCITY, 0f);
+        builder.define(YAW_ACCELERATION, 0f);
+        builder.define(FORWARD_VECTOR, new Vector3f());
+        builder.define(UP_VECTOR, new Vector3f());
+        super.defineSynchedData(builder);
     }
 
     @Override

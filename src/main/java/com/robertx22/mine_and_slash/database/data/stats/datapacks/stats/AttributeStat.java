@@ -20,11 +20,12 @@ public class AttributeStat extends BaseDatapackStat {
 
     public UUID uuid;
     public String attributeId;
-    public Attribute attribute;
-    public AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
+    public net.minecraft.core.Holder<Attribute> attribute;
+    public AttributeModifier.Operation operation = AttributeModifier.Operation.ADD_VALUE;
     public boolean cut_by_hundred = true;
 
-    public AttributeStat(String id, String locname, UUID uuid, Attribute attribute, boolean perc,
+    public AttributeStat(String id, String locname, UUID uuid, net.minecraft.core.Holder<Attribute> attribute,
+            boolean perc,
             AttributeModifier.Operation operation, boolean cut) {
         super(SER_ID);
         this.id = id;
@@ -32,7 +33,7 @@ public class AttributeStat extends BaseDatapackStat {
         this.locname = locname;
         this.uuid = uuid;
         this.cut_by_hundred = cut;
-        this.attributeId = BuiltInRegistries.ATTRIBUTE.getKey(attribute)
+        this.attributeId = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value())
                 .toString();
         this.attribute = attribute;
         this.is_perc = perc;
@@ -61,14 +62,14 @@ public class AttributeStat extends BaseDatapackStat {
         AttributeModifier mod = new AttributeModifier(
                 uuid,
                 attributeId,
-                val,
+                (double) val,
                 operation);
 
         AttributeInstance atri = en.getAttribute(attribute);
 
         if (atri != null) {
-            if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod.getId()); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
+            if (atri.getModifier(uuid) != null) {
+                atri.removeModifier(uuid); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
             }
             atri.addTransientModifier(mod);
         }

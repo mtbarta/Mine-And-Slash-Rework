@@ -14,7 +14,7 @@ public class StatCompats implements ExileRegistryInit {
     public void registerAll() {
 
         new StatCompat("armor").editAndReg(x -> {
-            x.attribute_id = BuiltInRegistries.ATTRIBUTE.getKey(Attributes.ARMOR).toString();
+            x.attribute_id = BuiltInRegistries.ATTRIBUTE.getKey(Attributes.ARMOR.value()).toString();
             x.mns_stat_id = Armor.getInstance().GUID();
             x.mod_type = ModType.PERCENT;
         });

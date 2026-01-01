@@ -41,14 +41,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomModelData;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevelTier {
-
 
     public int tier = 1;
 
@@ -64,21 +64,20 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
 
     public boolean can_sal = true;
 
-
     public SavedGearSoul gear = null;
-
 
     public static boolean has(ItemStack stack) {
 
-        return StackSaving.STAT_SOULS.has(stack) || (stack.getItem() instanceof CraftedSoulItem i && i.getSoul(stack) != null);
-
+        return StackSaving.STAT_SOULS.has(stack)
+                || (stack.getItem() instanceof CraftedSoulItem i && i.getSoul(stack) != null);
 
     }
 
     // todo how do i make the result accept nbt.
     // and how to make jei accept nbt
 
-    // i COULD make each of these an item ? and have profession set the correct tier?
+    // i COULD make each of these an item ? and have profession set the correct
+    // tier?
 
     public static StatSoulData ofFamily(GearRarity rar, SkillItemTier tier, SlotFamily fam) {
         StatSoulData data = new StatSoulData();
@@ -98,15 +97,13 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
 
     public ItemStack toStack() {
 
-
         ItemStack stack = new ItemStack(SlashItems.STAT_SOUL.get());
 
         StackSaving.STAT_SOULS.saveTo(stack, this);
 
         if (!slot.isEmpty()) {
-            stack.getOrCreateTag()
-                    .putInt("CustomModelData", ExileDB.GearSlots()
-                            .get(slot).model_num);
+            stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(ExileDB.GearSlots()
+                    .get(slot).model_num));
         }
 
         return stack;
@@ -117,7 +114,8 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
 
         ItemStack copy = s.copy();
 
-        // todo replacing souls needs to support replacing more than just gearitemdata.. otherwise you could just delete potential or corruption or whatever
+        // todo replacing souls needs to support replacing more than just gearitemdata..
+        // otherwise you could just delete potential or corruption or whatever
         if (gear != null) {
             gear.saveTo(copy);
             return copy;
@@ -146,7 +144,8 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
     }
 
     public boolean isArmor() {
-        return this.fam == SlotFamily.Armor || (!this.slot.isEmpty() && ExileDB.GearSlots().get(slot).fam == SlotFamily.Armor);
+        return this.fam == SlotFamily.Armor
+                || (!this.slot.isEmpty() && ExileDB.GearSlots().get(slot).fam == SlotFamily.Armor);
     }
 
     public ExplainedResult canApplyTo(ItemStack stack) {
@@ -177,25 +176,24 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
         return ExplainedResult.silentlyFail();
     }
 
-
     public ExileStacklessData createGearData(@Nullable ItemStack stack, Player p) {
 
-        int lvl = MathHelper.clamp(Load.Unit(p).getLevel(), LevelUtils.tierToLevel(tier).getMinLevel(), LevelUtils.tierToLevel(tier).getMaxLevel());
+        int lvl = MathHelper.clamp(Load.Unit(p).getLevel(), LevelUtils.tierToLevel(tier).getMinLevel(),
+                LevelUtils.tierToLevel(tier).getMaxLevel());
 
         GearBlueprint b = new GearBlueprint(LootInfo.ofLevel(lvl));
         b.level.set(lvl);
         b.rarity.set(ExileDB.GearRarities()
                 .get(rar));
 
-
         GearSlot gearslot = getSlotFor(stack);
         String slotid = gearslot.GUID();
-
 
         var possible = ExileDB.GearTypes().getFilterWrapped(x -> x.gear_slot.equals(slotid)).list;
 
         if (forcesTag()) {
-            // only use the force tag if the slot can actually roll that tag, this is a bandaid fix for now
+            // only use the force tag if the slot can actually roll that tag, this is a
+            // bandaid fix for now
             var filted = possible.stream().filter(x -> x.tags.contains(force_tag)).collect(Collectors.toList());
             if (!filted.isEmpty()) {
                 possible = filted;
@@ -254,7 +252,6 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
         return ExileDB.GearRarities().get(rar);
     }
 
-
     @Override
     public void setTier(int tier) {
         this.tier = tier;
@@ -271,7 +268,7 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
     }
 
     @Override
-    public ItemstackDataSaver<? extends ICommonDataItem> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<? extends com.robertx22.mine_and_slash.uncommon.interfaces.data_items.ICommonDataItem> getStackSaver() {
         return StackSaving.STAT_SOULS;
     }
 
@@ -279,12 +276,14 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
 
         ExileTooltips exileTooltips = new ExileTooltips()
                 .accept(new RarityBlock(getRarity()))
-                .accept(new UsageBlock(Collections.singletonList(Chats.INFUSES_STATS.locName().withStyle(ChatFormatting.AQUA))));
-
+                .accept(new UsageBlock(
+                        Collections.singletonList(Chats.INFUSES_STATS.locName().withStyle(ChatFormatting.AQUA))));
 
         if (this.gear != null) {
-            //this.gear.BuildTooltip(new TooltipContext(stack, tooltip, Load.Unit(ClientOnly.getPlayer())));
-            exileTooltips.accept(new AdditionalBlock(Itemtips.CHECK_GEAR_STATS_IN_SOUL.locName().withStyle(ChatFormatting.AQUA)));
+            // this.gear.BuildTooltip(new TooltipContext(stack, tooltip,
+            // Load.Unit(ClientOnly.getPlayer())));
+            exileTooltips.accept(
+                    new AdditionalBlock(Itemtips.CHECK_GEAR_STATS_IN_SOUL.locName().withStyle(ChatFormatting.AQUA)));
             exileTooltips.accept(new OperationTipBlock().setAlt().setShift());
         } else {
 
@@ -294,15 +293,19 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
                     .locName(Component.literal(levelRange.getMinLevel() + ""),
                             Component.literal(levelRange.getMaxLevel() + ""))
                     .withStyle(ChatFormatting.GOLD));
-            //tooltip.add(TooltipUtils.gearTier(this.tier));
+            // tooltip.add(TooltipUtils.gearTier(this.tier));
             if (new StatRangeInfo(ModRange.hide()).hasAltDown) {
-                // tooltip.add(Component.literal("[" + Itemtips.MAP_TIER_TIP.locName().getString() + "]").withStyle(ChatFormatting.BLUE));
+                // tooltip.add(Component.literal("[" +
+                // Itemtips.MAP_TIER_TIP.locName().getString() +
+                // "]").withStyle(ChatFormatting.BLUE));
             }
             if (this.canBeOnAnySlot()) {
 
             } else {
                 if (this.fam != SlotFamily.NONE) {
-                    tooltip.add(Itemtips.ITEM_TYPE.locName(Component.literal(this.fam.name()).withStyle(ChatFormatting.BLUE)).withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Itemtips.ITEM_TYPE
+                            .locName(Component.literal(this.fam.name()).withStyle(ChatFormatting.BLUE))
+                            .withStyle(ChatFormatting.GRAY));
                 } else {
                     tooltip.add(Itemtips.ITEM_TYPE.locName(ExileDB.GearSlots()
                             .get(this.slot)
@@ -319,7 +322,9 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
         exileTooltips.accept(WorksOnBlock.usableOn(WorksOnBlock.ItemType.SOULLESS_GEAR));
 
         exileTooltips
-                .accept(new AdditionalBlock(Collections.singletonList(Chats.RIGHT_CLICK_TO_GEN_ITEM.locName().withStyle(ChatFormatting.BLUE))).showWhen(() -> cangen))
+                .accept(new AdditionalBlock(Collections
+                        .singletonList(Chats.RIGHT_CLICK_TO_GEN_ITEM.locName().withStyle(ChatFormatting.BLUE)))
+                        .showWhen(() -> cangen))
                 .accept(new SalvageBlock(this, ExileStack.of(stack)));
 
         return exileTooltips;
@@ -333,9 +338,11 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
     @Override
     public List<ItemStack> getSalvageResult(ExileStack stack) {
         int amount = 1;
-        return Arrays.asList(new ItemStack(RarityItems.RARITY_STONE.getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(), amount));
+        return Arrays.asList(new ItemStack(
+                RarityItems.RARITY_STONE
+                        .getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(),
+                amount));
     }
-
 
     @Override
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {

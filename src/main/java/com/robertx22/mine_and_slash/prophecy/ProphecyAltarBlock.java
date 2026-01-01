@@ -41,7 +41,7 @@ public class ProphecyAltarBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player p, InteractionHand pHand,
+    protected InteractionResult useWithoutItem(BlockState pState, Level level, BlockPos pPos, Player p,
             BlockHitResult pHit) {
 
         if (!level.isClientSide) {

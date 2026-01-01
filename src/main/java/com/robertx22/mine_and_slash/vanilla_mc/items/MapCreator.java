@@ -47,7 +47,6 @@ public class MapCreator extends AutoItem implements IShapedRecipe {
 
             if (Load.Unit(p).getLevel() < ServerContainer.get().MIN_LEVEL_MAP_DROPS.get()) {
 
-
                 return InteractionResultHolder.pass(p.getItemInHand(pUsedHand));
             }
 
@@ -67,13 +66,14 @@ public class MapCreator extends AutoItem implements IShapedRecipe {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
         ExileTooltips tip = new ExileTooltips();
         tip.accept(new RequirementBlock(ServerContainer.get().MIN_LEVEL_MAP_DROPS.get()));
-        tip.accept(new AdditionalBlock(splitLongText(Itemtips.MAP_CREATOR_ITEM.locName().withStyle(ChatFormatting.YELLOW))));
+        tip.accept(new AdditionalBlock(
+                splitLongText(Itemtips.MAP_CREATOR_ITEM.locName().withStyle(ChatFormatting.YELLOW))));
         list.addAll(tip.release());
     }
-
 
     @Override
     public String locNameForLangFile() {

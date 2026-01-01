@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
@@ -99,9 +100,11 @@ public class ResetPotion extends AutoItem implements IShapedRecipe {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> l, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> l,
+            TooltipFlag pIsAdvanced) {
         if (reset == ResetType.ADD_POINTS) {
-            l.addAll(ExileTooltipUtils.splitLongText(Chats.RESET_POINTS_POTION_DESC.locName().withStyle(ChatFormatting.AQUA)));
+            l.addAll(ExileTooltipUtils
+                    .splitLongText(Chats.RESET_POINTS_POTION_DESC.locName().withStyle(ChatFormatting.AQUA)));
         } else {
             l.add(Chats.RESET_FULL_POTION_DESC.locName().withStyle(ChatFormatting.AQUA));
         }

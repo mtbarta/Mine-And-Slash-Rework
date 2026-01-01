@@ -11,7 +11,9 @@ import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import com.robertx22.orbs_of_crafting.misc.StackHolder;
 import com.robertx22.orbs_of_crafting.register.mods.base.ItemModification;
 import com.robertx22.orbs_of_crafting.register.mods.base.ItemModificationResult;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.component.CustomData;
 
 public class ForceGearSlotSoulMod extends ItemModification {
 
@@ -25,7 +27,6 @@ public class ForceGearSlotSoulMod extends ItemModification {
         this.data = data;
     }
 
-
     @Override
     public OutcomeType getOutcomeType() {
         return OutcomeType.GOOD;
@@ -38,7 +39,6 @@ public class ForceGearSlotSoulMod extends ItemModification {
         // maybe add profession outcome types, default type being tier 1 and 2 etc?
         // can also leave it as is, souls probably wont get any more specific currencies
 
-
         var craftedStack = stack.stack;
 
         StatSoulData soul = StackSaving.STAT_SOULS.loadFrom(craftedStack);
@@ -49,7 +49,8 @@ public class ForceGearSlotSoulMod extends ItemModification {
             if (craftedStack.getItem() instanceof CraftedSoulItem i) {
                 var craftedSoul = i.getSoul(craftedStack);
                 if (craftedSoul != null) {
-                    craftedStack.getOrCreateTag().putString("force_tag", this.data.gear_tag);
+                    craftedStack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY,
+                            customData -> customData.update(tag -> tag.putString("force_tag", this.data.gear_tag)));
                 }
             }
         }
@@ -66,11 +67,9 @@ public class ForceGearSlotSoulMod extends ItemModification {
                 .desc(ExileTranslation.registry(this, "Forces Soul to Produce %1$s"));
     }
 
-
     @Override
     public Class<?> getClassForSerialization() {
         return ForceGearSlotSoulMod.class;
     }
-
 
 }

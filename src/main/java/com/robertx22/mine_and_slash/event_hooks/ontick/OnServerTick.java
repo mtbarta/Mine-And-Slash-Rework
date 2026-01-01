@@ -33,9 +33,9 @@ public class OnServerTick {
 
     public static AttributeModifier CASTING_SPEED_SLOW = new AttributeModifier(
             UUID.fromString("3fb10485-f309-128f-afc6-a23b0d6cf4c1"),
-            BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MOVEMENT_SPEED).toString(),
+            BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MOVEMENT_SPEED.value()).toString(),
             -0.5,
-            AttributeModifier.Operation.MULTIPLY_TOTAL);
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
     public static void onEndTick(ServerPlayer player) {
         try {
@@ -110,7 +110,7 @@ public class OnServerTick {
                         }
                     } else {
                         if (atri.hasModifier(CASTING_SPEED_SLOW)) {
-                            atri.removeModifier(CASTING_SPEED_SLOW.getId());
+                            atri.removeModifier(CASTING_SPEED_SLOW.id());
                         }
                     }
                 }

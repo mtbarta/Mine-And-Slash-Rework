@@ -32,7 +32,6 @@ public class AutoItem implements JsonExileRegistry<AutoItem>, IAutoGson<AutoItem
 
     public String custom_item_generation = "";
 
-
     public static void of(String id, String itemid, String gen) {
         AutoItem b = new AutoItem();
         b.item_id = itemid;
@@ -44,15 +43,18 @@ public class AutoItem implements JsonExileRegistry<AutoItem>, IAutoGson<AutoItem
 
     public static void tryInsertTo(ItemStack stack, Player p) {
         if (!StackSaving.GEARS.has(stack)) {
-            if (!stack.hasTag() || (stack.hasTag() && !stack.getTag().getBoolean("free_souled"))) {
+            // Check if the item is already "free_souled" using data components
+            if (!stack.getOrDefault(StackSaving.FREE_SOULED, false)) {
                 var auto = AutoItem.getRandom(stack.getItem());
                 if (auto != null) {
-                    stack.getOrCreateTag().putBoolean("free_souled", true);
+                    // Mark as free_souled
+                    stack.set(StackSaving.FREE_SOULED, true);
 
                     var data = auto.create(p);
                     var ex = ExileStack.of(stack);
                     data.apply(ex);
-                    stack.setTag(ex.getStack().getTag()); // todo this needs rework after 1.21
+                    // Copy all data components from the modified stack
+                    stack.applyComponents(ex.getStack().getComponents());
                 }
             }
         }
@@ -76,7 +78,6 @@ public class AutoItem implements JsonExileRegistry<AutoItem>, IAutoGson<AutoItem
         }
         return map;
     }).clearOnDatabaseChange();
-
 
     public static AutoItem getRandom(Item item) {
         var list = CACHED_MAP.get().get(item);

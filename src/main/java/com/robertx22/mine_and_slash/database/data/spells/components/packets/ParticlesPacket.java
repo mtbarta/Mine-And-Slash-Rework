@@ -13,7 +13,8 @@ import com.robertx22.library_of_exile.utils.geometry.MyPosition;
 import com.robertx22.library_of_exile.utils.geometry.ShapeHelper;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -29,11 +30,9 @@ public class ParticlesPacket extends MyPacket<ParticlesPacket> {
 
     public static class Data {
 
-
         public Vec3 pos = new Vec3(0, 0, 0);
         public Vec3 vel = new Vec3(0, 0, 0);
         public Vec3 casterAngle = new Vec3(0, 0, 0);
-
 
         public float height = 0;
         public float yrand = 0;
@@ -50,19 +49,18 @@ public class ParticlesPacket extends MyPacket<ParticlesPacket> {
         }
     }
 
-
     @Override
     public ResourceLocation getIdentifier() {
         return SlashRef.id("particles");
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         data = MyGSON.GSON.fromJson(buf.readUtf(), Data.class);
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
         buf.writeUtf(MyGSON.GSON.toJson(data));
     }
 
@@ -84,7 +82,6 @@ public class ParticlesPacket extends MyPacket<ParticlesPacket> {
 
         ShapeHelper c = new Circle3d(new MyPosition(data.pos), data.radius);
 
-
         c.doXTimes(data.amount, x -> {
 
             MyPosition sp = data.shape.getPosition(middle, data.radius, x.multi);
@@ -93,7 +90,8 @@ public class ParticlesPacket extends MyPacket<ParticlesPacket> {
 
             sp = new MyPosition(sp.x - vel.x / 2F, sp.y - vel.y / 2 + data.height, sp.z - vel.z / 2);
 
-            Vec3 v = data.motion.getMotion(new Vec3(sp.x, sp.y + yRandom, sp.z), data.casterAngle, data.pos).multiply(data.motionMulti, data.motionMulti, data.motionMulti);
+            Vec3 v = data.motion.getMotion(new Vec3(sp.x, sp.y + yRandom, sp.z), data.casterAngle, data.pos)
+                    .multiply(data.motionMulti, data.motionMulti, data.motionMulti);
 
             c.spawnParticle(world, sp.asVector3D(), particle, new MyPosition(v).asVector3D());
         });

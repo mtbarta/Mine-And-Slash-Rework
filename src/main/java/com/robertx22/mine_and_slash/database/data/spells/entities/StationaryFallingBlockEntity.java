@@ -36,7 +36,6 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
         super(SlashEntities.SIMPLE_BLOCK_ENTITY.get(), world);
     }
 
-
     public StationaryFallingBlockEntity(Level world, BlockPos pos, BlockState block) {
         this(SlashEntities.SIMPLE_BLOCK_ENTITY.get(), world);
         FallingBlockAccessor acc = (FallingBlockAccessor) this;
@@ -67,13 +66,17 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
 
     CalculatedSpellData spellData;
 
-    private static final EntityDataAccessor<CompoundTag> SPELL_DATA = SynchedEntityData.defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.COMPOUND_TAG);
-    private static final EntityDataAccessor<String> ENTITY_NAME = SynchedEntityData.defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<String> BLOCK = SynchedEntityData.defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Boolean> IS_FALLING = SynchedEntityData.defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<Float> FALL_SPEED = SynchedEntityData.defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<CompoundTag> SPELL_DATA = SynchedEntityData
+            .defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<String> ENTITY_NAME = SynchedEntityData
+            .defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> BLOCK = SynchedEntityData
+            .defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> IS_FALLING = SynchedEntityData
+            .defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Float> FALL_SPEED = SynchedEntityData
+            .defineId(StationaryFallingBlockEntity.class, EntityDataSerializers.FLOAT);
 
-    @Override
     public Iterable<ItemStack> getArmorSlots() {
         return new ArrayList<>();
     }
@@ -97,7 +100,7 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
             return;
         }
 
-        //this.age++; this is called somewhere again idk
+        // this.age++; this is called somewhere again idk
 
         if (entityData.get(IS_FALLING)) {
             if (!this.isNoGravity()) {
@@ -115,7 +118,6 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
         }
 
         try {
-
 
             if (!level().isClientSide) {
                 if (getSpellData() != null) {
@@ -181,13 +183,13 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(SPELL_DATA, new CompoundTag());
-        this.entityData.define(ENTITY_NAME, "");
-        this.entityData.define(BLOCK, "");
-        this.entityData.define(IS_FALLING, false);
-        this.entityData.define(FALL_SPEED, -0.04F);
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SPELL_DATA, new CompoundTag());
+        builder.define(ENTITY_NAME, "");
+        builder.define(BLOCK, "");
+        builder.define(IS_FALLING, false);
+        builder.define(FALL_SPEED, -0.04F);
+        super.defineSynchedData(builder);
     }
 
     public String getScoreboardName() {
@@ -202,7 +204,6 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
                 .intValue();
 
         lifespan *= data.data.getNumber(EventData.DURATION_MULTI, 1).number;
-
 
         data.data.setString(EventData.ITEM_ID, holder.get(MapField.ITEM));
         CompoundTag nbt = new CompoundTag();

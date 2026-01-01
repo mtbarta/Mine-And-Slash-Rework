@@ -9,12 +9,9 @@ import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
 
-
 public abstract class BestiaryEntry<T> {
 
-
     public T obj;
-
 
     public ItemStack stack;
 
@@ -25,7 +22,9 @@ public abstract class BestiaryEntry<T> {
     }
 
     public List<Component> getTooltip() {
-        var list = stack.getTooltipLines(ClientOnly.getPlayer(), TooltipFlag.NORMAL);
+        var list = stack.getTooltipLines(
+                net.minecraft.world.item.Item.TooltipContext.of(ClientOnly.getPlayer().level()), ClientOnly.getPlayer(),
+                TooltipFlag.NORMAL);
         return list;
     }
 
@@ -33,7 +32,6 @@ public abstract class BestiaryEntry<T> {
         this.icon = i;
         return this;
     }
-
 
     public abstract String getName();
 
@@ -52,7 +50,6 @@ public abstract class BestiaryEntry<T> {
     public boolean isItem() {
         return stack != null && !stack.isEmpty();
     }
-
 
     public static class Item<T> extends BestiaryEntry<T> {
         public Item(T obj, ItemStack stack) {
@@ -96,7 +93,6 @@ public abstract class BestiaryEntry<T> {
 
         String name;
         List<Component> tooltip;
-
 
         @Override
         public String getName() {

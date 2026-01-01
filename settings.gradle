@@ -14,7 +14,7 @@ pluginManagement {
             name = 'NeoForgeGeneral'
             url = 'https://maven.neoforged.net/releases'
         }
-          maven {
+        maven {
             // location of the maven that hosts JEI files since January 2023
             name = "Jared's maven"
             url = "https://maven.blamejared.com/"
@@ -48,23 +48,21 @@ pluginManagement {
         }
     }
 
-
+    // Centralized plugin version management
+    plugins {
+        id 'net.neoforged.gradle.userdev' version '7.1.17'
+        id 'me.modmuss50.mod-publish-plugin' version '0.8.4'
+    }
 }
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-includeBuild("Library-of-Exile-Rework") {
-    dependencySubstitution {
-        substitute(module("com.robertx22:Library-of-Exile-Rework")).using(project(":"))
-    }
-}
-includeBuild "the_harvest"
-includeBuild("ancient_obelisks") {
-    dependencySubstitution {
-        // map the hyphenated module to the included build
-        substitute(module("com.robertx22:ancient-obelisks")).using(project(":"))
-    }
-}
-includeBuild "dungeon_realm"
+rootProject.name = 'Mine-And-Slash-Rework'
+
+// Include subprojects
+include 'Library-of-Exile-Rework'
+include 'ancient_obelisks'
+include 'the_harvest'
+include 'dungeon_realm'

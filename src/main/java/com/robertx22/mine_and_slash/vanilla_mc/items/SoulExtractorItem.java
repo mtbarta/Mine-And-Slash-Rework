@@ -55,14 +55,16 @@ public class SoulExtractorItem extends AutoItem implements IShapelessRecipe {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag contextFlag) {
         ExileTooltips tip = new ExileTooltips();
-        tip.accept(new AdditionalBlock(splitLongText(Itemtips.SOUL_EXTRACTOR_TIP.locName().withStyle(ChatFormatting.RED))));
-        tip.accept(WorksOnBlock.usableOn(WorksOnBlock.ItemType.GEAR).rarities(ExileDB.GearRarities().getFilterWrapped(x -> canExtract(x)).list));
+        tip.accept(new AdditionalBlock(
+                splitLongText(Itemtips.SOUL_EXTRACTOR_TIP.locName().withStyle(ChatFormatting.RED))));
+        tip.accept(WorksOnBlock.usableOn(WorksOnBlock.ItemType.GEAR)
+                .rarities(ExileDB.GearRarities().getFilterWrapped(x -> canExtract(x)).list));
         tip.accept(new OperationTipBlock().setShift());
         tooltip.addAll(tip.release());
     }
-
 
     @Override
     public ShapelessRecipeBuilder getRecipe() {

@@ -4,7 +4,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class AcceptProphecyPacket extends MyPacket<AcceptProphecyPacket> {
@@ -21,20 +21,19 @@ public class AcceptProphecyPacket extends MyPacket<AcceptProphecyPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
 
         id = buf.readUtf();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
 
         buf.writeUtf(id);
     }
 
     @Override
     public void onReceived(ExilePacketContext ctx) {
-
 
         var data = Load.player(ctx.getPlayer()).prophecy;
 

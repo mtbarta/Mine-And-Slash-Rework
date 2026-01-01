@@ -29,17 +29,32 @@ public interface ICommonDataItem<R extends Rarity> extends ISalvagable, ITooltip
         return (int) (3 * rar.item_tier_power * getLevel());
     }
 
-    ItemstackDataSaver<? extends ICommonDataItem> getStackSaver();
+    com.robertx22.library_of_exile.components.ComponentDataSaver<? extends ICommonDataItem> getStackSaver();
 
     void saveToStack(ItemStack stack);
 
     static ICommonDataItem load(ItemStack stack) {
-
-        for (ItemstackDataSaver<? extends ICommonDataItem> saver : AllItemStackSavers.getAllOfClass(ICommonDataItem.class)) {
-            ICommonDataItem data = saver.loadFrom(stack);
-            if (data != null) {
-                return data;
+        // Iterate over known savers from StackSaving
+        // This assumes StackSaving has all relevant savers public static
+        try {
+            for (java.lang.reflect.Field field : com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving.class
+                    .getFields()) {
+                if (com.robertx22.library_of_exile.components.ComponentDataSaver.class
+                        .isAssignableFrom(field.getType())) {
+                    com.robertx22.library_of_exile.components.ComponentDataSaver<?> saver = (com.robertx22.library_of_exile.components.ComponentDataSaver<?>) field
+                            .get(null);
+                    if (saver.getClazz() != null && ICommonDataItem.class.isAssignableFrom(saver.getClazz())) {
+                        @SuppressWarnings("unchecked")
+                        com.robertx22.library_of_exile.components.ComponentDataSaver<? extends ICommonDataItem> typedSaver = (com.robertx22.library_of_exile.components.ComponentDataSaver<? extends ICommonDataItem>) saver;
+                        ICommonDataItem data = typedSaver.loadFrom(stack);
+                        if (data != null) {
+                            return data;
+                        }
+                    }
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

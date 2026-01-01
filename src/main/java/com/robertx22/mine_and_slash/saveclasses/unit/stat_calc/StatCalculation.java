@@ -53,9 +53,11 @@ public class StatCalculation {
         return statContexts;
     }
 
-    // the List<StatContext> is modified so i cant reuse it until the code is redone and fixed
+    // the List<StatContext> is modified so i cant reuse it until the code is redone
+    // and fixed
     // todo trying to rewrite calc code..
-    public static void calc(Unit unit, List<StatContext> statsWithoutSuppGems, LivingEntity entity, Spell spell, int skillGem) {
+    public static void calc(Unit unit, List<StatContext> statsWithoutSuppGems, LivingEntity entity, Spell spell,
+            int skillGem) {
 
         if (entity.level().isClientSide) {
             return;
@@ -84,7 +86,6 @@ public class StatCalculation {
 
         sc.applyToInCalc(statCalc);
 
-
         InCalc incalc = new InCalc(unit);
         incalc.addVanillaHpToStats(entity, statCalc);
         incalc.modify(data, statCalc);
@@ -106,7 +107,6 @@ public class StatCalculation {
         unit.setStats(statCalc.calculate());
         copiedStats = unit.getStats().clone();
 
-
         var addToAfterCalcStats = stats.entrySet().stream()
                 .filter(en -> en.getValue().GetStat() instanceof AddToAfterCalcEnd)
                 .sorted((a, b) -> {
@@ -126,8 +126,7 @@ public class StatCalculation {
             AddToAfterCalcEnd aff = (AddToAfterCalcEnd) en.getValue().GetStat();
 
             // Get current priority
-            int currentPriority = (aff instanceof AddPerPercentOfOther addStat) ?
-                    addStat.priority : Integer.MAX_VALUE;
+            int currentPriority = (aff instanceof AddPerPercentOfOther addStat) ? addStat.priority : Integer.MAX_VALUE;
 
             // Only clone if priority has increased (new priority tier)
             if (currentPriority > lastPriority && lastPriority != Integer.MIN_VALUE) {
@@ -143,7 +142,8 @@ public class StatCalculation {
         }
 
         Cached.VANILLA_STAT_UIDS_TO_CLEAR_EVERY_STAT_CALC.forEach(x -> {
-            AttributeInstance in = entity.getAttribute(x.left);
+            AttributeInstance in = entity
+                    .getAttribute(net.minecraft.core.registries.BuiltInRegistries.ATTRIBUTE.wrapAsHolder(x.left));
             if (in != null && in.getModifier(x.right) != null) {
                 in.removeModifier(x.right);
             }
@@ -157,9 +157,7 @@ public class StatCalculation {
                     }
                 });
 
-
     }
-
 
     private static List<StatContext> collectGemStats(Player p, EntityData data, PlayerData playerData, int skillGem) {
         List<StatContext> statContexts = new ArrayList<>();
@@ -168,7 +166,8 @@ public class StatCalculation {
             var gem = playerData.getSkillGemInventory().getHotbarGem(skillGem);
             for (SkillGemData d : gem.getSupportDatas()) {
                 if (d.getSupport() != null) {
-                    statContexts.add(new SimpleStatCtx(StatContext.StatCtxType.SUPPORT_GEM, d.getSupport().GetAllStats(data, d)));
+                    statContexts.add(new SimpleStatCtx(StatContext.StatCtxType.SUPPORT_GEM,
+                            d.getSupport().GetAllStats(data, d)));
                 }
             }
 
@@ -198,10 +197,8 @@ public class StatCalculation {
         return statContexts;
     }
 
-
     private static List<StatContext> collectStatsWithCtx(LivingEntity entity, EntityData data, List<GearData> gears) {
         List<StatContext> statContexts = new ArrayList<>();
-
 
         statContexts.addAll(CommonStatUtils.addExactCustomStats(entity));
 
@@ -210,7 +207,6 @@ public class StatCalculation {
         statContexts.addAll(addGearStats(gears));
         statContexts.addAll(CommonStatUtils.addMapAffixStats(entity));
         statContexts.addAll(CommonStatUtils.addBaseStats(entity));
-
 
         if (entity instanceof Player p) {
             statContexts.addAll(Load.player(p).cachedStats.statContexts);

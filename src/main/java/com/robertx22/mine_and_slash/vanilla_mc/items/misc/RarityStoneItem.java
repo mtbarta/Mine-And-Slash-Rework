@@ -43,21 +43,21 @@ public class RarityStoneItem extends Item implements IWeighted, IAutoModel {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> l, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> l,
+            TooltipFlag pIsAdvanced) {
         var pro = ExileDB.Professions().get(Professions.SALVAGING);
         var tip = ProfTierMatItem.makeTooltip(pro, null);
-        tip.accept(new UsageBlock(Arrays.asList(Itemtips.STONE_REPAIRE_DURABILITY.locName(getTotalRepair()).withStyle(ChatFormatting.GREEN))));
+        tip.accept(new UsageBlock(Arrays
+                .asList(Itemtips.STONE_REPAIRE_DURABILITY.locName(getTotalRepair()).withStyle(ChatFormatting.GREEN))));
         tip.accept((WorksOnBlock.usableOn(WorksOnBlock.ItemType.GEAR)));
         tip.accept(new OperationTipBlock());
         l.addAll(tip.release());
     }
 
-
     @Override
     public int Weight() {
         return 100;
     }
-
 
     @Override
     public void generateModel(ItemModelManager manager) {

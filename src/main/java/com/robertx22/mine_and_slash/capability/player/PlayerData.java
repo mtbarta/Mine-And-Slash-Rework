@@ -39,9 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-
 public class PlayerData implements ICap {
-
 
     public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "player_data");
 
@@ -49,12 +47,10 @@ public class PlayerData implements ICap {
         return entity.getData(SlashAttachments.PLAYER_DATA);
     }
 
-
     @Override
     public void syncToClient(Player player) {
 
     }
-
 
     private static final String TEAM_DATA = "teams";
     private static final String PROPHECY = "proph";
@@ -84,11 +80,10 @@ public class PlayerData implements ICap {
 
     public transient Player player;
 
-
     public transient StatCalcInfoData ctxs = new StatCalcInfoData();
 
     // so players know where their stats come from in the future gui
-    //ublic SavedStatCtxList ctxStats = new SavedStatCtxList();
+    // ublic SavedStatCtxList ctxStats = new SavedStatCtxList();
 
     public TeamData team = new TeamData();
     public TalentsData talents = new TalentsData();
@@ -113,9 +108,7 @@ public class PlayerData implements ICap {
     public List<String> aurasOn = new ArrayList<>();
     SummonedData summonedData = new SummonedData();
 
-
     public int bonusTalents = 0;
-
 
     public int omensFilled = 0;
 
@@ -125,7 +118,6 @@ public class PlayerData implements ICap {
         this.jewelData = new JewelData(player);
     }
 
-
     public CachedPlayerStats cachedStats;
 
     public JewelData getJewels() {
@@ -133,7 +125,7 @@ public class PlayerData implements ICap {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(net.minecraft.core.HolderLookup.Provider provider) {
 
         CompoundTag nbt = new CompoundTag();
 
@@ -155,10 +147,10 @@ public class PlayerData implements ICap {
 
         // LoadSave.Save(ctxStats, nbt, "ctx");
 
-        nbt.put(GEMS, skillGemInv.createTag());
-        nbt.put(AURAS, auraInv.createTag());
-        //nbt.put(JEWELS, jewelsInv.createTag());
-        nbt.put(JEWELS, jewelData.jewelInventory.createTag());
+        nbt.put(GEMS, skillGemInv.createTag(provider));
+        nbt.put(AURAS, auraInv.createTag(provider));
+        // nbt.put(JEWELS, jewelsInv.createTag());
+        nbt.put(JEWELS, jewelData.jewelInventory.createTag(provider));
 
         nbt.putInt(BONUS_TALENTS, bonusTalents);
         nbt.putInt(OMENS_FILLED, omensFilled);
@@ -167,35 +159,39 @@ public class PlayerData implements ICap {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(net.minecraft.core.HolderLookup.Provider provider, CompoundTag nbt) {
 
         this.team = loadOrBlank(TeamData.class, new TeamData(), nbt, TEAM_DATA, new TeamData());
-        this.prophecy = loadOrBlank(PlayerProphecies.class, new PlayerProphecies(), nbt, PROPHECY, new PlayerProphecies());
+        this.prophecy = loadOrBlank(PlayerProphecies.class, new PlayerProphecies(), nbt, PROPHECY,
+                new PlayerProphecies());
         this.talents = loadOrBlank(TalentsData.class, new TalentsData(), nbt, TALENTS_DATA, new TalentsData());
-        this.statPoints = loadOrBlank(StatPointsData.class, new StatPointsData(), nbt, STAT_POINTS, new StatPointsData());
+        this.statPoints = loadOrBlank(StatPointsData.class, new StatPointsData(), nbt, STAT_POINTS,
+                new StatPointsData());
         this.ascClass = loadOrBlank(SpellSchoolsData.class, new SpellSchoolsData(), nbt, ASC, new SpellSchoolsData());
-        this.spellCastingData = loadOrBlank(SpellCastingData.class, new SpellCastingData(), nbt, CAST, new SpellCastingData());
+        this.spellCastingData = loadOrBlank(SpellCastingData.class, new SpellCastingData(), nbt, CAST,
+                new SpellCastingData());
         this.config = loadOrBlank(PlayerConfigData.class, new PlayerConfigData(), nbt, CONFIG, new PlayerConfigData());
         this.favor = loadOrBlank(DeathFavorData.class, new DeathFavorData(), nbt, FAVOR, new DeathFavorData());
-        this.professions = loadOrBlank(PlayerProfessionsData.class, new PlayerProfessionsData(), nbt, PROFESSIONS, new PlayerProfessionsData());
+        this.professions = loadOrBlank(PlayerProfessionsData.class, new PlayerProfessionsData(), nbt, PROFESSIONS,
+                new PlayerProfessionsData());
         this.buff = loadOrBlank(PlayerBuffData.class, new PlayerBuffData(), nbt, BUFFS, new PlayerBuffData());
         this.rested_xp = loadOrBlank(RestedExpData.class, new RestedExpData(), nbt, RESTED_XP, new RestedExpData());
         this.points = loadOrBlank(PlayerPointsData.class, new PlayerPointsData(), nbt, POINTS, new PlayerPointsData());
-        this.characters = loadOrBlank(CharStorageData.class, new CharStorageData(), nbt, CHARACTERS, new CharStorageData());
+        this.characters = loadOrBlank(CharStorageData.class, new CharStorageData(), nbt, CHARACTERS,
+                new CharStorageData());
         this.miscInfo = loadOrBlank(MiscSyncData.class, new MiscSyncData(), nbt, MISC_INFO, new MiscSyncData());
         this.summonedData = loadOrBlank(SummonedData.class, new SummonedData(), nbt, SUMMONED, new SummonedData());
-        //generate a container with mutable size
-        // this.ctxStats = loadOrBlank(SavedStatCtxList.class, new SavedStatCtxList(), nbt, "ctx", new SavedStatCtxList());
+        // generate a container with mutable size
+        // this.ctxStats = loadOrBlank(SavedStatCtxList.class, new SavedStatCtxList(),
+        // nbt, "ctx", new SavedStatCtxList());
 
-        //todo this code sucks, we need Codec
+        // todo this code sucks, we need Codec
         this.jewelData = new JewelData(this.player);
-        this.jewelData.jewelInventory.fromTag(nbt.getList(JEWELS, 10));
+        this.jewelData.jewelInventory.fromTag(nbt.getList(JEWELS, 10), player.level().registryAccess());
 
-
-        skillGemInv.fromTag(nbt.getList(GEMS, 10)); // todo
-        auraInv.fromTag(nbt.getList(AURAS, 10)); // todo
-        //jewelsInv.fromTag(nbt.getList(JEWELS, 10));
-
+        skillGemInv.fromTag(nbt.getList(GEMS, 10), player.level().registryAccess()); // todo
+        auraInv.fromTag(nbt.getList(AURAS, 10), player.level().registryAccess()); // todo
+        // jewelsInv.fromTag(nbt.getList(JEWELS, 10));
 
         this.bonusTalents = nbt.getInt(BONUS_TALENTS);
         if (bonusTalents < 0) {
@@ -210,7 +206,6 @@ public class PlayerData implements ICap {
     }
 
     transient HashMap<String, Unit> spellUnits = new HashMap<>();
-
 
     // todo cache this maybe too
     public void recalcOmensFilled() {
@@ -313,7 +308,9 @@ public class PlayerData implements ICap {
         }
         return blank;
     }
+
     public static final String ID = "rpg_player_data";
+
     @Override
     public String getCapIdForSyncing() {
         return ID;

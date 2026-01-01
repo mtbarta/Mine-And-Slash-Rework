@@ -3,6 +3,7 @@ package com.robertx22.mine_and_slash.vanilla_mc.items;
 import com.robertx22.mine_and_slash.vanilla_mc.items.misc.AutoItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -26,7 +27,8 @@ public class SalvageHammerItem extends AutoItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag contextFlag) {
         tooltip.add(Component.literal("Click on items to salvage them.").withStyle(ChatFormatting.RED));
     }
 }

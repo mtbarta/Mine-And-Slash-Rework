@@ -26,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.ItemStackedOnOtherEvent;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
+
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.ArrayList;
@@ -56,9 +56,7 @@ public class OnItemInteract {
 
     static List<ClickFeature> CLICKS = new ArrayList<>();
 
-
     public static void register() {
-
 
         CLICKS.add(new ClickFeature() {
             @Override
@@ -88,7 +86,6 @@ public class OnItemInteract {
                 return new Result(false);
             }
         });
-
 
         // todo replace repair stones with datapack currencies
         CLICKS.add(new ClickFeature() {
@@ -147,7 +144,6 @@ public class OnItemInteract {
             }
         });
 
-
         CLICKS.add(new ClickFeature() {
             @Override
             public Result tryApply(Player player, ItemStack craftedStack, ItemStack currency, Slot slot) {
@@ -160,7 +156,8 @@ public class OnItemInteract {
                             var can = effect.canItemBeModified(ctx);
                             if (can.can) {
                                 ItemStack result = effect.modifyItem(ctx).stack.copy();
-                                craftedStack.shrink(1); // seems the currency creates a copy of a new item, so we delete the old one
+                                craftedStack.shrink(1); // seems the currency creates a copy of a new item, so we delete
+                                                        // the old one
                                 currency.shrink(1);
                                 // PlayerUtils.giveItem(result, player);
                                 slot.set(result);
@@ -174,7 +171,6 @@ public class OnItemInteract {
                 return new Result(false);
             }
         });
-
 
         CLICKS.add(new ClickFeature() {
             @Override
@@ -193,7 +189,9 @@ public class OnItemInteract {
 
                                 soul.rar = gear.rar;
 
-                                soul.gear = new SavedGearSoul(ex.get(StackKeys.GEAR).get(), ex.get(StackKeys.POTENTIAL).getOrCreate(), ex.get(StackKeys.CUSTOM).getOrCreate());
+                                soul.gear = new SavedGearSoul(ex.get(StackKeys.GEAR).get(),
+                                        ex.get(StackKeys.POTENTIAL).getOrCreate(),
+                                        ex.get(StackKeys.CUSTOM).getOrCreate());
 
                                 ItemStack soulstack = soul.toStack();
 
@@ -223,7 +221,8 @@ public class OnItemInteract {
 
                     if (gear != null && !ServerContainer.get().isSoulCleanBanned(craftedStack.getItem())) {
                         try {
-                            craftedStack.getOrCreateTag().remove(StackSaving.GEARS.GUID());
+                            craftedStack.remove(
+                                    com.robertx22.mine_and_slash.mmorpg.registers.DataComponentTypes.GEAR_DATA.get());
                             currency.shrink(1);
                             return new Result(true).ding();
                         } catch (Exception e) {
@@ -234,7 +233,6 @@ public class OnItemInteract {
                 return new Result(false);
             }
         });
-
 
         ForgeEvents.registerForgeEvent(ItemStackedOnOtherEvent.class, x -> {
             Player player = x.getPlayer();
@@ -248,7 +246,6 @@ public class OnItemInteract {
 
             ItemStack currency = x.getStackedOnItem();
             ItemStack craftedStack = x.getCarriedItem();
-
 
             for (ClickFeature click : CLICKS) {
                 var result = click.tryApply(player, craftedStack, currency, x.getSlot());
@@ -264,7 +261,6 @@ public class OnItemInteract {
                 }
             }
 
-
         });
 
         ForgeEvents.registerForgeEvent(PlayerEvent.ItemCraftedEvent.class, x -> {
@@ -278,17 +274,16 @@ public class OnItemInteract {
             }
         });
 
-        ForgeEvents.registerForgeEvent(EntityItemPickupEvent.class, x -> {
+        ForgeEvents.registerForgeEvent(net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent.class, x -> {
             try {
-                if (!x.getEntity().level().isClientSide) {
-                    ItemStack stack = x.getItem().getItem();
-                    AutoItem.tryInsertTo(stack, x.getEntity());
+                if (!x.getPlayer().level().isClientSide) {
+                    ItemStack stack = x.getItemEntity().getItem();
+                    AutoItem.tryInsertTo(stack, x.getPlayer());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
-
 
 }

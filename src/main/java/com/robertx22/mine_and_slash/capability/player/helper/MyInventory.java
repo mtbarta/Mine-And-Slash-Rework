@@ -1,5 +1,6 @@
 package com.robertx22.mine_and_slash.capability.player.helper;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -9,15 +10,13 @@ import net.minecraft.world.item.ItemStack;
 // had to override tag methods because the simplecontainer doesn't save place in inventory, just autosorts items..
 public class MyInventory extends SimpleContainer {
 
-
     public MyInventory(int pSize) {
         super(pSize);
 
     }
 
-
     @Override
-    public void fromTag(ListTag pContainerNbt) {
+    public void fromTag(ListTag pContainerNbt, HolderLookup.Provider pProvider) {
         for (int i = 0; i < this.getContainerSize(); ++i) {
             this.setItem(i, ItemStack.EMPTY);
         }
@@ -26,7 +25,7 @@ public class MyInventory extends SimpleContainer {
             CompoundTag compoundtag = pContainerNbt.getCompound(k);
             int j = compoundtag.getByte("Slot") & 255;
             if (j >= 0 && j < this.getContainerSize()) {
-                ItemStack stack = ItemStack.of(compoundtag);
+                ItemStack stack = ItemStack.parseOptional(pProvider, compoundtag);
 
                 // handle 128+ stack size
                 if (compoundtag.contains("IntCount", Tag.TAG_INT)) {
@@ -42,7 +41,7 @@ public class MyInventory extends SimpleContainer {
     }
 
     @Override
-    public ListTag createTag() {
+    public ListTag createTag(HolderLookup.Provider pProvider) {
         ListTag listtag = new ListTag();
 
         for (int i = 0; i < this.getContainerSize(); ++i) {
@@ -50,12 +49,12 @@ public class MyInventory extends SimpleContainer {
             if (!itemstack.isEmpty()) {
                 CompoundTag compoundtag = new CompoundTag();
                 compoundtag.putByte("Slot", (byte) i);
-                itemstack.save(compoundtag);
+                itemstack.save(pProvider, compoundtag);
 
                 if (itemstack.getCount() > 32767) {
                     compoundtag.putInt("IntCount", itemstack.getCount());
                 } else if (itemstack.getCount() > 127) {
-                    compoundtag.putShort("ShortCount", (short)itemstack.getCount());
+                    compoundtag.putShort("ShortCount", (short) itemstack.getCount());
                 }
 
                 listtag.add(compoundtag);
@@ -72,7 +71,6 @@ public class MyInventory extends SimpleContainer {
     public boolean hasFreeSlots() {
         return getFreeSlots() > 0;
     }
-
 
     public int getFreeSlots() {
         int free = 0;

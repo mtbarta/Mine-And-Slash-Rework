@@ -7,7 +7,7 @@ import com.robertx22.mine_and_slash.a_libraries.player_animations.PlayerAnimatio
 import com.robertx22.mine_and_slash.database.data.spells.components.Spell;
 import com.robertx22.mine_and_slash.database.registry.ExileDB;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,14 +40,14 @@ public class TellClientEntityCastingSpell extends MyPacket<TellClientEntityCasti
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         this.spellid = tag.readUtf();
         this.type = tag.readEnum(PlayerAnimations.CastEnum.class);
         this.enid = tag.readInt();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(spellid);
         tag.writeEnum(type);
         tag.writeInt(enid);

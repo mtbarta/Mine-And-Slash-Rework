@@ -23,11 +23,9 @@ import static com.robertx22.library_of_exile.tooltip.ExileTooltipUtils.splitLong
 
 public class SoulCleanerItem extends AutoItem implements IShapelessRecipe {
 
-
     public SoulCleanerItem() {
         super(new Item.Properties().stacksTo(64));
     }
-
 
     @Override
     public String locNameForLangFile() {
@@ -39,11 +37,12 @@ public class SoulCleanerItem extends AutoItem implements IShapelessRecipe {
         return "soul_cleaner";
     }
 
-
     @Override
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag contextFlag) {
         ExileTooltips tip = new ExileTooltips();
-        tip.accept(new AdditionalBlock(splitLongText(Itemtips.SOUL_CLEANER_USAGE_AND_WARNING.locName().withStyle(ChatFormatting.RED))));
+        tip.accept(new AdditionalBlock(
+                splitLongText(Itemtips.SOUL_CLEANER_USAGE_AND_WARNING.locName().withStyle(ChatFormatting.RED))));
         tip.accept(WorksOnBlock.usableOn(WorksOnBlock.ItemType.GEAR));
         tip.accept(new OperationTipBlock().setShift());
         tooltip.addAll(tip.release());

@@ -30,7 +30,8 @@ import static com.robertx22.library_of_exile.tooltip.ExileTooltipUtils.splitLong
 
 // todo rework this so each data component adds its thing to exiletooltip
 public class TooltipMethod {
-    public static List<Component> getTooltip(ItemStack stack, Player entity, TooltipFlag tooltipContext, CallbackInfoReturnable<List<Component>> list) {
+    public static List<Component> getTooltip(ItemStack stack, Player entity, TooltipFlag tooltipContext,
+            CallbackInfoReturnable<List<Component>> list) {
 
         List<Component> tooltip = list.getReturnValue();
 
@@ -56,7 +57,6 @@ public class TooltipMethod {
                 return tooltip;
             }
 
-
             if (Screen.hasControlDown()) {
                 GearItemData gear = StackSaving.GEARS.loadFrom(stack);
 
@@ -66,12 +66,11 @@ public class TooltipMethod {
                 }
             }
 
-            
             TooltipContext ctx = new TooltipContext(stack, tooltip, unitdata);
 
             boolean hasdata = false;
 
-            if (stack.hasTag()) {
+            if (!stack.isEmpty()) {
 
                 ICommonDataItem data = ICommonDataItem.load(stack);
 
@@ -84,7 +83,6 @@ public class TooltipMethod {
                 if (broken != null) {
                     tooltip.add(broken);
                 }
-
 
                 if (StackSaving.TOOL.has(stack)) {
                     StackSaving.TOOL.loadFrom(stack).BuildTooltip(ctx);
@@ -105,7 +103,8 @@ public class TooltipMethod {
                 }
 
                 if (stack.getItem() instanceof INeedsNBT) {
-                    tooltip.addAll(TooltipUtils.cutIfTooLong(Chats.ITEM_NON_NBT.locName().withStyle(ChatFormatting.RED)));
+                    tooltip.addAll(
+                            TooltipUtils.cutIfTooLong(Chats.ITEM_NON_NBT.locName().withStyle(ChatFormatting.RED)));
                 }
             }
 

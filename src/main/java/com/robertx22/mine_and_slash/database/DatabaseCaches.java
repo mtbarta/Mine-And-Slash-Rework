@@ -24,7 +24,8 @@ public class DatabaseCaches {
         // can't find a client load event
         ForgeEvents.registerForgeEvent(PlayerEvent.PlayerLoggedInEvent.class, x -> {
             Packets.sendToClient(x.getEntity(), new TellClientResetCaches());
-            // maybe i delay this by a second to make sure the caches dont generate too early?
+            // maybe i delay this by a second to make sure the caches dont generate too
+            // early?
         });
 
         // this is only called on server I think
@@ -60,7 +61,8 @@ public class DatabaseCaches {
         ExileDB.Stats()
                 .getFilterWrapped(x -> x instanceof AttributeStat).list.forEach(x -> {
                     AttributeStat attri = (AttributeStat) x;
-                    Cached.VANILLA_STAT_UIDS_TO_CLEAR_EVERY_STAT_CALC.add(ImmutablePair.of(attri.attribute, attri.uuid));
+                    Cached.VANILLA_STAT_UIDS_TO_CLEAR_EVERY_STAT_CALC
+                            .add(ImmutablePair.of(attri.attribute.value(), attri.uuid));
                 });
     }
 }

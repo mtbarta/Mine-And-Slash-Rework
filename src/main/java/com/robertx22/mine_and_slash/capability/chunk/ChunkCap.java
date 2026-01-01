@@ -65,7 +65,7 @@ public class ChunkCap implements ICap {
 
     public List<UUID> mobIds = new ArrayList<>();
 
-    public void trySaveMob(LivingEntity en) {
+    public void trySaveMob(LivingEntity en, net.minecraft.core.HolderLookup.Provider provider) {
 
         if (en instanceof Player) {
             return;
@@ -82,13 +82,13 @@ public class ChunkCap implements ICap {
         }
         mobIds.add(en.getUUID());
 
-        var nbt = en.serializeNBT();
+        var nbt = en.serializeNBT(provider);
 
         savedMobs.add(nbt);
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(net.minecraft.core.HolderLookup.Provider provider) {
 
         CompoundTag nbt = new CompoundTag();
 
@@ -110,7 +110,7 @@ public class ChunkCap implements ICap {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(net.minecraft.core.HolderLookup.Provider provider, CompoundTag nbt) {
 
         try {
             this.generatedTerrain = nbt.getBoolean("gen");

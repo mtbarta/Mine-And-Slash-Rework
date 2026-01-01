@@ -9,7 +9,7 @@ import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,13 +35,13 @@ public class OpenEntityStatsReplyPacket extends MyPacket<OpenEntityStatsReplyPac
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         id = tag.readInt();
         nbt = tag.readNbt();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeInt(id);
         tag.writeNbt(nbt);
     }

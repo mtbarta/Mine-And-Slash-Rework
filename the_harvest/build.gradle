@@ -1,9 +1,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version "7.0.145"
-    id "me.modmuss50.mod-publish-plugin" version "${publish_plugin_version}"
-    // id "org.moddedmc.wiki.toolkit" version "${wiki_toolkit_version}"
+    id 'net.neoforged.gradle.userdev'
+    id "me.modmuss50.mod-publish-plugin"
 }
 
 version = project.mod_version
@@ -38,7 +37,7 @@ dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}") 
 
-    implementation "com.robertx22:Library-of-Exile-Rework"
+    implementation project(':Library-of-Exile-Rework')
 }
 
 apply from: file('../gradle/scripts/meta.gradle')
@@ -47,13 +46,3 @@ apply from: file('../gradle/scripts/publishing.gradle')
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-
-/*
-wiki {
-    docs {
-        mutils {
-            root = file("docs")
-        }
-    }
-}
-*/

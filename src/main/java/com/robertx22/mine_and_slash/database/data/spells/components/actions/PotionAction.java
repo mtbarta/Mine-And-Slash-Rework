@@ -30,7 +30,7 @@ public class PotionAction extends SpellAction {
 
             for (LivingEntity t : targets) {
                 if (action == GiveOrTake.GIVE_STACKS) {
-                    MobEffect potion = data.getPotion();
+                    net.minecraft.core.Holder<MobEffect> potion = data.getPotion();
 
                     int dura = data.get(POTION_DURATION)
                             .intValue();
@@ -38,7 +38,7 @@ public class PotionAction extends SpellAction {
                             .intValue();
                     t.addEffect(new MobEffectInstance(potion, dura, str));
                 } else if (action == GiveOrTake.REMOVE_STACKS) {
-                    MobEffect potion = data.getPotion();
+                    net.minecraft.core.Holder<MobEffect> potion = data.getPotion();
 
                     t.removeEffect(potion);
                 } else if (action == GiveOrTake.REMOVE_NEGATIVE) {
@@ -48,7 +48,7 @@ public class PotionAction extends SpellAction {
 
                         List<MobEffectInstance> opt = t.getActiveEffects()
                                 .stream()
-                                .filter(x -> x.getEffect().getCategory() == MobEffectCategory.HARMFUL)
+                                .filter(x -> x.getEffect().value().getCategory() == MobEffectCategory.HARMFUL)
                                 .collect(Collectors.toList());
 
                         if (!opt.isEmpty()) {
@@ -98,4 +98,3 @@ public class PotionAction extends SpellAction {
         return "potion";
     }
 }
-

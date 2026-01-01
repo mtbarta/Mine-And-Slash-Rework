@@ -53,7 +53,6 @@ public class TagForceSoulItem extends AutoItem implements IShapelessRecipe {
     public ShapelessRecipeBuilder getRecipe() {
         Item middle = item.get();
 
-
         return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, this, 3)
                 .unlockedBy("player_level", EnchantedItemTrigger.TriggerInstance.enchantedItem())
                 .requires(Items.IRON_INGOT, 1)
@@ -61,11 +60,13 @@ public class TagForceSoulItem extends AutoItem implements IShapelessRecipe {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@NotNull ItemStack pStack, Item.TooltipContext context,
+            List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
 
         pTooltipComponents.addAll(
                 new ExileTooltips()
-                        .accept(new UsageBlock(Collections.singletonList(Itemtips.SOUL_MODIFIER_TIP.locName().withStyle(ChatFormatting.AQUA))))
+                        .accept(new UsageBlock(Collections
+                                .singletonList(Itemtips.SOUL_MODIFIER_TIP.locName().withStyle(ChatFormatting.AQUA))))
                         .accept((WorksOnBlock.usableOn(WorksOnBlock.ItemType.SOUL)))
                         .accept(new OperationTipBlock()).release());
     }

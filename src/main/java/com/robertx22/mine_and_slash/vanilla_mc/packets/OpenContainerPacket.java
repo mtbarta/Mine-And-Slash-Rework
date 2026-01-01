@@ -5,7 +5,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
@@ -32,14 +32,13 @@ public class OpenContainerPacket extends MyPacket<OpenContainerPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         this.gui = buf.readEnum(GuiType.class);
-
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
 
         buf.writeEnum(gui);
     }

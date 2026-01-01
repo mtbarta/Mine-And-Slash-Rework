@@ -12,9 +12,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -23,18 +25,18 @@ public class OmenItem extends BaseBaublesItem implements IOmen {
 
     VanillaMaterial mat;
 
-
     public OmenItem(VanillaMaterial mat) {
-        super(new Properties().durability(500 + mat.armormat.getDurabilityForType(ArmorItem.Type.CHESTPLATE) * 2)
-                , "Omen");
+        super(new Properties()
+                .durability(500 + ArmorItem.Type.CHESTPLATE.getDurability(2)),
+                "Omen");
         this.mat = mat;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
 
         try {
-
 
             var omen = StackSaving.OMEN.loadFrom(stack);
             if (omen == null) {
@@ -42,7 +44,6 @@ public class OmenItem extends BaseBaublesItem implements IOmen {
             }
 
             list.clear();
-
 
             var set = new OmenSet(omen);
 
@@ -53,7 +54,6 @@ public class OmenItem extends BaseBaublesItem implements IOmen {
             if (p == null) {
                 return;
             }
-
 
             // todo note somewhere the weapon isnt included in omen counting
 
@@ -71,7 +71,6 @@ public class OmenItem extends BaseBaublesItem implements IOmen {
                     .accept(new UsageBlock(omen.getReqTooltip()))
 
                     .release());
-
 
         } catch (Exception e) {
             e.printStackTrace();

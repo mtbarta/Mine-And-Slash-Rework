@@ -4,7 +4,7 @@ import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.vanilla_mc.packets.proxies.OpenGuiWrapper;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 // todo pick curse gui
@@ -13,7 +13,6 @@ public class OpenGuiPacket extends MyPacket<OpenGuiPacket> {
     public enum GuiType {
         PICK_PROPHECY_CURSE,
         MAIN_HUB;
-
 
     }
 
@@ -28,12 +27,12 @@ public class OpenGuiPacket extends MyPacket<OpenGuiPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         type = GuiType.valueOf(buf.readUtf());
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
         buf.writeUtf(type.name());
     }
 

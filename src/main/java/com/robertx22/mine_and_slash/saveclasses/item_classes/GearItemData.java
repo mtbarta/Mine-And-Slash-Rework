@@ -45,7 +45,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class GearItemData implements ICommonDataItem<GearRarity> {
 
     // Stats
@@ -56,22 +55,22 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public UniqueStatsData uniqueStats;
     public GearInfusionData ench;
 
-    //  public GenericDataHolder data = new GenericDataHolder();
+    // public GenericDataHolder data = new GenericDataHolder();
 
     // Stats
 
-    // i added rename ideas to comments. As tiny as possible while still allowing people to understand kinda what it is
-    // apparently people had big issues with many storage mods, So i should try minimize the nbt.
+    // i added rename ideas to comments. As tiny as possible while still allowing
+    // people to understand kinda what it is
+    // apparently people had big issues with many storage mods, So i should try
+    // minimize the nbt.
     public String rar = IRarity.COMMON_ID; // rar
 
     public int lvl = 1; // lvl
     public String gtype = "";
 
-
     public int getQualityBaseStatsBonus(ExileStack stack) {
         return stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.QUALITY);
     }
-
 
     public int getTier() {
         return LevelUtils.levelToTier(lvl);
@@ -85,11 +84,9 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {
         if (GetBaseGearType().isWeapon()) {
             return ToggleAutoSalvageRarity.SalvageType.WEAPON;
-        }
-        else if (GetBaseGearType().isArmor()) {
+        } else if (GetBaseGearType().isArmor()) {
             return ToggleAutoSalvageRarity.SalvageType.ARMOR;
-        }
-        else {
+        } else {
             return ToggleAutoSalvageRarity.SalvageType.GEAR;
         }
     }
@@ -123,7 +120,6 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
                 .isRegistered(gtype);
     }
 
-
     public int getEmptySockets() {
         return sockets.getTotalSockets() - this.sockets.getSocketedGemsCount();
     }
@@ -133,14 +129,14 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         if (affix.only_one_per_item && affixes.containsAffix(affix)) {
             return false;
         }
-        if (!affix.one_of_a_kind.isEmpty() && affixes.getPrefixesAndSuffixes().stream().anyMatch(x -> x.getAffix().one_of_a_kind.equals(affix.one_of_a_kind))) {
+        if (!affix.one_of_a_kind.isEmpty() && affixes.getPrefixesAndSuffixes().stream()
+                .anyMatch(x -> x.getAffix().one_of_a_kind.equals(affix.one_of_a_kind))) {
             return false;
         }
 
         return affix.meetsRequirements(new GearRequestedFor(this));
 
     }
-
 
     @Override
     public String getRarityId() {
@@ -156,7 +152,6 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public Component name(ItemStack stack) {
         return stack.getHoverName();
     }
-
 
     public BaseGearType GetBaseGearType() {
         return ExileDB.GearTypes()
@@ -198,7 +193,8 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
             if (uniq.replaces_name) {
                 return uniq.locName().withStyle(getRarity().textFormatting());
             }
-            return Formatter.UNIQUE_NAME_FORMAT.locName(uniqueStats.getUnique(stack).locName(), base).withStyle(getRarity().textFormatting());
+            return Formatter.UNIQUE_NAME_FORMAT.locName(uniqueStats.getUnique(stack).locName(), base)
+                    .withStyle(getRarity().textFormatting());
         }
     }
 
@@ -214,14 +210,15 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         }
     }
 
-
     private List<MutableComponent> getFullAffixedName(ExileStack stack) {
         List<MutableComponent> list = new ArrayList<>();
         ChatFormatting format = this.getRarity()
                 .textFormatting();
 
-        // turns out the null mutablecomponent could remain a space-like char when form the name.
-        //String[] name = processStrings(prefixChecker().getString(), uniqueChecker().getString(), suffixChecker().getString());
+        // turns out the null mutablecomponent could remain a space-like char when form
+        // the name.
+        // String[] name = processStrings(prefixChecker().getString(),
+        // uniqueChecker().getString(), suffixChecker().getString());
         MutableComponent text;
 
         String str1 = prefixChecker(stack).getString();
@@ -230,7 +227,8 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
 
         // pre-gear-suf
         if (!str1.isEmpty() && !str2.isEmpty() && !str3.isEmpty()) {
-            text = Formatter.GEAR_ITEM_NAME_ALL.locName(prefixChecker(stack), uniqueChecker(stack), suffixChecker(stack));
+            text = Formatter.GEAR_ITEM_NAME_ALL.locName(prefixChecker(stack), uniqueChecker(stack),
+                    suffixChecker(stack));
         }
         // gear
         else if (str1.isEmpty() && !str2.isEmpty() && str3.isEmpty()) {
@@ -242,7 +240,8 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         }
         // another
         else {
-            text = Formatter.GEAR_ITEM_NAME_ANOTHER.locName(prefixChecker(stack), uniqueChecker(stack), suffixChecker(stack));
+            text = Formatter.GEAR_ITEM_NAME_ANOTHER.locName(prefixChecker(stack), uniqueChecker(stack),
+                    suffixChecker(stack));
         }
 
         text.withStyle(format);
@@ -252,7 +251,6 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         return list;
 
     }
-
 
     public List<IStatsContainer> GetAllStatContainers() {
 
@@ -275,8 +273,8 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     }
 
     public List<IStatsContainer> GetAllStatContainersExceptBase() {
-        return this.GetAllStatContainers().stream().filter(x -> x instanceof BaseStatsData == false).collect(Collectors.toList());
-
+        return this.GetAllStatContainers().stream().filter(x -> x instanceof BaseStatsData == false)
+                .collect(Collectors.toList());
 
     }
 
@@ -301,10 +299,11 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public StatContext getEnchantCompatStats(ItemStack stack) {
         var list = new ArrayList<ExactStatData>();
 
-        for (Map.Entry<Enchantment, Integer> en : stack.getAllEnchantments().entrySet()) {
-            var id = BuiltInRegistries.ENCHANTMENT.getKey(en.getKey()).toString();
+        for (var en : stack.getAllEnchantments().entrySet()) {
+            var id = en.getKey().unwrapKey().get().location().toString();
             // todo this could be cached
-            for (StatCompat compat : ExileDB.StatCompat().getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
+            for (StatCompat compat : ExileDB.StatCompat()
+                    .getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
                 var result = compat.getEnchantCompatResult(Arrays.asList(stack), lvl);
                 if (result != null) {
                     list.add(result);
@@ -322,7 +321,7 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public static StatContext getEnchantCompatStats(Player p, List<GearData> gears) {
         var list = new ArrayList<ExactStatData>();
 
-        Set<Enchantment> enchants = new HashSet<>();
+        Set<net.minecraft.core.Holder<Enchantment>> enchants = new HashSet<>();
 
         for (GearData gear : gears) {
             enchants.addAll(gear.stack.getAllEnchantments().keySet());
@@ -331,10 +330,11 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         int lvl = Load.Unit(p).getLevel();
         var stacks = gears.stream().map(x -> x.stack).collect(Collectors.toList());
 
-        for (Enchantment enchant : enchants) {
-            var id = BuiltInRegistries.ENCHANTMENT.getKey(enchant).toString();
+        for (var enchant : enchants) {
+            var id = enchant.unwrapKey().get().location().toString();
 
-            for (StatCompat compat : ExileDB.StatCompat().getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
+            for (StatCompat compat : ExileDB.StatCompat()
+                    .getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
                 var result = compat.getEnchantCompatResult(stacks, lvl);
                 if (result != null) {
                     list.add(result);
@@ -368,32 +368,34 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         GearTooltipUtils.BuildTooltip(this, ctx.stack, ctx.tooltip, ctx.data);
     }
 
-
     private <T> void IfNotNullAdd(T obj, List<T> list) {
         if (obj != null) {
             list.add(obj);
         }
     }
 
-
     @Override
     public List<ItemStack> getSalvageResult(ExileStack stack) {
 
         if (!stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.SALVAGING_DISABLED)) {
             if (this.isUnique()) {
-                return Arrays.asList(new ItemStack(RandomUtils.randomFromList(RarityItems.RARITY_STONE.values().stream().toList()).get(), RandomUtils.RandomRange(2, 9)));
+                return Arrays.asList(new ItemStack(
+                        RandomUtils.randomFromList(RarityItems.RARITY_STONE.values().stream().toList()).get(),
+                        RandomUtils.RandomRange(2, 9)));
             }
             int amount = 1;
 
-            return Arrays.asList(new ItemStack(RarityItems.RARITY_STONE.getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(), amount));
+            return Arrays.asList(new ItemStack(
+                    RarityItems.RARITY_STONE
+                            .getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(),
+                    amount));
         }
 
         return Arrays.asList(ItemStack.EMPTY);
     }
 
-
     @Override
-    public ItemstackDataSaver<GearItemData> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<GearItemData> getStackSaver() {
         return StackSaving.GEARS;
     }
 
@@ -414,6 +416,5 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         }
         return false;
     }
-
 
 }

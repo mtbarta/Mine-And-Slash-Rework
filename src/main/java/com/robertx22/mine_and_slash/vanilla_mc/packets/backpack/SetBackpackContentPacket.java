@@ -8,7 +8,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public class SetBackpackContentPacket extends MyPacket<SetBackpackContentPacket>
         this.stateId = stateId;
         this.items = NonNullList.withSize(items.size(), ItemStack.EMPTY);
 
-        for(int index = 0; index < items.size(); ++index) {
+        for (int index = 0; index < items.size(); ++index) {
             this.items.set(index, items.get(index).copy());
         }
 
@@ -44,19 +44,20 @@ public class SetBackpackContentPacket extends MyPacket<SetBackpackContentPacket>
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         containerId = tag.readUnsignedByte();
         stateId = tag.readVarInt();
-        items = tag.readCollection(NonNullList::createWithCapacity, BackpackItemSerializer::readItem);
-        carriedItem = tag.readItem();
+        items = tag.readCollection(NonNullList::createWithCapacity,
+                (buf) -> BackpackItemSerializer.readItem((RegistryFriendlyByteBuf) buf));
+        carriedItem = ItemStack.OPTIONAL_STREAM_CODEC.decode(tag);
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeByte(containerId);
         tag.writeVarInt(stateId);
         tag.writeCollection(items, BackpackItemSerializer::writeItem);
-        tag.writeItem(carriedItem);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(tag, carriedItem);
     }
 
     @Override

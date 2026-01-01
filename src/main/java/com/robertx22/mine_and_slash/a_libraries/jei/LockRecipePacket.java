@@ -5,7 +5,7 @@ import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.mine_and_slash.database.data.profession.screen.CraftingStationMenu;
 import com.robertx22.mine_and_slash.database.registry.ExileDB;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -23,13 +23,13 @@ public class LockRecipePacket extends MyPacket<LockRecipePacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         this.recipeId = buf.readUtf();
         // todo
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
         buf.writeUtf(recipeId);
     }
 
@@ -37,7 +37,6 @@ public class LockRecipePacket extends MyPacket<LockRecipePacket> {
     public void onReceived(ExilePacketContext ctx) {
 
         Player p = ctx.getPlayer();
-
 
         if (p.containerMenu instanceof CraftingStationMenu menu) {
             if (menu.be != null) {

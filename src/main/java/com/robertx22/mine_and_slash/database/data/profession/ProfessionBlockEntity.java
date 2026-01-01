@@ -17,6 +17,7 @@ import com.robertx22.mine_and_slash.uncommon.localization.Words;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -46,7 +47,6 @@ public class ProfessionBlockEntity extends BlockEntity {
     public Crafting_State craftingState = Crafting_State.STOPPED;
     public UUID ownerUUID = null;
 
-
     public ProfessionBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(SlashBlockEntities.PROFESSION.get(), pPos, pBlockState);
     }
@@ -63,7 +63,6 @@ public class ProfessionBlockEntity extends BlockEntity {
         return null;
     }
 
-
     public void tryInputRecipe(ProfessionRecipe recipe, Player p) {
 
         if (!recipe.profession.equals(getProfession().GUID())) {
@@ -74,7 +73,6 @@ public class ProfessionBlockEntity extends BlockEntity {
 
         this.recipe_locked = true;
         this.last_recipe = recipe;
-
 
     }
 
@@ -123,7 +121,6 @@ public class ProfessionBlockEntity extends BlockEntity {
                                         stack.shrink(transfer);
                                         stacked.grow(transfer);
                                     }
-
 
                                 }
                             }
@@ -193,14 +190,17 @@ public class ProfessionBlockEntity extends BlockEntity {
             }
 
             if (craftingState == Crafting_State.ACTIVE) {
-                boolean ifOnlyDestroy = getMats().stream().filter(x -> !x.toString().equals(Blocks.AIR.asItem().getDefaultInstance().toString())).allMatch(x -> x.toString().equals(SlashItems.DESTROY_OUTPUT.get().getDefaultInstance().toString()));
+                boolean ifOnlyDestroy = getMats().stream()
+                        .filter(x -> !x.toString().equals(Blocks.AIR.asItem().getDefaultInstance().toString()))
+                        .allMatch(x -> x.toString()
+                                .equals(SlashItems.DESTROY_OUTPUT.get().getDefaultInstance().toString()));
                 if (this.inventory.getInventory(INPUTS).isEmpty() || ifOnlyDestroy) {
 
                     if (recipe_locked)
                         craftingState = Crafting_State.IDLE;
                     else {
                         craftingState = Crafting_State.IDLE;
-                        //ownerUUID = null;
+                        // ownerUUID = null;
                     }
                     return;
                 }
@@ -217,27 +217,30 @@ public class ProfessionBlockEntity extends BlockEntity {
                                 var can2 = tryRecipe(p);
                                 if (!can2.can && p.containerMenu instanceof CraftingStationMenu) {
                                     p.sendSystemMessage(can2.answer);
-                                    //craftingState = Crafting_State.IDLE;
+                                    // craftingState = Crafting_State.IDLE;
                                 }
                             } else if (p.containerMenu instanceof CraftingStationMenu) {
                                 p.sendSystemMessage(can.answer);
                                 craftingState = Crafting_State.IDLE;
                             }
 
-                            //craftingState = Crafting_State.IDLE;
+                            // craftingState = Crafting_State.IDLE;
                         } else {
                             ProfessionRecipe recipe = getCurrentRecipe();
                             if (recipe == null) {
-                                p.sendSystemMessage(Chats.PROF_RECIPE_NOT_SELECTED.locName().withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                                p.sendSystemMessage(Chats.PROF_RECIPE_NOT_SELECTED.locName()
+                                        .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                                 craftingState = Crafting_State.IDLE;
-                                //ownerUUID = null;
+                                // ownerUUID = null;
                                 return;
                             }
                             int ownerLvl = Load.player(p).professions.getLevel(recipe.profession);
                             if (recipe.getLevelRequirement() > ownerLvl) {
-                                p.sendSystemMessage(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(getProfession().locName(), recipe.getLevelRequirement(), ownerLvl).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                                p.sendSystemMessage(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH
+                                        .locName(getProfession().locName(), recipe.getLevelRequirement(), ownerLvl)
+                                        .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                                 craftingState = Crafting_State.IDLE;
-                                //ownerUUID = null;
+                                // ownerUUID = null;
                                 return;
                             }
                             var can = recipe.canCraft(getMats());
@@ -247,7 +250,7 @@ public class ProfessionBlockEntity extends BlockEntity {
                                 if (!rec.can) {
                                     show.clearContent();
                                     craftingState = Crafting_State.IDLE;
-                                    //ownerUUID = null;
+                                    // ownerUUID = null;
                                 }
                             } else {
                                 p.sendSystemMessage(can.answer);
@@ -260,7 +263,7 @@ public class ProfessionBlockEntity extends BlockEntity {
             ModErrors.print(e);
         }
 
-        //    this.setChanged(); // todo will this cause any problems to have it perma on?
+        // this.setChanged(); // todo will this cause any problems to have it perma on?
     }
 
     public boolean hasAtLeastOneFreeOutputSlot() {
@@ -288,13 +291,13 @@ public class ProfessionBlockEntity extends BlockEntity {
         }
         int ownerLvl = Load.player(p).professions.getLevel(getProfession().GUID());
         if (recipe.getLevelRequirement() > ownerLvl) {
-            return ExplainedResult.failure(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(getProfession().locName(), recipe.getLevelRequirement(), ownerLvl));
+            return ExplainedResult.failure(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(getProfession().locName(),
+                    recipe.getLevelRequirement(), ownerLvl));
         }
 
         float expMulti = 1;
 
         boolean destroyOuput = false;
-
 
         if (this.inventory.getInventory(INPUTS).countItem(SlashItems.DESTROY_OUTPUT.get()) > 0) {
             if (!getProfession().GUID().equals(Professions.SALVAGING)) {
@@ -317,7 +320,8 @@ public class ProfessionBlockEntity extends BlockEntity {
     public boolean tryPutToOutputs(List<ItemStack> stacks) {
         for (ItemStack stack : stacks) {
             if (!inventory.addStack(OUTPUTS, stack)) {
-                ItemEntity itementity = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 0.5, getBlockPos().getZ(), stack);
+                ItemEntity itementity = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 0.5,
+                        getBlockPos().getZ(), stack);
                 itementity.setDefaultPickUpDelay();
                 level.addFreshEntity(itementity);
             }
@@ -375,7 +379,8 @@ public class ProfessionBlockEntity extends BlockEntity {
 
                         stack.shrink(stack.getCount());
 
-                        ItemEntity itementity = new ItemEntity(level, this.getBlockPos().getX(), getBlockPos().getY() + 1.5, getBlockPos().getZ(), copy);
+                        ItemEntity itementity = new ItemEntity(level, this.getBlockPos().getX(),
+                                getBlockPos().getY() + 1.5, getBlockPos().getZ(), copy);
                         itementity.setDefaultPickUpDelay();
                         level.addFreshEntity(itementity);
 
@@ -397,7 +402,6 @@ public class ProfessionBlockEntity extends BlockEntity {
         }
 
     }
-
 
     public List<ItemStack> getMats() {
         return inventory.getAllStacks(INPUTS);
@@ -428,45 +432,46 @@ public class ProfessionBlockEntity extends BlockEntity {
             if (list.isEmpty()) {
                 return null;
             }
-            // higher power versions usually just require more materials, so to make sure it always uses the highest power recipe, we do this
+            // higher power versions usually just require more materials, so to make sure it
+            // always uses the highest power recipe, we do this
             return list.stream().max(Comparator.comparingInt(x -> x.tier)).get();
         }
         return null;
     }
 
-    public ListTag createTag() {
+    public ListTag createTag(HolderLookup.Provider pRegistries) {
         ListTag listtag = new ListTag();
 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             ItemStack itemstack = inventory.getItem(i);
             if (itemstack.isEmpty())
                 continue;
-            CompoundTag slot = new CompoundTag();
-            slot.putInt("slot", i);
-            itemstack.save(slot);
-            listtag.add(slot);
+            net.minecraft.nbt.Tag savedTag = itemstack.save(pRegistries);
+            if (savedTag instanceof CompoundTag slot) {
+                slot.putInt("slot", i);
+                listtag.add(slot);
+            }
         }
         return listtag;
     }
 
-    public void fromTag(ListTag pContainerNbt) {
+    public void fromTag(ListTag pContainerNbt, HolderLookup.Provider pRegistries) {
         inventory.clearContent();
         for (int i = 0; i < pContainerNbt.size(); ++i) {
             CompoundTag tag = pContainerNbt.getCompound(i);
             int slot = tag.getInt("slot");
             tag.remove("slot");
-            ItemStack itemstack = ItemStack.of(tag);
+            ItemStack itemstack = ItemStack.parse(pRegistries, tag).orElse(ItemStack.EMPTY);
             inventory.setItem(slot, itemstack);
         }
     }
 
-
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         try {
-            fromTag(pTag.getList("inv", 10));
-            this.show.fromTag(pTag.getList("show", 10));
+            fromTag(pTag.getList("inv", 10), pRegistries);
+            this.show.fromTag(pTag.getList("show", 10), pRegistries);
             this.recipe_locked = pTag.getBoolean("locked");
 
             var state = pTag.getString("state");
@@ -491,12 +496,12 @@ public class ProfessionBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
 
         try {
-            pTag.put("inv", createTag());
-            pTag.put("show", this.show.createTag());
+            pTag.put("inv", createTag(pRegistries));
+            pTag.put("show", this.show.createTag(pRegistries));
             if (recipe_locked) {
                 if (last_recipe != null) {
                     pTag.putBoolean("locked", recipe_locked);
@@ -519,4 +524,3 @@ public class ProfessionBlockEntity extends BlockEntity {
     }
 
 }
-

@@ -73,7 +73,8 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
 
         int num = (int) this.type.getHealPercent(pStack);
         pTooltipComponents.clear();
@@ -81,9 +82,13 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
                 .accept(new NameBlock(pStack.getHoverName()))
                 .accept(new RarityBlock(getRarity()))
                 .accept(new ProfessionDropSourceBlock(Professions.ALCHEMY))
-                .accept(new UsageBlock(Collections.singletonList(Itemtips.Restores.locName(Component.literal(num + "%").withStyle(ChatFormatting.GREEN), this.type.name).withStyle(ChatFormatting.GRAY))))
+                .accept(new UsageBlock(Collections.singletonList(Itemtips.Restores
+                        .locName(Component.literal(num + "%").withStyle(ChatFormatting.GREEN), this.type.name)
+                        .withStyle(ChatFormatting.GRAY))))
                 .accept(new LeveledItemBlock(pStack))
-                .accept(new UsageBlock(Collections.singletonList(Words.COOLDOWN.locName(Component.literal(getCooldownTicks() / 20 + "").withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GOLD))))
+                .accept(new UsageBlock(Collections.singletonList(Words.COOLDOWN
+                        .locName(Component.literal(getCooldownTicks() / 20 + "").withStyle(ChatFormatting.GOLD))
+                        .withStyle(ChatFormatting.GOLD))))
                 .release());
 
     }
@@ -114,7 +119,6 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
         return 20 * 30;
     }
 
-
     public GearRarity getRarity() {
         return ExileDB.GearRarities().get(rar);
     }
@@ -125,9 +129,14 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
             public boolean restoreResource(Player player, ItemStack itemStack, SlashPotionItem slashPotionItem) {
                 float healPercent = this.getHealPercent(itemStack);
                 ResourcesData resources = Load.Unit(player).getResources();
-                if (HealthUtils.getCurrentHealth(player) < HealthUtils.getMaxHealth(player) || resources.getMagicShield() < resources.getMax(player, ResourceType.magic_shield)) {
-                    EventBuilder.ofRestore(player, player, ResourceType.health, RestoreType.potion, HealthUtils.getMaxHealth(player) * healPercent / 100F).build().Activate();
-                    EventBuilder.ofRestore(player, player, ResourceType.magic_shield, RestoreType.potion, Load.Unit(player).getUnit().magicShieldData().getValue() * healPercent / 100F).build().Activate();
+                if (HealthUtils.getCurrentHealth(player) < HealthUtils.getMaxHealth(player)
+                        || resources.getMagicShield() < resources.getMax(player, ResourceType.magic_shield)) {
+                    EventBuilder.ofRestore(player, player, ResourceType.health, RestoreType.potion,
+                            HealthUtils.getMaxHealth(player) * healPercent / 100F).build().Activate();
+                    EventBuilder
+                            .ofRestore(player, player, ResourceType.magic_shield, RestoreType.potion,
+                                    Load.Unit(player).getUnit().magicShieldData().getValue() * healPercent / 100F)
+                            .build().Activate();
                     return true;
                 }
                 return false;
@@ -151,9 +160,16 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
             public boolean restoreResource(Player player, ItemStack itemStack, SlashPotionItem slashPotionItem) {
                 float healPercent = this.getHealPercent(itemStack);
                 ResourcesData resources = Load.Unit(player).getResources();
-                if (resources.getMana() < resources.getMax(player, ResourceType.mana) || resources.getEnergy() < resources.getMax(player, ResourceType.energy)) {
-                    EventBuilder.ofRestore(player, player, ResourceType.mana, RestoreType.potion, Load.Unit(player).getUnit().manaData().getValue() * healPercent / 100F).build().Activate();
-                    EventBuilder.ofRestore(player, player, ResourceType.energy, RestoreType.potion, Load.Unit(player).getUnit().energyData().getValue() * healPercent / 100F).build().Activate();
+                if (resources.getMana() < resources.getMax(player, ResourceType.mana)
+                        || resources.getEnergy() < resources.getMax(player, ResourceType.energy)) {
+                    EventBuilder
+                            .ofRestore(player, player, ResourceType.mana, RestoreType.potion,
+                                    Load.Unit(player).getUnit().manaData().getValue() * healPercent / 100F)
+                            .build().Activate();
+                    EventBuilder
+                            .ofRestore(player, player, ResourceType.energy, RestoreType.potion,
+                                    Load.Unit(player).getUnit().energyData().getValue() * healPercent / 100F)
+                            .build().Activate();
 
                     return true;
                 }
@@ -172,13 +188,15 @@ public class SlashPotionItem extends AutoItem implements ICreativeTabTiered {
                 return 5 + (0.25F * r.stat_percents.max * tier.statMulti);
             }
         };
+
         String name;
 
         Item craftItem;
 
-
         public abstract boolean restoreResource(Player player, ItemStack itemStack, SlashPotionItem slashPotionItem);
+
         public abstract List<SlashPotionItem> getSameTypePotions();
+
         public abstract float getHealPercent(ItemStack stack);
 
         Type(String name, Item craftItem) {

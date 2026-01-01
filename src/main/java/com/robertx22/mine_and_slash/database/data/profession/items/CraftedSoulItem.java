@@ -12,9 +12,10 @@ import com.robertx22.mine_and_slash.gui.texts.ExileTooltips;
 import com.robertx22.mine_and_slash.gui.texts.textblocks.NameBlock;
 import com.robertx22.mine_and_slash.gui.texts.textblocks.dropblocks.ProfessionDropSourceBlock;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import com.robertx22.mine_and_slash.saveclasses.gearitem.gear_bases.TooltipContext;
+
 import com.robertx22.mine_and_slash.saveclasses.stat_soul.StatSoulData;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
+import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import com.robertx22.mine_and_slash.uncommon.interfaces.IRarityItem;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.StringUTIL;
@@ -43,28 +44,32 @@ public class CraftedSoulItem extends AutoItem implements ICreativeTabTiered, IRa
 
     @Override
     public void generateModel(ItemModelManager manager) {
-        new ModelHelper(this, ModelHelper.Type.GENERATED, SlashRef.id("item/stat_soul/family/" + fam.id).toString()).generate();
+        new ModelHelper(this, ModelHelper.Type.GENERATED, SlashRef.id("item/stat_soul/family/" + fam.id).toString())
+                .generate();
     }
 
     public StatSoulData getSoul(ItemStack stack) {
         StatSoulData data = StatSoulData.ofFamily(ExileDB.GearRarities().get(rar), LeveledItem.getTier(stack), fam);
 
-        String force = stack.getOrCreateTag().getString("force_tag");
-        if (!force.isEmpty()) {
+        String force = stack.get(StackSaving.FORCE_TAG);
+        if (force != null && !force.isEmpty()) {
             data.force_tag = force;
         }
         return data;
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
         try {
             var soul = getSoul(pStack);
 
             if (soul != null) {
                 list.clear();
                 if (Screen.hasShiftDown() && soul.gear != null) {
-                    soul.gear.gear.BuildTooltip(new TooltipContext(pStack, list, Load.Unit(ClientOnly.getPlayer())));
+                    soul.gear.gear.BuildTooltip(
+                            new com.robertx22.mine_and_slash.saveclasses.gearitem.gear_bases.TooltipContext(pStack,
+                                    list, Load.Unit(ClientOnly.getPlayer())));
                 } else {
                     ExileTooltips tooltip = soul.getTooltip(pStack, false);
                     tooltip.accept(new NameBlock(Collections.singletonList(pStack.getHoverName())));

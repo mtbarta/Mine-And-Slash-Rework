@@ -5,17 +5,15 @@ import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.mine_and_slash.a_libraries.dmg_number_particle.particle.InteractionResultHandler;
 import com.robertx22.mine_and_slash.config.forge.ClientConfigs;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class ExileInteractionResultPacket extends MyPacket<ExileInteractionResultPacket> {
 
-
     public int id;
     private InteractionResultHandler.ExileParticleType type;
     private IParticleSpawnMaterial notifier;
-
 
     public ExileInteractionResultPacket(int id, IParticleSpawnMaterial notifier) {
         this.id = id;
@@ -32,14 +30,14 @@ public class ExileInteractionResultPacket extends MyPacket<ExileInteractionResul
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf friendlyByteBuf) {
+    public void loadFromData(RegistryFriendlyByteBuf friendlyByteBuf) {
         this.id = friendlyByteBuf.readInt();
         this.type = friendlyByteBuf.readEnum(InteractionResultHandler.ExileParticleType.class);
         this.notifier = this.type.target.loadFromData(friendlyByteBuf);
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf friendlyByteBuf) {
+    public void saveToData(RegistryFriendlyByteBuf friendlyByteBuf) {
         friendlyByteBuf.writeInt(id);
         friendlyByteBuf.writeEnum(type);
         notifier.saveToBuf(friendlyByteBuf);
@@ -47,7 +45,8 @@ public class ExileInteractionResultPacket extends MyPacket<ExileInteractionResul
 
     @Override
     public void onReceived(ExilePacketContext exilePacketContext) {
-        if (!ClientConfigs.getConfig().ENABLE_FLOATING_DMG.get().getReal()) return;
+        if (!ClientConfigs.getConfig().ENABLE_FLOATING_DMG.get().getReal())
+            return;
         Entity entity = exilePacketContext.getPlayer().level().getEntity(id);
         notifier.spawnOnClient(entity);
     }

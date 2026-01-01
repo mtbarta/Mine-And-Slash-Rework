@@ -46,9 +46,7 @@ import java.util.List;
 
 public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
 
-
     public CraftedUniqueJewelData uniq = new CraftedUniqueJewelData();
-
 
     public List<AffixData> cor = new ArrayList<>();
 
@@ -61,7 +59,6 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
     public int lvl = 1;
 
     public String rar = IRarity.COMMON_ID;
-
 
     public void corrupt() {
         if (cor.isEmpty()) {
@@ -88,7 +85,8 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
 
         for (int i = 0; i < num; i++) {
             Affix affix = ExileDB.Affixes().getFilterWrapped(x -> {
-                return x.type == Affix.AffixSlot.jewel && x.getAllTagReq().contains(SlotTags.any_jewel.GUID()) || x.getAllTagReq().contains(getStyle().getJewelAffixTag().GUID());
+                return x.type == Affix.AffixSlot.jewel && x.getAllTagReq().contains(SlotTags.any_jewel.GUID())
+                        || x.getAllTagReq().contains(getStyle().getJewelAffixTag().GUID());
             }).random();
 
             var data = new AffixData(Affix.AffixSlot.jewel);
@@ -98,18 +96,14 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
             affixes.add(data);
         }
 
-
     }
-
 
     @Override
     public void BuildTooltip(TooltipContext ctx) {
 
-
         ExileStack ex = ExileStack.of(ctx.stack);
 
         ctx.tooltip.clear();
-
 
         StatRangeInfo info = new StatRangeInfo(ModRange.of(this.getRarity().stat_percents));
 
@@ -118,13 +112,12 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
         tip.accept(new NameBlock(Collections.singletonList(ctx.stack.getHoverName())));
         tip.accept(new RarityBlock(getRarity()));
 
-
         if (this.auraStats.isEmpty()) {
             tip.accept(new SimpleItemStatBlock(info)
                     .acceptIf(Itemtips.JEWEL_STATS.locName().withStyle(ChatFormatting.BLUE),
-                            affixes.stream().flatMap(x -> x.getAllStatsWithCtx(lvl, this.getRarity()).stream()).toList(),
-                            this.auraStats.isEmpty())
-            );
+                            affixes.stream().flatMap(x -> x.getAllStatsWithCtx(lvl, this.getRarity()).stream())
+                                    .toList(),
+                            this.auraStats.isEmpty()));
         } else {
             tip.accept(new StatBlock() {
                 @Override
@@ -144,7 +137,8 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
                 public List<? extends Component> getAvailableComponents() {
                     List<MutableComponent> list = new ArrayList<>();
                     list.add(Itemtips.COR_STATS.locName().withStyle(ChatFormatting.RED));
-                    for (TooltipStatWithContext c : cor.stream().flatMap(x -> x.getAllStatsWithCtx(lvl, getRarity()).stream()).toList()) {
+                    for (TooltipStatWithContext c : cor.stream()
+                            .flatMap(x -> x.getAllStatsWithCtx(lvl, getRarity()).stream()).toList()) {
                         list.addAll(c.GetTooltipString());
                     }
                     return list;
@@ -156,11 +150,13 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
                 .accept(new AdditionalBlock(() -> {
                     var up = uniq.getCraftedTier().upgradeStack.get();
                     return ImmutableList.of(
-                            Itemtips.JEWEL_UPGRADE_1.locName(up.getCount(), up.getHoverName()).withStyle(ChatFormatting.AQUA),
-                            Itemtips.JEWEL_UPGRADE_2.locName(up.getCount(), up.getHoverName()).withStyle(ChatFormatting.AQUA)
-                    );
+                            Itemtips.JEWEL_UPGRADE_1.locName(up.getCount(), up.getHoverName())
+                                    .withStyle(ChatFormatting.AQUA),
+                            Itemtips.JEWEL_UPGRADE_2.locName(up.getCount(), up.getHoverName())
+                                    .withStyle(ChatFormatting.AQUA));
 
-                }).showWhen(() -> this.auraStats.isEmpty() && uniq.isUnique() && uniq.isCraftableUnique() && uniq.getCraftedTier().canUpgradeMore()))
+                }).showWhen(() -> this.auraStats.isEmpty() && uniq.isUnique() && uniq.isCraftableUnique()
+                        && uniq.getCraftedTier().canUpgradeMore()))
 
                 .accept(new OperationTipBlock().setShift().setAlt());
 
@@ -181,7 +177,7 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
     }
 
     @Override
-    public ItemstackDataSaver<JewelItemData> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<JewelItemData> getStackSaver() {
         return StackSaving.JEWEL;
     }
 
@@ -199,7 +195,6 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
     public GearRarity getRarity() {
         return ExileDB.GearRarities().get(rar);
     }
-
 
     public Item getItem() {
         var s = getStyle();
@@ -227,9 +222,10 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
         if (RarityItems.RARITY_STONE.containsKey(getRarity().GUID())) {
             return Arrays.asList(new ItemStack(RarityItems.RARITY_STONE.get(getRarity().GUID()).get(), amount));
         }
-        return Arrays.asList(new ItemStack(RandomUtils.randomFromList(RarityItems.RARITY_STONE.values().stream().toList()).get(), RandomUtils.RandomRange(1, 5)));
+        return Arrays.asList(
+                new ItemStack(RandomUtils.randomFromList(RarityItems.RARITY_STONE.values().stream().toList()).get(),
+                        RandomUtils.RandomRange(1, 5)));
     }
-
 
     @Override
     public List<StatContext> getStatAndContext(LivingEntity en) {

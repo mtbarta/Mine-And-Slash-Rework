@@ -8,7 +8,7 @@ import com.robertx22.mine_and_slash.capability.player.helper.MyInventory;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashContainers;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -19,11 +19,9 @@ import net.minecraft.world.inventory.MenuType;
 
 public class OpenJewelsPacket extends MyPacket<OpenJewelsPacket> {
 
-
     public OpenJewelsPacket() {
 
     }
-
 
     @Override
     public ResourceLocation getIdentifier() {
@@ -31,22 +29,22 @@ public class OpenJewelsPacket extends MyPacket<OpenJewelsPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
-
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
     }
 
     @Override
     public void onReceived(ExilePacketContext ctx) {
         Player p = ctx.getPlayer();
-        p.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) -> new JewelsMenu(SlashContainers.JEWEL.get(), i, playerInventory, playerEntity), Component.literal("")));
+        p.openMenu(
+                new SimpleMenuProvider((i, playerInventory, playerEntity) -> new JewelsMenu(SlashContainers.JEWEL.get(),
+                        i, playerInventory, playerEntity), Component.literal("")));
 
     }
-
 
     @Override
     public MyPacket<OpenJewelsPacket> newInstance() {

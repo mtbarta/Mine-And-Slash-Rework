@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
@@ -47,13 +48,14 @@ public class ItemButton extends ImageButton {
     @Override
     public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         this.setTooltip(
-                Tooltip.create(TextUTIL.mergeList(this.stack.getTooltipLines(this.mc.player, TooltipFlag.NORMAL))));
+                Tooltip.create(TextUTIL.mergeList(this.stack.getTooltipLines(Item.TooltipContext.of(mc.level),
+                        this.mc.player, TooltipFlag.NORMAL))));
         pGuiGraphics.renderItem(stack, getX(), getY());
         pGuiGraphics.renderItemDecorations(mc.font, stack, getX(), getY());
 
         var tip = new ArrayList<Component>();
         tip.addAll(extraText);
-        tip.addAll(stack.getTooltipLines(mc.player, TooltipFlag.NORMAL));
+        tip.addAll(stack.getTooltipLines(Item.TooltipContext.of(mc.level), mc.player, TooltipFlag.NORMAL));
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(tip)));
 

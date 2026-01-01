@@ -8,7 +8,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.AllyOrEnemy;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.EntityFinder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,12 +21,12 @@ public class UnsummonPacket extends MyPacket<UnsummonPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf friendlyByteBuf) {
+    public void loadFromData(RegistryFriendlyByteBuf friendlyByteBuf) {
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf friendlyByteBuf) {
+    public void saveToData(RegistryFriendlyByteBuf friendlyByteBuf) {
 
     }
 

@@ -15,11 +15,10 @@ public class CasterHasEffectCondition extends EffectCondition {
         super(Arrays.asList(MapField.POTION_ID));
     }
 
-
     @Override
     public boolean canActivate(SpellCtx ctx, MapHolder data) {
         MobEffect potion = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(data.get(MapField.POTION_ID)));
-        return ctx.caster.hasEffect(potion);
+        return ctx.caster.hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(potion));
     }
 
     public MapHolder create(MobEffect effect) {

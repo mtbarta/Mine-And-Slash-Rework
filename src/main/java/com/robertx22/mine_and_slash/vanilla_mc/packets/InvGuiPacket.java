@@ -6,7 +6,7 @@ import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.library_of_exile.utils.LoadSave;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class InvGuiPacket extends MyPacket<InvGuiPacket> {
@@ -24,7 +24,7 @@ public class InvGuiPacket extends MyPacket<InvGuiPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
 
         data = LoadSave.Load(GuiItemData.class, new GuiItemData(), buf.readNbt(), "inv");
 
@@ -33,7 +33,7 @@ public class InvGuiPacket extends MyPacket<InvGuiPacket> {
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
         CompoundTag nbt = new CompoundTag();
         LoadSave.Save(data, nbt, "inv");
         buf.writeNbt(nbt);

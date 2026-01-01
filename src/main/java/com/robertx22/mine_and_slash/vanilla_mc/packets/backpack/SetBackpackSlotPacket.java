@@ -5,7 +5,7 @@ import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +36,7 @@ public class SetBackpackSlotPacket extends MyPacket<SetBackpackSlotPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         containerId = tag.readUnsignedByte();
         stateId = tag.readVarInt();
         slot = tag.readShort();
@@ -44,7 +44,7 @@ public class SetBackpackSlotPacket extends MyPacket<SetBackpackSlotPacket> {
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeByte(containerId);
         tag.writeVarInt(stateId);
         tag.writeShort(slot);

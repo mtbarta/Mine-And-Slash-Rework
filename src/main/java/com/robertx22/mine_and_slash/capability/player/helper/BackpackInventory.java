@@ -28,7 +28,8 @@ public class BackpackInventory extends MyInventory {
     public boolean canAddItem(ItemStack stack) {
         for (int i = 0; i < getContainerSize(); ++i) {
             ItemStack destStack = this.getItem(i);
-            if (destStack.isEmpty() || (ItemStack.isSameItemSameTags(destStack, stack) && destStack.getCount() < getMaxStackSize(destStack))) {
+            if (destStack.isEmpty() || (ItemStack.isSameItemSameComponents(destStack, stack)
+                    && destStack.getCount() < getMaxStackSize(destStack))) {
                 return true;
             }
         }
@@ -39,7 +40,7 @@ public class BackpackInventory extends MyInventory {
     protected void moveItemToOccupiedSlotsWithSameType(ItemStack stack) {
         for (int slot = 0; slot < getContainerSize(); slot++) {
             ItemStack existing = this.getItem(slot);
-            if (ItemStack.isSameItemSameTags(existing, stack)) {
+            if (ItemStack.isSameItemSameComponents(existing, stack)) {
                 this.moveItemsBetweenStacks(stack, existing);
                 if (stack.isEmpty()) {
                     return;

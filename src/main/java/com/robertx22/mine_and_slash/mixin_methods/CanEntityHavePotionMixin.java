@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class CanEntityHavePotionMixin {
 
     public static void hook(LivingEntity en, MobEffectInstance effect, CallbackInfoReturnable<Boolean> ci) {
-        if (!canAddPotion(en, effect.getEffect())) {
+        if (!canAddPotion(en, effect.getEffect().value())) {
             ci.setReturnValue(false);
         }
     }
@@ -23,21 +23,21 @@ public class CanEntityHavePotionMixin {
 
                 if (one.isOneOfAKind()) {
                     if (en.getActiveEffects()
-                        .stream()
-                        .anyMatch(x -> {
-                            if (x.getEffect() instanceof IOneOfATypePotion) {
-                                IOneOfATypePotion ot = (IOneOfATypePotion) x.getEffect();
-                                if (ot.getOneOfATypeType()
-                                    .equals(one.getOneOfATypeType())) {
-                                    return true;
+                            .stream()
+                            .anyMatch(x -> {
+                                if (x.getEffect() instanceof IOneOfATypePotion) {
+                                    IOneOfATypePotion ot = (IOneOfATypePotion) x.getEffect();
+                                    if (ot.getOneOfATypeType()
+                                            .equals(one.getOneOfATypeType())) {
+                                        return true;
+                                    }
+                                    if (x.getEffect()
+                                            .equals(effect)) {
+                                        return true;
+                                    }
                                 }
-                                if (x.getEffect()
-                                    .equals(effect)) {
-                                    return true;
-                                }
-                            }
-                            return false;
-                        })) {
+                                return false;
+                            })) {
                         return false;
                     }
                 }

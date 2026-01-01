@@ -1,6 +1,5 @@
 package com.robertx22.mine_and_slash.database.data.profession;
 
-
 import net.minecraft.core.Direction;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
@@ -9,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class MergedContainer extends SimpleContainer implements WorldlyContainer {
@@ -34,12 +32,10 @@ public class MergedContainer extends SimpleContainer implements WorldlyContainer
                 setItem(index, stack.copy());
                 return true;
             }
-            if (current.getItem() == stack.getItem()) {
-                if (Objects.equals(stack.getTag(), current.getTag())) {
-                    if (current.getCount() + stack.getCount() <= current.getMaxStackSize()) {
-                        current.setCount(current.getCount() + stack.getCount());
-                        return true;
-                    }
+            if (ItemStack.isSameItemSameComponents(current, stack)) {
+                if (current.getCount() + stack.getCount() <= current.getMaxStackSize()) {
+                    current.setCount(current.getCount() + stack.getCount());
+                    return true;
                 }
             }
         }
@@ -136,6 +132,5 @@ public class MergedContainer extends SimpleContainer implements WorldlyContainer
             this.hopperface = hopperface;
         }
     }
-
 
 }

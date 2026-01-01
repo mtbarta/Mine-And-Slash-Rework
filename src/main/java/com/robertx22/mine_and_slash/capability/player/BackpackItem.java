@@ -54,13 +54,13 @@ public class BackpackItem extends AutoItem implements IAutoLocName, IAutoModel, 
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
 
         list.add(Component.literal(""));
         list.add(Chats.RIGHT_CLICK_OPEN.locName());
 
     }
-
 
     @Override
     public ShapelessRecipeBuilder getRecipe() {

@@ -42,7 +42,6 @@ public class SpellCastingData {
     public static final int SPELL_KEY_NOT_EXIST = -1;
     public HashMap<Integer, String> hotbar = new HashMap<>();
 
-
     public static class HotbarSpellData {
         public Spell spell;
         public int hotbarkey;
@@ -52,7 +51,6 @@ public class SpellCastingData {
             this.hotbarkey = hotbarkey;
         }
     }
-
 
     public boolean learnedSpellButHotbarIsEmpty() {
         return getAllHotbarSpells().isEmpty() && !spells.isEmpty();
@@ -91,7 +89,6 @@ public class SpellCastingData {
 
     public List<InsertedSpell> spells = new ArrayList<>();
 
-
     public void setHotbar(int slot, String spell) {
 
         for (Map.Entry<Integer, String> en : hotbar.entrySet()) {
@@ -109,7 +106,6 @@ public class SpellCastingData {
 
     public void calcSpellLevels(Unit unit) {
         resetSpells();
-
 
         unit.getStats().stats.values()
                 .forEach(x -> {
@@ -153,11 +149,9 @@ public class SpellCastingData {
         return spells.stream().filter(x -> x.id.equals(id)).findAny().orElse(new InsertedSpell("", 0));
     }
 
-
     public String getSpellId(int slot) {
         return hotbar.getOrDefault(slot, "");
     }
-
 
     public static class InsertedSpell {
 
@@ -264,7 +258,7 @@ public class SpellCastingData {
                 ItemStack wep = player.getMainHandItem();
 
                 if (!wep.isEmpty() && !RepairUtils.isItemBroken(wep)) {
-                    wep.hurt(1, player.getRandom(), (ServerPlayer) player);
+                    wep.hurtAndBreak(1, player, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
                 }
 
                 SpellCastContext c = new SpellCastContext(player, 0, spell);
@@ -280,7 +274,8 @@ public class SpellCastingData {
             } else if (!cds.isOnCooldown("spell_fail")) {
                 cds.setOnCooldown("spell_fail", 40);
                 if (can.answer != null) {
-                    if (Load.Unit(player).getLevel() < 15 || Load.player(player).config.isConfigEnabled(PlayerConfigData.Config.CAST_FAIL)) {
+                    if (Load.Unit(player).getLevel() < 15
+                            || Load.player(player).config.isConfigEnabled(PlayerConfigData.Config.CAST_FAIL)) {
                         player.sendSystemMessage(Chats.CAST_FAILED.locName().append(can.answer));
                     }
                 }
@@ -342,14 +337,14 @@ public class SpellCastingData {
         }
 
         // Prune input buffer
-        for (Iterator<SpellInputBufferEntry> iterator = spellInputBuffer.iterator(); iterator.hasNext(); ) {
+        for (Iterator<SpellInputBufferEntry> iterator = spellInputBuffer.iterator(); iterator.hasNext();) {
             if (iterator.next().ticksLeft-- == 0) {
                 iterator.remove();
             }
         }
 
         // See if any buffered inputs succeed
-        for (Iterator<SpellInputBufferEntry> iterator = spellInputBuffer.iterator(); iterator.hasNext(); ) {
+        for (Iterator<SpellInputBufferEntry> iterator = spellInputBuffer.iterator(); iterator.hasNext();) {
             if (tryStartSpellCast(player, iterator.next().number)) {
                 iterator.remove();
                 return;
@@ -407,7 +402,8 @@ public class SpellCastingData {
             } catch (Exception e) {
                 e.printStackTrace();
                 this.cancelCast(entity);
-                // cancel when error, cus this is called on tick, so it doesn't crash servers when 1 spell fails
+                // cancel when error, cus this is called on tick, so it doesn't crash servers
+                // when 1 spell fails
             }
         } else {
             lastSpell = null;
@@ -459,7 +455,6 @@ public class SpellCastingData {
             return calcSpell.getSpell();
         }
 
-
         return null;
     }
 
@@ -471,7 +466,6 @@ public class SpellCastingData {
         if (isCasting()) {
             return ExplainedResult.failure(Chats.ALREADY_CASTING.locName());
         }
-
 
         if (spell == null) {
             return ExplainedResult.failure(Component.literal("Trying to cast NULL Spell, this shouldn't happen"));
@@ -488,7 +482,6 @@ public class SpellCastingData {
             }
             return ExplainedResult.silentlyFail();
         }
-
 
         if (player.isCreative()) {
             return ExplainedResult.success();
@@ -508,7 +501,6 @@ public class SpellCastingData {
 
         SpellCastContext ctx = new SpellCastContext(player, 0, spell);
 
-
         EntityData data = Load.Unit(player);
 
         if (data != null) {
@@ -520,7 +512,6 @@ public class SpellCastingData {
             SpendResourceEvent mana = spell.getManaCostCtx(ctx);
             SpendResourceEvent energy = spell.getEnergyCostCtx(ctx);
 
-
             if (data.getResources().hasEnough(mana) && data.getResources().hasEnough(energy)) {
 
                 var opt = Load.Unit(player).equipmentCache.getWeaponOpt();
@@ -528,7 +519,6 @@ public class SpellCastingData {
                 if (RepairUtils.isItemBroken(player.getMainHandItem())) {
                     return ExplainedResult.failure(Chats.CANT_CAST_WITH_BROKEN_WEAPON.locName());
                 }
-
 
                 if (!CompatConfig.get().ignoreWeaponReqForSpells()) {
 
@@ -539,8 +529,10 @@ public class SpellCastingData {
                     }
 
                     if (!spell.getConfig().castingWeapon.predicate.predicate.test(player)) {
-                        // If the spell requires a mage weapon and the player is a battlemage, allow casting
-                        if (spell.getConfig().castingWeapon == CastingWeapon.MAGE_WEAPON && data.getUnit().isBattlemage()) {
+                        // If the spell requires a mage weapon and the player is a battlemage, allow
+                        // casting
+                        if (spell.getConfig().castingWeapon == CastingWeapon.MAGE_WEAPON
+                                && data.getUnit().isBattlemage()) {
                             // Do nothing, allow casting
                         } else {
                             return ExplainedResult.failure(Chats.WRONG_CASTING_WEAPON.locName());
@@ -594,11 +586,13 @@ public class SpellCastingData {
         this.casting = false;
 
         /*
-        if (ctx.caster instanceof ServerPlayer p) {
-            Load.Unit(ctx.caster).sync.setDirty();
-            Packets.sendToClient(p, new TellClientEntityCastingSpell(PlayerAnimations.CastEnum.CAST_FINISH, p, ctx.spell));
-        }
-
+         * if (ctx.caster instanceof ServerPlayer p) {
+         * Load.Unit(ctx.caster).sync.setDirty();
+         * Packets.sendToClient(p, new
+         * TellClientEntityCastingSpell(PlayerAnimations.CastEnum.CAST_FINISH, p,
+         * ctx.spell));
+         * }
+         * 
          */
     }
 

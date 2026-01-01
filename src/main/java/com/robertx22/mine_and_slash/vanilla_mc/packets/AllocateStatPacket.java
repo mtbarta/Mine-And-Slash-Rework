@@ -9,7 +9,7 @@ import com.robertx22.mine_and_slash.database.data.stats.datapacks.stats.CoreStat
 import com.robertx22.mine_and_slash.database.registry.ExileDB;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
@@ -36,14 +36,14 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         stat = tag.readUtf(30);
         action = tag.readEnum(AllocateStatPacket.ACTION.class);
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(stat, 30);
         tag.writeEnum(action);
 

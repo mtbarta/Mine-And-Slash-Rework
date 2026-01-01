@@ -20,8 +20,6 @@ public class ToonList extends ObjectSelectionList<ToonEntry> {
         this.screen = screen;
 
         reloadAllEntries();
-
-        this.setRenderBackground(false);
     }
 
     private List<ToonData> all = new ArrayList<>();

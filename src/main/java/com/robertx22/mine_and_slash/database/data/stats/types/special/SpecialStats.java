@@ -25,16 +25,16 @@ public class SpecialStats {
 
     }
 
-
     public static SpecialStat HEAL_CLEANSE = new SpecialStat("heal_cleanse",
             format("Your " + ResourceStats.HEAL_STRENGTH.get()
-                    .getFormat() + ResourceStats.HEAL_STRENGTH.get().icon + " Heal Spells " + ChatFormatting.GRAY + "have a " + VAL1 + "%" + " chance to cleanse a negative effect."),
+                    .getFormat() + ResourceStats.HEAL_STRENGTH.get().icon + " Heal Spells " + ChatFormatting.GRAY
+                    + "have a " + VAL1 + "%" + " chance to cleanse a negative effect."),
 
             new BaseHealEffect() {
                 @Override
                 public RestoreResourceEvent activate(RestoreResourceEvent effect, StatData data, Stat stat) {
                     for (MobEffectInstance x : new ArrayList<>(effect.target.getActiveEffects())) {
-                        if (x.getEffect()
+                        if (x.getEffect().value()
                                 .getCategory() == MobEffectCategory.HARMFUL) {
                             effect.target.removeEffect(x.getEffect());
                         }
@@ -56,9 +56,7 @@ public class SpecialStats {
                 public StatPriority GetPriority() {
                     return StatPriority.Spell.FIRST;
                 }
-            }
-    );
-
+            });
 
     public static SpecialStat BETTER_FOOD_BUFFS = new SpecialStat("more_food_stats",
             format("You gain " + VAL1 + "% more stats through Food buffs."),
@@ -67,8 +65,6 @@ public class SpecialStats {
                 public StatContext.StatCtxType getCtxTypeNeeded() {
                     return StatContext.StatCtxType.FOOD_BUFF;
                 }
-            }
-    );
-
+            });
 
 }

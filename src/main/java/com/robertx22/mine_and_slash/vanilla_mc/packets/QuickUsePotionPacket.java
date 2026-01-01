@@ -5,7 +5,7 @@ import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.library_of_exile.utils.SoundUtils;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.vanilla_mc.items.SlashPotionItem;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -26,12 +26,12 @@ public class QuickUsePotionPacket extends MyPacket<QuickUsePotionPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf friendlyByteBuf) {
+    public void loadFromData(RegistryFriendlyByteBuf friendlyByteBuf) {
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf friendlyByteBuf) {
+    public void saveToData(RegistryFriendlyByteBuf friendlyByteBuf) {
 
     }
 
@@ -39,25 +39,27 @@ public class QuickUsePotionPacket extends MyPacket<QuickUsePotionPacket> {
     public void onReceived(ExilePacketContext exilePacketContext) {
         if (exilePacketContext.getPlayer() instanceof ServerPlayer player) {
             List<ItemStack> potionItems = new ArrayList<>();
-            //get all kinds of SlashPotionItem in player's inventory.
+            // get all kinds of SlashPotionItem in player's inventory.
             for (Slot slot : player.inventoryMenu.slots) {
                 if (slot.getItem().getItem() instanceof SlashPotionItem) {
                     potionItems.add(slot.getItem());
                 }
             }
             potionItems.stream()
-                    //remove all in-cooldown potions
+                    // remove all in-cooldown potions
                     .filter(x -> !player.getCooldowns().isOnCooldown(x.getItem()))
                     .map(x -> Pair.of(x, ((SlashPotionItem) x.getItem())))
                     .collect(Collectors.groupingBy(x -> x.getRight().getType()))
                     .values()
                     .stream()
-                    //pick the greatest one
+                    // pick the greatest one
                     .map(v -> {
                         if (v.size() > 1) {
-                            //sort the list to find the greatest one
+                            // sort the list to find the greatest one
                             List<Pair<ItemStack, SlashPotionItem>> sorted = v.stream()
-                                    .sorted(((p1, p2) -> -Float.compare(p1.getRight().getType().getHealPercent(p1.getKey()), p2.getRight().getType().getHealPercent(p2.getKey()))))
+                                    .sorted(((p1,
+                                            p2) -> -Float.compare(p1.getRight().getType().getHealPercent(p1.getKey()),
+                                                    p2.getRight().getType().getHealPercent(p2.getKey()))))
                                     .toList();
                             return sorted.get(0);
                         } else {
@@ -65,12 +67,13 @@ public class QuickUsePotionPacket extends MyPacket<QuickUsePotionPacket> {
                         }
 
                     })
-                    //try drink
+                    // try drink
                     .map(x -> x.getRight().handlePotionRestore(player, x.getLeft()))
                     .filter(x -> x)
-                    //at least one potion is consumed
+                    // at least one potion is consumed
                     .findFirst()
-                    .ifPresentOrElse(x -> SoundUtils.playSound(player, SoundEvents.VILLAGER_YES), () -> SoundUtils.playSound(player, SoundEvents.VILLAGER_NO));
+                    .ifPresentOrElse(x -> SoundUtils.playSound(player, SoundEvents.VILLAGER_YES),
+                            () -> SoundUtils.playSound(player, SoundEvents.VILLAGER_NO));
         }
     }
 

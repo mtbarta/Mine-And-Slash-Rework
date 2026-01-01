@@ -29,11 +29,9 @@ public class CraftedUniqueJewelItem extends Item implements IShapelessRecipe {
 
     }
 
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-
 
         if (!pLevel.isClientSide) {
 
@@ -42,7 +40,6 @@ public class CraftedUniqueJewelItem extends Item implements IShapelessRecipe {
             if (data == null) {
 
                 data = new JewelItemData();
-
 
                 data.rar = IRarity.RUNEWORD_ID;
 
@@ -54,18 +51,17 @@ public class CraftedUniqueJewelItem extends Item implements IShapelessRecipe {
 
         }
 
-
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
 
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         if (!StackSaving.JEWEL.has(pStack)) {
             pTooltipComponents.add(Itemtips.UNIQUE_JEWEL_USE.locName());
         }
     }
-
 
     @Override
     public ShapelessRecipeBuilder getRecipe() {

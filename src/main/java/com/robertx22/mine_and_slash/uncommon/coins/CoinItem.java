@@ -28,10 +28,12 @@ public class CoinItem extends AutoItem implements ICreativeTabTiered {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         try {
             // todo need info for each coin type
-            //  pTooltipComponents.add(coin.validator.isCoinValid(ClientOnly.getPlayer(), pStack).answer);
+            // pTooltipComponents.add(coin.validator.isCoinValid(ClientOnly.getPlayer(),
+            // pStack).answer);
             pTooltipComponents.addAll(new ExileTooltips().accept(new LeveledItemBlock(pStack)).release());
         } catch (Exception e) {
             e.printStackTrace();

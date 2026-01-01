@@ -10,6 +10,7 @@ import com.robertx22.mine_and_slash.maps.MnsMapDataHolder;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashAttachments;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -17,9 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 public class WorldData implements ICap {
-
 
     public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "world");
 
@@ -31,21 +30,18 @@ public class WorldData implements ICap {
         return level.getServer().overworld().getData(SlashAttachments.WORLD_DATA);
     }
 
-
     private static final String MAP = "mapdata";
 
     transient Level level;
 
     public MnsMapDataHolder map = new MnsMapDataHolder();
 
-
     public WorldData(Level level) {
         this.level = level;
     }
 
-
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
 
         CompoundTag nbt = new CompoundTag();
 
@@ -55,7 +51,7 @@ public class WorldData implements ICap {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
 
         this.map = loadOrBlank(MnsMapDataHolder.class, new MnsMapDataHolder(), nbt, MAP, new MnsMapDataHolder());
 

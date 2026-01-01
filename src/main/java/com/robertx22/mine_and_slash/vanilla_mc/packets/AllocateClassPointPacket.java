@@ -7,7 +7,7 @@ import com.robertx22.mine_and_slash.database.data.spell_school.SpellSchool;
 import com.robertx22.mine_and_slash.database.registry.ExileDB;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket> {
@@ -36,7 +36,7 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         id = tag.readUtf(100);
         schoolid = tag.readUtf(100);
         action = tag.readEnum(AllocateClassPointPacket.ACTION.class);
@@ -44,7 +44,7 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(id, 100);
         tag.writeUtf(schoolid, 100);
         tag.writeEnum(action);
@@ -53,7 +53,6 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
 
     @Override
     public void onReceived(ExilePacketContext ctx) {
-
 
         Perk perk = ExileDB.Perks().get(this.id);
         SpellSchool school = ExileDB.SpellSchools().get(this.schoolid);
@@ -76,7 +75,6 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
 
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
 
-
         Load.player(ctx.getPlayer()).playerDataSync.setDirty();
 
     }
@@ -86,4 +84,3 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
         return new AllocateClassPointPacket();
     }
 }
-

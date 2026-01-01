@@ -17,16 +17,14 @@ public class BossSpells implements ExileRegistryInit {
     public static String CLOSE_NOVA = "close_nova";
     public static String MINION_EXPLOSION = "minion_explosion";
 
-
     @Override
     public void registerAll() {
 
-
         SpellBuilder.of(MINION_EXPLOSION, PlayStyle.STR, SpellConfiguration.Builder.instant(0, 0), "Minion Explosion",
-                        Arrays.asList(SpellTags.area, SpellTags.damage))
+                Arrays.asList(SpellTags.area, SpellTags.damage))
 
                 .weight(0)
-                .onCast(PartBuilder.playSound(SoundEvents.GENERIC_EXPLODE, 1D, 1D))
+                .onCast(PartBuilder.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1D, 1D))
 
                 .onCast(PartBuilder.aoeParticles(ParticleTypes.WITCH, 300D, 3D))
                 .onCast(PartBuilder.aoeParticles(ParticleTypes.EXPLOSION, 100D, 3D))
@@ -38,10 +36,10 @@ public class BossSpells implements ExileRegistryInit {
                 .build();
 
         SpellBuilder.of(CLOSE_NOVA, PlayStyle.STR, SpellConfiguration.Builder.instant(0, 0), "Close Nova",
-                        Arrays.asList(SpellTags.area, SpellTags.damage))
+                Arrays.asList(SpellTags.area, SpellTags.damage))
 
                 .weight(0)
-                .onCast(PartBuilder.playSound(SoundEvents.GENERIC_EXPLODE, 1D, 1D))
+                .onCast(PartBuilder.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1D, 1D))
 
                 .onCast(PartBuilder.nova(ParticleTypes.WITCH, 150D, 3D, 0.05D))
 

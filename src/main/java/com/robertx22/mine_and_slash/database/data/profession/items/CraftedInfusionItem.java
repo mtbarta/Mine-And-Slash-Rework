@@ -62,7 +62,8 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> l, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext context, List<Component> l,
+            TooltipFlag pIsAdvanced) {
         var tier = LeveledItem.getTier(pStack);
         l.clear();
         l.addAll(new ExileTooltips()
@@ -72,14 +73,19 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
                 .accept(new UsageBlock(() -> {
                     List<GearOutcome> outcomes = ((GearCurrency) this.currencyEffect(pStack)).getOutcomes();
                     return outcomes.stream()
-                            .map(x -> x.getTooltip(outcomes.stream().mapToInt(IWeighted::Weight).sum()).withStyle(ChatFormatting.GRAY))
+                            .map(x -> x.getTooltip(outcomes.stream().mapToInt(IWeighted::Weight).sum())
+                                    .withStyle(ChatFormatting.GRAY))
                             .toList();
 
                 }))
                 .accept(new ProfessionDropSourceBlock(Professions.INFUSING))
-                .accept(new UsageBlock(() -> Arrays.asList(Chats.ENCHANT_UPGRADE_RARITY.locName().withStyle(ChatFormatting.BLUE))))
-                .accept(new RequirementBlock(Collections.singletonList(Itemtips.INFUSION_GEAR_LEVEL_RANGE.locName(tier.levelRange.getMinLevel(), tier.levelRange.getMaxLevel())), UNICODE.ROTATED_CUBE + " "))
-                //  .accept(new LeveledItemBlock(pStack))
+                .accept(new UsageBlock(
+                        () -> Arrays.asList(Chats.ENCHANT_UPGRADE_RARITY.locName().withStyle(ChatFormatting.BLUE))))
+                .accept(new RequirementBlock(
+                        Collections.singletonList(Itemtips.INFUSION_GEAR_LEVEL_RANGE
+                                .locName(tier.levelRange.getMinLevel(), tier.levelRange.getMaxLevel())),
+                        UNICODE.ROTATED_CUBE + " "))
+                // .accept(new LeveledItemBlock(pStack))
                 .release());
     }
 
@@ -123,7 +129,10 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
                                         gear.ench = new GearInfusionData();
 
                                         Affix affix = ExileDB.Affixes().getFilterWrapped(x -> {
-                                            return x.type == Affix.AffixSlot.enchant && x.requirements.satisfiesAllRequirements(new GearRequestedFor(gear)) && x.getAllTagReq().contains(SlotTags.enchantment.GUID());
+                                            return x.type == Affix.AffixSlot.enchant
+                                                    && x.requirements
+                                                            .satisfiesAllRequirements(new GearRequestedFor(gear))
+                                                    && x.getAllTagReq().contains(SlotTags.enchantment.GUID());
                                         }).random();
                                         gear.ench.en = affix.GUID();
                                     } else {
@@ -165,8 +174,7 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
                             public int Weight() {
                                 return 1000;
                             }
-                        }
-                );
+                        });
             }
 
             @Override
@@ -205,7 +213,6 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
                     }
                 }
 
-
                 if (stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.ENCHANT_TIMES) > 9) {
                     return ExplainedResult.failure(Chats.THIS_ITEM_CANT_BE_USED_MORE_THAN_X_TIMES.locName(10));
                 }
@@ -215,7 +222,8 @@ public class CraftedInfusionItem extends AutoItem implements IRarityItem, IItemA
 
             @Override
             public String locDescForLangFile() {
-                return "Tries to Infuse the item, adding stats. Item can only attempt infusion 10 times. As this can fail, some items will never reach maximum rarity Infusions." +
+                return "Tries to Infuse the item, adding stats. Item can only attempt infusion 10 times. As this can fail, some items will never reach maximum rarity Infusions."
+                        +
                         "The item must be infused through the rarities progressively. So first you have to infuse a common enchant, then an uncommon etc";
             }
 

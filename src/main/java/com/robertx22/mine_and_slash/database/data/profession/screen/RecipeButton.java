@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ public class RecipeButton extends ImageButton {
     public void setModTooltip() {
 
         List<MutableComponent> list = new ArrayList<>();
-        for (Component l : recipe.toResultStackForJei().getTooltipLines(mc.player, TooltipFlag.NORMAL)) {
+        for (Component l : recipe.toResultStackForJei().getTooltipLines(Item.TooltipContext.of(mc.level), mc.player,
+                TooltipFlag.NORMAL)) {
             list.add((MutableComponent) l);
         }
 

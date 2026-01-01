@@ -181,4 +181,9 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
     }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false; // Summons don't breed
+    }
 }

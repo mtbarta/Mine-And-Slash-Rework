@@ -2,7 +2,6 @@ package com.robertx22.mine_and_slash.a_libraries.neat;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
-import net.neoforged.fml.IExtensionPoint;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 // import net.minecraftforge.network.NetworkConstants;
@@ -25,9 +24,6 @@ public class NeatForgeConfig {
     }
 
     public static void register() {
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
-                () -> new IExtensionPoint.DisplayTest(() -> IExtensionPoint.DisplayTest.IGNORESERVERONLY,
-                        (incoming, isNetwork) -> true));
         NeatForgeConfig.init();
     }
 

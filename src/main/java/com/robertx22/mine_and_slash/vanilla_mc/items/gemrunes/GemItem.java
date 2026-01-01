@@ -45,6 +45,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -58,10 +59,10 @@ import java.util.Optional;
 
 public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCurrency, IWeighted, IShapelessRecipe {
 
-
     @Override
     public Component getName(ItemStack stack) {
-        return Formatter.GEM_ITEM_NAME.locName(this.gemRank.locName(), this.gemType.locName()).withStyle(gemType.format);
+        return Formatter.GEM_ITEM_NAME.locName(this.gemRank.locName(), this.gemType.locName())
+                .withStyle(gemType.format);
     }
 
     @Override
@@ -71,8 +72,8 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
             return null;
         }
         return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, GemItems.MAP.get(gemType)
-                        .get(gemRank)
-                        .get())
+                .get(gemRank)
+                .get())
                 .requires(GemItems.MAP.get(gemType)
                         .get(gemRank.lower())
                         .get(), 3)
@@ -88,7 +89,6 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
     public void generateModel(ItemModelManager manager) {
         manager.generated(this);
     }
-
 
     static float MIN_WEP_DMG = 2;
     static float MAX_WEP_DMG = 15;
@@ -146,7 +146,8 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
                                     ctx.player.displayClientMessage(Chats.GEM_SOCKETED.locName(), false);
                                 });
 
-                                ex.get(StackKeys.CUSTOM).edit(custom -> custom.data.set(CustomItemData.KEYS.SALVAGING_DISABLED, true));
+                                ex.get(StackKeys.CUSTOM)
+                                        .edit(custom -> custom.data.set(CustomItemData.KEYS.SALVAGING_DISABLED, true));
                                 ctx.stack = ex.getStack();
                             }
 
@@ -154,8 +155,7 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
                             public int Weight() {
                                 return 1000;
                             }
-                        }
-                );
+                        });
             }
 
             @Override
@@ -175,21 +175,21 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
                 }
                 var rar = data.getRarity();
 
-                //int runes = (int) data.sockets.getSocketed().stream().filter(x -> x.isRune()).count();
+                // int runes = (int) data.sockets.getSocketed().stream().filter(x ->
+                // x.isRune()).count();
                 int gems = (int) data.sockets.getSocketed().stream().filter(x -> x.isGem()).count();
 
                 if (rar.max_gems > 0) {
                     if (gems >= rar.max_gems) {
-                        return ExplainedResult.failure(Chats.RARITY_CANT_HAVE_MORE_THAN_X_GEMS.locName(rar.coloredName(), rar.max_gems));
+                        return ExplainedResult.failure(
+                                Chats.RARITY_CANT_HAVE_MORE_THAN_X_GEMS.locName(rar.coloredName(), rar.max_gems));
                     }
                 } else {
                     return ExplainedResult.failure(Chats.RARITY_CANT_HAVE_ANY_GEMS.locName(rar.coloredName()));
                 }
 
-
                 return ExplainedResult.success();
             }
-
 
             @Override
             public String locDescForLangFile() {
@@ -212,7 +212,6 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
             }
         };
     }
-
 
     public static class EleGem extends GemStatPerTypes {
         public Elements ele;
@@ -268,7 +267,8 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
 
             @Override
             public List<StatMod> onWeapons() {
-                return Arrays.asList(new StatMod(1, 3, ResourceStats.RESOURCE_ON_HIT.get(new ResourceAndAttack(ResourceType.mana, AttackType.hit))));
+                return Arrays.asList(new StatMod(1, 3,
+                        ResourceStats.RESOURCE_ON_HIT.get(new ResourceAndAttack(ResourceType.mana, AttackType.hit))));
             }
         }),
 
@@ -359,7 +359,6 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
         }
     }
 
-
     public enum GemRank implements IAutoLocName {
         CRACKED("Cracked", 0, 0.1F, 100, 100999, 0F, IRarity.COMMON_ID),
         CHIPPED("Chipped", 1, 0.2F, 75, 25999, 0.1F, IRarity.COMMON_ID),
@@ -377,7 +376,8 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
         public int weight;
         public float lvlToDropmulti;
 
-        GemRank(String locName, int tier, float statmulti, int upgradeChance, int weight, float lvlToDropmulti, String rar) {
+        GemRank(String locName, int tier, float statmulti, int upgradeChance, int weight, float lvlToDropmulti,
+                String rar) {
             this.locName = locName;
             this.rar = rar;
             this.weight = weight;
@@ -462,15 +462,14 @@ public class GemItem extends BaseGemItem implements IGUID, IAutoModel, IItemAsCu
         return opt.orElse(new Gem());
     }
 
-
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag flag) {
 
         try {
 
             tooltip.addAll(getBaseTooltip());
-
 
         } catch (Exception e) {
             e.printStackTrace();

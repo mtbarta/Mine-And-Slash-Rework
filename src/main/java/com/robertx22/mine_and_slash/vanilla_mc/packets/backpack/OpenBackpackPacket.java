@@ -8,7 +8,7 @@ import com.robertx22.mine_and_slash.capability.player.BackpackItem;
 import com.robertx22.mine_and_slash.capability.player.data.Backpacks;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
@@ -21,19 +21,18 @@ public class OpenBackpackPacket extends MyPacket<OpenBackpackPacket> {
         this.type = type;
     }
 
-
     @Override
     public ResourceLocation getIdentifier() {
         return SlashRef.id("open_backpack");
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         this.type = buf.readEnum(Backpacks.BackpackType.class);
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
 
         buf.writeEnum(type);
     }

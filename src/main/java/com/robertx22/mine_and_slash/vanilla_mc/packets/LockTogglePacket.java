@@ -11,7 +11,7 @@ import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.localization.Chats;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,12 +33,12 @@ public class LockTogglePacket extends MyPacket<LockTogglePacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf friendlyByteBuf) {
+    public void loadFromData(RegistryFriendlyByteBuf friendlyByteBuf) {
         this.block_pos = friendlyByteBuf.readBlockPos();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf friendlyByteBuf) {
+    public void saveToData(RegistryFriendlyByteBuf friendlyByteBuf) {
         friendlyByteBuf.writeBlockPos(this.block_pos);
     }
 
@@ -54,38 +54,54 @@ public class LockTogglePacket extends MyPacket<LockTogglePacket> {
             }
 
             if (pbe.craftingState == Crafting_State.ACTIVE && pbe.recipe_locked) {
-                if ((pbe.ownerUUID != null && pbe.ownerUUID.compareTo(exilePacketContext.getPlayer().getUUID()) == 0) || pbe.ownerUUID == null)
-                    exilePacketContext.getPlayer().sendSystemMessage(Component.literal("This Station is currently claimed by another player").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                if ((pbe.ownerUUID != null && pbe.ownerUUID.compareTo(exilePacketContext.getPlayer().getUUID()) == 0)
+                        || pbe.ownerUUID == null)
+                    exilePacketContext.getPlayer()
+                            .sendSystemMessage(Component.literal("This Station is currently claimed by another player")
+                                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             } else if (pbe.craftingState == Crafting_State.IDLE && pbe.recipe_locked) {
-                exilePacketContext.getPlayer().sendSystemMessage(Component.literal("Stop auto crafting before unlocking the recipe").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                exilePacketContext.getPlayer()
+                        .sendSystemMessage(Component.literal("Stop auto crafting before unlocking the recipe")
+                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             } else if (pbe.craftingState == Crafting_State.STOPPED && pbe.recipe_locked) {
                 pbe.recipe_locked = false;
                 pbe.last_recipe = null;
-                //pbe.show.clearContent();
+                // pbe.show.clearContent();
                 if (pbe.ownerUUID != null && pbe.ownerUUID.compareTo(exilePacketContext.getPlayer().getUUID()) != 0) {
                     // pbe.ownerUUID = null;
                 }
             } else if (pbe.craftingState == Crafting_State.ACTIVE && !pbe.recipe_locked) {
-                exilePacketContext.getPlayer().sendSystemMessage(Component.literal("Stop auto crafting before locking the recipe").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                exilePacketContext.getPlayer()
+                        .sendSystemMessage(Component.literal("Stop auto crafting before locking the recipe")
+                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             } else if (pbe.craftingState == Crafting_State.STOPPED && !pbe.recipe_locked) {
                 ProfessionRecipe recipe = pbe.getCurrentRecipe();
                 if (recipe == null) {
-                    exilePacketContext.getPlayer().sendSystemMessage(Chats.PROF_RECIPE_NOT_SELECTED.locName().withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                    exilePacketContext.getPlayer().sendSystemMessage(Chats.PROF_RECIPE_NOT_SELECTED.locName()
+                            .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                     return;
                 }
 
                 int ownerLvl = Load.player(exilePacketContext.getPlayer()).professions.getLevel(recipe.profession);
                 if (recipe.getLevelRequirement() > ownerLvl) {
-                    exilePacketContext.getPlayer().sendSystemMessage(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH.locName(recipe.profession, recipe.getLevelRequirement(), ownerLvl).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                    exilePacketContext.getPlayer()
+                            .sendSystemMessage(Chats.PROF_RECIPE_LEVEL_NOT_ENOUGH
+                                    .locName(recipe.profession, recipe.getLevelRequirement(), ownerLvl)
+                                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                     return;
                 }
                 pbe.recipe_locked = true;
                 pbe.last_recipe = recipe;
                 var showstack = recipe.toResultStackForJei();
                 showstack.setCount(1);
-                //pbe.show.setItem(0, showstack);
+                // pbe.show.setItem(0, showstack);
             } else {
-                exilePacketContext.getPlayer().sendSystemMessage(Component.literal("Unhandled Case(Report The Following):  " + pbe.recipe_locked + " + " + pbe.craftingState.name()).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                exilePacketContext.getPlayer()
+                        .sendSystemMessage(
+                                Component
+                                        .literal("Unhandled Case(Report The Following):  " + pbe.recipe_locked + " + "
+                                                + pbe.craftingState.name())
+                                        .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
             }
             pbe.setChanged();
         }

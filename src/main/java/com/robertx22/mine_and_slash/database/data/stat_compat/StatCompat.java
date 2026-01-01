@@ -51,7 +51,6 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
     private StatCompat() {
     }
 
-
     public void editAndReg(Consumer<StatCompat> co) {
         co.accept(this);
         addToSerializables(MMORPG.SERIAZABLE_REGISTRATION_INFO);
@@ -68,7 +67,6 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
     public boolean isEnchantCompat() {
         return !enchant_id.isEmpty();
     }
-
 
     public ExactStatData getEnchantCompatResult(List<ItemStack> stacks, int lvl) {
         if (ExileDB.Stats().get(mns_stat_id) instanceof AttributeStat) {
@@ -110,7 +108,8 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
                 return null;
             }
 
-            int val = (int) (en.getAttributeValue(at) * conversion);
+            var holder = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(at);
+            int val = (int) (en.getAttributeValue(holder) * conversion);
             int value = MathHelper.clamp(val, minimum_cap, maximum_cap);
 
             if (value != 0) {
@@ -139,7 +138,6 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
     public ExileRegistryType getExileRegistryType() {
         return ExileRegistryTypes.STAT_COMPAT;
     }
-
 
     @Override
     public String GUID() {

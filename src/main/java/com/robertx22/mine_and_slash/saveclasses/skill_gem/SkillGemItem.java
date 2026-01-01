@@ -24,7 +24,6 @@ public class SkillGemItem extends Item implements INeedsNBT {
     public SkillGemItem() {
         super(new Properties().stacksTo(1));
 
-
     }
 
     @Override
@@ -45,18 +44,18 @@ public class SkillGemItem extends Item implements INeedsNBT {
             });
         }
 
-
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
 
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
 
         try {
-            if (pLevel != null && !pLevel.isClientSide()) {
-                return;
-            }
+            // if (pLevel != null && !pLevel.isClientSide()) {
+            // return;
+            // }
 
             SkillGemData data = StackSaving.SKILL_GEM.loadFrom(stack);
             if (data != null) {

@@ -59,7 +59,6 @@ import java.util.List;
 
 import static com.robertx22.library_of_exile.tooltip.ExileTooltipUtils.splitLongText;
 
-
 public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, IWeighted, IItemAsCurrency {
 
     public int weight = 1000;
@@ -68,7 +67,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
     public CodeCurrency currencyEffect(ItemStack stack) {
         return new RuneCurrency();
     }
-
 
     public class RuneCurrency extends GearCurrency {
 
@@ -92,10 +90,12 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
                             ExileStack ex = ExileStack.of(ctx.stack);
 
                             ex.get(StackKeys.GEAR).edit(gear -> {
-                                //todo actually make this based on gear rarities
+                                // todo actually make this based on gear rarities
                                 var rune = new SocketData();
                                 boolean add = true;
-                                var opt = gear.sockets.getSocketed().stream().filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id)).findAny();
+                                var opt = gear.sockets.getSocketed().stream()
+                                        .filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id))
+                                        .findAny();
                                 if (opt.isPresent()) {
                                     rune = opt.get();
                                     add = false;
@@ -115,14 +115,16 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
 
                                 if (add) {
                                     gear.sockets.getSocketed().add(rune);
-                                    ex.get(StackKeys.CUSTOM).edit(custom -> custom.data.set(CustomItemData.KEYS.SALVAGING_DISABLED, true));
+                                    ex.get(StackKeys.CUSTOM).edit(
+                                            custom -> custom.data.set(CustomItemData.KEYS.SALVAGING_DISABLED, true));
                                 }
 
-
                                 if (gear.getRarity().can_have_runewords) {
-                                    var list = ExileDB.RuneWords().getFilterWrapped(x -> x.canApplyOnItem(gear) && x.hasMatchingRunesToCreate(gear)).list;
+                                    var list = ExileDB.RuneWords().getFilterWrapped(
+                                            x -> x.canApplyOnItem(gear) && x.hasMatchingRunesToCreate(gear)).list;
                                     if (!list.isEmpty()) {
-                                        var biggest = list.stream().max(Comparator.comparingInt(x -> x.runes.size())).get();
+                                        var biggest = list.stream().max(Comparator.comparingInt(x -> x.runes.size()))
+                                                .get();
 
                                         var current = gear.sockets.getRuneWord();
 
@@ -139,7 +141,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
 
                             });
 
-
                             ctx.stack = ex.getStack();
                         }
 
@@ -147,8 +148,7 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
                         public int Weight() {
                             return 1000;
                         }
-                    }
-            );
+                    });
         }
 
         @Override
@@ -167,9 +167,9 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
 
             int runes = (int) data.sockets.getSocketed().stream().filter(x -> x.isRune()).count();
             if (runes >= data.getRarity().max_runes) {
-                return ExplainedResult.failure(Chats.MAX_RUNES_PER_RARITY.locName(data.getRarity().max_runes, data.getRarity().coloredName()));
+                return ExplainedResult.failure(
+                        Chats.MAX_RUNES_PER_RARITY.locName(data.getRarity().max_runes, data.getRarity().coloredName()));
             }
-
 
             Rune rune = ExileDB.Runes().get(RuneItem.this.type.id);
 
@@ -177,15 +177,16 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
                 return ExplainedResult.failure(Chats.NOT_FAMILY.locName());
             }
 
-            var opt = data.sockets.getSocketed().stream().filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id)).findAny();
+            var opt = data.sockets.getSocketed().stream()
+                    .filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id)).findAny();
             if (opt.isPresent()) {
                 if (opt.get().p >= 100) {
                     return ExplainedResult.failure(Chats.RUNE_IS_ALREADY_MAXED.locName());
                 }
             }
 
-
-            int samerunes = (int) data.sockets.getSocketed().stream().filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id)).count();
+            int samerunes = (int) data.sockets.getSocketed().stream()
+                    .filter(x -> x.isRune() && x.getRune().GUID().equals(RuneItem.this.type.id)).count();
             var can = data.getEmptySockets() > 0 || samerunes == 1;
 
             if (!can) {
@@ -219,7 +220,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
     public AutoLocGroup locNameGroup() {
         return AutoLocGroup.Misc;
     }
-
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
@@ -267,7 +267,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
         return "runes/" + type.id;
     }
 
-
     @Override
     public int Weight() {
         return weight;
@@ -280,7 +279,8 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag flag) {
 
         try {
 
@@ -298,13 +298,15 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
             Rune rune = this.getRune();
 
             if (Screen.hasShiftDown()) {
-                t.accept(new UsageBlock(splitLongText(Itemtips.RUNE_ITEM_USAGE.locName().withStyle(ChatFormatting.BLUE))));
+                t.accept(new UsageBlock(
+                        splitLongText(Itemtips.RUNE_ITEM_USAGE.locName().withStyle(ChatFormatting.BLUE))));
                 if (rune.Weight() > 0) {
                     var lvl = Load.Unit(ClientOnly.getPlayer()).getLevel();
                     t.accept(new DropLevelBlock(rune.getReqLevelToDrop(), GameBalanceConfig.get().MAX_LEVEL));
                     t.accept(new DropChanceBlock(RunePart.droppableAtLevel(lvl).getDropChance(rune)));
                 } else {
-                    t.accept(new AdditionalBlock(Itemtips.NOT_A_RANDOM_MNS_DROP_CHECK_MODPACK.locName().withStyle(ChatFormatting.BLUE)));
+                    t.accept(new AdditionalBlock(
+                            Itemtips.NOT_A_RANDOM_MNS_DROP_CHECK_MODPACK.locName().withStyle(ChatFormatting.BLUE)));
                 }
             }
 
@@ -321,7 +323,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
         int lvl = Load.Unit(ClientOnly.getPlayer()).getLevel();
 
         Rune gem = this.getRune();
-
 
         // TooltipInfo info = new TooltipInfo();
 
@@ -354,7 +355,6 @@ public class RuneItem extends Item implements IGUID, IAutoModel, IAutoLocName, I
             }
         }
         tooltip.add(Component.literal(""));
-
 
         return tooltip;
     }

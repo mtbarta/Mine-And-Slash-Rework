@@ -76,8 +76,9 @@ public class MapHolder {
         return AttackType.valueOf(get(MapField.DMG_EFFECT_TYPE));
     }
 
-    public MobEffect getPotion() {
-        return BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(get(POTION_ID)));
+    public net.minecraft.core.Holder<MobEffect> getPotion() {
+        return BuiltInRegistries.MOB_EFFECT.getHolderOrThrow(net.minecraft.resources.ResourceKey
+                .create(net.minecraft.core.registries.Registries.MOB_EFFECT, new ResourceLocation(get(POTION_ID))));
     }
 
     public Elements getElement() {
@@ -118,9 +119,12 @@ public class MapHolder {
         }
     }
 
-    /*public SimpleParticleType getParticle() {
-        return (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(new ResourceLocation(get(MapField.PARTICLE_TYPE)));
-    }*/
+    /*
+     * public SimpleParticleType getParticle() {
+     * return (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(new
+     * ResourceLocation(get(MapField.PARTICLE_TYPE)));
+     * }
+     */
 
     public Block getBlock() {
         return VanillaUTIL.REGISTRY.blocks().get(new ResourceLocation(get(MapField.BLOCK)));

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,7 +23,8 @@ public class GiveArrowsIfNotInfinity extends SpellAction {
     public void tryActivate(Collection<LivingEntity> targets, SpellCtx ctx, MapHolder data) {
         if (ctx.caster instanceof Player p) {
 
-            if (EnchantmentHelper.getItemEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.INFINITY_ARROWS, ctx.caster.getMainHandItem()) < 1) {
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY,
+                    ctx.caster.getMainHandItem()) < 1) {
                 if (p.getInventory().countItem(Items.ARROW) < 64) {
                     PlayerUtils.giveItem(new ItemStack(Items.ARROW, 64), p);
                 }
@@ -41,4 +43,3 @@ public class GiveArrowsIfNotInfinity extends SpellAction {
         return "give_arrows_if_no_infi";
     }
 }
-

@@ -1,7 +1,6 @@
 package com.robertx22.mine_and_slash.saveclasses.stat_soul;
 
 import com.robertx22.library_of_exile.registry.IGUID;
-import com.robertx22.library_of_exile.utils.LoadSave;
 import com.robertx22.mine_and_slash.a_libraries.jei.iHideJei;
 import com.robertx22.mine_and_slash.database.data.gear_slots.GearSlot;
 import com.robertx22.mine_and_slash.database.data.rarities.GearRarity;
@@ -10,7 +9,6 @@ import com.robertx22.mine_and_slash.gui.texts.ExileTooltips;
 import com.robertx22.mine_and_slash.gui.texts.textblocks.NameBlock;
 import com.robertx22.mine_and_slash.itemstack.ExileStack;
 import com.robertx22.mine_and_slash.itemstack.StackKeys;
-import com.robertx22.mine_and_slash.saveclasses.gearitem.gear_bases.TooltipContext;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import com.robertx22.mine_and_slash.uncommon.localization.Words;
@@ -45,13 +43,11 @@ public class StatSoulItem extends Item implements IGUID, ICreativeTabNbt, iHideJ
     }
 
     public static boolean hasSoul(ItemStack stack) {
-        return stack.hasTag() && stack.getTag()
-                .contains(TAG);
+        return StackSaving.STAT_SOULS.has(stack);
     }
 
     public static StatSoulData getSoul(ItemStack stack) {
-        StatSoulData data = LoadSave.Load(StatSoulData.class, new StatSoulData(), stack.getOrCreateTag(), TAG);
-        return data;
+        return StackSaving.STAT_SOULS.loadFrom(stack);
     }
 
     @Override
@@ -143,7 +139,8 @@ public class StatSoulItem extends Item implements IGUID, ICreativeTabNbt, iHideJ
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag flag) {
         try {
             StatSoulData data = StackSaving.STAT_SOULS.loadFrom(stack);
             if (data != null) {
@@ -152,7 +149,10 @@ public class StatSoulItem extends Item implements IGUID, ICreativeTabNbt, iHideJ
                     // todo temp solution to view extracted souls
                     var gearstack = new ItemStack(Items.IRON_SWORD);
                     data.gear.saveTo(gearstack);
-                    data.gear.gear.BuildTooltip(new TooltipContext(gearstack, tooltip, Load.Unit(ClientOnly.getPlayer())));
+                    data.gear.gear
+                            .BuildTooltip(
+                                    new com.robertx22.mine_and_slash.saveclasses.gearitem.gear_bases.TooltipContext(
+                                            gearstack, tooltip, Load.Unit(ClientOnly.getPlayer())));
                 } else {
                     ExileTooltips exileTooltips = data.getTooltip(stack, false);
                     exileTooltips.accept(new NameBlock(Collections.singletonList(stack.getHoverName())));
@@ -170,6 +170,5 @@ public class StatSoulItem extends Item implements IGUID, ICreativeTabNbt, iHideJ
     public String GUID() {
         return "stat_soul/stat_soul";
     }
-
 
 }

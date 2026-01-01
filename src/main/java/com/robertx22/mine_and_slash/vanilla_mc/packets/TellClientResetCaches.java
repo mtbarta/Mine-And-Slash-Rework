@@ -4,11 +4,10 @@ import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
 import com.robertx22.mine_and_slash.database.DatabaseCaches;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class TellClientResetCaches extends MyPacket<TellClientResetCaches> {
-
 
     @Override
     public ResourceLocation getIdentifier() {
@@ -16,12 +15,12 @@ public class TellClientResetCaches extends MyPacket<TellClientResetCaches> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
 
     }
 
@@ -34,6 +33,5 @@ public class TellClientResetCaches extends MyPacket<TellClientResetCaches> {
     public MyPacket<TellClientResetCaches> newInstance() {
         return new TellClientResetCaches();
     }
-
 
 }

@@ -5,8 +5,10 @@ import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.main.Packets;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
-import net.minecraft.network.FriendlyByteBuf;
+
 import net.minecraft.resources.ResourceLocation;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public class RequestStatCalcInfoPacket extends MyPacket<RequestStatCalcInfoPacket> {
 
@@ -16,12 +18,12 @@ public class RequestStatCalcInfoPacket extends MyPacket<RequestStatCalcInfoPacke
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
 
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
 
     }
 

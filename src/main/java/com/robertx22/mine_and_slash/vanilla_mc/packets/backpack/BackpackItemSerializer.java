@@ -1,41 +1,31 @@
 package com.robertx22.mine_and_slash.vanilla_mc.packets.backpack;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 
 public class BackpackItemSerializer {
-    public static void writeItem(FriendlyByteBuf buf, ItemStack stack) {
+    public static void writeItem(RegistryFriendlyByteBuf buf, ItemStack stack) {
         writeItemStack(buf, stack, true);
     }
 
-    public static void writeItemStack(FriendlyByteBuf buf, ItemStack stack, boolean limitedTag) {
+    public static void writeItemStack(RegistryFriendlyByteBuf buf, ItemStack stack, boolean limitedTag) {
         if (stack.isEmpty()) {
             buf.writeBoolean(false);
         } else {
             buf.writeBoolean(true);
-            Item item = stack.getItem();
-            buf.writeId(BuiltInRegistries.ITEM, item);
             buf.writeVarInt(stack.getCount());
-            CompoundTag compoundtag = null;
-            if (item.isDamageable(stack) || item.shouldOverrideMultiplayerNbt()) {
-                compoundtag = limitedTag ? stack.getTag() : stack.getTag();
-            }
-            buf.writeNbt(compoundtag);
+            ItemStack.STREAM_CODEC.encode(buf, stack.copyWithCount(1));
         }
     }
 
-    public static ItemStack readItem(FriendlyByteBuf buf) {
+    public static ItemStack readItem(RegistryFriendlyByteBuf buf) {
         if (!buf.readBoolean()) {
             return ItemStack.EMPTY;
         } else {
-            Item item = (Item) buf.readById(BuiltInRegistries.ITEM);
             int count = buf.readVarInt();
-            ItemStack itemstack = new ItemStack(item, count);
-            itemstack.setTag(buf.readNbt());
-            return itemstack;
+            ItemStack stack = ItemStack.STREAM_CODEC.decode(buf);
+            stack.setCount(count);
+            return stack;
         }
     }
 }

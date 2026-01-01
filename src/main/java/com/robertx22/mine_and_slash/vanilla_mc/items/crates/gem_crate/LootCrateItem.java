@@ -26,6 +26,8 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -51,8 +53,7 @@ public class LootCrateItem extends Item implements IGUID {
         data.type = data.type;
         ItemStack stack = new ItemStack(SlashItems.LOOT_CRATE.get());
         StackSaving.GEM_CRATE.saveTo(stack, data);
-        stack.getTag()
-                .putInt("CustomModelData", data.type.custommodeldata);
+        stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(data.type.custommodeldata));
 
         return stack;
 
@@ -102,38 +103,38 @@ public class LootCrateItem extends Item implements IGUID {
         return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, player.getItemInHand(hand));
     }
 
-
     // todo
     /*
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
-        if (this.allowdedIn(group)) {
-
-            for (int tier : LevelUtils.getAllTiers()) {
-                for (LootType type : LOOT_TYPES) {
-                    ItemStack stack = new ItemStack(this);
-
-                    LootCrateData data = new LootCrateData();
-                    data.type = type;
-                    data.tier = tier;
-
-                    StackSaving.GEM_CRATE.saveTo(stack, data);
-
-                    stack.getTag()
-                            .putInt("CustomModelData", type.custommodeldata);
-
-                    stacks.add(stack);
-                }
-            }
-        }
-    }
-
+     * @Override
+     * public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack>
+     * stacks) {
+     * if (this.allowdedIn(group)) {
+     * 
+     * for (int tier : LevelUtils.getAllTiers()) {
+     * for (LootType type : LOOT_TYPES) {
+     * ItemStack stack = new ItemStack(this);
+     * 
+     * LootCrateData data = new LootCrateData();
+     * data.type = type;
+     * data.tier = tier;
+     * 
+     * StackSaving.GEM_CRATE.saveTo(stack, data);
+     * 
+     * stack.getTag()
+     * .putInt("CustomModelData", type.custommodeldata);
+     * 
+     * stacks.add(stack);
+     * }
+     * }
+     * }
+     * }
+     * 
      */
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip,
-                                TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+            TooltipFlag flag) {
         LootCrateData data = getData(stack);
 
         if (data != null) {
@@ -159,8 +160,9 @@ public class LootCrateItem extends Item implements IGUID {
                 }
             }
 
-            return Formatter.GEM_CHEST_NAME.locName(new rankChecker().checker(), data.type.word.locName(), Words.Loot.locName(), Words.Crate.locName()
-                    .withStyle(TierColors.get(data.tier)).withStyle(ChatFormatting.BOLD));
+            return Formatter.GEM_CHEST_NAME.locName(new rankChecker().checker(), data.type.word.locName(),
+                    Words.Loot.locName(), Words.Crate.locName()
+                            .withStyle(TierColors.get(data.tier)).withStyle(ChatFormatting.BOLD));
         }
 
         return Words.EMPTY_BOX.locName();

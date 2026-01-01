@@ -4,7 +4,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.SyncedToClientValues;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.packets.ExilePacketContext;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class SyncAreaLevelPacket extends MyPacket<SyncAreaLevelPacket> {
@@ -25,12 +25,12 @@ public class SyncAreaLevelPacket extends MyPacket<SyncAreaLevelPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         lvl = tag.readInt();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeInt(lvl);
     }
 
@@ -44,4 +44,3 @@ public class SyncAreaLevelPacket extends MyPacket<SyncAreaLevelPacket> {
         return new SyncAreaLevelPacket();
     }
 }
-

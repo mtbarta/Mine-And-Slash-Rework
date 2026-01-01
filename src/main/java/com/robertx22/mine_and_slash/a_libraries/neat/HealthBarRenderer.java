@@ -20,13 +20,14 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
+
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -119,10 +120,10 @@ public class HealthBarRenderer {
         if (boss) {
             return new ItemStack(Items.NETHER_STAR);
         }
-        MobType type = entity.getMobType();
-        if (type == MobType.ARTHROPOD) {
+        // Use entity type tags instead of MobType
+        if (entity.getType().is(EntityTypeTags.SENSITIVE_TO_BANE_OF_ARTHROPODS)) {
             return new ItemStack(Items.SPIDER_EYE);
-        } else if (type == MobType.UNDEAD) {
+        } else if (entity.getType().is(EntityTypeTags.SENSITIVE_TO_SMITE)) {
             return new ItemStack(Items.ROTTEN_FLESH);
         } else {
             return ItemStack.EMPTY;

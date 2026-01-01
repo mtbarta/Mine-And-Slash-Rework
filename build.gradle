@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
-    id 'net.neoforged.gradle.userdev' version "7.0.145"
-    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+    id 'net.neoforged.gradle.userdev'
+    id "me.modmuss50.mod-publish-plugin"
 }
 
 version = project.mod_version
@@ -61,10 +61,10 @@ dependencies {
     runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
     implementation("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
 
-    implementation("com.robertx22:Library-of-Exile-Rework:${project.exile_library_version}")
-    implementation("com.robertx22:ancient-obelisks:${project.ancient_obelisks_version}")
-    implementation("com.robertx22:the_harvest:${project.the_harvest_version}")
-    implementation("com.robertx22:dungeon_realm:${project.dungeon_realm_version}")
+    implementation project(':Library-of-Exile-Rework')
+    implementation project(':ancient_obelisks')
+    implementation project(':the_harvest')
+    implementation project(':dungeon_realm')
 }
 
 jar {

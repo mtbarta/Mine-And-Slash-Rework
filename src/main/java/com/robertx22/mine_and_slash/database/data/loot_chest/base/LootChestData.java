@@ -100,14 +100,17 @@ public class LootChestData implements ICommonDataItem<GearRarity> {
                 .accept(new NameBlock(Collections.singletonList(ctx.stack.getHoverName())))
                 .accept(new RarityBlock(getRarity()))
                 .accept(new UsageBlock(ImmutableList.of(
-                        Itemtips.CHEST_CONTAINS.locName(new ChestContent(getLootChest().GUID()).get().locName().withStyle(ChatFormatting.YELLOW)),
-                        TooltipUtils.level(lvl))
-                ))
-                .accept(new AdditionalBlock(ImmutableList.of(Chats.OPEN_LOOT_CHEST.locName().withStyle(ChatFormatting.AQUA))))
+                        Itemtips.CHEST_CONTAINS.locName(new ChestContent(getLootChest().GUID()).get().locName()
+                                .withStyle(ChatFormatting.YELLOW)),
+                        TooltipUtils.level(lvl))))
+                .accept(new AdditionalBlock(
+                        ImmutableList.of(Chats.OPEN_LOOT_CHEST.locName().withStyle(ChatFormatting.AQUA))))
                 .accept(new AdditionalBlock(() -> {
-                    //weird
+                    // weird
                     if (getKeyItem() != null) {
-                        return ImmutableList.of(Itemtips.NEED_KEY.locName(getKeyItem().getDefaultInstance().getHoverName()).withStyle(ChatFormatting.GOLD));
+                        return ImmutableList
+                                .of(Itemtips.NEED_KEY.locName(getKeyItem().getDefaultInstance().getHoverName())
+                                        .withStyle(ChatFormatting.GOLD));
                     } else {
                         return EMPTY_LIST;
                     }
@@ -115,8 +118,7 @@ public class LootChestData implements ICommonDataItem<GearRarity> {
                 .accept(new SalvageBlock(this, ExileStack.of(ctx.stack)))
                 .release());
 
-
-        //tip.add(TooltipUtils.level(lvl));
+        // tip.add(TooltipUtils.level(lvl));
     }
 
     @Override
@@ -125,7 +127,7 @@ public class LootChestData implements ICommonDataItem<GearRarity> {
     }
 
     @Override
-    public ItemstackDataSaver<LootChestData> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<LootChestData> getStackSaver() {
         return StackSaving.LOOT_CHEST;
     }
 
@@ -138,7 +140,6 @@ public class LootChestData implements ICommonDataItem<GearRarity> {
     public List<ItemStack> getSalvageResult(ExileStack stack) {
         return Arrays.asList();
     }
-
 
     @Override
     public int getLevel() {

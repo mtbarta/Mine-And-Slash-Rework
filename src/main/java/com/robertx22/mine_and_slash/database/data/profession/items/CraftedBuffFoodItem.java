@@ -31,9 +31,13 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
@@ -56,7 +60,8 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
 
     static Properties getProp(PlayerBuffData.Type type) {
         if (type.isFood()) {
-            return new Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(5).meat().build());
+            return new Properties()
+                    .food(new FoodProperties.Builder().nutrition(6).saturationModifier(5).fast().build());
         } else {
             return new Properties();
         }
@@ -64,7 +69,8 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
 
     @Override
     public void generateModel(ItemModelManager manager) {
-        new ModelHelper(this, ModelHelper.Type.GENERATED, SlashRef.id("item/" + this.type.id + "/" + buff_id).toString()).generate();
+        new ModelHelper(this, ModelHelper.Type.GENERATED,
+                SlashRef.id("item/" + this.type.id + "/" + buff_id).toString()).generate();
     }
 
     @Override
@@ -76,9 +82,12 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
     public ItemStack finishUsingItem(ItemStack stack, Level pLevel, LivingEntity pLivingEntity) {
         if (!pLevel.isClientSide) {
             if (pLivingEntity instanceof Player p) {
-                boolean did = Load.player(p).buff.tryAdd(p, getBuff(), LeveledItem.getLevel(stack), rar.getPercent(), type, getTicksDuration());
+                boolean did = Load.player(p).buff.tryAdd(p, getBuff(), LeveledItem.getLevel(stack), rar.getPercent(),
+                        type, getTicksDuration());
                 if (did) {
-                    pLivingEntity.addEffect(new MobEffectInstance(this.type.effect.get(), getTicksDuration()));
+                    MobEffect effect = this.type.effect.get();
+                    Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
+                    pLivingEntity.addEffect(new MobEffectInstance(holder, getTicksDuration()));
                     stack.shrink(1);
                     return stack;
                 }
@@ -114,13 +123,14 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
     // Greater intelligence potion = power + name
     @Override
     public Component getName(ItemStack stack) {
-        return Formatter.BUFF_CONSUMPTIONS_NAME.locName(this.rar.getRarity().locName(), getBuff().mods.get(0).GetStat().locName(), type.locName())
+        return Formatter.BUFF_CONSUMPTIONS_NAME
+                .locName(this.rar.getRarity().locName(), getBuff().mods.get(0).GetStat().locName(), type.locName())
                 .withStyle(rar.getRarity().textFormatting());
     }
 
-
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> list, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list,
+            TooltipFlag pIsAdvanced) {
 
         try {
 
@@ -128,11 +138,15 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
             int lvl = LeveledItem.getLevel(stack);
 
             List<MutableComponent> info = new ArrayList<>();
-            info.add(Component.literal(UNICODE.STAR + " ").append(Itemtips.BUFF_CONSUMABLE_TYPE.locName(this.type.locName().withStyle(ChatFormatting.YELLOW))).withStyle(ChatFormatting.AQUA));
-            info.addAll(ExileTooltipUtils.splitLongText(Itemtips.BUFF_CONSUMABLE_INFO.locName().withStyle(ChatFormatting.AQUA)));
+            info.add(Component.literal(UNICODE.STAR + " ")
+                    .append(Itemtips.BUFF_CONSUMABLE_TYPE.locName(this.type.locName().withStyle(ChatFormatting.YELLOW)))
+                    .withStyle(ChatFormatting.AQUA));
+            info.addAll(ExileTooltipUtils
+                    .splitLongText(Itemtips.BUFF_CONSUMABLE_INFO.locName().withStyle(ChatFormatting.AQUA)));
             info.add(Component.literal(UNICODE.ROTATED_CUBE + " ")
-                    .append(Itemtips.BUFF_CONSUMABLE_DURATION_MINUTES.locName(Component.literal((getTicksDuration() / 20 / 60) + "").withStyle(ChatFormatting.YELLOW))).withStyle(ChatFormatting.GREEN));
-
+                    .append(Itemtips.BUFF_CONSUMABLE_DURATION_MINUTES.locName(
+                            Component.literal((getTicksDuration() / 20 / 60) + "").withStyle(ChatFormatting.YELLOW)))
+                    .withStyle(ChatFormatting.GREEN));
 
             list.addAll(new ExileTooltips()
                     .accept(new SimpleItemStatBlock(new StatRangeInfo(ModRange.always(rar.getPercent())))
@@ -142,7 +156,6 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
                     .accept(new ProfessionDropSourceBlock(this.type.profession))
                     .accept(new UsageBlock(info))
                     .release());
-
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -155,7 +168,7 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
         return AutoLocGroup.Misc;
     }
 
-    //Use Formatter process the item name instead.
+    // Use Formatter process the item name instead.
     @Override
     public String locNameLangFileGUID() {
         return "";
@@ -170,7 +183,6 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
     public String GUID() {
         return "";
     }
-
 
     @Override
     public Item getThis() {

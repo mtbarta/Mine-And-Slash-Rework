@@ -40,12 +40,10 @@ import java.util.List;
 
 public class SkillGemData implements ICommonDataItem<GearRarity> {
 
-
     @Override
     public void BuildTooltip(TooltipContext ctx) {
 
     }
-
 
     @Override
     public List<ItemStack> getSalvageResult(ExileStack stack) {
@@ -53,7 +51,10 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
             return Arrays.asList();
         }
         int amount = 1; // todo
-        return Arrays.asList(new ItemStack(RarityItems.RARITY_STONE.getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(), amount));
+        return Arrays.asList(new ItemStack(
+                RarityItems.RARITY_STONE
+                        .getOrDefault(getRarity().GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(),
+                amount));
     }
 
     @Override
@@ -66,14 +67,13 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         return id;
     }
 
-
     @Override
     public int getLevel() {
         return 1; // wait what
     }
 
     @Override
-    public ItemstackDataSaver<SkillGemData> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<SkillGemData> getStackSaver() {
         return StackSaving.SKILL_GEM;
     }
 
@@ -82,13 +82,11 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         getStackSaver().saveTo(stack, this);
     }
 
-
     public String id = "";
     public SkillGemType type = SkillGemType.SKILL;
     public int perc = 0;
     public String rar = IRarity.COMMON_ID;
     private int links = 1;
-
 
     public void setLinks(int t) {
         this.links = t;
@@ -109,7 +107,6 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
     public enum SkillGemType {
         SKILL(), SUPPORT(), AURA();
     }
-
 
     @Override
     public String getRarityId() {
@@ -156,7 +153,6 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         return null;
     }
 
-
     public ISkillGem getGeneric() {
         if (getSupport() != null) {
             return getSupport();
@@ -174,7 +170,6 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         return getGeneric().getStyle();
     }
 
-
     private MutableComponent stars(Player p) {
 
         int slots = GameBalanceConfig.get().getTotalLinks(links, p);
@@ -188,7 +183,6 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         return text;
 
     }
-
 
     public List<Component> getTooltip(Player p) {
 
@@ -208,29 +202,25 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
                 list.add(c);
             }
             // mahj to-do need to change to current level rather than the "minimum" level
-            //list.add(ExileText.emptyLine().get());
-            //if (req > 0) { 
-            //    list.add(TooltipUtils.level(req));
+            // list.add(ExileText.emptyLine().get());
+            // if (req > 0) {
+            // list.add(TooltipUtils.level(req));
 
-            //}
+            // }
 
             list.add(ExileText.emptyLine().get());
 
             list.add(stars(p));
-
 
             return list;
         }
 
         ISkillGem generic = getGeneric();
 
-
         list.add(generic.locName().withStyle(rar.textFormatting()));
         list.add(ExileText.emptyLine().get());
 
-
         ExileTooltips tip = new ExileTooltips();
-
 
         if (this.type == SkillGemType.SUPPORT) {
             SupportGem supp = getSupport();
@@ -244,9 +234,11 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
                     return stats;
                 }
             });
-            tip.accept(new AdditionalBlock(Itemtips.SUPPORT_GEM_COST.locName((int) (supp.manaMulti * 100)).withStyle(ChatFormatting.RED)));
+            tip.accept(new AdditionalBlock(
+                    Itemtips.SUPPORT_GEM_COST.locName((int) (supp.manaMulti * 100)).withStyle(ChatFormatting.RED)));
             if (supp.isOneOfAKind()) {
-                tip.accept(new AdditionalBlock(Itemtips.SUPPORT_GEM_ONLY_ONE.locName().append(supp.one_of_a_kind + "")));
+                tip.accept(
+                        new AdditionalBlock(Itemtips.SUPPORT_GEM_ONLY_ONE.locName().append(supp.one_of_a_kind + "")));
             }
             tip.accept(new AdditionalBlock(Itemtips.SUPPORT_GEM_EXPLANATION.locName().withStyle(ChatFormatting.AQUA)));
             tip.accept(new DropLevelBlock(supp.min_lvl, GameBalanceConfig.get().MAX_LEVEL));
@@ -267,10 +259,12 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
                     return stats;
                 }
             });
-            tip.accept(new AdditionalBlock(Itemtips.AURA_RESERVATION.locName().append((int) (aura.reservation * 100) + "").withStyle(ChatFormatting.RED)));
+            tip.accept(new AdditionalBlock(Itemtips.AURA_RESERVATION.locName()
+                    .append((int) (aura.reservation * 100) + "").withStyle(ChatFormatting.RED)));
 
             int spiritLeft = (int) Load.player(p).getSkillGemInventory().getRemainingSpirit(p);
-            tip.accept(new AdditionalBlock(Itemtips.REMAINING_AURA_CAPACITY.locName().append(spiritLeft + "").withStyle(ChatFormatting.AQUA)));
+            tip.accept(new AdditionalBlock(
+                    Itemtips.REMAINING_AURA_CAPACITY.locName().append(spiritLeft + "").withStyle(ChatFormatting.AQUA)));
             tip.accept(new DropLevelBlock(aura.min_lvl, GameBalanceConfig.get().MAX_LEVEL));
             tip.accept(new AdditionalBlock(Itemtips.AUGMENT_EXPLANATION.locName().withStyle(ChatFormatting.AQUA)));
 
@@ -286,7 +280,6 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         list.addAll(tip.release());
 
         return list;
-
 
     }
 

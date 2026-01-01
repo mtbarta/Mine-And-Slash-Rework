@@ -18,7 +18,6 @@ import java.util.List;
 
 public class LivingHurtUtils {
 
-
     public static int getItemDamage(float dmg) {
         return 1; // todo lets reduce the dmg jewelry takes(int) Mth.clamp(dmg / 10F, 1, 4);
     }
@@ -31,9 +30,7 @@ public class LivingHurtUtils {
 
             List<ItemStack> curios = MyCuriosUtils.getAllSlots(player);
 
-            curios.forEach(x -> x.hurtAndBreak(getItemDamage(dmg), player, (entity) -> {
-                entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            }));
+            curios.forEach(x -> x.hurtAndBreak(getItemDamage(dmg), player, EquipmentSlot.MAINHAND));
 
         }
     }
@@ -42,7 +39,6 @@ public class LivingHurtUtils {
     public static void tryAttack(AttackInformation event) {
 
         LivingEntity target = event.getTargetEntity();
-
 
         if (target.level().isClientSide) {
             return;
@@ -71,13 +67,15 @@ public class LivingHurtUtils {
 
             if (data.getAttackerEntity() instanceof Player p) {
 
-                if (weapondata == null || !weapondata.GetBaseGearType().weaponType().damage_validity_check.isValid(data.getSource())) {
+                if (weapondata == null
+                        || !weapondata.GetBaseGearType().weaponType().damage_validity_check.isValid(data.getSource())) {
                     Load.Unit(p).unarmedAttack(data);
                     return;
                 }
 
                 if (!weapondata.canPlayerWear(data.getAttackerEntityData())) {
-                    OnScreenMessageUtils.sendMessage((ServerPlayer) data.getAttackerEntity(), Component.literal(""), Component.literal("Weapon requirements not met"));
+                    OnScreenMessageUtils.sendMessage((ServerPlayer) data.getAttackerEntity(), Component.literal(""),
+                            Component.literal("Weapon requirements not met"));
                     Load.Unit(p).unarmedAttack(data);
                     return;
                 }

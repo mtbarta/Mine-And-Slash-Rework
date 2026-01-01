@@ -5,7 +5,7 @@ import com.robertx22.mine_and_slash.database.data.stats.datapacks.base.IStatSeri
 import com.robertx22.mine_and_slash.database.data.stats.datapacks.stats.AttributeStat;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class AttributeStatSer implements IStatSerializer<AttributeStat> {
 
         ResourceLocation ide = new ResourceLocation(json.get("attribute_id").getAsString());
 
-        Attribute attri = BuiltInRegistries.ATTRIBUTE.get(ide);
+        var attri = BuiltInRegistries.ATTRIBUTE.getHolder(ide).orElseThrow();
 
         var oper = AttributeModifier.Operation.valueOf(json.get("operation").getAsString());
 

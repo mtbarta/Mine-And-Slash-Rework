@@ -6,7 +6,7 @@ import com.robertx22.library_of_exile.registry.IAutoGson;
 import com.robertx22.mine_and_slash.gui.screens.map.MapSyncData;
 import com.robertx22.mine_and_slash.maps.MapData;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class MapCompletePacket extends MyPacket<MapCompletePacket> {
@@ -29,12 +29,12 @@ public class MapCompletePacket extends MyPacket<MapCompletePacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         data = IAutoGson.GSON.fromJson(tag.readUtf(), MapSyncData.class);
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(IAutoGson.GSON.toJson(data));
     }
 

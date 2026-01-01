@@ -62,9 +62,7 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
 
     public List<MapAffixData> affixes = new ArrayList<MapAffixData>();
 
-
     public String uuid = UUID.randomUUID().toString();
-
 
     public void setRarityAndRerollNeeded(GearRarity rar) {
 
@@ -78,12 +76,9 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
 
     }
 
-
     public MapItemData() {
 
-
     }
-
 
     public static MapItemData empty() {
         if (empty == null) {
@@ -92,7 +87,6 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
         return empty;
 
     }
-
 
     public StatRequirement getStatReq() {
 
@@ -121,11 +115,12 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
 
     public List<ExactStatData> getTierStats() {
 
-
         List<ExactStatData> stats = new ArrayList<>();
 
-        stats.add(ExactStatData.noScaling((float) (GameBalanceConfig.get().HP_MOB_BONUS_PER_MAP_TIER * tier * 100F), ModType.MORE, Health.getInstance().GUID()));
-        stats.add(ExactStatData.noScaling((float) (GameBalanceConfig.get().DMG_MOB_BONUS_PER_MAP_TIER * tier * 100F), ModType.MORE, OffenseStats.TOTAL_DAMAGE.get().GUID()));
+        stats.add(ExactStatData.noScaling((float) (GameBalanceConfig.get().HP_MOB_BONUS_PER_MAP_TIER * tier * 100F),
+                ModType.MORE, Health.getInstance().GUID()));
+        stats.add(ExactStatData.noScaling((float) (GameBalanceConfig.get().DMG_MOB_BONUS_PER_MAP_TIER * tier * 100F),
+                ModType.MORE, OffenseStats.TOTAL_DAMAGE.get().GUID()));
 
         return stats;
     }
@@ -149,7 +144,8 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
     }
 
     public List<MapAffixData> getAllAffixesThatAffect(AffectedEntities aff) {
-        return affixes.stream().filter(x -> x.getAffix() != null && x.getAffix().affected == aff).collect(Collectors.toList());
+        return affixes.stream().filter(x -> x.getAffix() != null && x.getAffix().affected == aff)
+                .collect(Collectors.toList());
     }
 
     public List<Component> getTooltip(ExileStack stack) {
@@ -177,19 +173,21 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
                     private final ImmutableMap<AffectedEntities, MutableComponent> map = ImmutableMap.of(
                             AffectedEntities.Mobs, Words.Mob_Affixes.locName(),
                             AffectedEntities.Players, Words.Player_Affixes.locName(),
-                            AffectedEntities.All, Words.Affixes_Affecting_All.locName()
-                    );
+                            AffectedEntities.All, Words.Affixes_Affecting_All.locName());
 
                     @Override
                     public List<? extends Component> getAvailableComponents() {
                         IgnoreNullList<Component> list = new IgnoreNullList<>();
-                        Stream.of(AffectedEntities.Mobs, AffectedEntities.Players, AffectedEntities.All).forEachOrdered(x -> getAffectedStatList(list, tooltipInfo, x));
+                        Stream.of(AffectedEntities.Mobs, AffectedEntities.Players, AffectedEntities.All)
+                                .forEachOrdered(x -> getAffectedStatList(list, tooltipInfo, x));
                         list.add(Itemtips.TIER_INFLUENCE.locName().withStyle(ChatFormatting.BLUE));
-                        mapItemData.getTierStats().forEach(exactStatData -> list.addAll(exactStatData.GetTooltipString()));
+                        mapItemData.getTierStats()
+                                .forEach(exactStatData -> list.addAll(exactStatData.GetTooltipString()));
                         return list;
                     }
 
-                    private void getAffectedStatList(IgnoreNullList<Component> list, StatRangeInfo info, AffectedEntities target) {
+                    private void getAffectedStatList(IgnoreNullList<Component> list, StatRangeInfo info,
+                            AffectedEntities target) {
                         List<MutableComponent> list1 = Optional.of(target)
                                 .map(mapItemData::getAllAffixesThatAffect)
                                 .filter(x -> !x.isEmpty())
@@ -198,10 +196,9 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
                                 .map(x -> x.getAffix().getStats(x.p, mapItemData.getLevel()))
                                 .flatMap(x -> x.stream()
                                         .map(y -> y.GetTooltipString())
-                                        .flatMap(Collection::stream)
-                                )
+                                        .flatMap(Collection::stream))
                                 .sorted((s1, s2) -> {
-                                    //sort long stat
+                                    // sort long stat
                                     Boolean s1IfLong = s1.getString().contains("\u25C6");
                                     Boolean s2IfLong = s2.getString().contains("\u25C6");
                                     return s1IfLong.compareTo(s2IfLong);
@@ -229,30 +226,32 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
                     }
 
                     if (!tooltipInfo.shouldShowDescriptions()) {
-                        additional.add(Itemtips.Exp.locName(this.getBonusExpAmountInPercent()).withStyle(ChatFormatting.GOLD));
-                        additional.add(Itemtips.Loot.locName(this.getBonusLootAmountInPercent()).withStyle(ChatFormatting.GOLD));
+                        additional.add(
+                                Itemtips.Exp.locName(this.getBonusExpAmountInPercent()).withStyle(ChatFormatting.GOLD));
+                        additional.add(Itemtips.Loot.locName(this.getBonusLootAmountInPercent())
+                                .withStyle(ChatFormatting.GOLD));
                         additional.add(TooltipUtils.tier(this.tier).withStyle(ChatFormatting.GOLD));
                     } else {
-                        additional.add(Itemtips.Exp.locName(this.getBonusExpAmountInPercent()).withStyle(ChatFormatting.GOLD));
-                        additional.add(Itemtips.Loot.locName(this.getBonusLootAmountInPercent()).withStyle(ChatFormatting.GOLD));
+                        additional.add(
+                                Itemtips.Exp.locName(this.getBonusExpAmountInPercent()).withStyle(ChatFormatting.GOLD));
+                        additional.add(Itemtips.Loot.locName(this.getBonusLootAmountInPercent())
+                                .withStyle(ChatFormatting.GOLD));
                         additional.add(TooltipUtils.tier(this.tier).withStyle(ChatFormatting.GOLD));
-                        additional.add(Component.literal("[" + Itemtips.SOUL_TIER_TIP.locName().getString() + "]").withStyle(ChatFormatting.BLUE));
+                        additional.add(Component.literal("[" + Itemtips.SOUL_TIER_TIP.locName().getString() + "]")
+                                .withStyle(ChatFormatting.BLUE));
                     }
                     return additional;
                 }))
-                //handle possibleRarities
+                // handle possibleRarities
                 .accept(WorksOnBlock.possibleDrops(ExileDB.GearRarities().getFilterWrapped(
-                        x -> this.tier >= ExileDB.GearRarities().get(x.min_map_rarity_to_drop).map_tiers.min
-                ).list).notDraggable());
-
+                        x -> this.tier >= ExileDB.GearRarities().get(x.min_map_rarity_to_drop).map_tiers.min).list)
+                        .notDraggable());
 
         tip.accept(new OperationTipBlock().setAlt());
 
         return tip.release();
 
     }
-
-
 
     @Override
     public void BuildTooltip(TooltipContext ctx) {
@@ -293,19 +292,16 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
         return ExileDB.GearRarities().get(rar);
     }
 
-
     public int getTier() {
         return this.tier;
     }
-
 
     public int getLevel() {
         return lvl;
     }
 
-
     @Override
-    public ItemstackDataSaver<? extends ICommonDataItem> getStackSaver() {
+    public com.robertx22.library_of_exile.components.ComponentDataSaver<? extends com.robertx22.mine_and_slash.uncommon.interfaces.data_items.ICommonDataItem> getStackSaver() {
         return StackSaving.MAP;
     }
 
@@ -340,9 +336,9 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
         }
 
         return Arrays.asList(new ItemStack(
-                RarityItems.RARITY_STONE.getOrDefault(stoneRarity.GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(),
-                amount
-        ));
+                RarityItems.RARITY_STONE
+                        .getOrDefault(stoneRarity.GUID(), RarityItems.RARITY_STONE.get(IRarity.COMMON_ID)).get(),
+                amount));
     }
 
     @Override

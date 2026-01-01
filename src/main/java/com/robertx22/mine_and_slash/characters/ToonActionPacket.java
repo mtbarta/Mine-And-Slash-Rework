@@ -7,7 +7,7 @@ import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.localization.Chats;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class ToonActionPacket extends MyPacket<ToonActionPacket> {
@@ -28,14 +28,14 @@ public class ToonActionPacket extends MyPacket<ToonActionPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf buf) {
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
         num = buf.readInt();
         act = buf.readEnum(ToonActionButton.Action.class);
         name = buf.readUtf();
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf buf) {
+    public void saveToData(RegistryFriendlyByteBuf buf) {
         buf.writeInt(num);
         buf.writeEnum(act);
         buf.writeUtf(name);

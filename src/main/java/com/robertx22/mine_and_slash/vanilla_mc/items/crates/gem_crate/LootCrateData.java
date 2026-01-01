@@ -5,9 +5,7 @@ import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import com.robertx22.mine_and_slash.uncommon.enumclasses.LootType;
 import net.minecraft.world.item.ItemStack;
 
-
 public class LootCrateData {
-
 
     public LootType type = LootType.Gem;
 
@@ -18,11 +16,10 @@ public class LootCrateData {
     }
 
     public ItemStack createStack() {
-        
 
         ItemStack stack = new ItemStack(SlashItems.LOOT_CRATE.get());
-        stack.getOrCreateTag()
-                .putInt("CustomModelData", type.custommodeldata);
+        stack.set(net.minecraft.core.component.DataComponents.CUSTOM_MODEL_DATA,
+                new net.minecraft.world.item.component.CustomModelData(type.custommodeldata));
 
         StackSaving.GEM_CRATE.saveTo(stack, this);
         return stack;

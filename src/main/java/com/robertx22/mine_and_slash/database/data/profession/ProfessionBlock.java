@@ -108,7 +108,7 @@ public class ProfessionBlock extends BaseEntityBlock implements WorldlyContainer
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player p, InteractionHand pHand,
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player p,
             BlockHitResult pHit) {
 
         if (!pLevel.isClientSide) {

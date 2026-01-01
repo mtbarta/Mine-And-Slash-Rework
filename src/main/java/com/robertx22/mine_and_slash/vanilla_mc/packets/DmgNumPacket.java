@@ -7,7 +7,7 @@ import com.robertx22.mine_and_slash.config.forge.ClientConfigs;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.items.SlashItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,17 +25,17 @@ public class DmgNumPacket extends MyPacket<DmgNumPacket> {
 
     }
 
-
     public DmgNumPacket(LivingEntity entity, String str, boolean iscrit, ChatFormatting format) {
         string = str;
         this.id = entity.getId();
         this.iscrit = iscrit;
         this.format = format;
 
+        // todo this is horrible but i'll need to wait for damage indicator mods to be
+        // ported
 
-        // todo this is horrible but i'll need to wait for damage indicator mods to be ported
-
-        ItemEntity en = new ItemEntity(entity.level(), entity.getX(), entity.getEyeY(), entity.getZ(), new ItemStack(SlashItems.INVISIBLE_ICON.get(), 1));
+        ItemEntity en = new ItemEntity(entity.level(), entity.getX(), entity.getEyeY(), entity.getZ(),
+                new ItemStack(SlashItems.INVISIBLE_ICON.get(), 1));
         en.setNeverPickUp();
         en.setCustomName(Component.literal(format + this.string));
         en.setInvisible(true);
@@ -51,7 +51,7 @@ public class DmgNumPacket extends MyPacket<DmgNumPacket> {
     }
 
     @Override
-    public void loadFromData(FriendlyByteBuf tag) {
+    public void loadFromData(RegistryFriendlyByteBuf tag) {
         string = tag.readUtf(500);
         id = tag.readInt();
         this.iscrit = tag.readBoolean();
@@ -60,7 +60,7 @@ public class DmgNumPacket extends MyPacket<DmgNumPacket> {
     }
 
     @Override
-    public void saveToData(FriendlyByteBuf tag) {
+    public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeUtf(string);
         tag.writeInt(id);
         tag.writeBoolean(iscrit);

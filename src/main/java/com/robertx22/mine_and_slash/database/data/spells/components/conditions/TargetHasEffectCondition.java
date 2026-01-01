@@ -18,7 +18,7 @@ public class TargetHasEffectCondition extends EffectCondition {
     @Override
     public boolean canActivate(SpellCtx ctx, MapHolder data) {
         MobEffect potion = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(data.get(MapField.POTION_ID)));
-        return ctx.target != null && ctx.target.hasEffect(potion);
+        return ctx.target != null && ctx.target.hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(potion));
     }
 
     public MapHolder create(MobEffect effect) {
@@ -34,4 +34,3 @@ public class TargetHasEffectCondition extends EffectCondition {
         return "target_has_potion";
     }
 }
-

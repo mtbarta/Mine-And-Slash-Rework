@@ -27,12 +27,12 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
-import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.*;
@@ -72,13 +72,13 @@ public class ClientInit {
         });
 
         var todisable = Arrays.asList(
-                VanillaGuiOverlay.ARMOR_LEVEL,
-                VanillaGuiOverlay.MOUNT_HEALTH,
-                VanillaGuiOverlay.PLAYER_HEALTH);
+                VanillaGuiLayers.ARMOR_LEVEL,
+                VanillaGuiLayers.VEHICLE_HEALTH,
+                VanillaGuiLayers.PLAYER_HEALTH);
 
-        ForgeEvents.registerForgeEvent(RenderGuiOverlayEvent.Pre.class, x -> {
+        ForgeEvents.registerForgeEvent(RenderGuiLayerEvent.Pre.class, x -> {
             if (ClientConfigs.getConfig().GUI_POSITION.get() == GuiPosition.OVER_VANILLA) {
-                if (todisable.stream().anyMatch(e -> e.id().equals(x.getOverlay().id()))) {
+                if (todisable.stream().anyMatch(e -> e.equals(x.getName()))) {
                     x.setCanceled(true);
                 }
             }

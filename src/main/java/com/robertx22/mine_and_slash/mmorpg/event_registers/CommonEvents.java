@@ -40,7 +40,7 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -55,31 +55,36 @@ public class CommonEvents {
 
         ForgeEvents.registerForgeEvent(EntityAttributeCreationEvent.class, x -> {
             x.put(SlashEntities.SPIRIT_WOLF.get(), Wolf.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.4).build());
-            x.put(SlashEntities.SKELETON.get(), Skeleton.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).build());
+            x.put(SlashEntities.SKELETON.get(),
+                    Skeleton.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).build());
             x.put(SlashEntities.SPIDER.get(), Spider.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.5).build());
             x.put(SlashEntities.ZOMBIE.get(), Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.4).build());
 
-            x.put(SlashEntities.FIRE_GOLEM.get(), Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
-            x.put(SlashEntities.COLD_GOLEM.get(), Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
-            x.put(SlashEntities.LIGHTNING_GOLEM.get(), Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
+            x.put(SlashEntities.FIRE_GOLEM.get(),
+                    Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
+            x.put(SlashEntities.COLD_GOLEM.get(),
+                    Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
+            x.put(SlashEntities.LIGHTNING_GOLEM.get(),
+                    Zombie.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.45).build());
 
         });
 
-
         OnItemInteract.register();
-
 
         // instant bows
         ForgeEvents.registerForgeEvent(ArrowLooseEvent.class, event -> {
-            if (event.getEntity().hasEffect(SlashPotions.INSTANT_ARROWS.get())) {
+            if (event.getEntity().hasEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT
+                    .wrapAsHolder(SlashPotions.INSTANT_ARROWS.get()))) {
                 event.setCharge(100);
             }
         });
         ForgeEvents.registerForgeEvent(ArrowNockEvent.class, event -> {
-            if (event.getEntity().hasEffect(SlashPotions.INSTANT_ARROWS.get())) {
+            if (event.getEntity().hasEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT
+                    .wrapAsHolder(SlashPotions.INSTANT_ARROWS.get()))) {
                 event.setAction(InteractionResultHolder.pass(event.getBow()));
                 event.getBow().releaseUsing(event.getLevel(), event.getEntity(), 2000);
-                int cd = 20 - event.getEntity().getEffect(SlashPotions.INSTANT_ARROWS.get()).getAmplifier();
+                int cd = 20 - event.getEntity().getEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT
+                        .wrapAsHolder(SlashPotions.INSTANT_ARROWS.get())).getAmplifier();
 
                 if (cd < 3) {
                     cd = 3;
@@ -87,19 +92,23 @@ public class CommonEvents {
                 event.getEntity().getCooldowns().addCooldown(event.getBow().getItem(), cd); // todo
             }
         });
-        ForgeEvents.registerForgeEvent(TickEvent.PlayerTickEvent.class, event -> {
-            if (!event.player.level().isClientSide) {
-                if (event.player.hasEffect(SlashPotions.INSTANT_ARROWS.get())) {
-                    if (event.player.getMainHandItem().getItem() instanceof BowItem) {
-                        event.player.getMainHandItem().getOrCreateTag().putBoolean("instant", true);
+        ForgeEvents.registerForgeEvent(PlayerTickEvent.Post.class, event -> {
+            Player player = event.getEntity();
+            if (!player.level().isClientSide) {
+                if (player.hasEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT
+                        .wrapAsHolder(SlashPotions.INSTANT_ARROWS.get()))) {
+                    if (player.getMainHandItem().getItem() instanceof BowItem) {
+                        ItemStack bow = player.getMainHandItem();
+                        bow.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                                bow.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                                        net.minecraft.world.item.component.CustomData.EMPTY)
+                                        .update(tag -> tag.putBoolean("instant", true)));
                     }
                 }
             }
         });
 
-
         // instant bows
-
 
         ForgeEvents.registerForgeEvent(LivingDeathEvent.class, event -> {
 
@@ -138,9 +147,7 @@ public class CommonEvents {
             }
         });
 
-
-        ForgeEvents.registerForgeEvent(EntityJoinLevelEvent.class, event ->
-        {
+        ForgeEvents.registerForgeEvent(EntityJoinLevelEvent.class, event -> {
             try {
                 if (event.getEntity() == null) {
                     return;
@@ -148,7 +155,8 @@ public class CommonEvents {
 
                 if (event.getEntity() instanceof LivingEntity en) {
                     Load.Unit(en).equipmentCache.setAllDirty(); // todo this is a new performance test
-                    // does NOT saving stats to nbt, but calculating every time entity joins world make servers better or worse off?
+                    // does NOT saving stats to nbt, but calculating every time entity joins world
+                    // make servers better or worse off?
                 }
                 OnMobSpawn.onLoad(event.getEntity());
             } catch (Exception e) {
@@ -156,13 +164,12 @@ public class CommonEvents {
             }
         });
 
-
-        ForgeEvents.registerForgeEvent(EntityItemPickupEvent.class, event ->
+        ForgeEvents.registerForgeEvent(ItemEntityPickupEvent.class, event ->
 
         {
-            if (event.getEntity() instanceof ServerPlayer player) {
+            if (event.getPlayer() instanceof ServerPlayer player) {
                 if (!player.level().isClientSide) {
-                    ItemEntity item = event.getItem();
+                    ItemEntity item = event.getItemEntity();
                     ItemStack stack = item.getItem();
                     if (!stack.isEmpty()) {
 
@@ -173,7 +180,7 @@ public class CommonEvents {
                                 ExileStack ex = new ExileStack();
                                 ex.setStack(stack); // we need to write to the stack directly instead of copying
                                 ex.get(StackKeys.DROPPED).delete(); // clear dropped item data when we pick up
-                                Load.backpacks(player).getBackpacks().tryAutoPickup(event.getEntity(), stack);
+                                Load.backpacks(player).getBackpacks().tryAutoPickup(event.getPlayer(), stack);
                             }
                         }
                     }
@@ -196,17 +203,14 @@ public class CommonEvents {
             }
         });
 
-
-        ForgeEvents.registerForgeEvent(TickEvent.PlayerTickEvent.class, event ->
+        ForgeEvents.registerForgeEvent(PlayerTickEvent.Post.class, event ->
 
         {
-            if (!event.player.level().isClientSide) {
-                if (event.phase == TickEvent.Phase.END) {
-                    OnServerTick.onEndTick((ServerPlayer) event.player);
-                }
+            Player player = event.getEntity();
+            if (!player.level().isClientSide) {
+                OnServerTick.onEndTick((ServerPlayer) player);
             }
         });
-
 
         ForgeEvents.registerForgeEvent(AttackEntityEvent.class, event ->
 
@@ -232,10 +236,12 @@ public class CommonEvents {
             }
         });
 
-        ForgeEvents.registerForgeEvent(LivingEvent.LivingTickEvent.class, event ->
+        ForgeEvents.registerForgeEvent(net.neoforged.neoforge.event.tick.EntityTickEvent.Post.class, event ->
 
         {
-            OnEntityTick.onTick(event.getEntity());
+            if (event.getEntity() instanceof LivingEntity living) {
+                OnEntityTick.onTick(living);
+            }
         });
 
         ExileEvents.ON_CHEST_LOOTED.register(new OnLootChestEvent());
@@ -243,13 +249,12 @@ public class CommonEvents {
 
         NewDamageMain.init();
 
-
-        // ExileEvents.DAMAGE_BEFORE_CALC.register(new ScaleVanillaMobDamage()); todo this doesnt seem needed..?
-        //ExileEvents.DAMAGE_BEFORE_CALC.register(new ScaleVanillaPlayerDamage()); todo same
-
+        // ExileEvents.DAMAGE_BEFORE_CALC.register(new ScaleVanillaMobDamage()); todo
+        // this doesnt seem needed..?
+        // ExileEvents.DAMAGE_BEFORE_CALC.register(new ScaleVanillaPlayerDamage()); todo
+        // same
 
         ExileEvents.PLAYER_DEATH.register(new OnPlayerDeath());
-
 
         ForgeEvents.registerForgeEvent(LivingDamageEvent.class, event ->
 
@@ -261,7 +266,8 @@ public class CommonEvents {
                         float dmg = event.getAmount();
                         float multi = dmg / event.getEntity().getMaxHealth();
                         float spend = Load.Unit(event.getEntity()).getUnit().magicShieldData().getValue() * multi;
-                        Load.Unit(event.getEntity()).getResources().spend(event.getEntity(), ResourceType.magic_shield, spend);
+                        Load.Unit(event.getEntity()).getResources().spend(event.getEntity(), ResourceType.magic_shield,
+                                spend);
                     }
                 }
             } catch (Exception e) {
@@ -270,7 +276,6 @@ public class CommonEvents {
 
         });
 
-
         ExileEvents.ON_PLAYER_LOGIN.register(new EventConsumer<ExileEvents.OnPlayerLogin>() {
             @Override
             public void accept(ExileEvents.OnPlayerLogin event) {
@@ -278,10 +283,8 @@ public class CommonEvents {
             }
         });
 
-
         DatabaseCaches.init();
 
     }
-
 
 }

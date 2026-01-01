@@ -35,9 +35,7 @@ public class SummonPetAction extends SpellAction {
             return;
         }
 
-
         int amount = data.getOrDefault(MapField.COUNT, 1D).intValue();
-
 
         for (int i = 0; i < amount; i++) {
 
@@ -45,7 +43,8 @@ public class SummonPetAction extends SpellAction {
 
             TamableAnimal en = (TamableAnimal) type.get().create(ctx.world);
 
-            en.finalizeSpawn((ServerLevel) ctx.world, ctx.world.getCurrentDifficultyAt(ctx.getBlockPos()), MobSpawnType.MOB_SUMMONED, null, null);
+            en.finalizeSpawn((ServerLevel) ctx.world, ctx.world.getCurrentDifficultyAt(ctx.getBlockPos()),
+                    MobSpawnType.MOB_SUMMONED, null);
 
             en.tame((Player) ctx.caster);
 
@@ -58,17 +57,15 @@ public class SummonPetAction extends SpellAction {
             float aggroRadius = ctx.calculatedSpellData.data.getNumber(EventData.AGGRO_RADIUS, 15).number;
             aggroRadius *= ctx.calculatedSpellData.data.getNumber(EventData.AGGRO_RADIUS_MULTI, 1).number;
 
-
             boolean counts = data.getOrDefault(MapField.COUNTS_TOWARDS_MAX_SUMMONS, true);
-            Load.Unit(en).summonedPetData.setup(ctx.calculatedSpellData.getSpell(), duration, (int) aggroRadius, counts);
-
+            Load.Unit(en).summonedPetData.setup(ctx.calculatedSpellData.getSpell(), duration, (int) aggroRadius,
+                    counts);
 
             Load.Unit(en).SetMobLevelAtSpawn((Player) ctx.caster);
 
             Load.Unit(en).setLevel(Load.Unit(ctx.caster).getLevel());
 
             Load.Unit(en).setRarity(IRarity.SUMMON_ID);
-
 
             ctx.world.addFreshEntity(en);
         }
@@ -90,7 +87,8 @@ public class SummonPetAction extends SpellAction {
         ArrayList<NearbySummon> summonsNearby = new ArrayList<>();
         int summonsTowardsMax = 0;
 
-        for (SummonEntity en : EntityFinder.start(caster, SummonEntity.class, caster.blockPosition()).searchFor(AllyOrEnemy.all).radius(100).build()) {
+        for (SummonEntity en : EntityFinder.start(caster, SummonEntity.class, caster.blockPosition())
+                .searchFor(AllyOrEnemy.all).radius(100).build()) {
             if (en.getOwner() != caster) {
                 continue;
             }
@@ -104,7 +102,8 @@ public class SummonPetAction extends SpellAction {
             summonsNearby.add(new NearbySummon(en, data));
         }
 
-        summonsNearby.sort(Comparator.comparingInt(x -> -x.summon.tickCount)); // todo this needs to be from highest to lowest age
+        summonsNearby.sort(Comparator.comparingInt(x -> -x.summon.tickCount)); // todo this needs to be from highest to
+                                                                               // lowest age
 
         int excess = summonsTowardsMax - totalSummons;
         for (int i = 0; excess > 0 && i < summonsNearby.size(); i++) {

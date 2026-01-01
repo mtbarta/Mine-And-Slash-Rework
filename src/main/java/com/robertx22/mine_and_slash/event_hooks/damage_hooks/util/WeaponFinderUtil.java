@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.HolderLookup;
 
 public class WeaponFinderUtil {
 
@@ -22,26 +23,26 @@ public class WeaponFinderUtil {
         GearItemData gear = StackSaving.GEARS.loadFrom(stack);
 
         /*
-        if (gear == null) {
-            if (source instanceof Player p) {
-                for (int i = 0; i < 9; i++) {
-                    if (Inventory.isHotbarSlot(i)) { // just in case it changes
-                        ItemStack attempt = p.getInventory().getItem(i);
-
-                        if (StackSaving.GEARS.has(attempt)) {
-                            gear = StackSaving.GEARS.loadFrom(attempt);
-                            if (gear != null) {
-                                if (gear.GetBaseGearType().isWeapon()) {
-                                    if (Load.Unit(source).getLevel() >= gear.getLevel()) {
-                                        return attempt;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+         * if (gear == null) {
+         * if (source instanceof Player p) {
+         * for (int i = 0; i < 9; i++) {
+         * if (Inventory.isHotbarSlot(i)) { // just in case it changes
+         * ItemStack attempt = p.getInventory().getItem(i);
+         * 
+         * if (StackSaving.GEARS.has(attempt)) {
+         * gear = StackSaving.GEARS.loadFrom(attempt);
+         * if (gear != null) {
+         * if (gear.GetBaseGearType().isWeapon()) {
+         * if (Load.Unit(source).getLevel() >= gear.getLevel()) {
+         * return attempt;
+         * }
+         * }
+         * }
+         * }
+         * }
+         * }
+         * }
+         * }
          */
 
         if (gear == null) {
@@ -63,11 +64,9 @@ public class WeaponFinderUtil {
         }
     }
 
-
     private static ItemStack getWeaponStackFromThrownEntity(Entity en) {
         try {
-            for (SynchedEntityData.DataValue<?> entry : en.getEntityData().getNonDefaultValues()
-            ) {
+            for (SynchedEntityData.DataValue<?> entry : en.getEntityData().getNonDefaultValues()) {
                 if (entry.value() instanceof ItemStack) {
                     GearItemData gear = StackSaving.GEARS.loadFrom((ItemStack) entry.value());
                     if (gear != null) {
@@ -81,6 +80,7 @@ public class WeaponFinderUtil {
         try {
             CompoundTag nbt = new CompoundTag();
             en.saveWithoutId(nbt);
+            HolderLookup.Provider registries = en.registryAccess();
 
             ItemStack stack = ItemStack.EMPTY;
 
@@ -88,7 +88,7 @@ public class WeaponFinderUtil {
                 if (stack == null || stack.isEmpty()) {
                     try {
                         if (nbt.get(key) instanceof CompoundTag) {
-                            ItemStack s = tryGetStackFromNbt(nbt.get(key));
+                            ItemStack s = tryGetStackFromNbt(nbt.get(key), registries);
 
                             if (!s.isEmpty() && StackSaving.GEARS.has(s)) {
                                 return s;
@@ -100,7 +100,7 @@ public class WeaponFinderUtil {
 
                             for (String key2 : nbt2.getAllKeys()) {
                                 if (nbt.get(key) instanceof CompoundTag) {
-                                    ItemStack s2 = tryGetStackFromNbt(nbt2.get(key2));
+                                    ItemStack s2 = tryGetStackFromNbt(nbt2.get(key2), registries);
                                     if (!s2.isEmpty() && StackSaving.GEARS.has(s2)) {
                                         return s2;
                                     }
@@ -115,7 +115,7 @@ public class WeaponFinderUtil {
 
             }
 
-            ItemStack tryWholeNbt = ItemStack.of(nbt);
+            ItemStack tryWholeNbt = ItemStack.parse(registries, nbt).orElse(ItemStack.EMPTY);
 
             if (tryWholeNbt != null) {
                 GearItemData gear = StackSaving.GEARS.loadFrom(tryWholeNbt);
@@ -136,9 +136,9 @@ public class WeaponFinderUtil {
         return ItemStack.EMPTY;
     }
 
-    private static ItemStack tryGetStackFromNbt(Tag nbt) {
+    private static ItemStack tryGetStackFromNbt(Tag nbt, HolderLookup.Provider registries) {
         if (nbt instanceof CompoundTag) {
-            ItemStack s = ItemStack.of((CompoundTag) nbt);
+            ItemStack s = ItemStack.parse(registries, (CompoundTag) nbt).orElse(ItemStack.EMPTY);
             if (s != null && !s.isEmpty()) {
                 return s;
 
@@ -147,6 +147,5 @@ public class WeaponFinderUtil {
 
         return ItemStack.EMPTY;
     }
-
 
 }
