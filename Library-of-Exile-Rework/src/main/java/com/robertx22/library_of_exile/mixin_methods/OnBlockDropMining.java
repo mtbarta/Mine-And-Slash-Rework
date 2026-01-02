@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -34,7 +36,13 @@ public class OnBlockDropMining {
             }
 
             ItemStack stack = ctx.getParamOrNull(LootContextParams.TOOL);
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0) {
+            // In NeoForge 1.21, we need to get the enchantment holder from registry to
+            // check level
+            var registryAccess = ctx.getLevel().registryAccess();
+            var enchantRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
+            var silkTouchHolder = enchantRegistry.getHolder(Enchantments.SILK_TOUCH);
+            if (silkTouchHolder.isPresent()
+                    && EnchantmentHelper.getItemEnchantmentLevel(silkTouchHolder.get(), stack) > 0) {
                 return;
             }
 

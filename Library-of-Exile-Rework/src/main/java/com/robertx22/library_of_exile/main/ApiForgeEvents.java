@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -16,18 +16,28 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.IModBusEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Consumer;
 
 public class ApiForgeEvents {
 
+    // Store the mod event bus for registering mod bus events
+    private static IEventBus modEventBus;
+
+    public static void setModEventBus(IEventBus bus) {
+        modEventBus = bus;
+    }
+
     public static <T extends Event> void registerForgeEvent(Class<T> clazz, Consumer<T> event, EventPriority priority) {
         if (IModBusEvent.class.isAssignableFrom(clazz) || clazz.isAssignableFrom(IModBusEvent.class)) {
-            FMLJavaModLoadingContext.get()
-                    .getModEventBus()
-                    .addListener(priority, event);
+            if (modEventBus != null) {
+                modEventBus.addListener(priority, event);
+            } else {
+                // Fallback for game events that may be misidentified
+                NeoForge.EVENT_BUS.addListener(priority, event);
+            }
         } else {
             NeoForge.EVENT_BUS.addListener(priority, event);
         }
@@ -39,19 +49,23 @@ public class ApiForgeEvents {
 
     public static void register() {
 
-        registerForgeEvent(LivingAttackEvent.class, event -> {
+        // LivingAttackEvent is now LivingIncomingDamageEvent in NeoForge 1.21
+        // This event fires before damage calculation - allows cancellation
+        registerForgeEvent(LivingIncomingDamageEvent.class, event -> {
             ExileEvents.OnDamageEntity after = ExileEvents.DAMAGE_BEFORE_CALC.callEvents(
                     new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity()));
             if (after.canceled) {
                 event.setCanceled(true);
             }
-            // todo is needed? event.setAmount(after.damage);
+            // Update the amount if modified by event handlers
+            event.setAmount(after.damage);
         }, EventPriority.HIGHEST);
 
-        registerForgeEvent(LivingDamageEvent.class, event -> {
+        // LivingDamageEvent.Pre is now the event for final damage before application
+        registerForgeEvent(LivingDamageEvent.Pre.class, event -> {
             ExileEvents.OnDamageEntity after = ExileEvents.DAMAGE_AFTER_CALC.callEvents(
-                    new ExileEvents.OnDamageEntity(event.getSource(), event.getAmount(), event.getEntity()));
-            event.setAmount(after.damage);
+                    new ExileEvents.OnDamageEntity(event.getSource(), event.getOriginalDamage(), event.getEntity()));
+            event.setNewDamage(after.damage);
         }, EventPriority.LOWEST);
 
         registerForgeEvent(EntityJoinLevelEvent.class, event -> {

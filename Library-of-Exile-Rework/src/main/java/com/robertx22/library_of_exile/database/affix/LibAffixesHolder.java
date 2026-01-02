@@ -14,8 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import java.util.UUID;
-
 // add affixes where mobs inflict potion effect on you
 public class LibAffixesHolder extends ExileKeyHolder<ExileMobAffix> {
     public static LibAffixesHolder INSTANCE = new LibAffixesHolder(Ref.REGISTER_INFO);
@@ -46,21 +44,21 @@ public class LibAffixesHolder extends ExileKeyHolder<ExileMobAffix> {
     });
     public ExileKey<ExileMobAffix, KeyInfo> KNOCKBACK_IMMUNE = ExileKey.ofId(this, "knockback_immune", x -> {
         var data = AttributeMobAffix.Data.of(Attributes.KNOCKBACK_RESISTANCE.value(),
-                UUID.fromString("9bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADD_VALUE,
+                "library_of_exile:knockback_immune", AttributeModifier.Operation.ADD_VALUE,
                 new AffixNumberRange(1, 1));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> HIGH_HEALTH = ExileKey.ofId(this, "high_health", x -> {
         var data = AttributeMobAffix.Data.of(Attributes.MAX_HEALTH.value(),
-                UUID.fromString("8bedbca3-44e3-4d99-acf3-7a8407b39339"),
+                "library_of_exile:high_health",
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, new AffixNumberRange(0.25F, 0.5F));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);
     });
     public ExileKey<ExileMobAffix, KeyInfo> HIGH_KNOCKBACK = ExileKey.ofId(this, "high_knockback", x -> {
         var data = AttributeMobAffix.Data.of(Attributes.ATTACK_KNOCKBACK.value(),
-                UUID.fromString("7bedbca3-44e3-4d99-acf3-7a8407b39339"), AttributeModifier.Operation.ADD_VALUE,
+                "library_of_exile:high_knockback", AttributeModifier.Operation.ADD_VALUE,
                 new AffixNumberRange(1, 3));
         var translation = AffixTranslation.ofAttribute(Ref.MODID);
         return new AttributeMobAffix(ExileMobAffix.Affects.MOB, x.GUID(), 1000, data, translation);

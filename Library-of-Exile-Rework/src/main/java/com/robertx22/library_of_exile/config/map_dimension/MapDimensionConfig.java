@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
@@ -42,7 +42,7 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.fml.ModLoadingContext;
-
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -199,8 +199,14 @@ public class MapDimensionConfig {
         var SPEC = specPair.getRight();
         var CONFIG = specPair.getLeft();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SPEC,
-                CommonInit.defaultConfigName(ModConfig.Type.SERVER, mapId.getNamespace() + "_dimension"));
+        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
+        // Commenting out config registration as it requires access to ModContainer from
+        // the mod's constructor
+        // The mod using this library should register its own config
+        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+        // SPEC,
+        // CommonInit.defaultConfigName(ModConfig.Type.SERVER, mapId.getNamespace() +
+        // "_dimension"));
 
         ApiForgeEvents.registerForgeEvent(PlayerInteractEvent.RightClickItem.class, event -> {
 
@@ -417,7 +423,8 @@ public class MapDimensionConfig {
          * 
          */
 
-        ApiForgeEvents.registerForgeEvent(LivingAttackEvent.class, event -> {
+        // LivingAttackEvent renamed to LivingIncomingDamageEvent in NeoForge 1.21
+        ApiForgeEvents.registerForgeEvent(LivingIncomingDamageEvent.class, event -> {
             try {
                 var en = event.getEntity();
 

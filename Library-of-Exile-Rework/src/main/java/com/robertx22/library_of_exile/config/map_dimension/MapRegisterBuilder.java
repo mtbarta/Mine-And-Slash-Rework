@@ -6,6 +6,7 @@ import com.robertx22.library_of_exile.dimension.MapDimensionInfo;
 import com.robertx22.library_of_exile.dimension.MapDimensions;
 import com.robertx22.library_of_exile.events.base.EventConsumer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
 
 public class MapRegisterBuilder {
 
@@ -15,8 +16,10 @@ public class MapRegisterBuilder {
         this.info = info;
     }
 
-    public MapRegisterBuilder chunkGenerator(EventConsumer<MapChunkGenEvent> event, ResourceLocation chunkGenId) {
-        MapChunkGens.registerMapChunkGenerator(chunkGenId, event);
+    // In NeoForge 1.21, modEventBus must be passed from the mod constructor
+    public MapRegisterBuilder chunkGenerator(IEventBus modEventBus, EventConsumer<MapChunkGenEvent> event,
+            ResourceLocation chunkGenId) {
+        MapChunkGens.registerMapChunkGenerator(modEventBus, chunkGenId, event);
         return this;
     }
 

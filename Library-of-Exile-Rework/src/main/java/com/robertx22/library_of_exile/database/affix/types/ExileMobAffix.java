@@ -24,12 +24,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Locale;
-import java.util.UUID;
 
 public abstract class ExileMobAffix
         implements JsonExileRegistry<ExileMobAffix>, GsonCustomSer<ExileMobAffix>, ITranslated {
     public static AttributeMobAffix SERIALIZER = new AttributeMobAffix(
-            Affects.MOB, "", 0, AttributeMobAffix.Data.of(Attributes.ARMOR.value(), UUID.randomUUID(),
+            Affects.MOB, "", 0, AttributeMobAffix.Data.of(Attributes.ARMOR.value(), "library_of_exile:serializer",
                     AttributeModifier.Operation.ADD_VALUE, new AffixNumberRange(1, 1)),
             AffixTranslation.ofAttribute(Ref.MODID));
 

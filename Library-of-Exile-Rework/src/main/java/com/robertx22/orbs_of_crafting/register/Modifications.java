@@ -8,32 +8,32 @@ import com.robertx22.library_of_exile.registry.register_info.ModRequiredRegister
 import com.robertx22.orbs_of_crafting.register.mods.DestroyItemMod;
 import com.robertx22.orbs_of_crafting.register.mods.DoNothingItemMod;
 import com.robertx22.orbs_of_crafting.register.mods.base.ItemModification;
-import com.robertx22.orbs_of_crafting.register.reqs.vanilla.VanillaItemMod;
-import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import com.robertx22.orbs_of_crafting.register.reqs.vanilla.VanillaEnchantItemMod;
 
 public class Modifications extends ExileKeyHolder<ItemModification> {
     public Modifications(ModRequiredRegisterInfo modRegisterInfo) {
         super(modRegisterInfo);
     }
 
-
     public static Modifications INSTANCE = new Modifications(Ref.REGISTER_INFO);
 
-    public ExileKey<ItemModification, KeyInfo> DESTROY_ITEM = ExileKey.ofId(this, "destroy_item", x -> new DestroyItemMod(x.GUID()));
-    public ExileKey<ItemModification, KeyInfo> DO_NOTHING = ExileKey.ofId(this, "do_nothing", x -> new DoNothingItemMod(x.GUID()));
+    public ExileKey<ItemModification, KeyInfo> DESTROY_ITEM = ExileKey.ofId(this, "destroy_item",
+            x -> new DestroyItemMod(x.GUID()));
+    public ExileKey<ItemModification, KeyInfo> DO_NOTHING = ExileKey.ofId(this, "do_nothing",
+            x -> new DoNothingItemMod(x.GUID()));
 
+    // In NeoForge 1.21, EnchantWithLevelsFunction.enchantWithLevels requires
+    // HolderLookup.Provider
+    // which is not available at static initialization time. Replaced with
+    // runtime-created mods.
     public ExileKey<ItemModification, KeyInfo> ENCHANT_30_LEVELS = ExileKey.ofId(this, "enchant_with_30_levels", x -> {
-        var fun = EnchantWithLevelsFunction.enchantWithLevels(ConstantValue.exactly(30.0F)).allowTreasure().build();
-        return new VanillaItemMod(x.GUID(), "Applies Enchantments worth 30 Levels", fun);
+        return new VanillaEnchantItemMod(x.GUID(), "Applies Enchantments worth 30 Levels", 30);
     });
     public ExileKey<ItemModification, KeyInfo> ENCHANT_20_LEVELS = ExileKey.ofId(this, "enchant_with_20_levels", x -> {
-        var fun = EnchantWithLevelsFunction.enchantWithLevels(ConstantValue.exactly(20)).allowTreasure().build();
-        return new VanillaItemMod(x.GUID(), "Applies Enchantments worth 20 Levels", fun);
+        return new VanillaEnchantItemMod(x.GUID(), "Applies Enchantments worth 20 Levels", 20);
     });
     public ExileKey<ItemModification, KeyInfo> ENCHANT_10_LEVELS = ExileKey.ofId(this, "enchant_with_10_levels", x -> {
-        var fun = EnchantWithLevelsFunction.enchantWithLevels(ConstantValue.exactly(10)).allowTreasure().build();
-        return new VanillaItemMod(x.GUID(), "Applies Enchantments worth 10 Levels", fun);
+        return new VanillaEnchantItemMod(x.GUID(), "Applies Enchantments worth 10 Levels", 10);
     });
 
     @Override

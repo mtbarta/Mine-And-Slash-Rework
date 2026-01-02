@@ -7,7 +7,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -19,13 +18,13 @@ public class MapChunkGens {
 
     // Simple empty chunk gen all my small map-dimension mods can use
     // the map stuff is generated in the event
-    public static void registerMapChunkGenerator(ResourceLocation id, EventConsumer<MapChunkGenEvent> e) {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    // In NeoForge 1.21, the mod event bus must be passed from the mod constructor
+    public static void registerMapChunkGenerator(IEventBus modEventBus, ResourceLocation id,
+            EventConsumer<MapChunkGenEvent> e) {
         DeferredRegister<MapCodec<? extends ChunkGenerator>> DEF = DeferredRegister.create(Registries.CHUNK_GENERATOR,
                 id.getNamespace());
 
-        DEF.register(bus);
+        DEF.register(modEventBus);
 
         DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> CHUNK_GEN = DEF
                 .register(id.getPath(), () -> MapChunkGenerator.MAP_CODEC);

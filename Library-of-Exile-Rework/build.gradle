@@ -121,7 +121,7 @@ processResources {
 }
 
 int getPackFormat() {
-    return 41 // 1.20.5
+    return 48 // 1.21.1
 }
 
 publishMods {

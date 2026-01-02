@@ -26,7 +26,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class MapChunkGenerator extends ChunkGenerator {
 
@@ -74,7 +73,7 @@ public class MapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom,
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender pBlender, RandomState pRandom,
             StructureManager pStructureManager, ChunkAccess pChunk) {
         // makeBase(pChunk);
         BlockState blockstate = Blocks.BEDROCK.defaultBlockState();

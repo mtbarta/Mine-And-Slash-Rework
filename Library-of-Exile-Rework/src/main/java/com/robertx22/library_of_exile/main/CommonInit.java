@@ -29,7 +29,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -40,7 +45,6 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.minecraft.core.registries.BuiltInRegistries; // ForgeRegistries is gone/different?
 // ForgeRegistries -> BuiltInRegistries for vanilla registries usually. Or NeoForgeRegistries.
@@ -62,9 +66,10 @@ public class CommonInit {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Ref.MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, Ref.MODID);
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Ref.MODID);
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_TAB = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, Ref.MODID);
-
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
+            .create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Ref.MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_TAB = DeferredRegister
+            .create(BuiltInRegistries.CREATIVE_MODE_TAB, Ref.MODID);
 
     public static void initDeferred(IEventBus bus) {
         ITEMS.register(bus);
@@ -88,16 +93,13 @@ public class CommonInit {
 
     public static void registerEntries() {
 
-
     }
-
 
     public CommonInit(IEventBus bus) {
         // LibAttachments.register(bus);
         OrderedModConstructor.register(new LibModConstructor(Ref.MODID), bus);
 
         OrbsOfCraftingMain.init(bus);
-
 
         if (RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(Ref.MODID);
@@ -108,18 +110,23 @@ public class CommonInit {
             });
         }
 
-        // todo make this separate per each mod?   ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MapDimensionConfig.SPEC, defaultConfigName(ModConfig.Type.SERVER, "exile_map_dimensions"));
-
+        // todo make this separate per each mod?
+        // ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,
+        // MapDimensionConfig.SPEC, defaultConfigName(ModConfig.Type.SERVER,
+        // "exile_map_dimensions"));
 
         bus.addListener(this::commonSetupEvent);
         bus.addListener(this::interMod);
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+        // Set the mod event bus for ApiForgeEvents
+        ApiForgeEvents.setModEventBus(bus);
+
+        // Replace DistExecutor with FMLEnvironment.dist check
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             bus.addListener(this::clientSetup);
-        });
+        }
 
         ApiForgeEvents.register();
-
 
         ApiForgeEvents.registerForgeEvent(OnDatapackSyncEvent.class, x -> {
             ServerPlayer player = x.getPlayer();
@@ -127,7 +134,8 @@ public class CommonInit {
         });
         MobAffixEvents.init();
 
-        // Packets are now registered in LibModConstructor during RegisterPayloadHandlerEvent
+        // Packets are now registered in LibModConstructor during
+        // RegisterPayloadHandlerEvent
         // C2SPacketRegister.register();
         // S2CPacketRegister.register();
 
@@ -135,7 +143,6 @@ public class CommonInit {
         IdentifiableItems.init();
 
         ExileEvents.DAMAGE_AFTER_CALC.register(new OnMobDamaged());
-
 
         ApiForgeEvents.registerForgeEvent(LivingDeathEvent.class, x -> {
             if (x.getEntity() instanceof ServerPlayer p) {
@@ -184,7 +191,7 @@ public class CommonInit {
         try {
             lock.lock();
             try {
-                //  Database.backup();
+                // Database.backup();
                 Database.checkGuidValidity();
                 Database.unregisterInvalidEntries();
                 Database.getAllRegistries().forEach(x -> x.onAllDatapacksLoaded());

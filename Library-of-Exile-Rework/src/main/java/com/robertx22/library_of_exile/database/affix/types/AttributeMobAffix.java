@@ -20,28 +20,28 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class AttributeMobAffix extends ExileMobAffix {
 
     public static record Data(String attribute_id,
-            String uuid,
+            String modifier_id,
             AttributeModifier.Operation operation,
             AffixNumberRange number_range) {
 
-        public static Data of(Attribute attribute, UUID uuid, AttributeModifier.Operation op, AffixNumberRange num) {
-            return new Data(BuiltInRegistries.ATTRIBUTE.getKey(attribute).toString(), uuid.toString(), op, num);
+        public static Data of(Attribute attribute, String modifierId, AttributeModifier.Operation op,
+                AffixNumberRange num) {
+            return new Data(BuiltInRegistries.ATTRIBUTE.getKey(attribute).toString(), modifierId, op, num);
         }
     }
 
     public Data data;
 
     public static class Lazy {
-        public transient LazyClass<UUID> lazyUUID;
+        public transient LazyClass<ResourceLocation> lazyModifierId;
         public transient LazyClass<net.minecraft.core.Holder<Attribute>> lazyAttribute;
 
         public Lazy(AttributeMobAffix affix) {
-            lazyUUID = new LazyClass<>(() -> UUID.fromString(affix.data.uuid));
+            lazyModifierId = new LazyClass<>(() -> ResourceLocation.parse(affix.data.modifier_id));
             lazyAttribute = new LazyClass<>(
                     () -> BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(affix.data.attribute_id)).get());
         }
@@ -64,8 +64,7 @@ public class AttributeMobAffix extends ExileMobAffix {
     public AttributeModifier getModifier(int perc) {
         var num = data.number_range.getNumber(perc);
         AttributeModifier mod = new AttributeModifier(
-                LAZY.get(this).lazyUUID.get(), // Reverting to UUID
-                data.attribute_id,
+                LAZY.get(this).lazyModifierId.get(),
                 (double) num,
                 data.operation);
         return mod;
@@ -73,22 +72,23 @@ public class AttributeMobAffix extends ExileMobAffix {
 
     public void apply(int perc, LivingEntity en) {
         var mod = getModifier(perc);
+        var modId = LAZY.get(this).lazyModifierId.get();
 
         AttributeInstance atri = en.getAttribute(LAZY.get(this).lazyAttribute.get());
         if (atri != null) {
-            if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod);
+            if (atri.hasModifier(modId)) {
+                atri.removeModifier(modId);
             }
             atri.addPermanentModifier(mod);
         }
     }
 
     public void remove(LivingEntity en) {
-        var mod = getModifier(0);
+        var modId = LAZY.get(this).lazyModifierId.get();
         AttributeInstance atri = en.getAttribute(LAZY.get(this).lazyAttribute.get());
         if (atri != null) {
-            if (atri.hasModifier(mod)) {
-                atri.removeModifier(mod);
+            if (atri.hasModifier(modId)) {
+                atri.removeModifier(modId);
             }
         }
     }
