@@ -23,7 +23,7 @@ public class GuiOverlays {
     public static void registerOverlay(RegisterGuiLayersEvent event) {
 
         event.registerAbove(VanillaGuiLayers.CHAT,
-                new ResourceLocation(SlashRef.MODID, "spell_hotbar"), new LayeredDraw.Layer() {
+                ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "spell_hotbar"), new LayeredDraw.Layer() {
                     @Override
                     public void render(GuiGraphics guiGraphics, float partialTick) {
                         if (ClientConfigs.CLIENT.SPELL_HOTBAR_OVERLAY_TYPE
@@ -43,7 +43,7 @@ public class GuiOverlays {
                     }
                 });
 
-        event.registerAbove(VanillaGuiLayers.CHAT, new ResourceLocation(SlashRef.MODID, "cast_bar"),
+        event.registerAbove(VanillaGuiLayers.CHAT, ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "cast_bar"),
                 new LayeredDraw.Layer() {
                     @Override
                     public void render(GuiGraphics guiGraphics, float partialTick) {
@@ -54,7 +54,7 @@ public class GuiOverlays {
                     }
                 });
 
-        event.registerAbove(VanillaGuiLayers.CHAT, new ResourceLocation(SlashRef.MODID, "rpg_gui"),
+        event.registerAbove(VanillaGuiLayers.CHAT, ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "rpg_gui"),
                 new LayeredDraw.Layer() {
                     @Override
                     public void render(GuiGraphics guiGraphics, float partialTick) {
@@ -63,7 +63,7 @@ public class GuiOverlays {
                 });
 
         event.registerAbove(VanillaGuiLayers.CHAT,
-                new ResourceLocation(SlashRef.MODID, "status_effects"), new LayeredDraw.Layer() {
+                ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "status_effects"), new LayeredDraw.Layer() {
                     @Override
                     public void render(GuiGraphics guiGraphics, float partialTick) {
                         if (ClientConfigs.CLIENT.STATUS_EFFECTS_OVERLAY_TYPE

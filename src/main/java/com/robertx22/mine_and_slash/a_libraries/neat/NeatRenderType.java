@@ -19,7 +19,7 @@ import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
 public class NeatRenderType extends RenderStateShard {
 
     //https://github.com/UpcraftLP/Orderly/blob/master/src/main/resources/assets/orderly/textures/ui/default_health_bar.png
-    public static final ResourceLocation HEALTH_BAR_TEXTURE = new ResourceLocation(SlashRef.MODID, "textures/gui/health_bar_texture.png");
+    public static final ResourceLocation HEALTH_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/health_bar_texture.png");
     public static final String barKey = "bar";
     public static final String iconKey = "icon";
     //have to do this otherwise sometime the game will crash after hotswap.

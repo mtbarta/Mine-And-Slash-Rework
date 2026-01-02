@@ -24,7 +24,7 @@ public class AllMapConnectionData {
 
     public Data getDataFromKey(String key) {
         try {
-            var struc = MapDimensions.getInfo(new ResourceLocation(key.split("-")[0]));
+            var struc = MapDimensions.getInfo(ResourceLocation.parse(key.split("-")[0]));
 
             String cps = key.split("-")[1];
 

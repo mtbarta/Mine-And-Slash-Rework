@@ -72,12 +72,12 @@ public class ObelisksMain {
 
     public static String MODID = "ancient_obelisks";
     public static String DIMENSION_ID = "ancient_obelisks:obelisk";
-    public static ResourceLocation DIMENSION_KEY = new ResourceLocation(DIMENSION_ID);
+    public static ResourceLocation DIMENSION_KEY = ResourceLocation.parse(DIMENSION_ID);
 
     public static ModRequiredRegisterInfo REGISTER_INFO = new ModRequiredRegisterInfo(MODID);
 
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(MODID, id);
     }
 
     // other

@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ToonEntry extends ObjectSelectionList.Entry<ToonEntry> {
 
-    private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("minecraft", "widget/button");
+    private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "widget/button");
 
     ToonData entry;
     ToonList list;

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class HarvestEntityCap {
-    public static final ResourceLocation RESOURCE = new ResourceLocation(HarvestMain.MODID, "entity_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(HarvestMain.MODID, "entity_data");
 
 
     public LivingEntity entity;

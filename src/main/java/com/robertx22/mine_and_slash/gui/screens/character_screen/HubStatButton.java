@@ -24,9 +24,9 @@ public class HubStatButton extends ImageButton {
 
     public static int xSize = 41;
     public static int ySize = 20;
-    public static ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID,
+    public static ResourceLocation LEFT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/main_hub/hub_stat_button_left.png");
-    public static ResourceLocation RIGHT = new ResourceLocation(SlashRef.MODID,
+    public static ResourceLocation RIGHT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/main_hub/hub_stat_button_right.png");
 
     StatData stat;

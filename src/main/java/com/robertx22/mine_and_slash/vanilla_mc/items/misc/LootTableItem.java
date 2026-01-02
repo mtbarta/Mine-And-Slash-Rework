@@ -64,7 +64,7 @@ public class LootTableItem extends Item implements IAutoModel {
                 ItemStack stack = player.getItemInHand(hand);
                 stack.shrink(1);
 
-                ResourceLocation loottableId = new ResourceLocation(
+                ResourceLocation loottableId = ResourceLocation.parse(
                         stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
                                 .getString("loot_table"));
 

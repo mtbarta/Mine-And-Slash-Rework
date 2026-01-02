@@ -730,7 +730,7 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     public ItemStack getItem() {
         try {
             Item item = VanillaUTIL.REGISTRY.items()
-                    .get(new ResourceLocation(getSpellData().data.getString(EventData.ITEM_ID)));
+                    .get(ResourceLocation.parse(getSpellData().data.getString(EventData.ITEM_ID)));
             if (item != null) {
                 return new ItemStack(item);
             }

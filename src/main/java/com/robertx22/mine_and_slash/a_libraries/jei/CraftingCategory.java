@@ -34,7 +34,7 @@ public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRec
     public static final String TEXTURE_GUI_PATH = "textures/jei/gui/";
     public static final String TEXTURE_GUI_VANILLA = TEXTURE_GUI_PATH + "gui_vanilla.png";
 
-    public static final ResourceLocation RECIPE_GUI_VANILLA = new ResourceLocation(ModIds.JEI_ID, TEXTURE_GUI_VANILLA);
+    public static final ResourceLocation RECIPE_GUI_VANILLA = ResourceLocation.fromNamespaceAndPath(ModIds.JEI_ID, TEXTURE_GUI_VANILLA);
 
     IProfessionCategoryExtension recipeExtension;
 
@@ -137,6 +137,6 @@ public class CraftingCategory implements IExtendableRecipeCategory<ProfessionRec
 
     @Override
     public ResourceLocation getRegistryName(ProfessionRecipe recipe) {
-        return new ResourceLocation(recipe.result);
+        return ResourceLocation.parse(recipe.result);
     }
 }

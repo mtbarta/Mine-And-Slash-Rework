@@ -36,7 +36,7 @@ public class TellClientEntityCastingSpell extends MyPacket<TellClientEntityCasti
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "tellclienttocastspell");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "tellclienttocastspell");
     }
 
     @Override

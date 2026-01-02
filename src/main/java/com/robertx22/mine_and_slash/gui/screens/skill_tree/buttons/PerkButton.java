@@ -40,8 +40,8 @@ public class PerkButton extends ImageButton {
     public static int SPACING = 26;
     public static int BIGGEST = 33;
 
-    static ResourceLocation ID = new ResourceLocation(SlashRef.MODID, "textures/gui/skill_tree/perk_buttons.png");
-    public static ResourceLocation LOCKED_TEX = new ResourceLocation(SlashRef.MODID, "textures/gui/locked.png");
+    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/skill_tree/perk_buttons.png");
+    public static ResourceLocation LOCKED_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/locked.png");
 
     public Perk perk;
     public PointData point;

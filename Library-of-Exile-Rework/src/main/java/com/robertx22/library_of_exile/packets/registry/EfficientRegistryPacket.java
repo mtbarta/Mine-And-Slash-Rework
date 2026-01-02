@@ -22,7 +22,7 @@ public class EfficientRegistryPacket<T extends ISerializable & JsonExileRegistry
         extends MyPacket<EfficientRegistryPacket<T>> {
     public static final JsonParser PARSER = new JsonParser();
 
-    public static ResourceLocation ID = new ResourceLocation(Ref.MODID, "eff_reg");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "eff_reg");
     private List<T> items;
 
     ExileRegistryType type;

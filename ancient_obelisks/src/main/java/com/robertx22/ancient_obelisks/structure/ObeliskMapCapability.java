@@ -12,7 +12,7 @@ public class ObeliskMapCapability {
 
     public Level world;
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(ObelisksMain.MODID, "world_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(ObelisksMain.MODID, "world_data");
 
     public ObeliskMapCapability(Level world) {
         this.world = world;

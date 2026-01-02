@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class ChunkCap implements ICap {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "chunk_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "chunk_data");
 
     public static ChunkCap get(LevelChunk chunk) {
         return chunk.getData(SlashAttachments.CHUNK_CAP);

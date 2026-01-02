@@ -76,12 +76,12 @@ public class HarvestMain {
 
     public static String MODID = "the_harvest";
     public static String DIMENSION_ID = "the_harvest:harvest";
-    public static ResourceLocation DIMENSION_KEY = new ResourceLocation(DIMENSION_ID);
+    public static ResourceLocation DIMENSION_KEY = ResourceLocation.parse(DIMENSION_ID);
 
     public static ModRequiredRegisterInfo REGISTER_INFO = new ModRequiredRegisterInfo(MODID);
 
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(MODID, id);
     }
 
     // other

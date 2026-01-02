@@ -47,7 +47,7 @@ public class DmgNumPacket extends MyPacket<DmgNumPacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "dmgnum");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "dmgnum");
     }
 
     @Override

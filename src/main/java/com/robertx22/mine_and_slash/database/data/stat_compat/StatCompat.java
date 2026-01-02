@@ -57,7 +57,7 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
     }
 
     private Attribute getAttribute() {
-        return BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(attribute_id));
+        return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(attribute_id));
     }
 
     public boolean isAttributeCompat() {
@@ -72,7 +72,7 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
         if (ExileDB.Stats().get(mns_stat_id) instanceof AttributeStat) {
             return null;
         }
-        Enchantment ench = BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchant_id));
+        Enchantment ench = BuiltInRegistries.ENCHANTMENT.get(ResourceLocation.parse(enchant_id));
 
         float value = 0;
 

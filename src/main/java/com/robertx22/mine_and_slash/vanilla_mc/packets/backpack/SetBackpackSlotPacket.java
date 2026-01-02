@@ -32,7 +32,7 @@ public class SetBackpackSlotPacket extends MyPacket<SetBackpackSlotPacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "setbackpackslot");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "setbackpackslot");
     }
 
     @Override

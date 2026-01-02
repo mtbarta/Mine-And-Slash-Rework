@@ -32,7 +32,7 @@ public class ProfessionLevelsButton extends ImageButton {
 
     public ProfessionLevelsButton(int xPos, int yPos) {
         super(xPos, yPos, SX, SY,
-                new WidgetSprites(new ResourceLocation("empty"), new ResourceLocation("empty")),
+                new WidgetSprites(ResourceLocation.parse("empty"), ResourceLocation.parse("empty")),
                 (button) -> {
                 });
 

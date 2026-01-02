@@ -17,7 +17,7 @@ public class DungeonMapCapability {
 
     public Level world;
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(DungeonMain.MODID, "world_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(DungeonMain.MODID, "world_data");
 
     public DungeonMapCapability(Level world) {
         this.world = world;

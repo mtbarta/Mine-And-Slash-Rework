@@ -10,7 +10,7 @@ public class SavedTeleportPos {
     public String dim = "";
 
     public ResourceLocation getDimensionId() {
-        return new ResourceLocation(dim);
+        return ResourceLocation.parse(dim);
     }
 
     public BlockPos getPos() {

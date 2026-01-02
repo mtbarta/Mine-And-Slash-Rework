@@ -10,7 +10,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 
 public class HelpButton extends ImageButton {
 
-    static ResourceLocation ID = new ResourceLocation(Ref.MODID, "textures/gui/spell_help.png");
+    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "textures/gui/spell_help.png");
 
     public HelpButton(int x, int y) {
         super(x, y, 20, 20, new WidgetSprites(ID, ID),

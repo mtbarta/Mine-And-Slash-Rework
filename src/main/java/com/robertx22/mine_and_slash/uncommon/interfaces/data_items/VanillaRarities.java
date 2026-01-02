@@ -10,15 +10,15 @@ import java.util.HashMap;
 public class VanillaRarities {
 
     public static Rarity LEGENDARY_ITEM = Rarity.create("LEGENDARY_ITEM",
-            new ResourceLocation(SlashRef.MODID, "legendary_item"), ChatFormatting.GOLD);
+            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "legendary_item"), ChatFormatting.GOLD);
     public static Rarity MYTHIC_ITEM = Rarity.create("MYTHIC_ITEM",
-            new ResourceLocation(SlashRef.MODID, "mythic_item"), ChatFormatting.DARK_PURPLE);
+            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "mythic_item"), ChatFormatting.DARK_PURPLE);
     public static Rarity UNIQUE_ITEM = Rarity.create("UNIQUE_ITEM",
-            new ResourceLocation(SlashRef.MODID, "unique_item"), ChatFormatting.RED);
-    public static Rarity RUNED_ITEM = Rarity.create("RUNED_ITEM", new ResourceLocation(SlashRef.MODID, "runed_item"),
+            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "unique_item"), ChatFormatting.RED);
+    public static Rarity RUNED_ITEM = Rarity.create("RUNED_ITEM", ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "runed_item"),
             ChatFormatting.YELLOW);
     public static Rarity UNCOMMON_ITEM = Rarity.create("UNCOMMON_ITEM",
-            new ResourceLocation(SlashRef.MODID, "uncommon_item"), ChatFormatting.GREEN);
+            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "uncommon_item"), ChatFormatting.GREEN);
 
     public static HashMap<String, Rarity> MAP = new HashMap<>();
 

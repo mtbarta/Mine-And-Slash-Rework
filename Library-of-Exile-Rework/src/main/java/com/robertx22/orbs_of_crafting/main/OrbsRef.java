@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 public class OrbsRef {
 
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(Ref.MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, id);
     }
 
 }

@@ -109,7 +109,7 @@ public final class Spell implements ISkillGem, IGUID, IAutoGson<Spell>, JsonExil
             return true;
         }
         return disabled_dims.stream()
-                .map(x -> new ResourceLocation(x))
+                .map(x -> ResourceLocation.parse(x))
                 .noneMatch(x -> x.equals(MapManager.getResourceLocation(world)));
     }
 
@@ -142,7 +142,7 @@ public final class Spell implements ISkillGem, IGUID, IAutoGson<Spell>, JsonExil
     }
 
     public static final ResourceLocation getIconLoc(String id) {
-        return new ResourceLocation(SlashRef.MODID, "textures/gui/spells/icons/" + id + ".png");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/icons/" + id + ".png");
     }
 
     public WeaponTypes getWeapon(LivingEntity en) {

@@ -41,7 +41,7 @@ import java.util.UUID;
 
 public class PlayerData implements ICap {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "player_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "player_data");
 
     public static PlayerData get(LivingEntity entity) {
         return entity.getData(SlashAttachments.PLAYER_DATA);

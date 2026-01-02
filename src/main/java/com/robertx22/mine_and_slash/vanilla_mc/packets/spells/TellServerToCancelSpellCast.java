@@ -13,7 +13,7 @@ public class TellServerToCancelSpellCast extends MyPacket<TellServerToCancelSpel
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "cancelspell");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "cancelspell");
     }
 
     @Override

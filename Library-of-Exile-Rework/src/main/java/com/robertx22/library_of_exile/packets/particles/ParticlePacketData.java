@@ -41,7 +41,7 @@ public class ParticlePacketData {
     public String particleID;
 
     public <T extends ParticleOptions> ParticleOptions getParticleType() {
-        ParticleType<T> particleType = (ParticleType<T>) VanillaUTIL.REGISTRY.particles().get(new ResourceLocation(particleID));
+        ParticleType<T> particleType = (ParticleType<T>) VanillaUTIL.REGISTRY.particles().get(ResourceLocation.parse(particleID));
 
         if (particleType instanceof ParticleOptions) {
             return (ParticleOptions) particleType;

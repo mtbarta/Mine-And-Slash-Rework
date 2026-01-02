@@ -13,7 +13,7 @@ public class MapConnectionsCap {
 
     public Level world;
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(Ref.MODID, "map_connections");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "map_connections");
 
     public MapConnectionsCap(Level world) {
         this.world = world;

@@ -19,8 +19,8 @@ public class FavorButton extends ImageButton {
 
     public FavorButton(int xPos, int yPos) {
         super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y,
-                new WidgetSprites(new ResourceLocation("minecraft", "empty"),
-                        new ResourceLocation("minecraft", "empty")),
+                new WidgetSprites(ResourceLocation.fromNamespaceAndPath("minecraft", "empty"),
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "empty")),
                 (button) -> {
                 }, Component.empty());
 

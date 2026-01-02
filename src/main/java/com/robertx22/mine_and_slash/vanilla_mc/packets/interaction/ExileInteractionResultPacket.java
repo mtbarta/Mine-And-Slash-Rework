@@ -26,7 +26,7 @@ public class ExileInteractionResultPacket extends MyPacket<ExileInteractionResul
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "eirpp");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "eirpp");
     }
 
     @Override

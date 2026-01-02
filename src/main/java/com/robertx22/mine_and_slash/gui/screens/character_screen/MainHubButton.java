@@ -23,7 +23,7 @@ public class MainHubButton extends ImageButton {
 
     public static int xSize = 105;
     public static int ySize = 28;
-    public static ResourceLocation EXLAMATION_MARK_TEX = new ResourceLocation(
+    public static ResourceLocation EXLAMATION_MARK_TEX = ResourceLocation.fromNamespaceAndPath(
             SlashRef.MODID, "textures/gui/main_hub/exclamation_mark.png");
 
     boolean shouldAlert = false;
@@ -33,17 +33,17 @@ public class MainHubButton extends ImageButton {
     boolean right;
 
     public MainHubButton(boolean isright, ResourceLocation loc, INamedScreen screen, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 
-            new WidgetSprites(loc, loc), // Using same sprite for normal and hovered states
-            (button) -> {
-            if (screen instanceof IContainerNamedScreen) {
-                IContainerNamedScreen con = (IContainerNamedScreen) screen;
-                con.openContainer();
-            } else {
-                Minecraft.getInstance()
-                        .setScreen((Screen) screen);
-            }
-        });
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(loc, loc), // Using same sprite for normal and hovered states
+                (button) -> {
+                    if (screen instanceof IContainerNamedScreen) {
+                        IContainerNamedScreen con = (IContainerNamedScreen) screen;
+                        con.openContainer();
+                    } else {
+                        Minecraft.getInstance()
+                                .setScreen((Screen) screen);
+                    }
+                });
 
         this.right = isright;
         this.screen = screen;
@@ -64,7 +64,6 @@ public class MainHubButton extends ImageButton {
     public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
         super.renderWidget(gui, x, y, ticks);
 
-
         if (right) {
             RenderUtils.render16Icon(gui, screen.iconLocation(), this.getX() + 9, this.getY() + 6);
         } else {
@@ -72,10 +71,11 @@ public class MainHubButton extends ImageButton {
         }
         if (shouldAlert) {
             var mc = Minecraft.getInstance();
-            // float color = MathHelper.clamp((mc.player.tickCount % 25 + mc.getPartialTick()) * 0.3F, 0, 3);
+            // float color = MathHelper.clamp((mc.player.tickCount % 25 +
+            // mc.getPartialTick()) * 0.3F, 0, 3);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            //System.out.println(getDynamicAlpha(40));
+            // System.out.println(getDynamicAlpha(40));
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, getDynamicAlpha(40));
             RenderUtils.render16Icon(gui, EXLAMATION_MARK_TEX, this.getX() + 5, this.getY() + 6);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -85,28 +85,29 @@ public class MainHubButton extends ImageButton {
 
         String str = screen.screenName().translate();
 
-
         if (isHovered()) {
             if (right) {
-                gui.drawCenteredString(Minecraft.getInstance().font, str, this.getX() + 65, this.getY() + 10, ChatFormatting.YELLOW.getColor());
+                gui.drawCenteredString(Minecraft.getInstance().font, str, this.getX() + 65, this.getY() + 10,
+                        ChatFormatting.YELLOW.getColor());
             } else {
-                gui.drawCenteredString(Minecraft.getInstance().font, str, this.getX() + 40, this.getY() + 10, ChatFormatting.YELLOW.getColor());
+                gui.drawCenteredString(Minecraft.getInstance().font, str, this.getX() + 40, this.getY() + 10,
+                        ChatFormatting.YELLOW.getColor());
 
             }
         }
     }
 
-    private float getDynamicAlpha(int ticksOfChangingTwice){
+    private float getDynamicAlpha(int ticksOfChangingTwice) {
         int current = ClientOnly.getPlayer().tickCount;
         int i = current - initTick;
         int once = ticksOfChangingTwice / 2;
         int i1 = (i % ticksOfChangingTwice);
         float result;
 
-        if (i1 <= once){
-            result =  1 - i1 * 1.0f / once;
+        if (i1 <= once) {
+            result = 1 - i1 * 1.0f / once;
         } else {
-            result =  ((i1 - once) * 1.0f / once);
+            result = ((i1 - once) * 1.0f / once);
         }
 
         return result;

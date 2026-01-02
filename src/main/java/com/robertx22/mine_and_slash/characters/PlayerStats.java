@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerStats {
-    public static final ResourceLocation LEVELS_GAINED = new ResourceLocation(SlashRef.MODID, "levels_gained");
+    public static final ResourceLocation LEVELS_GAINED = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "levels_gained");
     public static final HashMap<String, ResourceLocation> REGISTERED_STATS = new HashMap<>();
 
     private static class Registrations {
@@ -53,7 +53,7 @@ public class PlayerStats {
     }
 
     public static void addReg(String id) {
-        REGISTERED_STATS.put(id, new ResourceLocation(SlashRef.MODID, id));
+        REGISTERED_STATS.put(id, ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, id));
     }
 
     public static void initialize() {

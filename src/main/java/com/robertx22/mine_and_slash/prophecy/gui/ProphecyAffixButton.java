@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 
 public class ProphecyAffixButton extends ImageButton {
-    static ResourceLocation ID = new ResourceLocation(SlashRef.MODID, "textures/gui/prophecy/affix.png");
+    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/affix.png");
 
     MapAffix data;
 

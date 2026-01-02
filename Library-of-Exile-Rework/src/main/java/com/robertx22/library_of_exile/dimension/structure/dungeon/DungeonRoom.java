@@ -12,7 +12,7 @@ public class DungeonRoom implements IWeighted {
     public boolean isBarrier = false;
 
     public DungeonRoom(String dun, String id, RoomType type) {
-        this.loc = new ResourceLocation(Ref.MODID, "dun/" + dun + "/" + type.id + "/" + id);
+        this.loc = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "dun/" + dun + "/" + type.id + "/" + id);
         this.type = type;
     }
 

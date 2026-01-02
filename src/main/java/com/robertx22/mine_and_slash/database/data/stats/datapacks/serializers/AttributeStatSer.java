@@ -27,7 +27,7 @@ public class AttributeStatSer implements IStatSerializer<AttributeStat> {
     @Override
     public AttributeStat getStatFromJson(JsonObject json) {
 
-        ResourceLocation ide = new ResourceLocation(json.get("attribute_id").getAsString());
+        ResourceLocation ide = ResourceLocation.parse(json.get("attribute_id").getAsString());
 
         var attri = BuiltInRegistries.ATTRIBUTE.getHolder(ide).orElseThrow();
 

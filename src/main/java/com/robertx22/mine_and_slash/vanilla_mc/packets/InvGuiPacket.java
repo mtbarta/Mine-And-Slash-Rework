@@ -55,7 +55,7 @@ public class InvGuiPacket extends MyPacket<InvGuiPacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "invgui");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "invgui");
     }
 
 }

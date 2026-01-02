@@ -122,7 +122,7 @@ public class ExileCurrency implements ITranslated, IAutoGson<ExileCurrency>, Jso
     }
 
     public Item getItem() {
-        return VanillaUTIL.REGISTRY.items().get(new ResourceLocation(item_id));
+        return VanillaUTIL.REGISTRY.items().get(ResourceLocation.parse(item_id));
     }
 
     public static class ItemModData implements IWeighted {

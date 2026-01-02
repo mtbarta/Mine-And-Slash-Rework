@@ -76,9 +76,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainHubScreen extends BaseScreen implements INamedScreen {
-    private static final ResourceLocation LEFT = new ResourceLocation(SlashRef.MODID,
+    private static final ResourceLocation LEFT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/main_hub/buttons_backwards.png");
-    static ResourceLocation RIGHT = new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/buttons.png");
+    static ResourceLocation RIGHT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/main_hub/buttons.png");
 
     static int sizeX = 256;
     static int sizeY = 219;
@@ -101,7 +102,7 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         public ResourceLocation getIcon() {
 
-            return new ResourceLocation(SlashRef.MODID, "textures/gui/stat_groups/" + id + ".png");
+            return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/stat_groups/" + id + ".png");
         }
     }
 
@@ -210,7 +211,7 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
     @Override
     public ResourceLocation iconLocation() {
-        return new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/icons/stat_overview.png");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/main_hub/icons/stat_overview.png");
     }
 
     @Override
@@ -350,7 +351,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
     }
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(SlashRef.MODID, "textures/gui/stats.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/stats.png");
 
     @Override
     public void render(GuiGraphics gui, int x, int y, float ticks) {
@@ -389,7 +391,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
     public static class AllocateStatButton extends ImageButton {
         static int SIZEX = 18;
         static int SIZEY = 18;
-        static ResourceLocation BUTTON_TEX = new ResourceLocation(SlashRef.MODID, "textures/gui/plus_button.png");
+        static ResourceLocation BUTTON_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+                "textures/gui/plus_button.png");
 
         Stat stat;
 

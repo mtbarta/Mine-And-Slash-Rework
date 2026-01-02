@@ -11,7 +11,7 @@ public class TellClientResetCaches extends MyPacket<TellClientResetCaches> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "reset_caches");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "reset_caches");
     }
 
     @Override

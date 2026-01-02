@@ -172,7 +172,7 @@ public class BuilderToolCommands {
                             var structureNameLoc = be.getStructureName();
                             if (structureNameLoc != null) {
                                 StructureTemplate template = structureManager
-                                        .getOrCreate(new ResourceLocation(structureNameLoc));
+                                        .getOrCreate(ResourceLocation.parse(structureNameLoc));
                                 if (template != null) {
                                     var settings = new StructurePlaceSettings();
                                     template.placeInWorld((ServerLevel) world, en.getKey(), en.getKey(), settings,

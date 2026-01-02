@@ -68,7 +68,7 @@ public class AutoItem implements JsonExileRegistry<AutoItem>, IAutoGson<AutoItem
         HashMap<Item, List<AutoItem>> map = new HashMap<>();
 
         for (AutoItem auto : ExileDB.AutoItems().getList()) {
-            var item = VanillaUTIL.REGISTRY.items().get(new ResourceLocation(auto.item_id));
+            var item = VanillaUTIL.REGISTRY.items().get(ResourceLocation.parse(auto.item_id));
             if (item != Items.AIR) {
                 if (!map.containsKey(item)) {
                     map.put(item, new ArrayList<>());

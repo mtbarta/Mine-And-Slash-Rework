@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class BackpackScreen extends AbstractContainerScreen<BackpackMenu> {
 
-    public static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(SlashRef.MODID,
+    public static final ResourceLocation BACKGROUND_LOCATION = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/master_bag.png");
 
     public static double iMouseX = (double) (Minecraft.getInstance().getWindow().getScreenWidth() / 2);

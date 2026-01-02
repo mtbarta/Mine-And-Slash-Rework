@@ -76,7 +76,7 @@ public class Perk implements JsonExileRegistry<Perk>, IAutoGson<Perk>, IAutoLocN
 
     public ResourceLocation getIcon() {
         if (cachedIcon == null) {
-            ResourceLocation id = new ResourceLocation(icon);
+            ResourceLocation id = ResourceLocation.parse(icon);
             if (ClientTextureUtils.textureExists(id)) {
                 cachedIcon = id;
             } else {

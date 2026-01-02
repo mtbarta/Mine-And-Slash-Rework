@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 public class PlayerDataCapability {
 
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(Ref.MODID, "player");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "player");
 
     public static PlayerDataCapability get(Player p) {
         return p.getData(LibAttachments.LIB_PLAYER_DATA.get());

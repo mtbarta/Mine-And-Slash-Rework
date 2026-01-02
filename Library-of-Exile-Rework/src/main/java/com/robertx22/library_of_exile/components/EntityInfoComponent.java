@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class EntityInfoComponent {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(Ref.MODID, "entity_info");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "entity_info");
 
 
     public static EntityInfoComponent get(LivingEntity entity) {

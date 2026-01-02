@@ -15,7 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.Projectile;
 
 public class ModTridentRenderer extends EntityRenderer<Projectile> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/trident.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.parse("textures/entity/trident.png");
     private final TridentModel model;
 
     public ModTridentRenderer(EntityRendererProvider.Context ctx) {

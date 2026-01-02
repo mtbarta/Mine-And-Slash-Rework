@@ -12,7 +12,7 @@ public class HarvestMapCap {
 
     public Level world;
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(HarvestMain.MODID, "world_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(HarvestMain.MODID, "world_data");
     
 
     public HarvestMapCap(Level world) {

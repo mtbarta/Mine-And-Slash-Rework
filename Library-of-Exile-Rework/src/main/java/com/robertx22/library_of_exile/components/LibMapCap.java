@@ -15,7 +15,7 @@ public class LibMapCap {
 
     public Level world;
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(Ref.MODID, "world_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "world_data");
 
     public LibMapCap(Level world) {
         this.world = world;
@@ -57,7 +57,7 @@ public class LibMapCap {
 
         @Override
         public MapDimensionInfo getInfo() {
-            return MapDimensions.getInfo(new ResourceLocation(Ref.MODID)); // Assuming Ref.MODID is correct context.
+            return MapDimensions.getInfo(ResourceLocation.parse(Ref.MODID)); // Assuming Ref.MODID is correct context.
         }
     };
     public static LibMapData getData(Level level, net.minecraft.core.BlockPos pos) {

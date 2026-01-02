@@ -83,7 +83,7 @@ import java.util.UUID;
 
 public class EntityData implements ICap, INeededForClient {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "entity_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "entity_data");
 
     public static EntityData get(LivingEntity entity) {
         return entity.getData(SlashAttachments.ENTITY_DATA);

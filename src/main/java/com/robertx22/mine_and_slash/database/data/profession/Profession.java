@@ -177,7 +177,7 @@ public class Profession implements JsonExileRegistry<Profession>, IAutoGson<Prof
         }
 
         public ItemStack get() {
-            return new ItemStack(VanillaUTIL.REGISTRY.items().get(new ResourceLocation(item_id)), num);
+            return new ItemStack(VanillaUTIL.REGISTRY.items().get(ResourceLocation.parse(item_id)), num);
         }
 
         private int getWeight(Player p, Profession pro) {

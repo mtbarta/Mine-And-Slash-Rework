@@ -28,7 +28,7 @@ import java.util.*;
  */
 public class MapDeviceScreen extends AbstractContainerScreen<MapDeviceMenu> implements MenuAccess<MapDeviceMenu> {
     /** The ResourceLocation containing the chest GUI texture. */
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.parse("textures/gui/container/generic_54.png");
     /** Window height is calculated with these values" the more rows, the higher */
     private final int containerRows;
     private final int LINE_HEIGHT = 11;

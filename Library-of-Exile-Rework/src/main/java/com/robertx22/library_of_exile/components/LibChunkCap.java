@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LibChunkCap {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(Ref.MODID, "chunk_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "chunk_data");
 
     public static LibChunkCap get(LevelChunk chunk) {
         return chunk.getData(LibAttachments.LIB_CHUNK_CAP.get());

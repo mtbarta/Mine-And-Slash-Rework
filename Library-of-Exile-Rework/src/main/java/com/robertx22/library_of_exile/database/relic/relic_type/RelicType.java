@@ -34,7 +34,7 @@ public class RelicType implements ITranslated, IAutoGson<RelicType>, JsonExileRe
 
 
     public Item getItem() {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(item_id));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(item_id));
     }
 
     @Override

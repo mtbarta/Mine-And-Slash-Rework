@@ -226,7 +226,7 @@ public enum BarGuiType {
     }
 
     public ResourceLocation getIcon(EntityData data, Player en) {
-        return new ResourceLocation(getTexture(data, en).toString()
+        return ResourceLocation.fromNamespaceAndPath(getTexture(data, en).toString()
                 .replaceAll(".png", "_icon.png"));
     }
 

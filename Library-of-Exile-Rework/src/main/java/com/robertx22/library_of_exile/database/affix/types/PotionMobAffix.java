@@ -50,7 +50,7 @@ public class PotionMobAffix extends ExileMobAffix {
 
         public net.minecraft.core.Holder<MobEffect> getEffect() {
             return BuiltInRegistries.MOB_EFFECT.getHolderOrThrow(net.minecraft.resources.ResourceKey.create(
-                    net.minecraft.core.registries.Registries.MOB_EFFECT, new ResourceLocation(status_effect_id)));
+                    net.minecraft.core.registries.Registries.MOB_EFFECT, ResourceLocation.parse(status_effect_id)));
         }
     }
 

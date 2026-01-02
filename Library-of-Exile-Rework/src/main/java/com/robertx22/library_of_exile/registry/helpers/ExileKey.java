@@ -64,7 +64,7 @@ public class ExileKey<T extends ExileRegistry<T>, Info extends KeyInfo> implemen
     }
 
     public ExileKey<T, Info> addConditional(String requiredModid, Function<ExileKey<T, Info>, ShapedRecipeBuilder> b) {
-        RecipeGenerator.addConditional(this.modRegisterInfo.modid, () -> ConditionalRecipeData.ofModLoaded(requiredModid, new ResourceLocation(this.modRegisterInfo.modid, GUID()), c -> {
+        RecipeGenerator.addConditional(this.modRegisterInfo.modid, () -> ConditionalRecipeData.ofModLoaded(requiredModid, ResourceLocation.fromNamespaceAndPath(this.modRegisterInfo.modid, GUID()), c -> {
             b.apply(this).save(c);
         }));
         return this;

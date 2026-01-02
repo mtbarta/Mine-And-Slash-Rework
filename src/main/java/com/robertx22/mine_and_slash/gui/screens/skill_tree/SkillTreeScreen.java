@@ -42,7 +42,7 @@ import java.awt.*;
 import java.util.*;
 
 public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen, IAlertScreen {
-    static ResourceLocation BIG_PANEL = new ResourceLocation(SlashRef.MODID, "textures/gui/skill_tree/bar.png");
+    static ResourceLocation BIG_PANEL = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/skill_tree/bar.png");
 
     public SchoolType schoolType;
 

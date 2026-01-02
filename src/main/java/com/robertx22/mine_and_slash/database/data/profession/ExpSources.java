@@ -70,22 +70,22 @@ public class ExpSources {
 
             if (type == Type.BLOCK_TAG) {
                 if (obj instanceof TagKey<?> in) {
-                    return in.location().equals(new ResourceLocation(id));
+                    return in.location().equals(ResourceLocation.parse(id));
                 }
             }
             if (type == Type.BLOCK) {
                 if (obj instanceof Block in) {
-                    return VanillaUTIL.REGISTRY.blocks().getKey(in).equals(new ResourceLocation(id));
+                    return VanillaUTIL.REGISTRY.blocks().getKey(in).equals(ResourceLocation.parse(id));
                 }
             }
             if (type == Type.FARM_ITEM) {
                 if (obj instanceof Item in) {
-                    return VanillaUTIL.REGISTRY.items().getKey(in).equals(new ResourceLocation(id));
+                    return VanillaUTIL.REGISTRY.items().getKey(in).equals(ResourceLocation.parse(id));
                 }
             }
             if (type == Type.ENTITY) {
                 if (obj instanceof EntityType in) {
-                    return BuiltInRegistries.ENTITY_TYPE.getKey(in).equals(new ResourceLocation(id));
+                    return BuiltInRegistries.ENTITY_TYPE.getKey(in).equals(ResourceLocation.parse(id));
                 }
             }
 

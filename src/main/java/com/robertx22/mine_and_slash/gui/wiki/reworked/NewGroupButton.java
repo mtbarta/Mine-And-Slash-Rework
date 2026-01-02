@@ -19,7 +19,7 @@ import java.util.List;
 public class NewGroupButton extends ImageButton {
     public static int SIZE = 20;
 
-    static ResourceLocation GROUP_BUTTON_TEXTURE = new ResourceLocation(SlashRef.MODID,
+    static ResourceLocation GROUP_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/bestiary/bestiary_group_buttons.png");
 
     BestiaryGroup group;

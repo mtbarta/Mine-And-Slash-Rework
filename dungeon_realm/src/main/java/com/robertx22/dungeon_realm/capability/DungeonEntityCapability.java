@@ -16,7 +16,7 @@ public class DungeonEntityCapability {
     // If DungeonRef is not a real class, this will cause a compilation error.
     // For now, I will use DungeonMain.MODID as it exists in the original code.
     // If DungeonRef is a new class, it needs to be imported or defined.
-    public static final ResourceLocation RESOURCE = new ResourceLocation(DungeonMain.MODID, "dungeon_info");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(DungeonMain.MODID, "dungeon_info");
 
     public LivingEntity entity; // Changed 'en' to 'entity' as per user's snippet
 

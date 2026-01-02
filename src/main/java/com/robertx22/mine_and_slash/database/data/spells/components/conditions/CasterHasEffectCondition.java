@@ -17,7 +17,7 @@ public class CasterHasEffectCondition extends EffectCondition {
 
     @Override
     public boolean canActivate(SpellCtx ctx, MapHolder data) {
-        MobEffect potion = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(data.get(MapField.POTION_ID)));
+        MobEffect potion = BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.parse(data.get(MapField.POTION_ID)));
         return ctx.caster.hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(potion));
     }
 

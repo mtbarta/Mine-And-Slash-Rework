@@ -17,6 +17,6 @@ public class SlashItemTags {
     }
 
     public static TagKey<Item> tagOf(String id) {
-        return ItemTags.create(new ResourceLocation(SlashRef.MODID + ":" + id));
+        return ItemTags.create(ResourceLocation.parse(SlashRef.MODID + ":" + id));
     }
 }

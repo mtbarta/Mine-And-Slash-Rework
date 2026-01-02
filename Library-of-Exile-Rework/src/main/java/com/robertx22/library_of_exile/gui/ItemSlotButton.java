@@ -19,9 +19,9 @@ public class ItemSlotButton extends ImageButton {
     public static int xSize = 16;
     public static int ySize = 16;
 
-    static ResourceLocation buttonLoc = new ResourceLocation(Ref.MODID, "");
+    static ResourceLocation buttonLoc = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "");
 
-    static ResourceLocation fancyBorderLoc = new ResourceLocation(Ref.MODID, "textures/gui/pretty_icon_border.png");
+    static ResourceLocation fancyBorderLoc = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "textures/gui/pretty_icon_border.png");
     static int FX = 20;
     static int FY = 20;
     ItemStack stack;

@@ -75,7 +75,7 @@ public class Def {
 
 
     public static RegObj<SoundEvent> sound(String id) {
-        Supplier<SoundEvent> sup = () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(SlashRef.MODID, id), 16); // todo idk?
+        Supplier<SoundEvent> sup = () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, id), 16); // todo idk?
         DeferredHolder<SoundEvent, SoundEvent> reg = SlashDeferred.SOUNDS.register(id, sup);
         RegObj<SoundEvent> wrapper = new RegObj<>(reg);
         return wrapper;

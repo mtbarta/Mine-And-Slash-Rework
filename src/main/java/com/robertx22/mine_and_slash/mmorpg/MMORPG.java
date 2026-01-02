@@ -115,7 +115,7 @@ public class MMORPG {
     private static final String PROTOCOL_VERSION = "1";
     // TODO: Refactor Network for NeoForge 1.20.4
     // public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
-    // new ResourceLocation(SlashRef.MODID, "main"),
+    // ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "main"),
     // () -> PROTOCOL_VERSION,
     // PROTOCOL_VERSION::equals,
     // PROTOCOL_VERSION::equals

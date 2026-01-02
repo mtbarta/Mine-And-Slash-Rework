@@ -25,7 +25,7 @@ public class OpenEntityStatsRequestPacket extends MyPacket<OpenEntityStatsReques
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "openentitystatsrequest");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "openentitystatsrequest");
     }
 
     @Override

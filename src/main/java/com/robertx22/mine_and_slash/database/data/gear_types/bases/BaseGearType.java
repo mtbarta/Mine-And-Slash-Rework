@@ -76,7 +76,7 @@ public final class BaseGearType implements IAutoLocName, JsonExileRegistry<BaseG
         }
 
         public Item getItem() {
-            return VanillaUTIL.REGISTRY.items().get(new ResourceLocation(item_id));
+            return VanillaUTIL.REGISTRY.items().get(ResourceLocation.parse(item_id));
         }
 
         @Override

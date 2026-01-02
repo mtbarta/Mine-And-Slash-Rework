@@ -12,7 +12,7 @@ public class TellClientToRegisterFromPackets extends MyPacket<TellClientToRegist
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(Ref.MODID, "tell_client_to_reg_from_packets");
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, "tell_client_to_reg_from_packets");
     }
 
     @Override

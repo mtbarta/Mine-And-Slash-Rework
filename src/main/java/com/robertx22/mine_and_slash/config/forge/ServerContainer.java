@@ -191,7 +191,7 @@ public class ServerContainer {
                     .forEach(x -> {
                         try {
                             String[] array = x.split(":");
-                            ResourceLocation id = new ResourceLocation(array[0], array[1]);
+                            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(array[0], array[1]);
                             Item item = BuiltInRegistries.ITEM.get(id);
 
                             if (item != Items.AIR && item != null) {

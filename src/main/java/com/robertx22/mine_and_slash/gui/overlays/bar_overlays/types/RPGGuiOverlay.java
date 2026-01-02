@@ -15,8 +15,9 @@ import net.minecraft.world.entity.player.Player;
 
 public class RPGGuiOverlay {
 
-    static ResourceLocation BASETEX = new ResourceLocation(SlashRef.MODID, "textures/gui/overlay/base.png");
-    static ResourceLocation MANA_RESERVE = new ResourceLocation(SlashRef.MODID,
+    static ResourceLocation BASETEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/overlay/base.png");
+    static ResourceLocation MANA_RESERVE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/overlay/mana_reserve.png");
 
     public RPGGuiOverlay() {

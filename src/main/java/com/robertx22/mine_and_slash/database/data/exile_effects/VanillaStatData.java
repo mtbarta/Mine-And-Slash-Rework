@@ -29,7 +29,7 @@ public class VanillaStatData {
     }
 
     public Attribute getAttribute() {
-        return BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(id));
+        return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(id));
     }
 
     public void applyVanillaStats(LivingEntity en, int stacks) {

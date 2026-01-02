@@ -16,7 +16,7 @@ public class MobEntry implements IWeighted {
     }
 
     public EntityType getType() {
-        return BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(mob_id));
+        return BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(mob_id));
     }
 
     @Override

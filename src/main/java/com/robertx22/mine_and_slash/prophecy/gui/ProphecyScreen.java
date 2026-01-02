@@ -15,7 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 public class ProphecyScreen extends BaseScreen implements INamedScreen {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(SlashRef.MODID, "textures/gui/prophecy/prophecy.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/prophecy.png");
 
     static int sizeX = 177;
     static int sizeY = 180;
@@ -29,7 +29,7 @@ public class ProphecyScreen extends BaseScreen implements INamedScreen {
 
     @Override
     public ResourceLocation iconLocation() {
-        return new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/icons/prophecy.png");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/main_hub/icons/prophecy.png");
     }
 
     @Override

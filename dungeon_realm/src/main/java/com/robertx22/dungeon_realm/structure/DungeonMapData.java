@@ -105,7 +105,7 @@ public class DungeonMapData {
                 var en = RandomUtils.randomFromList(list);
                 var mc = LibDatabase.MapContent().get(en.getKey());
 
-                var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(mc.block_id));
+                var block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(mc.block_id));
                 level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);
                 bonusContents.map.get(en.getKey()).remainingSpawns--;
             }

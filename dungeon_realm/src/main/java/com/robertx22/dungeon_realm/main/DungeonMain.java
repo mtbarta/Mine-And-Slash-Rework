@@ -81,11 +81,11 @@ public class DungeonMain {
     public static String DIMENSION_ID = "dungeon_realm:dungeon";
     public static final Logger LOG = LoggerFactory.getLogger(MODID);
 
-    public static ResourceLocation DIMENSION_KEY = new ResourceLocation(DIMENSION_ID);
+    public static ResourceLocation DIMENSION_KEY = ResourceLocation.parse(DIMENSION_ID);
     public static ModRequiredRegisterInfo REGISTER_INFO = new ModRequiredRegisterInfo(MODID);
 
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(MODID, id);
     }
 
     // other

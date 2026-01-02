@@ -34,7 +34,7 @@ public class UberBossArena implements JsonExileRegistry<UberBossArena>, IAutoGso
     public List<String> possible_bosses = new ArrayList<>();
 
     public EntityType getRandomBoss() {
-        return BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(RandomUtils.randomFromList(possible_bosses)));
+        return BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(RandomUtils.randomFromList(possible_bosses)));
     }
 
     @Override

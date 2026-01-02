@@ -23,7 +23,7 @@ public class RequestTilePacket extends MyPacket<RequestTilePacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(Ref.MODID, "reqtiledata");
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, "reqtiledata");
     }
 
     @Override

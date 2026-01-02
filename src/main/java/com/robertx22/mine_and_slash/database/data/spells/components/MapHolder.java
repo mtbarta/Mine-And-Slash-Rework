@@ -78,7 +78,7 @@ public class MapHolder {
 
     public net.minecraft.core.Holder<MobEffect> getPotion() {
         return BuiltInRegistries.MOB_EFFECT.getHolderOrThrow(net.minecraft.resources.ResourceKey
-                .create(net.minecraft.core.registries.Registries.MOB_EFFECT, new ResourceLocation(get(POTION_ID))));
+                .create(net.minecraft.core.registries.Registries.MOB_EFFECT, ResourceLocation.parse(get(POTION_ID))));
     }
 
     public Elements getElement() {
@@ -127,11 +127,11 @@ public class MapHolder {
      */
 
     public Block getBlock() {
-        return VanillaUTIL.REGISTRY.blocks().get(new ResourceLocation(get(MapField.BLOCK)));
+        return VanillaUTIL.REGISTRY.blocks().get(ResourceLocation.parse(get(MapField.BLOCK)));
     }
 
     public SoundEvent getSound() {
-        return BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation(get(MapField.SOUND)));
+        return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(get(MapField.SOUND)));
     }
 
     public EntityFinder.SelectionType getSelectionType() {

@@ -16,13 +16,13 @@ Library mod for Mine and Slash and mine and slash accessories.
 [[dependencies.library_of_exile]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[20.4,)"
+versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.library_of_exile]]
 modId = "minecraft"
 mandatory = true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-versionRange = "[1.20.4,1.20.5)"
+versionRange = "[1.21.1,1.21.2)"
 ordering = "NONE"
 side = "BOTH"

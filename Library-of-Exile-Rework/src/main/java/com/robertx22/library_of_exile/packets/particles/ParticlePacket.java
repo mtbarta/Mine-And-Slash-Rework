@@ -25,7 +25,7 @@ public class ParticlePacket extends MyPacket<ParticlePacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(Ref.MODID, "particle");
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, "particle");
     }
 
     @Override

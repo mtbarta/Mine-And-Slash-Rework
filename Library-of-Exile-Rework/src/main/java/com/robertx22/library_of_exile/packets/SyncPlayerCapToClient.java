@@ -27,7 +27,7 @@ public class SyncPlayerCapToClient extends MyPacket<SyncPlayerCapToClient> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(Ref.MODID, "syncplayercap");
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, "syncplayercap");
     }
 
     @Override

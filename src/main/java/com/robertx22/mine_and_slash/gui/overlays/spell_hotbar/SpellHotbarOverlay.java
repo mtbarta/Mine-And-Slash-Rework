@@ -26,7 +26,7 @@ public class SpellHotbarOverlay {
     static ResourceLocation hotbarTex(Boolean horizontal, Boolean swap, Integer swapnum) {
         String swaptex = swap ? "_swap" + swapnum : "";
         String horizontaltex = horizontal ? "_horizontal" : "";
-        return new ResourceLocation(SlashRef.MODID,
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
                 "textures/gui/spells/hotbar/" + "hotbar" + swaptex + horizontaltex + ".png");
     }
 

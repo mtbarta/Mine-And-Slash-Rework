@@ -134,13 +134,13 @@ public class MapDimensionConfig {
     }
 
     public LazyClass<TagKey<Block>> LAZY_ALLOWED_BLOCKS = new LazyClass<>(
-            () -> BlockTags.create(new ResourceLocation(ALLOWED_BLOCK_BREAK_TAG.get())));
+            () -> BlockTags.create(ResourceLocation.parse(ALLOWED_BLOCK_BREAK_TAG.get())));
     public LazyClass<TagKey<Block>> LAZY_BLOCKED_INTERACT_BLOCKS = new LazyClass<>(
-            () -> BlockTags.create(new ResourceLocation(DISABLED_BLOCK_INTERACT_TAG.get())));
+            () -> BlockTags.create(ResourceLocation.parse(DISABLED_BLOCK_INTERACT_TAG.get())));
     public LazyClass<TagKey<Item>> LAZY_BANNED_ITEMS = new LazyClass<>(
-            () -> ItemTags.create(new ResourceLocation(BANNED_ITEMS_TAG.get())));
+            () -> ItemTags.create(ResourceLocation.parse(BANNED_ITEMS_TAG.get())));
     public LazyClass<TagKey<DamageType>> LAZY_ENVIRO_TAG = new LazyClass<>(
-            () -> create(new ResourceLocation(ENVIRO_DMG_TAG.get())));
+            () -> create(ResourceLocation.parse(ENVIRO_DMG_TAG.get())));
 
     private static TagKey<DamageType> create(ResourceLocation pName) {
         return TagKey.create(Registries.DAMAGE_TYPE, pName);

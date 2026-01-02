@@ -23,7 +23,7 @@ public class PlayerGearButton extends ImageButton {
     public static int xSize = 99;
     public static int ySize = 80;
 
-    static ResourceLocation TEX = new ResourceLocation(SlashRef.MODID, "textures/gui/player_gear.png");
+    static ResourceLocation TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/player_gear.png");
     BaseScreen screen;
     Player player;
 

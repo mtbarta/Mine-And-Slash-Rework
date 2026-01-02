@@ -26,7 +26,7 @@ public class TileUpdatePacket extends MyPacket<TileUpdatePacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(Ref.MODID, "givetiledata");
+        return ResourceLocation.fromNamespaceAndPath(Ref.MODID, "givetiledata");
     }
 
     @Override

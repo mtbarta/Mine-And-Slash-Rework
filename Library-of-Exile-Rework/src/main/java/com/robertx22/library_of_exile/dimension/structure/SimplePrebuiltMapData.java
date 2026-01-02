@@ -30,7 +30,7 @@ public class SimplePrebuiltMapData {
             int z = relative.z;
 
             if (isWithinBounds(x, z)) {
-                return new ResourceLocation(rooms_folder + "/" + x + "_" + z);
+                return ResourceLocation.parse(rooms_folder + "/" + x + "_" + z);
             }
         } catch (Exception e) {
             e.printStackTrace();

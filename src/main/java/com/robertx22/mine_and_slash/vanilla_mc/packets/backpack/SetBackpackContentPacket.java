@@ -40,7 +40,7 @@ public class SetBackpackContentPacket extends MyPacket<SetBackpackContentPacket>
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "setbackpackcontent");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "setbackpackcontent");
     }
 
     @Override

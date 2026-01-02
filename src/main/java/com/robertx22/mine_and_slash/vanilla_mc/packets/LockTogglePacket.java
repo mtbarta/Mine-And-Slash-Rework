@@ -29,7 +29,7 @@ public class LockTogglePacket extends MyPacket<LockTogglePacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "locktoggle");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "locktoggle");
     }
 
     @Override

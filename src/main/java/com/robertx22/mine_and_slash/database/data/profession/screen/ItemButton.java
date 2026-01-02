@@ -19,8 +19,8 @@ import java.util.List;
 public class ItemButton extends ImageButton {
     public static int xSize = 16;
     public static int ySize = 16;
-    static ResourceLocation buttonLoc = new ResourceLocation("library_of_exile", "");
-    static ResourceLocation fancyBorderLoc = new ResourceLocation("library_of_exile",
+    static ResourceLocation buttonLoc = ResourceLocation.fromNamespaceAndPath("library_of_exile", "");
+    static ResourceLocation fancyBorderLoc = ResourceLocation.fromNamespaceAndPath("library_of_exile",
             "textures/gui/pretty_icon_border.png");
     static int FX = 20;
     static int FY = 20;

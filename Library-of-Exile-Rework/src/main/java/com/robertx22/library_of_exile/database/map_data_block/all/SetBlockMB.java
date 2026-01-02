@@ -26,7 +26,7 @@ public class SetBlockMB extends MapDataBlock {
 
     @Override
     public void processImplementationINTERNAL(String key, BlockPos pos, Level world, CompoundTag nbt, MapBlockCtx ctx) {
-        var block = VanillaUTIL.REGISTRY.blocks().get(new ResourceLocation(block_id));
+        var block = VanillaUTIL.REGISTRY.blocks().get(ResourceLocation.parse(block_id));
         world.setBlock(pos, block.defaultBlockState(), 2);
     }
 

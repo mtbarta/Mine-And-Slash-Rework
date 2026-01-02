@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class WorldData implements ICap {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "world");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "world");
 
     public static WorldData get(Level level) {
         if (level.isClientSide) {

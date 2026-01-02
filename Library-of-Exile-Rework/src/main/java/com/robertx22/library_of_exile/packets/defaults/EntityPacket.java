@@ -3,7 +3,7 @@ package com.robertx22.library_of_exile.packets.defaults;
 public class EntityPacket {
 
     /*
-    public static final ResourceLocation ID = new ResourceLocation(Ref.MODID, "spawn_entity");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "spawn_entity");
 
     public static Packet<?> createPacket(Entity entity) {
         FriendlyByteBuf buf = createBuffer();

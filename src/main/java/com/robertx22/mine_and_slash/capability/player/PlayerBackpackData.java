@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerBackpackData implements ICap {
 
-    public static final ResourceLocation RESOURCE = new ResourceLocation(SlashRef.MODID, "backpacks");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "backpacks");
 
     public static PlayerBackpackData get(LivingEntity entity) {
         return entity.getData(SlashAttachments.PLAYER_BACKPACK_DATA);

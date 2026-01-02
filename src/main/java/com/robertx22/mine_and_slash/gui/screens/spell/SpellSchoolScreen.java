@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeftRight, IAlertScreen {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(SlashRef.MODID, "textures/gui/asc_classes/background.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/asc_classes/background.png");
 
     static int sizeX = 250;
     static int sizeY = 233;
@@ -54,7 +54,7 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
 
     @Override
     public ResourceLocation iconLocation() {
-        return new ResourceLocation(SlashRef.MODID, "textures/gui/main_hub/icons/spells.png");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/main_hub/icons/spells.png");
     }
 
     @Override

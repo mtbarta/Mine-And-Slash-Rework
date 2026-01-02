@@ -54,7 +54,7 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
     public BlockState getBlockState() {
 
         try {
-            return VanillaUTIL.REGISTRY.blocks().get(new ResourceLocation(this.entityData.get(BLOCK)))
+            return VanillaUTIL.REGISTRY.blocks().get(ResourceLocation.parse(this.entityData.get(BLOCK)))
                     .defaultBlockState();
         } catch (Exception e) {
             e.printStackTrace();

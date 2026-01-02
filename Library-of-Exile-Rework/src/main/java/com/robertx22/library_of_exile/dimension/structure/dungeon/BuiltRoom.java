@@ -25,7 +25,7 @@ public class BuiltRoom {
     public static BuiltRoom getBarrier() {
         DungeonRoom barrier = new DungeonRoom("", "", RoomType.END); // todo what
         barrier.isBarrier = true;
-        barrier.loc = new ResourceLocation(Ref.MODID, "dun/barrier");
+        barrier.loc = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "dun/barrier");
         RoomRotation rot = new RoomRotation(RoomType.END, new RoomSides(RoomSide.BLOCKED, RoomSide.BLOCKED, RoomSide.BLOCKED, RoomSide.BLOCKED), Rotation.NONE);
         BuiltRoom built = new BuiltRoom(rot, barrier);
         return built;

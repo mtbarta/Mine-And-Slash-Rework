@@ -24,12 +24,12 @@ import java.util.Locale;
 public class SpellOnHotbarRender {
     static int CHARGE_SIZE = 20;
 
-    private static final ResourceLocation CHARGE = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/charges/full_charges.png");
-    private static final ResourceLocation LOW_CHARGE = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/charges/low_charges.png");
-    private static final ResourceLocation NO_CHARGE = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/charges/no_charges.png");
-    private static final ResourceLocation KEY_BG = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/keybind_bg.png");
-    private static final ResourceLocation MOD_BG = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/modbg.png");
-    private static final ResourceLocation COOLDOWN_TEX = new ResourceLocation(SlashRef.MODID, "textures/gui/spells/cooldown.png");
+    private static final ResourceLocation CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/full_charges.png");
+    private static final ResourceLocation LOW_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/low_charges.png");
+    private static final ResourceLocation NO_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/no_charges.png");
+    private static final ResourceLocation KEY_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/keybind_bg.png");
+    private static final ResourceLocation MOD_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/modbg.png");
+    private static final ResourceLocation COOLDOWN_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/cooldown.png");
 
 
     public int place;

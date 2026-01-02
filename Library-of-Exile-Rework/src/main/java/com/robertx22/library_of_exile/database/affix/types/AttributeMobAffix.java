@@ -43,7 +43,7 @@ public class AttributeMobAffix extends ExileMobAffix {
         public Lazy(AttributeMobAffix affix) {
             lazyUUID = new LazyClass<>(() -> UUID.fromString(affix.data.uuid));
             lazyAttribute = new LazyClass<>(
-                    () -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(affix.data.attribute_id)).get());
+                    () -> BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(affix.data.attribute_id)).get());
         }
     }
 

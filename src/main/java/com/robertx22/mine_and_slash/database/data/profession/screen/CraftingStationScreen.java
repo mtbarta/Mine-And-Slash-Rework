@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 // todo sepearate screens for each station
 public abstract class CraftingStationScreen extends AbstractContainerScreen<CraftingStationMenu> {
-    public ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(SlashRef.MODID,
+    public ResourceLocation BACKGROUND_LOCATION = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/crafting_table2.png");
 
     Profession prof;

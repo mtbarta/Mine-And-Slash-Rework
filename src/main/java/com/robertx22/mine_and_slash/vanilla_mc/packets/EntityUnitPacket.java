@@ -26,7 +26,7 @@ public class EntityUnitPacket extends MyPacket<EntityUnitPacket> {
 
     @Override
     public ResourceLocation getIdentifier() {
-        return new ResourceLocation(SlashRef.MODID, "enpack");
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "enpack");
     }
 
     @Override
