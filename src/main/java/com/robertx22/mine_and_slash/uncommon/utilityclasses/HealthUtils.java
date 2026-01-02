@@ -9,21 +9,23 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
 
 public class HealthUtils {
+    // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
+    private static final ResourceLocation HEARTS_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath("mns",
+            "hearts_modifier");
 
     static AttributeModifier getHeartsAttributeMod(float num) {
         return new AttributeModifier(
-                UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"),
-                BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MAX_HEALTH.value()).toString(),
+                HEARTS_MODIFIER_ID,
                 num,
                 AttributeModifier.Operation.ADD_VALUE);
     }
 
     public static void setHealth(LivingEntity entity, float health) {
         AttributeInstance healthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
-        AttributeModifier mod = healthAttribute.getModifier(UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"));
+        AttributeModifier mod = healthAttribute.getModifier(HEARTS_MODIFIER_ID);
         if (mod != null) {
             healthAttribute.removeModifier(mod.id());
             healthAttribute.addPermanentModifier(getHeartsAttributeMod(health));
@@ -35,7 +37,7 @@ public class HealthUtils {
 
     public static void addHealth(LivingEntity entity, float health) {
         AttributeInstance healthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
-        AttributeModifier mod = healthAttribute.getModifier(UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"));
+        AttributeModifier mod = healthAttribute.getModifier(HEARTS_MODIFIER_ID);
         if (mod != null) {
             healthAttribute.removeModifier(mod.id());
             healthAttribute.addPermanentModifier(getHeartsAttributeMod((float) (mod.amount() + health)));

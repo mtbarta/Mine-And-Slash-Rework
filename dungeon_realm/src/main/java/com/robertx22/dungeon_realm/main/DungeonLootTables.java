@@ -52,10 +52,14 @@ public class DungeonLootTables {
         }
 
         public static class DungeonLootTableProvider implements LootTableSubProvider {
+                private final net.minecraft.core.HolderLookup.Provider registries;
+
+                public DungeonLootTableProvider(net.minecraft.core.HolderLookup.Provider registries) {
+                        this.registries = registries;
+                }
 
                 @Override
-                public void generate(net.minecraft.core.HolderLookup.Provider registries,
-                                BiConsumer<net.minecraft.resources.ResourceKey<LootTable>, LootTable.Builder> output) {
+                public void generate(BiConsumer<net.minecraft.resources.ResourceKey<LootTable>, LootTable.Builder> output) {
 
                 }
         }

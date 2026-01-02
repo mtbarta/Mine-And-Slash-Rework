@@ -37,7 +37,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
 
 public class DatapackStats implements ExileRegistryInit {
 
@@ -50,11 +50,13 @@ public class DatapackStats implements ExileRegistryInit {
         }
 
         // vanilla attributes
+        // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
         public static Stat MOVE_SPEED = new AttributeStat("move_speed", "Move Speed",
-                        UUID.fromString("7e286d81-3fcf-471c-85b8-980072b30907"), Attributes.MOVEMENT_SPEED, true,
+                        ResourceLocation.fromNamespaceAndPath("mns", "move_speed"), Attributes.MOVEMENT_SPEED, true,
                         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, true);
         public static Stat KNOCKBACK_RESIST = new AttributeStat("knockback_resist", "Knockback Resist",
-                        UUID.fromString("7e286d81-3fcf-471c-85b8-980072b30905"), Attributes.KNOCKBACK_RESISTANCE, true,
+                        ResourceLocation.fromNamespaceAndPath("mns", "knockback_resist"),
+                        Attributes.KNOCKBACK_RESISTANCE, true,
                         AttributeModifier.Operation.ADD_VALUE, true);
 
         // core stats

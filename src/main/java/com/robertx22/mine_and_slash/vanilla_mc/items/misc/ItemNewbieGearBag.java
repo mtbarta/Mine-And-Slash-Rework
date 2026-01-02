@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -99,7 +100,14 @@ public class ItemNewbieGearBag extends Item {
 
                 stack = exfi.getStack();
 
-                stack.enchant(Enchantments.UNBREAKING, 3);
+                // In NeoForge 1.21, stack.enchant() requires Holder<Enchantment>
+                var enchantHolder = player.level().registryAccess()
+                        .registryOrThrow(Registries.ENCHANTMENT)
+                        .getHolder(Enchantments.UNBREAKING)
+                        .orElse(null);
+                if (enchantHolder != null) {
+                    stack.enchant(enchantHolder, 3);
+                }
 
                 PlayerUtils.giveItem(stack, player);
 

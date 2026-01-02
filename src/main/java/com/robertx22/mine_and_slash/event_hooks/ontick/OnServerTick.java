@@ -27,13 +27,16 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
 
 public class OnServerTick {
 
+    // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
+    private static final ResourceLocation CASTING_SPEED_SLOW_ID = ResourceLocation.fromNamespaceAndPath("mns",
+            "casting_speed_slow");
+
     public static AttributeModifier CASTING_SPEED_SLOW = new AttributeModifier(
-            UUID.fromString("3fb10485-f309-128f-afc6-a23b0d6cf4c1"),
-            BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MOVEMENT_SPEED.value()).toString(),
+            CASTING_SPEED_SLOW_ID,
             -0.5,
             AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
@@ -102,14 +105,15 @@ public class OnServerTick {
                 AttributeInstance atri = player.getAttribute(Attributes.MOVEMENT_SPEED);
                 if (atri != null) {
                     if (playerData.spellCastingData.isCasting() && playerData.spellCastingData.castTickLeft > 0) {
-                        if (!atri.hasModifier(CASTING_SPEED_SLOW)) {
+                        // NeoForge 1.21: hasModifier takes ResourceLocation (modifier ID)
+                        if (!atri.hasModifier(CASTING_SPEED_SLOW_ID)) {
                             if (playerData.spellCastingData.getSpellBeingCast() != null
                                     && playerData.spellCastingData.getSpellBeingCast().config.slows_when_casting) {
                                 atri.addTransientModifier(CASTING_SPEED_SLOW);
                             }
                         }
                     } else {
-                        if (atri.hasModifier(CASTING_SPEED_SLOW)) {
+                        if (atri.hasModifier(CASTING_SPEED_SLOW_ID)) {
                             atri.removeModifier(CASTING_SPEED_SLOW.id());
                         }
                     }

@@ -14,12 +14,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.registries.Registries;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
 public class AddSpawnerExtraLootMethod {
-
 
     public static void hookLoot(LootContext context, CallbackInfoReturnable<List<ItemStack>> ci) {
 
@@ -52,10 +52,15 @@ public class AddSpawnerExtraLootMethod {
             }
 
             ItemStack stack = context.getParamOrNull(LootContextParams.TOOL);
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+            // In NeoForge 1.21, EnchantmentHelper.getItemEnchantmentLevel requires
+            // Holder<Enchantment>
+            var silkTouchHolder = context.getLevel().registryAccess()
+                    .registryOrThrow(Registries.ENCHANTMENT)
+                    .getHolder(Enchantments.SILK_TOUCH)
+                    .orElse(null);
+            if (silkTouchHolder != null && EnchantmentHelper.getItemEnchantmentLevel(silkTouchHolder, stack) != 0) {
                 return;
             }
-
 
             Vec3 p = context.getParamOrNull(LootContextParams.ORIGIN);
             BlockPos pos = new BlockPos((int) p.x, (int) p.y, (int) p.z);

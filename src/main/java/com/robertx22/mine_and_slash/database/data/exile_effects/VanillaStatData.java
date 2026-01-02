@@ -14,7 +14,7 @@ import java.util.UUID;
 public class VanillaStatData {
 
     float val;
-    String uuid;
+    String uuid; // Kept as String for backwards compatibility with saved data
     String id;
     ModType type;
 
@@ -32,10 +32,16 @@ public class VanillaStatData {
         return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.parse(id));
     }
 
-    public void applyVanillaStats(LivingEntity en, int stacks) {
+    // In NeoForge 1.21, convert UUID string to ResourceLocation for modifier ID
+    private ResourceLocation getModifierId() {
+        return ResourceLocation.fromNamespaceAndPath("mns", "effect_" + uuid.replace("-", "_"));
+    }
 
-        UUID modId = UUID.fromString(uuid);
-        AttributeModifier mod = new AttributeModifier(modId, id, (double) (val * stacks), type.operation);
+    public void applyVanillaStats(LivingEntity en, int stacks) {
+        // NeoForge 1.21: AttributeModifier constructor is (ResourceLocation, double,
+        // Operation)
+        ResourceLocation modId = getModifierId();
+        AttributeModifier mod = new AttributeModifier(modId, (double) (val * stacks), type.operation);
         Attribute attri = getAttribute();
         Holder<Attribute> holderAttri = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attri);
 
@@ -51,7 +57,7 @@ public class VanillaStatData {
     }
 
     public void removeVanillaStats(LivingEntity en) {
-        UUID modId = UUID.fromString(uuid);
+        ResourceLocation modId = getModifierId();
         Attribute attri = getAttribute();
         Holder<Attribute> holderAttri = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attri);
 

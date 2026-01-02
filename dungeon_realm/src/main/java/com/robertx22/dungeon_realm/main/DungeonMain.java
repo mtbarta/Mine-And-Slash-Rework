@@ -61,7 +61,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
@@ -118,7 +117,8 @@ public class DungeonMain {
         bus.addListener(this::clientSetup);
 
         new MapRegisterBuilder(MAP)
-                .chunkGenerator(new EventConsumer<MapChunkGenEvent>() {
+                // In NeoForge 1.21, chunkGenerator requires IEventBus as first arg
+                .chunkGenerator(bus, new EventConsumer<MapChunkGenEvent>() {
                     @Override
                     public void accept(MapChunkGenEvent event) {
                         if (event.mapId.equals("dungeon")) {
@@ -155,7 +155,8 @@ public class DungeonMain {
             }
         });
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, DungeonConfig.SPEC);
+        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
+        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER, DungeonConfig.SPEC);
 
         bus.addListener(this::commonSetupEvent);
 

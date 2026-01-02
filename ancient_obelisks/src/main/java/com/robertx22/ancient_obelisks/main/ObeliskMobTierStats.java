@@ -2,24 +2,25 @@ package com.robertx22.ancient_obelisks.main;
 
 import com.robertx22.ancient_obelisks.configs.ObeliskConfig;
 import com.robertx22.ancient_obelisks.structure.ObeliskMapData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import java.util.UUID;
-
 public class ObeliskMobTierStats {
 
-    public static UUID DMG = UUID.fromString("012d5bd9-4917-4747-b188-1f8da6871133");
-    public static UUID HP = UUID.fromString("19719d5f-e800-468b-839c-b907f9ab89ab");
+    // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
+    public static ResourceLocation DMG = ResourceLocation.fromNamespaceAndPath(ObelisksMain.MODID, "mob_tier_dmg");
+    public static ResourceLocation HP = ResourceLocation.fromNamespaceAndPath(ObelisksMain.MODID, "mob_tier_hp");
 
     public static AttributeModifier hpMod(int tier) {
         float hp = ObeliskConfig.get().MOB_HP_PER_TIER.get().floatValue() * tier;
 
+        // NeoForge 1.21: constructor is (ResourceLocation id, double amount, Operation
+        // operation)
         AttributeModifier mod = new AttributeModifier(
                 HP,
-                "mob_tier_hp",
                 (double) hp,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         return mod;
@@ -28,9 +29,10 @@ public class ObeliskMobTierStats {
     public static AttributeModifier dmgMod(int tier) {
         float dmg = ObeliskConfig.get().MOB_DMG_PER_TIER.get().floatValue() * tier;
 
+        // NeoForge 1.21: constructor is (ResourceLocation id, double amount, Operation
+        // operation)
         AttributeModifier mod = new AttributeModifier(
                 DMG,
-                "mob_tier_dmg",
                 (double) dmg,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         return mod;
@@ -43,12 +45,14 @@ public class ObeliskMobTierStats {
 
             if (tier > 0) {
                 AttributeInstance maxHealthAttribute = en.getAttribute(Attributes.MAX_HEALTH);
+                // NeoForge 1.21: getModifier takes ResourceLocation
                 if (maxHealthAttribute != null && maxHealthAttribute.getModifier(HP) == null) {
                     maxHealthAttribute.addPermanentModifier(hpMod(tier));
                     en.setHealth((int) maxHealthAttribute.getValue());
                 }
 
                 AttributeInstance attackDamageAttribute = en.getAttribute(Attributes.ATTACK_DAMAGE);
+                // NeoForge 1.21: getModifier takes ResourceLocation
                 if (attackDamageAttribute != null && attackDamageAttribute.getModifier(DMG) == null) {
                     attackDamageAttribute.addPermanentModifier(dmgMod(tier));
                 }

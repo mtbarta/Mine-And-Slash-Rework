@@ -9,29 +9,29 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-
-import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
 
 public class AttributeStat extends BaseDatapackStat {
 
     public static String SER_ID = "vanilla_attribute_stat_ser";
 
     transient String locname;
-
-    public UUID uuid;
+    // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
+    public ResourceLocation modifierId;
     public String attributeId;
     public net.minecraft.core.Holder<Attribute> attribute;
     public AttributeModifier.Operation operation = AttributeModifier.Operation.ADD_VALUE;
     public boolean cut_by_hundred = true;
 
-    public AttributeStat(String id, String locname, UUID uuid, net.minecraft.core.Holder<Attribute> attribute,
+    public AttributeStat(String id, String locname, ResourceLocation modifierId,
+            net.minecraft.core.Holder<Attribute> attribute,
             boolean perc,
             AttributeModifier.Operation operation, boolean cut) {
         super(SER_ID);
         this.id = id;
         this.operation = operation;
         this.locname = locname;
-        this.uuid = uuid;
+        this.modifierId = modifierId;
         this.cut_by_hundred = cut;
         this.attributeId = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value())
                 .toString();
@@ -59,17 +59,18 @@ public class AttributeStat extends BaseDatapackStat {
             val = val / 100F;
         }
 
+        // NeoForge 1.21: AttributeModifier constructor is (ResourceLocation id, double
+        // amount, Operation operation)
         AttributeModifier mod = new AttributeModifier(
-                uuid,
-                attributeId,
+                modifierId,
                 (double) val,
                 operation);
 
         AttributeInstance atri = en.getAttribute(attribute);
 
         if (atri != null) {
-            if (atri.getModifier(uuid) != null) {
-                atri.removeModifier(uuid); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
+            if (atri.getModifier(modifierId) != null) {
+                atri.removeModifier(modifierId); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
             }
             atri.addTransientModifier(mod);
         }

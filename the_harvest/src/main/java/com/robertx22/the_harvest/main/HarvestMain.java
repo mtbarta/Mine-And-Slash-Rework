@@ -63,7 +63,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.io.IOException;
@@ -112,7 +111,8 @@ public class HarvestMain {
         bus.addListener(this::clientSetup);
 
         new MapRegisterBuilder(MAP)
-                .chunkGenerator(new EventConsumer<MapChunkGenEvent>() {
+                // In NeoForge 1.21, chunkGenerator requires IEventBus as first arg
+                .chunkGenerator(bus, new EventConsumer<MapChunkGenEvent>() {
                     @Override
                     public void accept(MapChunkGenEvent event) {
                         if (event.mapId.equals("harvest")) {
@@ -150,7 +150,9 @@ public class HarvestMain {
             }
         });
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, HarvestConfig.SPEC);
+        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
+        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+        // HarvestConfig.SPEC);
 
         bus.addListener(this::commonSetupEvent);
 
@@ -239,8 +241,10 @@ public class HarvestMain {
                 .withParameter(LootContextParams.THIS_ENTITY, en)
                 .withParameter(LootContextParams.ORIGIN, en.position())
                 .withParameter(LootContextParams.DAMAGE_SOURCE, pDamageSource)
-                .withOptionalParameter(LootContextParams.KILLER_ENTITY, pDamageSource.getEntity())
-                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, pDamageSource.getDirectEntity());
+                // In NeoForge 1.21, these were renamed to ATTACKING_ENTITY and
+                // DIRECT_ATTACKING_ENTITY
+                .withOptionalParameter(LootContextParams.ATTACKING_ENTITY, pDamageSource.getEntity())
+                .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, pDamageSource.getDirectEntity());
         LootParams lootparams = lootparams$builder.create(LootContextParamSets.ENTITY);
         loottable.getRandomItems(lootparams, en.getLootTableSeed(), en::spawnAtLocation);
     }

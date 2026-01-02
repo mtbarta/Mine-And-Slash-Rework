@@ -20,10 +20,14 @@ public class ObeliskLootTables {
     public static final ResourceKey<LootTable> LOOT_TABLE_KEY = ResourceKey.create(Registries.LOOT_TABLE, LOOT);
 
     public static class ObeliskLootTableProvider implements LootTableSubProvider {
+        private final HolderLookup.Provider registries;
+
+        public ObeliskLootTableProvider(HolderLookup.Provider registries) {
+            this.registries = registries;
+        }
 
         @Override
-        public void generate(HolderLookup.Provider registries,
-                BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
 
             var essB = LootTable.lootTable()
                     .withPool(LootPool.lootPool().setRolls(UniformGenerator.between(3, 6))

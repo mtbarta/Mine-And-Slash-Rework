@@ -62,16 +62,18 @@ import net.minecraft.world.phys.Vec3;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
 
 public class DamageEvent extends EffectEvent {
     public static ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, SlashRef.id("mod"));
 
     public static String ID = "on_damage";
     public static String dmgSourceName = SlashRef.MODID + ".custom_damage";
+    // In NeoForge 1.21, AttributeModifier uses ResourceLocation instead of UUID
+    private static final ResourceLocation NO_KNOCKBACK_ID = ResourceLocation.fromNamespaceAndPath("mns",
+            "no_knockback");
     static AttributeModifier NO_KNOCKBACK = new AttributeModifier(
-            UUID.fromString("e926df30-c376-11ea-87d0-0242ac131053"),
-            Attributes.KNOCKBACK_RESISTANCE.value().getDescriptionId(),
+            NO_KNOCKBACK_ID,
             100,
             AttributeModifier.Operation.ADD_VALUE);
     public LivingEntity petEntity;
@@ -646,7 +648,8 @@ public class DamageEvent extends EffectEvent {
         AttributeInstance attri = target.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 
         if (data.getBoolean(EventData.DISABLE_KNOCKBACK) || this.getAttackType() == AttackType.dot) {
-            if (!attri.hasModifier(NO_KNOCKBACK)) {
+            // NeoForge 1.21: hasModifier takes ResourceLocation (modifier ID)
+            if (!attri.hasModifier(NO_KNOCKBACK_ID)) {
                 attri.addPermanentModifier(NO_KNOCKBACK);
             }
         }
@@ -712,7 +715,7 @@ public class DamageEvent extends EffectEvent {
             target.hurtMarked = false;
         }
 
-        if (attri.hasModifier(NO_KNOCKBACK)) {
+        if (attri.hasModifier(NO_KNOCKBACK_ID)) {
             attri.removeModifier(NO_KNOCKBACK.id());
         }
 

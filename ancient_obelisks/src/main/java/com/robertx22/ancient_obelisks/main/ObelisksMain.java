@@ -59,7 +59,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.io.IOException;
@@ -110,7 +110,8 @@ public class ObelisksMain {
         bus.addListener(this::clientSetup);
 
         new MapRegisterBuilder(MAP)
-                .chunkGenerator(new EventConsumer<MapChunkGenEvent>() {
+                // In NeoForge 1.21, chunkGenerator requires IEventBus as first arg
+                .chunkGenerator(bus, new EventConsumer<MapChunkGenEvent>() {
                     @Override
                     public void accept(MapChunkGenEvent event) {
                         if (event.mapId.equals("obelisk")) {
@@ -148,7 +149,10 @@ public class ObelisksMain {
             }
         });
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ObeliskConfig.SPEC);
+        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
+        // The mod should register config using ModContainer from constructor
+        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+        // ObeliskConfig.SPEC);
 
         bus.addListener(this::commonSetupEvent);
 
