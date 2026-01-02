@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.robertx22.mine_and_slash.uncommon.interfaces.IAutoLocName;
 import com.robertx22.library_of_exile.vanilla_util.main.VanillaUTIL;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -13,6 +14,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
@@ -26,7 +29,8 @@ public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment) || Items.DIAMOND_SWORD.canApplyAtEnchantingTable(stack, enchantment);
+        return super.canApplyAtEnchantingTable(stack, enchantment)
+                || Items.DIAMOND_SWORD.canApplyAtEnchantingTable(stack, enchantment);
     }
 
     String locname;
@@ -34,9 +38,7 @@ public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
 
     @Override
     public boolean hurtEnemy(ItemStack p_77644_1_, LivingEntity p_77644_2_, LivingEntity p_77644_3_) {
-        p_77644_1_.hurtAndBreak(1, p_77644_3_, (p_220045_0_) -> {
-            p_220045_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-        });
+        p_77644_1_.hurtAndBreak(1, p_77644_3_, EquipmentSlot.MAINHAND);
         return true;
     }
 
@@ -56,30 +58,23 @@ public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
                 .toString();
     }
 
-
     @Override
     public String GUID() {
         return "";
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        Multimap<Attribute, AttributeModifier> map = HashMultimap.create();
-        if (slot == EquipmentSlot.MAINHAND) {
-            map.put(
-                    Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 6,
-                            AttributeModifier.Operation.ADDITION
-                    )
-            );
-            map.put(
-                    Attributes.ATTACK_SPEED,
-                    new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier",
-                            (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
-
-        }
-
-        return map;
+    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+        return ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE,
+                        new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 6,
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED,
+                        new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double) this.attackSpeed,
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND)
+                .build();
     }
 
 }

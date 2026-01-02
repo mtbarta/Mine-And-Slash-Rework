@@ -21,7 +21,7 @@ public class EntityUnitPacket extends MyPacket<EntityUnitPacket> {
 
     public EntityUnitPacket(Entity entity) {
         this.id = entity.getId();
-        this.nbt = Load.Unit(entity).serializeNBT();
+        this.nbt = Load.Unit(entity).serializeNBT(entity.level().registryAccess());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EntityUnitPacket extends MyPacket<EntityUnitPacket> {
 
             LivingEntity en = (LivingEntity) entity;
 
-            Load.Unit(en).deserializeNBT(nbt);
+            Load.Unit(en).deserializeNBT(en.level().registryAccess(), nbt);
         }
     }
 

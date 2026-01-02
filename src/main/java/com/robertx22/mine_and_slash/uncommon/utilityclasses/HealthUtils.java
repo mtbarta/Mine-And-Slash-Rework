@@ -5,6 +5,7 @@ import com.robertx22.mine_and_slash.config.forge.compat.CompatConfig;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
@@ -12,23 +13,45 @@ import java.util.UUID;
 
 public class HealthUtils {
 
-
     static AttributeModifier getHeartsAttributeMod(float num) {
         return new AttributeModifier(
                 UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"),
-                BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MAX_HEALTH).toString(),
+                BuiltInRegistries.ATTRIBUTE.getKey(Attributes.MAX_HEALTH.value()).toString(),
                 num,
-                AttributeModifier.Operation.ADDITION
-        );
+                AttributeModifier.Operation.ADD_VALUE);
+    }
+
+    public static void setHealth(LivingEntity entity, float health) {
+        AttributeInstance healthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+        AttributeModifier mod = healthAttribute.getModifier(UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"));
+        if (mod != null) {
+            healthAttribute.removeModifier(mod.id());
+            healthAttribute.addPermanentModifier(getHeartsAttributeMod(health));
+        } else {
+            healthAttribute.addPermanentModifier(getHeartsAttributeMod(health));
+        }
+
+    }
+
+    public static void addHealth(LivingEntity entity, float health) {
+        AttributeInstance healthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+        AttributeModifier mod = healthAttribute.getModifier(UUID.fromString("3fb10485-f309-128f-afc6-a55b0d6cf4c1"));
+        if (mod != null) {
+            healthAttribute.removeModifier(mod.id());
+            healthAttribute.addPermanentModifier(getHeartsAttributeMod((float) (mod.amount() + health)));
+        } else {
+            healthAttribute.addPermanentModifier(getHeartsAttributeMod(health));
+        }
+
     }
 
     /*
-    public static void removeHeartsOnSpawnIfNotLiteMode(LivingEntity en) {
-        if (!CompatConfig.get().healthSystem().usesVanillaHearts()) {
-
-        }
-    }
-
+     * public static void removeHeartsOnSpawnIfNotLiteMode(LivingEntity en) {
+     * if (!CompatConfig.get().healthSystem().usesVanillaHearts()) {
+     * 
+     * }
+     * }
+     * 
      */
 
     public static void addHearts(LivingEntity en) {
@@ -49,8 +72,8 @@ public class HealthUtils {
 
             var at = en.getAttribute(Attributes.MAX_HEALTH);
 
-            if (en.getAttributes().hasModifier(Attributes.MAX_HEALTH, mod.getId())) {
-                at.removeModifier(mod.getId());
+            if (en.getAttributes().hasModifier(Attributes.MAX_HEALTH, mod.id())) {
+                at.removeModifier(mod.id());
             }
             data.heartsWithoutMnsHealth = (int) en.getMaxHealth();
 
@@ -65,8 +88,8 @@ public class HealthUtils {
         } else {
             var mod = getHeartsAttributeMod(0);
             var at = en.getAttribute(Attributes.MAX_HEALTH);
-            if (en.getAttributes().hasModifier(Attributes.MAX_HEALTH, mod.getId())) {
-                at.removeModifier(mod.getId());
+            if (en.getAttributes().hasModifier(Attributes.MAX_HEALTH, mod.id())) {
+                at.removeModifier(mod.id());
             }
         }
     }
@@ -74,7 +97,6 @@ public class HealthUtils {
     public static void heal(LivingEntity en, float heal) {
         en.heal(heal);
     }
-
 
     public static float realToVanilla(LivingEntity en, float dmg) {
         if (CompatConfig.get().healthSystem().usesVanillaHearts()) {
@@ -85,7 +107,6 @@ public class HealthUtils {
         float total = multi * max;
         return total;
     }
-
 
     public static float getMaxHealth(LivingEntity en) {
 
@@ -132,9 +153,8 @@ public class HealthUtils {
         return num;
     }
 
-
-    public static float getHealthBarPercent(LivingEntity entity){
-        return Math.min( 1.0f, getCurrentHealthPlusMagicShield(entity) * 1.0f / getMaxHealthPlusMagicShield(entity));
+    public static float getHealthBarPercent(LivingEntity entity) {
+        return Math.min(1.0f, getCurrentHealthPlusMagicShield(entity) * 1.0f / getMaxHealthPlusMagicShield(entity));
     }
 
 }

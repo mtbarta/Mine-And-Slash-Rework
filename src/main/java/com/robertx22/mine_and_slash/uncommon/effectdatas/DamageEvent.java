@@ -71,9 +71,9 @@ public class DamageEvent extends EffectEvent {
     public static String dmgSourceName = SlashRef.MODID + ".custom_damage";
     static AttributeModifier NO_KNOCKBACK = new AttributeModifier(
             UUID.fromString("e926df30-c376-11ea-87d0-0242ac131053"),
-            Attributes.KNOCKBACK_RESISTANCE.getDescriptionId(),
+            Attributes.KNOCKBACK_RESISTANCE.value().getDescriptionId(),
             100,
-            AttributeModifier.Operation.ADDITION);
+            AttributeModifier.Operation.ADD_VALUE);
     public LivingEntity petEntity;
     public float wepdmgMulti = 1;
     public boolean absorbedCompletely = false;
@@ -713,7 +713,7 @@ public class DamageEvent extends EffectEvent {
         }
 
         if (attri.hasModifier(NO_KNOCKBACK)) {
-            attri.removeModifier(NO_KNOCKBACK.getId());
+            attri.removeModifier(NO_KNOCKBACK.id());
         }
 
         if (dmg > 0) {

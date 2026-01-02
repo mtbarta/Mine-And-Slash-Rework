@@ -13,7 +13,7 @@ public class ItemNecklace extends BaseBaublesItem implements INecklace, IShapedR
 
     public ItemNecklace(VanillaMaterial mat) {
         super(new Properties().durability(
-                500 + (int) (mat.armormat.value().getDurabilityForType(ArmorItem.Type.CHESTPLATE) * 3)), "Necklace");
+                500 + (int) (mat.getChestplateDurability() * 3)), "Necklace");
         this.mat = mat;
     }
 

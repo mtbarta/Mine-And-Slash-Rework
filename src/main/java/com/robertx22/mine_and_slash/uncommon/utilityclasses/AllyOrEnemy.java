@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 public enum AllyOrEnemy {
 
-
-
     summonShouldAttack() {
         @Override
         public <T extends LivingEntity> List<T> getMatchingEntities(List<T> list, Entity caster) {
@@ -61,7 +59,6 @@ public enum AllyOrEnemy {
         }
     },
 
-
     allies() {
         @Override
         public <T extends LivingEntity> List<T> getMatchingEntities(List<T> list, Entity caster) {
@@ -105,7 +102,8 @@ public enum AllyOrEnemy {
         @Override
         public boolean is(Entity caster, LivingEntity target) {
             if (caster instanceof Player p) {
-                if (EntityFinder.isTamedByAlly(p, target) && target instanceof OwnableEntity pet && pet.getOwner() == caster) {
+                if (EntityFinder.isTamedByAlly(p, target) && target instanceof OwnableEntity pet
+                        && pet.getOwner() == caster) {
                     return true;
                 }
             }
@@ -129,7 +127,8 @@ public enum AllyOrEnemy {
         public boolean is(Entity caster, LivingEntity target) {
             if (caster instanceof Player p) {
                 if (target instanceof SummonEntity) {
-                    if (EntityFinder.isTamedByAlly(p, target) && target instanceof OwnableEntity pet && pet.getOwner() == caster) {
+                    if (EntityFinder.isTamedByAlly(p, target) && target instanceof OwnableEntity pet
+                            && pet.getOwner() == caster) {
                         return !Load.Unit(target).summonedPetData.isEmpty();
                     }
                 }
@@ -197,17 +196,19 @@ public enum AllyOrEnemy {
                 if (EntityFinder.isTamedByAlly(p, target)) {
                     return false;
                 }
-                if (target.serializeNBT().contains("NoAI")) {
+                if (target.serializeNBT(target.level().registryAccess()).contains("NoAI")) {
                     return false;
                 }
                 // Check for villagers and other NPCs
-                /*var type = Load.Unit(target).getType();
-                if (type == EntityTypeUtils.EntityClassification.NPC) {
-                    return false;
-                } // failsafe incase mod doesn't use villager class
-                if (target instanceof net.minecraft.world.entity.npc.AbstractVillager) {
-                    return false;
-                }*/
+                /*
+                 * var type = Load.Unit(target).getType();
+                 * if (type == EntityTypeUtils.EntityClassification.NPC) {
+                 * return false;
+                 * } // failsafe incase mod doesn't use villager class
+                 * if (target instanceof net.minecraft.world.entity.npc.AbstractVillager) {
+                 * return false;
+                 * }
+                 */
                 if (target instanceof Player) {
                     if (!caster.level().getServer().isPvpAllowed()) {
                         return false;

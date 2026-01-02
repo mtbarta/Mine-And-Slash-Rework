@@ -8,6 +8,7 @@ import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ArmorItem;
 
 public enum VanillaMaterial {
 
@@ -15,6 +16,11 @@ public enum VanillaMaterial {
     IRON("iron", new ItemOrTag(Items.IRON_INGOT), ArmorMaterials.IRON, Tiers.IRON),
     GOLD("gold", new ItemOrTag(Items.GOLD_INGOT), ArmorMaterials.GOLD, Tiers.GOLD),
     DIAMOND("diamond", new ItemOrTag(Items.DIAMOND), ArmorMaterials.DIAMOND, Tiers.DIAMOND);
+
+    public int getChestplateDurability() {
+        return new ArmorItem(this.armormat, ArmorItem.Type.CHESTPLATE, new Item.Properties()).getDefaultInstance()
+                .getMaxDamage();
+    }
 
     public String id;
     public ItemOrTag mat;

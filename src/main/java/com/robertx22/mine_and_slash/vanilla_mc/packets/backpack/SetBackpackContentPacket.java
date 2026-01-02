@@ -56,7 +56,8 @@ public class SetBackpackContentPacket extends MyPacket<SetBackpackContentPacket>
     public void saveToData(RegistryFriendlyByteBuf tag) {
         tag.writeByte(containerId);
         tag.writeVarInt(stateId);
-        tag.writeCollection(items, BackpackItemSerializer::writeItem);
+        tag.writeCollection(items,
+                (buf, item) -> BackpackItemSerializer.writeItem((RegistryFriendlyByteBuf) buf, item));
         ItemStack.OPTIONAL_STREAM_CODEC.encode(tag, carriedItem);
     }
 

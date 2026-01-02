@@ -30,6 +30,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class LootTableItem extends Item implements IAutoModel {
                  */
 
                 LootTable lootTable = world.getServer()
-                        .getLootData().getLootTable(loottableId);
+                        .reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, loottableId));
 
                 List<ItemStack> drops = lootTable.getRandomItems(params);
 

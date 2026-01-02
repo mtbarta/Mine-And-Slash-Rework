@@ -18,10 +18,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
@@ -37,9 +35,9 @@ public class ItemNewbieGearBag extends Item {
         super(new Properties());
     }
 
-
     static HashMap<String, NewbieContent> MAP = new HashMap<>();
-    static NewbieContent defaultContent = new NewbieContent(Arrays.asList(GearSlots.STAFF, GearSlots.SWORD, GearSlots.BOW));
+    static NewbieContent defaultContent = new NewbieContent(
+            Arrays.asList(GearSlots.STAFF, GearSlots.SWORD, GearSlots.BOW));
 
     static {
     }
@@ -72,9 +70,7 @@ public class ItemNewbieGearBag extends Item {
             return this;
         }
 
-
         public void give(Player player) {
-
 
             gearslots.forEach(x -> {
                 BaseGearType gear = ExileDB.GearTypes()
@@ -87,7 +83,6 @@ public class ItemNewbieGearBag extends Item {
                         .get(IRarity.COMMON_ID));
                 b.gearItemSlot.set(gear);
 
-
                 var ex = b.createData();
 
                 var data = ex.get(StackKeys.GEAR);
@@ -98,14 +93,13 @@ public class ItemNewbieGearBag extends Item {
 
                 data.saveToStack(stack);
 
-
                 var exfi = ExileStack.of(stack);
 
                 ex.apply(exfi);
 
                 stack = exfi.getStack();
 
-                EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(Enchantments.UNBREAKING, 3));
+                stack.enchant(Enchantments.UNBREAKING, 3);
 
                 PlayerUtils.giveItem(stack, player);
 
@@ -133,12 +127,14 @@ public class ItemNewbieGearBag extends Item {
                     defaultContent.give(playerIn);
                     // ItemNewbieGearBag.giveNewbieItemsFor(playerIn, starts.get(0));
 
-
                     playerIn.getItemInHand(handIn)
                             .shrink(1);
 
                 } else {
-                    playerIn.displayClientMessage(Component.literal("Choose your path to open this. (Press [H] and then open Talent Tree scren"), false);
+                    playerIn.displayClientMessage(
+                            Component.literal(
+                                    "Choose your path to open this. (Press [H] and then open Talent Tree scren"),
+                            false);
                 }
 
                 return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, playerIn.getItemInHand(handIn));
@@ -149,6 +145,5 @@ public class ItemNewbieGearBag extends Item {
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, playerIn.getItemInHand(handIn));
     }
-
 
 }
