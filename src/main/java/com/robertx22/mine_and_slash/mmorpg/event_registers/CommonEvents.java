@@ -256,14 +256,14 @@ public class CommonEvents {
 
         ExileEvents.PLAYER_DEATH.register(new OnPlayerDeath());
 
-        ForgeEvents.registerForgeEvent(LivingDamageEvent.class, event ->
+        ForgeEvents.registerForgeEvent(LivingDamageEvent.Pre.class, event ->
 
         {
             try {
                 if (event.getEntity() instanceof Player) {
                     if (LivingHurtUtils.isEnviromentalDmg(event.getSource())) {
                         // spend magic shield on envi dmg
-                        float dmg = event.getAmount();
+                        float dmg = event.getNewDamage();
                         float multi = dmg / event.getEntity().getMaxHealth();
                         float spend = Load.Unit(event.getEntity()).getUnit().magicShieldData().getValue() * multi;
                         Load.Unit(event.getEntity()).getResources().spend(event.getEntity(), ResourceType.magic_shield,

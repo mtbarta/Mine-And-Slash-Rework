@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class NeatForgeConfig {
-    public static void init() {
+    // 1.21: registerConfig moved from ModLoadingContext.get() to ModContainer
+    public static void init(net.neoforged.fml.ModContainer modContainer) {
         Pair<ForgeNeatConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeNeatConfig::new);
         NeatConfig.instance = specPair.getLeft();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight(),
+        modContainer.registerConfig(ModConfig.Type.CLIENT, specPair.getRight(),
                 defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash_neat_gui"));
     }
 
@@ -23,8 +24,8 @@ public class NeatForgeConfig {
         return String.format(Locale.ROOT, "%s-%s.toml", modId, type.extension());
     }
 
-    public static void register() {
-        NeatForgeConfig.init();
+    public static void register(net.neoforged.fml.ModContainer modContainer) {
+        NeatForgeConfig.init(modContainer);
     }
 
     private static class ForgeNeatConfig implements NeatConfig.ConfigAccess {

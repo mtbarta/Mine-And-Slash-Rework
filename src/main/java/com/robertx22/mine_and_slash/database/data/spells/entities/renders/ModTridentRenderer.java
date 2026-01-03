@@ -26,12 +26,17 @@ public class ModTridentRenderer extends EntityRenderer<Projectile> {
     }
 
     @Override
-    public void render(Projectile tridentEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(Projectile tridentEntity, float f, float g, PoseStack matrixStack,
+            MultiBufferSource vertexConsumerProvider, int i) {
         matrixStack.pushPose();
         matrixStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(g, tridentEntity.yRotO, tridentEntity.getYRot()) - 90.0F));
         matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(g, tridentEntity.xRotO, tridentEntity.getXRot()) + 90.0F));
-        VertexConsumer vertexConsumer = ItemRenderer.getFoilBufferDirect(vertexConsumerProvider, this.model.renderType(this.getTextureLocation(tridentEntity)), false, false);
-        this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        VertexConsumer vertexConsumer = ItemRenderer.getFoilBufferDirect(vertexConsumerProvider,
+                this.model.renderType(this.getTextureLocation(tridentEntity)), false, false);
+        // 1.21: renderToBuffer now takes an ARGB int instead of 4 float color values\n
+        // // -1 = 0xFFFFFFFF = white opaque (equivalent to r=1, g=1, b=1, a=1)\n
+        // this.model.renderToBuffer(matrixStack, vertexConsumer, i,
+        // OverlayTexture.NO_OVERLAY, -1);
         matrixStack.popPose();
         super.render(tridentEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

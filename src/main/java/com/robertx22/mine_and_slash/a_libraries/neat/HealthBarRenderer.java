@@ -275,14 +275,16 @@ public class HealthBarRenderer {
         if (NeatConfig.instance.drawBackground()) {
 
             VertexConsumer builder = buffers.getBuffer(renderType);
-            builder.vertex(poseStack.last().pose(), -halfSize - padding, -bgHeight, 0.01F).color(0, 0, 0, 64)
-                    .uv(0.0F, 0.0F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), -halfSize - padding, barHeight + padding, 0.01F).color(0, 0, 0, 64)
-                    .uv(0.0F, 0.5F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), halfSize + padding, barHeight + padding, 0.01F).color(0, 0, 0, 64)
-                    .uv(1.0F, 0.5F).uv2(light).endVertex();
-            builder.vertex(poseStack.last().pose(), halfSize + padding, -bgHeight, 0.01F).color(0, 0, 0, 64)
-                    .uv(1.0F, 0.0F).uv2(light).endVertex();
+            builder.addVertex(poseStack.last().pose(), -halfSize - padding, -bgHeight, 0.01F).setColor(0, 0, 0, 64)
+                    .setUv(0.0F, 0.0F).setLight(light);
+            builder.addVertex(poseStack.last().pose(), -halfSize - padding, barHeight + padding, 0.01F)
+                    .setColor(0, 0, 0, 64)
+                    .setUv(0.0F, 0.5F).setLight(light);
+            builder.addVertex(poseStack.last().pose(), halfSize + padding, barHeight + padding, 0.01F)
+                    .setColor(0, 0, 0, 64)
+                    .setUv(1.0F, 0.5F).setLight(light);
+            builder.addVertex(poseStack.last().pose(), halfSize + padding, -bgHeight, 0.01F).setColor(0, 0, 0, 64)
+                    .setUv(1.0F, 0.0F).setLight(light);
         }
 
         // Health Bar
@@ -305,34 +307,35 @@ public class HealthBarRenderer {
             float backgroundLayerZ = 0.002f;
 
             // health
-            builder.vertex(poseInHere, -halfSize, 0, healthLayerZ).color(argb).uv(0.0F, 0.75F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize, barHeight, healthLayerZ).color(argbShadow).uv(0.0F, 1.0F).uv2(light)
-                    .endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, 0.001F).color(argbShadow)
-                    .uv(1.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ).color(argb)
-                    .uv(1.0F, 0.75F).uv2(light).endVertex();
+            builder.addVertex(poseInHere, -halfSize, 0, healthLayerZ).setColor(argb).setUv(0.0F, 0.75F).setLight(light);
+            builder.addVertex(poseInHere, -halfSize, barHeight, healthLayerZ).setColor(argbShadow).setUv(0.0F, 1.0F)
+                    .setLight(light);
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, 0.001F)
+                    .setColor(argbShadow)
+                    .setUv(1.0F, 1.0F).setLight(light);
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ).setColor(argb)
+                    .setUv(1.0F, 0.75F).setLight(light);
 
             // magic shield
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ)
-                    .color(magicShieldColor).uv(0.0F, 0.75F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, healthLayerZ)
-                    .color(magicShieldShadowColor).uv(0.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, barHeight, healthLayerZ)
-                    .color(magicShieldShadowColor).uv(1.0F, 1.0F).uv2(light).endVertex();
-            builder.vertex(poseInHere, -halfSize + 2 * healthHalfSize, 0, healthLayerZ).color(magicShieldColor)
-                    .uv(1.0F, 0.75F).uv2(light).endVertex();
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, 0, healthLayerZ)
+                    .setColor(magicShieldColor).setUv(0.0F, 0.75F).setLight(light);
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize * healthPart, barHeight, healthLayerZ)
+                    .setColor(magicShieldShadowColor).setUv(0.0F, 1.0F).setLight(light);
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize, barHeight, healthLayerZ)
+                    .setColor(magicShieldShadowColor).setUv(1.0F, 1.0F).setLight(light);
+            builder.addVertex(poseInHere, -halfSize + 2 * healthHalfSize, 0, healthLayerZ).setColor(magicShieldColor)
+                    .setUv(1.0F, 0.75F).setLight(light);
 
             // Blank part of the bar
             if (healthHalfSize < halfSize) {
-                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, 0, backgroundLayerZ)
-                        .color(0, 0, 0, 127).uv(0.0F, 0.5F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, barHeight, backgroundLayerZ)
-                        .color(0, 0, 0, 127).uv(0.0F, 0.75F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), halfSize, barHeight, backgroundLayerZ).color(0, 0, 0, 127)
-                        .uv(1.0F, 0.75F).uv2(light).endVertex();
-                builder.vertex(poseStack.last().pose(), halfSize, 0, backgroundLayerZ).color(0, 0, 0, 127)
-                        .uv(1.0F, 0.5F).uv2(light).endVertex();
+                builder.addVertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, 0, backgroundLayerZ)
+                        .setColor(0, 0, 0, 127).setUv(0.0F, 0.5F).setLight(light);
+                builder.addVertex(poseStack.last().pose(), -halfSize + 2 * healthHalfSize, barHeight, backgroundLayerZ)
+                        .setColor(0, 0, 0, 127).setUv(0.0F, 0.75F).setLight(light);
+                builder.addVertex(poseStack.last().pose(), halfSize, barHeight, backgroundLayerZ).setColor(0, 0, 0, 127)
+                        .setUv(1.0F, 0.75F).setLight(light);
+                builder.addVertex(poseStack.last().pose(), halfSize, 0, backgroundLayerZ).setColor(0, 0, 0, 127)
+                        .setUv(1.0F, 0.5F).setLight(light);
             }
         }
 

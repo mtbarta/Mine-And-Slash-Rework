@@ -11,6 +11,7 @@ logoFile = "icon.png"
 credits = ""
 authors = "${mod_author}"
 description = '''${description}'''
+enumExtensions = "META-INF/enumextensions.json"
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.mmorpg]]
 modId = "neoforge"

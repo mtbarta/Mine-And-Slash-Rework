@@ -87,10 +87,9 @@ public class StationaryFallingBlockEntity extends FallingBlockEntity implements 
         removeNextTick = true;
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this, Block.getId(this.getBlockState()));
-    }
+    // getAddEntityPacket removed in 1.21 - Entity now defaults to
+    // ClientboundAddEntityPacket
+    // FallingBlockEntity handles block state syncing via data accessors internally
 
     @Override
     public void tick() {

@@ -62,7 +62,8 @@ public class DatabaseCaches {
                 .getFilterWrapped(x -> x instanceof AttributeStat).list.forEach(x -> {
                     AttributeStat attri = (AttributeStat) x;
                     Cached.VANILLA_STAT_UIDS_TO_CLEAR_EVERY_STAT_CALC
-                            .add(ImmutablePair.of(attri.attribute.value(), attri.uuid));
+                            // 1.21: AttributeStat now uses modifierId (ResourceLocation) instead of uuid
+                            .add(ImmutablePair.of(attri.attribute.value(), attri.modifierId));
                 });
     }
 }

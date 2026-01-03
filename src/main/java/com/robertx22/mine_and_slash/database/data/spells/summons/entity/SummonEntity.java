@@ -31,8 +31,8 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
     }
 
     protected AbstractArrow getArrow(ItemStack pArrowStack, float pVelocity) {
-        return ProjectileUtil.getMobArrow(this, pArrowStack, pVelocity);
-
+        // 1.21: getMobArrow now requires 4th parameter (weapon ItemStack)
+        return ProjectileUtil.getMobArrow(this, pArrowStack, pVelocity, ItemStack.EMPTY);
     }
 
     Goal aggroGoal = null;
@@ -67,8 +67,9 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
                     item -> item instanceof net.minecraft.world.item.BowItem)));
             AbstractArrow abstractarrow = this.getArrow(itemstack, pDistanceFactor);
             if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+                // 1.21: customArrow now requires 3rd parameter (weapon ItemStack)
                 abstractarrow = ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem())
-                        .customArrow(abstractarrow, itemstack);
+                        .customArrow(abstractarrow, itemstack, this.getMainHandItem());
             double d0 = pTarget.getX() - this.getX();
             double d1 = pTarget.getY(0.3333333333333333D) - abstractarrow.getY();
             double d2 = pTarget.getZ() - this.getZ();
@@ -120,7 +121,8 @@ public abstract class SummonEntity extends TamableAnimal implements RangedAttack
         }
 
         this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1, 1));
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.0D, 6.0F, 1.0F, false));
+        // 1.21: FollowOwnerGoal removed canFly boolean parameter
+        this.goalSelector.addGoal(7, new FollowOwnerGoal(this, 1.0D, 6.0F, 1.0F));
         this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));

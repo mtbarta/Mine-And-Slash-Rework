@@ -190,7 +190,8 @@ public enum BarGuiType {
 
         @Override
         public MutableComponent getText(EntityData data, Player en) {
-            return Gui.STATUS_BAR_HUGER.locName((int) getCurrent(data, en), (int) en.getFoodData().getSaturationLevel());
+            return Gui.STATUS_BAR_HUGER.locName((int) getCurrent(data, en),
+                    (int) en.getFoodData().getSaturationLevel());
         }
 
     },
@@ -226,7 +227,7 @@ public enum BarGuiType {
     }
 
     public ResourceLocation getIcon(EntityData data, Player en) {
-        return ResourceLocation.fromNamespaceAndPath(getTexture(data, en).toString()
+        return ResourceLocation.parse(getTexture(data, en).toString()
                 .replaceAll(".png", "_icon.png"));
     }
 
@@ -237,7 +238,6 @@ public enum BarGuiType {
     public abstract float getCurrent(EntityData data, Player en);
 
     public abstract float getMax(EntityData data, Player en);
-
 
     public boolean isFull(EntityData data, Player en) {
         return getCurrent(data, en) >= getMax(data, en);

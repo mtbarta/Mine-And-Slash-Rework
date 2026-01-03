@@ -17,6 +17,8 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.resources.ResourceLocation;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 
 public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
 
@@ -27,11 +29,8 @@ public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
 
     }
 
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment)
-                || Items.DIAMOND_SWORD.canApplyAtEnchantingTable(stack, enchantment);
-    }
+    // 1.21: canApplyAtEnchantingTable removed - enchanting is now fully data-driven
+    // Configure enchanting behavior via datapack if needed
 
     String locname;
     public float attackSpeed = -2.4F;
@@ -63,15 +62,18 @@ public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
         return "";
     }
 
+    // 1.21: AttributeModifier constructor now takes ResourceLocation instead of
+    // UUID + name
     @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers() {
         return ItemAttributeModifiers.builder()
                 .add(Attributes.ATTACK_DAMAGE,
-                        new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 6,
+                        new AttributeModifier(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "weapon_damage"), 6,
                                 AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND)
                 .add(Attributes.ATTACK_SPEED,
-                        new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double) this.attackSpeed,
+                        new AttributeModifier(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "weapon_speed"),
+                                (double) this.attackSpeed,
                                 AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND)
                 .build();

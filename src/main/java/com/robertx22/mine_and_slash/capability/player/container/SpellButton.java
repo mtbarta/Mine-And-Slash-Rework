@@ -50,7 +50,10 @@ public class SpellButton extends ImageButton {
         var mc = Minecraft.getInstance();
 
         // todo check if this causes seizures
-        float color = flicker ? MathHelper.clamp((mc.player.tickCount % 25 + mc.getPartialTick()) * 0.13f, 0, 3) : 1F;
+        float color = flicker
+                ? MathHelper.clamp((mc.player.tickCount % 25 + mc.getTimer().getGameTimeDeltaPartialTick(true)) * 0.13f,
+                        0, 3)
+                : 1F;
 
         gui.setColor(1.0F, color, 1.0F, 1.0F);
         if (hasSpell()) {

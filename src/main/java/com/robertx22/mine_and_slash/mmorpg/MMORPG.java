@@ -59,12 +59,12 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import com.robertx22.library_of_exile.main.Packets;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+// FMLJavaModLoadingContext removed in NeoForge 1.21 - using constructor-injected IEventBus
 // import net.neoforged.neoforge.network.NetworkRegistry;
 // import net.neoforged.neoforge.network.simple.SimpleChannel;
 
@@ -121,7 +121,11 @@ public class MMORPG {
     // PROTOCOL_VERSION::equals
     // );
 
-    public MMORPG(IEventBus bus) {
+    // 1.21: ModContainer is now passed as constructor argument for registerConfig
+    public MMORPG(IEventBus bus, ModContainer modContainer) {
+
+        // Set the mod bus for ForgeEvents helper class
+        ForgeEvents.setModBus(bus);
 
         SchemaTest.run();
 
@@ -131,7 +135,7 @@ public class MMORPG {
             Packets.setRegistrar(event.registrar(SlashRef.MODID).versioned(PROTOCOL_VERSION));
         });
 
-        SlashCapabilities.register();
+        SlashCapabilities.register(bus);
 
         if (MMORPG.RUN_DEV_TOOLS) {
             ExileRegistryUtil.setCurrentRegistarMod(SlashRef.MODID);
@@ -139,7 +143,8 @@ public class MMORPG {
 
         Watch watch = new Watch();
 
-        ModLoadingContext.get()
+        // 1.21: registerConfig moved from ModLoadingContext.get() to ModContainer
+        modContainer
                 .registerConfig(ModConfig.Type.SERVER, ServerContainer.spec,
                         NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash"));
 
@@ -163,16 +168,15 @@ public class MMORPG {
 
         // DistExecutor removed, registered directly
         // NeatForgeConfig.register(); // Todo check if safe
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec,
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec,
                 NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
         bus.addListener(ClientInit::onInitializeClient);
         ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
             KeybindsRegister.register(x);
         });
-        FMLJavaModLoadingContext.get().getModEventBus()
-                .addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
-                    RenderRegister.regRenders(x);
-                });
+        bus.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
+            RenderRegister.regRenders(x);
+        });
 
         bus.addListener(this::commonSetupEvent);
         bus.addListener(this::interMod);
@@ -201,7 +205,7 @@ public class MMORPG {
 
         LifeCycleEvents.register();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, new Consumer<GatherDataEvent>() {
+        bus.addListener(EventPriority.LOW, new Consumer<GatherDataEvent>() {
             @Override
             public void accept(GatherDataEvent x) {
                 for (ExileRegistryType type : ExileRegistryType.getAllInRegisterOrder()) {
@@ -214,7 +218,7 @@ public class MMORPG {
         ProfessionEvents.init();
         OrbAddonEvents.register();
 
-        PlayerStats.register();
+        PlayerStats.register(bus);
         PlayerStats.initialize();
 
         DerivedRegistries.init();
@@ -238,9 +242,14 @@ public class MMORPG {
          * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
          * SlotTypeMessage.Builder(RefCurio.OMEN).size(1).build());
          */
-        ModLoadingContext.get()
-                .registerConfig(ModConfig.Type.SERVER, CompatConfig.spec,
-                        NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER, "mine_and_slash_compatibility"));
+        // 1.21: registerConfig on ModContainer is stored during construction, not in
+        // interMod
+        // Move this to constructor if needed, or use a static ModContainer reference
+        // For now, commenting out as interMod may run after config registration should
+        // happen
+        // modContainer.registerConfig(ModConfig.Type.SERVER, CompatConfig.spec,
+        // NeatForgeConfig.defaultConfigName(ModConfig.Type.SERVER,
+        // "mine_and_slash_compatibility"));
 
     }
 

@@ -14,12 +14,16 @@ import com.robertx22.mine_and_slash.saveclasses.ExactStatData;
 import com.robertx22.mine_and_slash.uncommon.MathHelper;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.enumclasses.ModType;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
@@ -68,16 +72,40 @@ public class StatCompat implements JsonExileRegistry<StatCompat>, IAutoGson<Stat
         return !enchant_id.isEmpty();
     }
 
-    public ExactStatData getEnchantCompatResult(List<ItemStack> stacks, int lvl) {
+    /**
+     * Sets the enchant_id from a ResourceKey<Enchantment> constant.
+     * This is the preferred way to set enchantment IDs in 1.21 as it's type-safe.
+     */
+    public void setEnchantKey(ResourceKey<Enchantment> key) {
+        this.enchant_id = key.location().toString();
+    }
+
+    /**
+     * Gets the ResourceKey<Enchantment> from the stored enchant_id string.
+     * Returns null if enchant_id is empty.
+     */
+    public ResourceKey<Enchantment> getEnchantKey() {
+        if (enchant_id.isEmpty()) {
+            return null;
+        }
+        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.parse(enchant_id));
+    }
+
+    // Updated for 1.21: Accept the Holder<Enchantment> from the caller instead of
+    // looking it up
+    public ExactStatData getEnchantCompatResult(List<ItemStack> stacks, int lvl, Holder<Enchantment> enchHolder) {
         if (ExileDB.Stats().get(mns_stat_id) instanceof AttributeStat) {
             return null;
         }
-        Enchantment ench = BuiltInRegistries.ENCHANTMENT.get(ResourceLocation.parse(enchant_id));
+
+        if (enchHolder == null) {
+            return null;
+        }
 
         float value = 0;
 
         for (ItemStack stack : stacks) {
-            int enchlvl = stack.getEnchantmentLevel(ench);
+            int enchlvl = EnchantmentHelper.getItemEnchantmentLevel(enchHolder, stack);
 
             if (enchlvl < 1) {
                 continue;

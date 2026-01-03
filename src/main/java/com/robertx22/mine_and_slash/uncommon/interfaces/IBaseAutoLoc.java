@@ -60,8 +60,8 @@ public interface IBaseAutoLoc extends IGUID {
             return "item.";
         } else if (this instanceof Block) {
             return "block.";
-        } else if (this instanceof Enchantment) {
-            return "enchantment.";
+            // 1.21: Enchantment is now a datapack registry object, not a class that can be
+            // instanceof checked
         } else if (this instanceof MobEffect) {
             return "effect.";
         } else {

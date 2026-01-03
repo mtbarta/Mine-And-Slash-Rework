@@ -19,7 +19,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class AutoSkullRender extends EntityRenderer<AutoAimingProj> {
-    private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = ResourceLocation.parse("textures/entity/wither/wither_invulnerable.png");
+    private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = ResourceLocation
+            .parse("textures/entity/wither/wither_invulnerable.png");
     private static final ResourceLocation WITHER_LOCATION = ResourceLocation.parse("textures/entity/wither/wither.png");
     private final SkullModel model;
 
@@ -31,7 +32,8 @@ public class AutoSkullRender extends EntityRenderer<AutoAimingProj> {
     public static LayerDefinition createSkullLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 35).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F), PartPose.ZERO);
+        partdefinition.addOrReplaceChild("head",
+                CubeListBuilder.create().texOffs(0, 35).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F), PartPose.ZERO);
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
@@ -39,14 +41,17 @@ public class AutoSkullRender extends EntityRenderer<AutoAimingProj> {
         return 15;
     }
 
-    public void render(AutoAimingProj pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(AutoAimingProj pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
+            MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         float f = Mth.rotLerp(pPartialTicks, pEntity.yRotO, pEntity.getYRot());
         float f1 = Mth.lerp(pPartialTicks, pEntity.xRotO, pEntity.getXRot());
         VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
         this.model.setupAnim(0.0F, f, f1);
-        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        // 1.21: renderToBuffer now takes an ARGB int instead of 4 float color values
+        // -1 = 0xFFFFFFFF = white opaque (equivalent to r=1, g=1, b=1, a=1)
+        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, -1);
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }

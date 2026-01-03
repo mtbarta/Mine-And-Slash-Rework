@@ -17,7 +17,6 @@ import org.joml.Matrix4f;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class DamageParticleRenderer {
 
     // todo might need to do without dmg particles for a while.
@@ -40,23 +39,20 @@ public class DamageParticleRenderer {
             scaleToGui *= 2;
         }
 
-
         if (true) {
-            //   renderNameTag(gui, camera, particle.renderString, particle, gui.pose(), 10000);
+            // renderNameTag(gui, camera, particle.renderString, particle, gui.pose(),
+            // 10000);
             return;
         }
-
 
         var matrix = gui.pose();
 
         Minecraft client = Minecraft.getInstance();
-        float tickDelta = client.getFrameTime();
-
+        float tickDelta = client.getTimer().getGameTimeDeltaPartialTick(true);
 
         double x = Mth.lerp((double) tickDelta, particle.xPrev, particle.x);
         double y = Mth.lerp((double) tickDelta, particle.yPrev, particle.y);
         double z = Mth.lerp((double) tickDelta, particle.zPrev, particle.z);
-
 
         Vec3 camPos = camera.getPosition();
         double camX = camPos.x;
@@ -73,10 +69,8 @@ public class DamageParticleRenderer {
 
         matrix.scale(scaleToGui, scaleToGui, scaleToGui);
 
-
-        //   matrix.mulPose(camera.rotation());
-        //matrix.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
-
+        // matrix.mulPose(camera.rotation());
+        // matrix.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
 
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
@@ -85,28 +79,26 @@ public class DamageParticleRenderer {
         matrix.popPose();
     }
 
-    public static void renderNameTag(Camera camera, String name, DamageParticle particle, PoseStack matrix, float tickDelta, MultiBufferSource pBuffer) {
+    public static void renderNameTag(Camera camera, String name, DamageParticle particle, PoseStack matrix,
+            float tickDelta, MultiBufferSource pBuffer) {
         Minecraft mc = Minecraft.getInstance();
-
 
         double x = Mth.lerp((double) tickDelta, particle.xPrev, particle.x);
         double y = Mth.lerp((double) tickDelta, particle.yPrev, particle.y);
         double z = Mth.lerp((double) tickDelta, particle.zPrev, particle.z);
-
 
         Vec3 camPos = camera.getPosition();
         double camX = camPos.x;
         double camY = camPos.y;
         double camZ = camPos.z;
 
-
         int i = "deadmau5".equals(name) ? -10 : 0;
         matrix.pushPose();
 
         matrix.translate(x, y, z);
-        //   matrix.translate(x - camX, y - camY, z - camZ);
+        // matrix.translate(x - camX, y - camY, z - camZ);
 
-        //matrix.translate(0.0F, y, 0.0F);
+        // matrix.translate(0.0F, y, 0.0F);
 
         matrix.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
         matrix.scale(-0.025F, -0.025F, 0.025F);
@@ -118,37 +110,36 @@ public class DamageParticleRenderer {
 
         // gui.drawString(mc.font, name, 0, 0, ChatFormatting.RED.getColor());
 
-
         font.drawInBatch(name, f2, (float) i, 553648127, false, matrix4f, pBuffer, Font.DisplayMode.NORMAL, j, 10000);
-
 
         matrix.popPose();
 
     }
 
     public static void drawDamageNumber(GuiGraphics gui, String s, double x, double y,
-                                        float width) {
+            float width) {
 
         Minecraft minecraft = Minecraft.getInstance();
         int sw = minecraft.font.width(s);
 
-
-        //gui.drawString(minecraft.font, s, (int) (x + (width / 2) - sw), (int) y + 5, ChatFormatting.RED.getColor());
+        // gui.drawString(minecraft.font, s, (int) (x + (width / 2) - sw), (int) y + 5,
+        // ChatFormatting.RED.getColor());
         gui.drawString(minecraft.font, s, 0, 0, ChatFormatting.RED.getColor());
     }
 
-
     /*
-    public static void drawDamageNumber(GuiGraphics gui,PoseStack matrix, String s, double x, double y,
-                                        float width) {
-
-           Minecraft minecraft = Minecraft.getInstance();
-        int sw = minecraft.tex.getWidth(s);
-         minecraft.font.drawInBatch(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, ChatFormatting.WHITE.getColor());
-    }
-
-
-
+     * public static void drawDamageNumber(GuiGraphics gui,PoseStack matrix, String
+     * s, double x, double y,
+     * float width) {
+     * 
+     * Minecraft minecraft = Minecraft.getInstance();
+     * int sw = minecraft.tex.getWidth(s);
+     * minecraft.font.drawInBatch(matrix, s, (int) (x + (width / 2) - sw), (int) y +
+     * 5, ChatFormatting.WHITE.getColor());
+     * }
+     * 
+     * 
+     * 
      */
 
 }

@@ -1,0 +1,46 @@
+{
+    "entries": {
+        "net/minecraft/world/item/Rarity": [
+            {
+                "name": "MNS_LEGENDARY",
+                "constructor": "(Ljava/util/function/UnaryOperator;)V",
+                "parameters": {
+                    "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                    "method": "legendaryStyle"
+                }
+            },
+            {
+                "name": "MNS_MYTHIC",
+                "constructor": "(Ljava/util/function/UnaryOperator;)V",
+                "parameters": {
+                    "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                    "method": "mythicStyle"
+                }
+            },
+            {
+                "name": "MNS_UNIQUE",
+                "constructor": "(Ljava/util/function/UnaryOperator;)V",
+                "parameters": {
+                    "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                    "method": "uniqueStyle"
+                }
+            },
+            {
+                "name": "MNS_RUNED",
+                "constructor": "(Ljava/util/function/UnaryOperator;)V",
+                "parameters": {
+                    "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                    "method": "runedStyle"
+                }
+            },
+            {
+                "name": "MNS_UNCOMMON",
+                "constructor": "(Ljava/util/function/UnaryOperator;)V",
+                "parameters": {
+                    "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                    "method": "uncommonStyle"
+                }
+            }
+        ]
+    }
+}

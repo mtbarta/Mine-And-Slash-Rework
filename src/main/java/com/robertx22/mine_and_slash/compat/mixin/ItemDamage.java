@@ -2,6 +2,8 @@ package com.robertx22.mine_and_slash.compat.mixin;
 
 import com.robertx22.mine_and_slash.config.forge.compat.CompatConfig;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -26,7 +28,9 @@ public class ItemDamage {
         if (!pEntity.level().isClientSide
                 && (!(pEntity instanceof Player) || !((Player) pEntity).getAbilities().instabuild)) {
             if (stack.isDamageableItem()) {
-                pAmount = stack.getItem().damageItem(stack, pAmount, pEntity, () -> pOnBroken.accept(pEntity));
+                // 1.21: damageItem now takes Consumer<Item> instead of a Runnable-style
+                // callback
+                pAmount = stack.getItem().damageItem(stack, pAmount, pEntity, item -> pOnBroken.accept(pEntity));
                 int newDamage = stack.getDamageValue() + pAmount;
                 stack.setDamageValue(newDamage);
 

@@ -121,10 +121,8 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
 
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
+    // getAddEntityPacket removed in 1.21 - Entity now defaults to
+    // ClientboundAddEntityPacket
 
     @Override // seems to help making it hit easier?
     public float getPickRadius() {
@@ -158,7 +156,7 @@ public class SimpleProjectileEntity extends AbstractArrow implements IMyRenderAs
     }
 
     public SimpleProjectileEntity(EntityType<? extends Entity> type, Level worldIn) {
-        super((EntityType<? extends AbstractArrow>) type, worldIn, ItemStack.EMPTY);
+        super((EntityType<? extends AbstractArrow>) type, worldIn);
         this.xTile = -1;
         this.yTile = -1;
         this.zTile = -1;

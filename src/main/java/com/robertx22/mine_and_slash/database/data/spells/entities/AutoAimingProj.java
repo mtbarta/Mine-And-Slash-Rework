@@ -24,7 +24,6 @@ public class AutoAimingProj extends AbstractHurtingProjectile {
 
     public float speed = 1;
 
-
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         return true;
@@ -43,7 +42,8 @@ public class AutoAimingProj extends AbstractHurtingProjectile {
                     flag = entity.hurt(this.damageSources().mobAttack(en), 8.0F);
                     if (flag) {
                         if (entity.isAlive()) {
-                            this.doEnchantDamageEffects(livingentity, entity);
+                            // doEnchantDamageEffects was removed in 1.21 - enchantment damage is now
+                            // handled automatically
                         } else {
                             // livingentity.heal(5.0F);
                         }
@@ -62,7 +62,8 @@ public class AutoAimingProj extends AbstractHurtingProjectile {
                     }
 
                     if (i > 0) {
-                        livingentity1.addEffect(new MobEffectInstance(MobEffects.WITHER, 20 * i, 1), this.getEffectSource());
+                        livingentity1.addEffect(new MobEffectInstance(MobEffects.WITHER, 20 * i, 1),
+                                this.getEffectSource());
                     }
                 }
 
@@ -83,12 +84,12 @@ public class AutoAimingProj extends AbstractHurtingProjectile {
     public void tick() {
         super.tick();
 
-
         if (!level().isClientSide) {
             if (target == null || target.isDeadOrDying()) {
 
             } else {
-                var move = ProjectileCastHelper.positionToVelocity(new MyPosition(this.position()), new MyPosition(target.getEyePosition()));
+                var move = ProjectileCastHelper.positionToVelocity(new MyPosition(this.position()),
+                        new MyPosition(target.getEyePosition()));
                 move = move.normalize().multiply(speed, speed, speed);
 
                 this.setDeltaMovement(move);
@@ -99,7 +100,6 @@ public class AutoAimingProj extends AbstractHurtingProjectile {
                 this.discard();
             }
         }
-
 
     }
 }

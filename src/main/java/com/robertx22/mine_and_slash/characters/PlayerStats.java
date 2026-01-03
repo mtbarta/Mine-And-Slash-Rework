@@ -5,16 +5,17 @@ import com.robertx22.mine_and_slash.database.data.stats.types.resources.energy.E
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.health.Health;
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.magic_shield.MagicShield;
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.mana.Mana;
+import com.robertx22.mine_and_slash.mmorpg.ForgeEvents;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +24,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerStats {
-    public static final ResourceLocation LEVELS_GAINED = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "levels_gained");
+    public static final ResourceLocation LEVELS_GAINED = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "levels_gained");
     public static final HashMap<String, ResourceLocation> REGISTERED_STATS = new HashMap<>();
+
+    private static IEventBus modBus;
 
     private static class Registrations {
         public final List<ResourceLocation> customStats = new ArrayList<>();
@@ -44,8 +48,9 @@ public class PlayerStats {
         getActiveRegistrations().customStats.add(identifier);
     }
 
-    public static void register() {
-        FMLJavaModLoadingContext.get().getModEventBus().register(getActiveRegistrations());
+    public static void register(IEventBus bus) {
+        modBus = bus;
+        modBus.register(getActiveRegistrations());
     }
 
     private static Registrations getActiveRegistrations() {
@@ -63,11 +68,11 @@ public class PlayerStats {
         addReg(Energy.getInstance().GUID());
         addReg(MagicShield.getInstance().GUID());
         /*
-        addReg(DatapackStats.DEX.GUID());
-        addReg(DatapackStats.INT.GUID());
-        addReg(DatapackStats.STR.GUID());
-        addReg(DatapackStats.MOVE_SPEED.GUID());
-
+         * addReg(DatapackStats.DEX.GUID());
+         * addReg(DatapackStats.INT.GUID());
+         * addReg(DatapackStats.STR.GUID());
+         * addReg(DatapackStats.MOVE_SPEED.GUID());
+         * 
          */
 
         registerCustomStat(LEVELS_GAINED);

@@ -40,7 +40,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -278,8 +279,9 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
 
     }
 
-    public List<MutableComponent> getEnchantCompatTooltip(ItemStack stack) {
-        var ench = getEnchantCompatStats(stack);
+    public List<MutableComponent> getEnchantCompatTooltip(ItemStack stack,
+            HolderLookup.RegistryLookup<Enchantment> enchantLookup) {
+        var ench = getEnchantCompatStats(stack, enchantLookup);
 
         List<MutableComponent> list = new ArrayList<>();
 
@@ -296,15 +298,16 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
 
     }
 
-    public StatContext getEnchantCompatStats(ItemStack stack) {
+    public StatContext getEnchantCompatStats(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> enchantLookup) {
         var list = new ArrayList<ExactStatData>();
 
-        for (var en : stack.getAllEnchantments().entrySet()) {
-            var id = en.getKey().unwrapKey().get().location().toString();
+        for (var en : stack.getAllEnchantments(enchantLookup).entrySet()) {
+            var enchHolder = en.getKey();
+            var id = enchHolder.unwrapKey().get().location().toString();
             // todo this could be cached
             for (StatCompat compat : ExileDB.StatCompat()
                     .getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
-                var result = compat.getEnchantCompatResult(Arrays.asList(stack), lvl);
+                var result = compat.getEnchantCompatResult(Arrays.asList(stack), lvl, enchHolder);
                 if (result != null) {
                     list.add(result);
                 }
@@ -321,21 +324,24 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
     public static StatContext getEnchantCompatStats(Player p, List<GearData> gears) {
         var list = new ArrayList<ExactStatData>();
 
+        // Get the enchantment registry lookup from the player's level (1.21 API change)
+        var enchantLookup = p.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+
         Set<net.minecraft.core.Holder<Enchantment>> enchants = new HashSet<>();
 
         for (GearData gear : gears) {
-            enchants.addAll(gear.stack.getAllEnchantments().keySet());
+            enchants.addAll(gear.stack.getAllEnchantments(enchantLookup).keySet());
         }
 
         int lvl = Load.Unit(p).getLevel();
         var stacks = gears.stream().map(x -> x.stack).collect(Collectors.toList());
 
-        for (var enchant : enchants) {
-            var id = enchant.unwrapKey().get().location().toString();
+        for (var enchHolder : enchants) {
+            var id = enchHolder.unwrapKey().get().location().toString();
 
             for (StatCompat compat : ExileDB.StatCompat()
                     .getFilterWrapped(x -> x.isEnchantCompat() && x.enchant_id.equals(id)).list) {
-                var result = compat.getEnchantCompatResult(stacks, lvl);
+                var result = compat.getEnchantCompatResult(stacks, lvl, enchHolder);
                 if (result != null) {
                     list.add(result);
                 }

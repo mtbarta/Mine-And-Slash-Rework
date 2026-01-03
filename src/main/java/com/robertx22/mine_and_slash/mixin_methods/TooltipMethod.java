@@ -61,7 +61,9 @@ public class TooltipMethod {
                 GearItemData gear = StackSaving.GEARS.loadFrom(stack);
 
                 if (gear != null) {
-                    tooltip.addAll(gear.getEnchantCompatTooltip(stack));
+                    var enchantLookup = player.level().registryAccess()
+                            .lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+                    tooltip.addAll(gear.getEnchantCompatTooltip(stack, enchantLookup));
                     return tooltip;
                 }
             }

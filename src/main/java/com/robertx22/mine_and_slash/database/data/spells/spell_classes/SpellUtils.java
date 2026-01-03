@@ -19,7 +19,10 @@ public class SpellUtils {
 
     public static void summonLightningStrike(Entity entity) {
 
-        LightningBolt lightningboltentity = new LightningBolt(EntityType.LIGHTNING_BOLT, entity.level());  //boolean true means it's only an effect!'
+        LightningBolt lightningboltentity = new LightningBolt(EntityType.LIGHTNING_BOLT, entity.level()); // boolean
+                                                                                                          // true means
+                                                                                                          // it's only
+                                                                                                          // an effect!'
 
         lightningboltentity.setPosRaw((double) entity.getX() + 0.5D,
                 (double) entity.getY(),
@@ -34,10 +37,10 @@ public class SpellUtils {
     }
 
     public static void addLightningBolt(ServerLevel world, LightningBolt entityIn) {
-        world.getServer()
-                .getPlayerList()
-                .broadcast((Player) null, entityIn.getX(), entityIn.getY(), entityIn.getZ(), 50, world.dimension()
-                        , new ClientboundAddEntityPacket(entityIn));
+        // 1.21: ClientboundAddEntityPacket constructor changed. Use
+        // world.addFreshEntity instead
+        // which handles spawning and packet broadcasting internally.
+        world.addFreshEntity(entityIn);
     }
 
     public static void setUpProjectilePosition(Vec3 pos, AbstractArrow projectile, Entity caster) {
@@ -47,14 +50,15 @@ public class SpellUtils {
     }
 
     public static void shootProjectile(Vec3 pos, AbstractArrow projectile, Entity caster, float speed,
-                                       float pitch, float yaw) {
+            float pitch, float yaw) {
 
         setUpProjectilePosition(pos, projectile, caster);
         projectile.shootFromRotation(caster, pitch, yaw, 0, speed, 1F);
 
     }
 
-    public static void initSpellEntity(Entity spellEntity, LivingEntity caster, CalculatedSpellData data, MapHolder holder) {
+    public static void initSpellEntity(Entity spellEntity, LivingEntity caster, CalculatedSpellData data,
+            MapHolder holder) {
 
         IDatapackSpellEntity se = (IDatapackSpellEntity) spellEntity;
         se.init(caster, data, holder);

@@ -112,7 +112,7 @@ public class CraftedBuffFoodItem extends AutoItem implements IRarityItem, ICreat
     }
 
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, LivingEntity pEntity) {
         return 32;
     }
 

@@ -308,7 +308,7 @@ public class WaterSpells implements ExileRegistryInit {
                                 .manualDesc("Strike enemies in front of you for "
                                                 + SpellCalcs.TIDAL_STRIKE.getLocDmgTooltip(Elements.Cold))
                                 .weaponReq(CastingWeapon.MELEE_WEAPON)
-                                .onCast(PartBuilder.playSound(SoundEvents.TRIDENT_THROW, 1D, 1D))
+                                .onCast(PartBuilder.playSound(SoundEvents.TRIDENT_THROW.value(), 1D, 1D))
                                 .onCast(PartBuilder.swordSweepParticles())
                                 .onCast(PartBuilder.damageInFront(SpellCalcs.TIDAL_STRIKE, Elements.Cold, 2D, 3D)
                                                 .addPerEntityHit(PartBuilder.groundEdgeParticles(ParticleTypes.RAIN,

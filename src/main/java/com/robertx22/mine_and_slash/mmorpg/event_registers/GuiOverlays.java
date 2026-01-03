@@ -8,6 +8,7 @@ import com.robertx22.mine_and_slash.gui.overlays.spell_cast_bar.SpellCastBarOver
 import com.robertx22.mine_and_slash.gui.overlays.spell_hotbar.SpellHotbarOverlay;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +26,7 @@ public class GuiOverlays {
         event.registerAbove(VanillaGuiLayers.CHAT,
                 ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "spell_hotbar"), new LayeredDraw.Layer() {
                     @Override
-                    public void render(GuiGraphics guiGraphics, float partialTick) {
+                    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
                         if (ClientConfigs.CLIENT.SPELL_HOTBAR_OVERLAY_TYPE
                                 .get() == ClientConfigs.HorizontalOrVertical.HORIZONTAL) {
                             if (ClientConfigs.getConfig().shouldRenderOverlay(OverlayType.SPELL_HOTBAR_HORIZONTAL)) {
@@ -46,10 +47,10 @@ public class GuiOverlays {
         event.registerAbove(VanillaGuiLayers.CHAT, ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "cast_bar"),
                 new LayeredDraw.Layer() {
                     @Override
-                    public void render(GuiGraphics guiGraphics, float partialTick) {
+                    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
                         if (ClientConfigs.getConfig().shouldRenderOverlay(OverlayType.SPELL_CAST_BAR)) {
-                            new SpellCastBarOverlay().onHudRender(guiGraphics,
-                                    partialTick);
+                            float partialTick = deltaTracker.getGameTimeDeltaPartialTick(true);
+                            new SpellCastBarOverlay().onHudRender(guiGraphics, partialTick);
                         }
                     }
                 });
@@ -57,7 +58,7 @@ public class GuiOverlays {
         event.registerAbove(VanillaGuiLayers.CHAT, ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "rpg_gui"),
                 new LayeredDraw.Layer() {
                     @Override
-                    public void render(GuiGraphics guiGraphics, float partialTick) {
+                    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
                         new RPGGuiOverlay().onHudRender(guiGraphics);
                     }
                 });
@@ -65,7 +66,7 @@ public class GuiOverlays {
         event.registerAbove(VanillaGuiLayers.CHAT,
                 ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "status_effects"), new LayeredDraw.Layer() {
                     @Override
-                    public void render(GuiGraphics guiGraphics, float partialTick) {
+                    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
                         if (ClientConfigs.CLIENT.STATUS_EFFECTS_OVERLAY_TYPE
                                 .get() == ClientConfigs.HorizontalOrVertical.HORIZONTAL) {
                             if (ClientConfigs.getConfig().shouldRenderOverlay(OverlayType.EFFECTS_HORIZONTAL)) {

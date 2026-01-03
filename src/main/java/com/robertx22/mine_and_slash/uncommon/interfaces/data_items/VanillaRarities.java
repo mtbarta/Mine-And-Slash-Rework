@@ -1,24 +1,42 @@
 package com.robertx22.mine_and_slash.uncommon.interfaces.data_items;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.Rarity;
-import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 
 import java.util.HashMap;
+import java.util.function.UnaryOperator;
 
 public class VanillaRarities {
 
-    public static Rarity LEGENDARY_ITEM = Rarity.create("LEGENDARY_ITEM",
-            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "legendary_item"), ChatFormatting.GOLD);
-    public static Rarity MYTHIC_ITEM = Rarity.create("MYTHIC_ITEM",
-            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "mythic_item"), ChatFormatting.DARK_PURPLE);
-    public static Rarity UNIQUE_ITEM = Rarity.create("UNIQUE_ITEM",
-            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "unique_item"), ChatFormatting.RED);
-    public static Rarity RUNED_ITEM = Rarity.create("RUNED_ITEM", ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "runed_item"),
-            ChatFormatting.YELLOW);
-    public static Rarity UNCOMMON_ITEM = Rarity.create("UNCOMMON_ITEM",
-            ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "uncommon_item"), ChatFormatting.GREEN);
+    // Style provider methods for the extensible enum system (referenced by
+    // enumextensions.json)
+    public static UnaryOperator<Style> legendaryStyle() {
+        return style -> style.withColor(ChatFormatting.GOLD);
+    }
+
+    public static UnaryOperator<Style> mythicStyle() {
+        return style -> style.withColor(ChatFormatting.DARK_PURPLE);
+    }
+
+    public static UnaryOperator<Style> uniqueStyle() {
+        return style -> style.withColor(ChatFormatting.RED);
+    }
+
+    public static UnaryOperator<Style> runedStyle() {
+        return style -> style.withColor(ChatFormatting.YELLOW);
+    }
+
+    public static UnaryOperator<Style> uncommonStyle() {
+        return style -> style.withColor(ChatFormatting.GREEN);
+    }
+
+    // Access the custom rarities created by the enum extension system
+    public static Rarity LEGENDARY_ITEM = Rarity.valueOf("MNS_LEGENDARY");
+    public static Rarity MYTHIC_ITEM = Rarity.valueOf("MNS_MYTHIC");
+    public static Rarity UNIQUE_ITEM = Rarity.valueOf("MNS_UNIQUE");
+    public static Rarity RUNED_ITEM = Rarity.valueOf("MNS_RUNED");
+    public static Rarity UNCOMMON_ITEM = Rarity.valueOf("MNS_UNCOMMON");
 
     public static HashMap<String, Rarity> MAP = new HashMap<>();
 
