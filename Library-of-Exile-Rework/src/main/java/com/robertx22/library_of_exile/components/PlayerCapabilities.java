@@ -35,6 +35,7 @@ public class PlayerCapabilities {
             e.printStackTrace();
         }
     }
+
     public static void saveAllOnDeath(net.neoforged.neoforge.event.entity.player.PlayerEvent.Clone event) {
         // NeoForge attachments handle copyOnDeath via builder.
     }

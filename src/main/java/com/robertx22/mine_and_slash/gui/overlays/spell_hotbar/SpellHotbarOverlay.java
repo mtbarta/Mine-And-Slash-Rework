@@ -35,7 +35,10 @@ public class SpellHotbarOverlay {
     public void onHudRender(GuiGraphics gui, OverlayConfig config, OverlayType type) {
 
         try {
-
+            // Early return if player is not available
+            if (mc.player == null) {
+                return;
+            }
             if (mc.getDebugOverlay().showDebugScreen()) {
                 return;
             }

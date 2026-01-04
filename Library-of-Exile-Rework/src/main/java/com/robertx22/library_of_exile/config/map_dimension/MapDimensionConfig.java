@@ -159,37 +159,9 @@ public class MapDimensionConfig {
         return true;
     }
 
-    public static final ModConfigSpec SPEC;
-    public static final MapDimensionConfig INSTANCE;
+    public ModConfigSpec spec;
 
-    static {
-        // This static block cannot directly access 'opt' or 'mapId' as they are method
-        // parameters.
-        // The config needs to be initialized with a default or placeholder, or the
-        // registration
-        // pattern needs to be adjusted to pass these values.
-        // For now, initializing with dummy values or assuming a single global config
-        // instance.
-        // The original code suggests a config per dimension, which is not directly
-        // supported by this static pattern.
-        // Assuming the intent is to have a single config instance for a specific
-        // dimension or a generic one.
-        // If multiple dimensions need separate configs, this static pattern is
-        // incorrect.
-        // Reverting to the original method signature for `register` but updating the
-        // internal types.
-        // The provided snippet for the static block and new register method is
-        // incompatible with the existing
-        // per-dimension config registration logic.
-        // I will apply the type changes (ForgeConfigSpec -> ModConfigSpec) and update
-        // the ModLoadingContext call
-        // within the existing `register` method, as that seems to be the most faithful
-        // interpretation
-        // of "Replace ForgeConfigSpec with ModConfigSpec. Update ModLoadingContext."
-        // while maintaining functionality.
-        SPEC = null; // Placeholder, will be set in the register method
-        INSTANCE = null; // Placeholder, will be set in the register method
-    }
+    public static final MapDimensionConfig INSTANCE = null; // Unused static placeholder
 
     public static MapDimensionConfig register(MapDimensionInfo info, MapDimensionConfigDefaults opt) {
         ResourceLocation mapId = info.dimensionId;
@@ -198,15 +170,12 @@ public class MapDimensionConfig {
                 .configure(b -> new MapDimensionConfig(b, opt, mapId.toString()));
         var SPEC = specPair.getRight();
         var CONFIG = specPair.getLeft();
+        CONFIG.spec = SPEC;
 
-        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
-        // Commenting out config registration as it requires access to ModContainer from
-        // the mod's constructor
-        // The mod using this library should register its own config
+        // In NeoForge 1.21, the mod must register the config itself.
+        // We expose the SPEC via CONFIG.spec so the calling mod can do:
         // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
-        // SPEC,
-        // CommonInit.defaultConfigName(ModConfig.Type.SERVER, mapId.getNamespace() +
-        // "_dimension"));
+        // info.config.spec, ...);
 
         ApiForgeEvents.registerForgeEvent(PlayerInteractEvent.RightClickItem.class, event -> {
 

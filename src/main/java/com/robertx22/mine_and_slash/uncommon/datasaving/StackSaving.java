@@ -95,10 +95,19 @@ public class StackSaving {
                         DroppedItemData::new,
                         () -> DataComponentTypes.DROPPED_DATA.get()));
 
-        // Simple boolean flags
-        public static DataComponentType<Boolean> FREE_SOULED = DataComponentTypes.FREE_SOULED.get();
-        public static DataComponentType<String> FORCE_TAG = DataComponentTypes.FORCE_TAG.get();
-        public static DataComponentType<Integer> TIER = DataComponentTypes.TIER.get();
+        // Simple boolean flags - use accessors to avoid calling .get() during class
+        // init
+        public static DataComponentType<Boolean> FREE_SOULED() {
+                return DataComponentTypes.FREE_SOULED.get();
+        }
+
+        public static DataComponentType<String> FORCE_TAG() {
+                return DataComponentTypes.FORCE_TAG.get();
+        }
+
+        public static DataComponentType<Integer> TIER() {
+                return DataComponentTypes.TIER.get();
+        }
 
         static ComponentDataSaver of(ComponentDataSaver t) {
                 return t;

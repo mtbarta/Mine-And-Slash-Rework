@@ -83,7 +83,8 @@ import java.util.UUID;
 
 public class EntityData implements ICap, INeededForClient {
 
-    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "entity_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "entity_data");
 
     public static EntityData get(LivingEntity entity) {
         return entity.getData(SlashAttachments.ENTITY_DATA);
@@ -427,7 +428,10 @@ public class EntityData implements ICap, INeededForClient {
             // this is a bit jank but it solves 2 things: fake players not having energy to
             // attack, and fake players not having stats because they dont tick
             // and stats are calc on tick..
-            Load.Unit(p).equipmentCache.setAllDirty();
+            var attackerData = Load.Unit(p);
+            if (attackerData != null) {
+                attackerData.equipmentCache.setAllDirty();
+            }
         } else {
             if (event.data.getNumber() > resources.getEnergy()) {
                 data.setCanceled(true);
@@ -662,9 +666,13 @@ public class EntityData implements ICap, INeededForClient {
             float cost = Energy.getInstance().scale(ModType.FLAT, slot.weapon_data.energy_cost_per_mob_attacked,
                     getLevel());
 
-            if (!Load.Unit(entity).cooldowns.isOnCooldown("swing_cost")) {
-                Load.Unit(entity).cooldowns.setOnCooldown("swing_cost", 3);
-                cost += Energy.getInstance().scale(ModType.FLAT, slot.weapon_data.energy_cost_per_swing, getLevel());
+            var entityData = Load.Unit(entity);
+            if (entityData != null) {
+                if (!entityData.cooldowns.isOnCooldown("swing_cost")) {
+                    entityData.cooldowns.setOnCooldown("swing_cost", 3);
+                    cost += Energy.getInstance().scale(ModType.FLAT, slot.weapon_data.energy_cost_per_swing,
+                            getLevel());
+                }
             }
 
             SpendResourceEvent event = new SpendResourceEvent(entity, null, ResourceType.energy, cost);
@@ -674,8 +682,11 @@ public class EntityData implements ICap, INeededForClient {
                 // this is a bit jank but it solves 2 things: fake players not having energy to
                 // attack, and fake players not having stats because they dont tick
                 // and stats are calc on tick..
-                Load.Unit(p).equipmentCache.setAllDirty();
-                Load.Unit(p).recalcStats_DONT_CALL();
+                var pData = Load.Unit(p);
+                if (pData != null) {
+                    pData.equipmentCache.setAllDirty();
+                    pData.recalcStats_DONT_CALL();
+                }
             } else {
                 if (event.data.getNumber() > resources.getEnergy()) {
                     data.setCanceled(true);
@@ -902,6 +913,14 @@ public class EntityData implements ICap, INeededForClient {
 
     public LivingEntity getEntity() {
         return entity;
+    }
+
+    public void setEntity(LivingEntity entity) {
+        this.entity = entity;
+        // Re-initialize equipmentCache if it was created with null, or update it
+        if (this.equipmentCache == null || this.equipmentCache.entity == null) {
+            this.equipmentCache = new CachedEntityStats(entity);
+        }
     }
 
     public void onSpellHitTarget(Entity spellEntity, LivingEntity target) {

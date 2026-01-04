@@ -274,16 +274,17 @@ public class OnItemInteract {
             }
         });
 
-        ForgeEvents.registerForgeEvent(net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent.class, x -> {
-            try {
-                if (!x.getPlayer().level().isClientSide) {
-                    ItemStack stack = x.getItemEntity().getItem();
-                    AutoItem.tryInsertTo(stack, x.getPlayer());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        ForgeEvents.registerForgeEvent(net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent.Pre.class,
+                x -> {
+                    try {
+                        if (!x.getPlayer().level().isClientSide) {
+                            ItemStack stack = x.getItemEntity().getItem();
+                            AutoItem.tryInsertTo(stack, x.getPlayer());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
 }

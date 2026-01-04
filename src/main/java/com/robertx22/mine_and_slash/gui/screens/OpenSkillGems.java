@@ -30,6 +30,7 @@ public class OpenSkillGems implements IContainerNamedScreen, IAlertScreen {
 
     @Override
     public boolean shouldAlert() {
-        return Load.player(ClientOnly.getPlayer()).spellCastingData.learnedSpellButHotbarIsEmpty();
+        var playerData = Load.player(ClientOnly.getPlayer());
+        return playerData != null && playerData.spellCastingData.learnedSpellButHotbarIsEmpty();
     }
 }

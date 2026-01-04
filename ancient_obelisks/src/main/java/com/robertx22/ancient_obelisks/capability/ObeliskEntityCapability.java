@@ -15,10 +15,15 @@ import java.util.UUID;
 import net.minecraft.core.HolderLookup;
 
 public class ObeliskEntityCapability implements INBTSerializable<CompoundTag> {
-    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(ObelisksMain.MODID, "entity_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(ObelisksMain.MODID,
+            "entity_data");
 
     public static ObeliskEntityCapability get(LivingEntity entity) {
-        return entity.getData(ObeliskAttachments.OBELISK_ENTITY);
+        var cap = entity.getData(ObeliskAttachments.OBELISK_ENTITY);
+        if (cap.entity == null) {
+            cap.entity = entity;
+        }
+        return cap;
     }
 
     LivingEntity entity;

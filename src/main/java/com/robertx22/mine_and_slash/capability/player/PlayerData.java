@@ -1,6 +1,7 @@
 package com.robertx22.mine_and_slash.capability.player;
 
 import com.robertx22.library_of_exile.components.ICap;
+import com.robertx22.library_of_exile.components.PlayerDataCapability;
 import com.robertx22.library_of_exile.main.Packets;
 import com.robertx22.library_of_exile.packets.SyncPlayerCapToClient;
 import com.robertx22.library_of_exile.utils.LoadSave;
@@ -41,10 +42,15 @@ import java.util.UUID;
 
 public class PlayerData implements ICap {
 
-    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "player_data");
+    public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "player_data");
 
     public static PlayerData get(LivingEntity entity) {
-        return entity.getData(SlashAttachments.PLAYER_DATA);
+        var cap = entity.getData(SlashAttachments.PLAYER_DATA);
+        if (entity instanceof Player player) {
+            cap.player = player;
+        }
+        return cap;
     }
 
     @Override
@@ -309,10 +315,8 @@ public class PlayerData implements ICap {
         return blank;
     }
 
-    public static final String ID = "rpg_player_data";
-
     @Override
     public String getCapIdForSyncing() {
-        return ID;
+        return PlayerDataCapability.CAP_ID;
     }
 }

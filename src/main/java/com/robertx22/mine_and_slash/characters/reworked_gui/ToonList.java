@@ -28,7 +28,11 @@ public class ToonList extends ObjectSelectionList<ToonEntry> {
 
         this.all = new ArrayList<>();
 
-        for (Map.Entry<Integer, CharacterData> en : Load.player(ClientOnly.getPlayer()).characters.map.entrySet()) {
+        var playerData = Load.player(ClientOnly.getPlayer());
+        if (playerData == null) {
+            return;
+        }
+        for (Map.Entry<Integer, CharacterData> en : playerData.characters.map.entrySet()) {
             var data = new ToonData(en.getValue(), en.getKey());
             all.add(data);
             addEntry(new ToonEntry(this, data));

@@ -5,8 +5,11 @@ import com.robertx22.mine_and_slash.config.forge.compat.CompatConfig;
 import com.robertx22.mine_and_slash.mixin_methods.TooltipMethod;
 import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -25,7 +28,8 @@ public abstract class ItemStackMixin {
     }
 
     @Inject(method = "hurtAndBreak", at = @At(value = "HEAD"), cancellable = true)
-    public <T extends LivingEntity> void hookLoot(int pAmount, T pEntity, Consumer<T> pOnBroken, CallbackInfo ci) {
+    public void hookLoot(int pAmount, ServerLevel serverLevel, ServerPlayer pEntity, Consumer<Item> pOnBroken,
+            CallbackInfo ci) {
 
         try {
 
@@ -33,7 +37,7 @@ public abstract class ItemStackMixin {
 
             if (CompatConfig.get().capItemDuraLoss()) {
                 ci.cancel();
-                ItemDamage.hurtAndBreak(stack, pAmount, pEntity, pOnBroken);
+                ItemDamage.hurtAndBreak(stack, pAmount, serverLevel, pEntity, pOnBroken);
             }
 
         } catch (Exception e) {
@@ -60,13 +64,12 @@ public abstract class ItemStackMixin {
         }
     }
 
-
     // copied from TooltipCallback fabric event
-    @Inject(method = {"getTooltipLines"}, at = {@At("RETURN")})
-    private void getTooltip(Player entity, TooltipFlag tooltipContext, CallbackInfoReturnable<List<Component>> list) {
+    @Inject(method = { "getTooltipLines" }, at = { @At("RETURN") })
+    private void getTooltip(Item.TooltipContext context, Player entity, TooltipFlag tooltipContext,
+            CallbackInfoReturnable<List<Component>> list) {
         ItemStack stack = (ItemStack) (Object) this;
         TooltipMethod.getTooltip(stack, entity, tooltipContext, list);
     }
-
 
 }

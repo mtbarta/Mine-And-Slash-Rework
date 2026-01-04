@@ -64,6 +64,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
 // FMLJavaModLoadingContext removed in NeoForge 1.21 - using constructor-injected IEventBus
 // import net.neoforged.neoforge.network.NetworkRegistry;
 // import net.neoforged.neoforge.network.simple.SimpleChannel;
@@ -84,11 +86,20 @@ public class MMORPG {
     public static ModRequiredRegisterInfo REGISTER_INFO = new ModRequiredRegisterInfo(SlashRef.MODID);
 
     public static String formatNumber(float num) {
-
-        if (num < ClientConfigs.getConfig().SHOW_DECIMALS_ON_NUMBER_SMALLER_THAN.get()) {
-            return DECIMAL_FORMAT.format(num);
+        // Only use client config on client side
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            if (num < ClientConfigs.getConfig().SHOW_DECIMALS_ON_NUMBER_SMALLER_THAN.get()) {
+                return DECIMAL_FORMAT.format(num);
+            } else {
+                return ((int) num) + "";
+            }
         } else {
-            return ((int) num) + "";
+            // Server fallback - use default threshold of 15
+            if (num < 15) {
+                return DECIMAL_FORMAT.format(num);
+            } else {
+                return ((int) num) + "";
+            }
         }
     }
 
@@ -133,6 +144,9 @@ public class MMORPG {
 
         bus.addListener((RegisterPayloadHandlersEvent event) -> {
             Packets.setRegistrar(event.registrar(SlashRef.MODID).versioned(PROTOCOL_VERSION));
+            // Register packets after the registrar is set
+            C2SPacketRegister.register();
+            S2CPacketRegister.register();
         });
 
         SlashCapabilities.register(bus);
@@ -166,17 +180,21 @@ public class MMORPG {
             x.register(SocketTooltip.SocketComponent.class, SocketTooltip::new);
         });
 
-        // DistExecutor removed, registered directly
-        // NeatForgeConfig.register(); // Todo check if safe
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec,
-                NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
-        bus.addListener(ClientInit::onInitializeClient);
-        ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
-            KeybindsRegister.register(x);
-        });
-        bus.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
-            RenderRegister.regRenders(x);
-        });
+        // Client-only registrations - wrap in dist check to prevent loading client
+        // classes on server
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfigs.clientSpec,
+                    NeatForgeConfig.defaultConfigName(ModConfig.Type.CLIENT, "mine_and_slash"));
+            // Register Neat config to initialize NeatConfig.instance
+            NeatForgeConfig.register(modContainer);
+            bus.addListener(ClientInit::onInitializeClient);
+            ForgeEvents.registerForgeEvent(RegisterKeyMappingsEvent.class, x -> {
+                KeybindsRegister.register(x);
+            });
+            bus.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) x -> {
+                RenderRegister.regRenders(x);
+            });
+        }
 
         bus.addListener(this::commonSetupEvent);
         bus.addListener(this::interMod);
@@ -199,9 +217,6 @@ public class MMORPG {
         SlashItemTags.init();
         // ExileDBInit.registerAllItems(); // after config registerAll
         CommonEvents.register();
-
-        C2SPacketRegister.register();
-        S2CPacketRegister.register();
 
         LifeCycleEvents.register();
 

@@ -265,13 +265,14 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         rightButtons.add(new SpellSchoolScreen());
         rightButtons.add(new OpenSkillGems());
         rightButtons.add(new TalentsScreen());
-        if (Load.player(mc.player).talents.getAllocatedPoints(TalentTree.SchoolType.TALENTS) > 0) {
+        var playerData = Load.player(mc.player);
+        if (playerData != null && playerData.talents.getAllocatedPoints(TalentTree.SchoolType.TALENTS) > 0) {
             rightButtons.add(new AscendancyTree());
         }
         rightButtons.add(new OpenJewelsScreen());
 
-        if (mc.level.dimension().location().equals(DungeonMain.DIMENSION_KEY)) {
-            if (Load.player(mc.player).prophecy.affixOffers.isEmpty()) {
+        if (mc.level != null && mc.level.dimension().location().equals(DungeonMain.DIMENSION_KEY)) {
+            if (playerData != null && playerData.prophecy.affixOffers.isEmpty()) {
                 rightButtons.add(new ProphecyScreen());
             } else {
                 rightButtons.add(OpenGuiWrapper.getProphecyCardsScreen());
@@ -378,7 +379,8 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
                     ChatFormatting.GREEN.getColor());
         }
 
-        int lvl = Load.player(mc.player).miscInfo.area_lvl;
+        var pData = Load.player(mc.player);
+        int lvl = pData != null ? pData.miscInfo.area_lvl : 0;
         MutableComponent areaLevel = Gui.AREA_LEVEL.locName().append(String.valueOf(lvl));
         gui.drawString(mc.font, areaLevel, guiLeft + sizeX / 2 - mc.font.width(areaLevel) / 2, guiTop + sizeY + 5,
                 ChatFormatting.YELLOW.getColor());

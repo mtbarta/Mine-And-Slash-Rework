@@ -40,8 +40,10 @@ public class PerkButton extends ImageButton {
     public static int SPACING = 26;
     public static int BIGGEST = 33;
 
-    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/skill_tree/perk_buttons.png");
-    public static ResourceLocation LOCKED_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/locked.png");
+    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/skill_tree/perk_buttons.png");
+    public static ResourceLocation LOCKED_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/locked.png");
 
     public Perk perk;
     public PointData point;
@@ -176,6 +178,12 @@ public class PerkButton extends ImageButton {
         float off = width / -2F * add;
         gui.pose().translate(off, off, 0);
         gui.pose().scale(scale, scale, 1.0f);
+
+        // Skip rendering if playerData is null
+        if (playerData == null) {
+            gui.pose().popPose();
+            return;
+        }
 
         PerkStatus status = playerData.talents.getStatus(Minecraft.getInstance().player, school, point);
 

@@ -34,10 +34,12 @@ public class NewDamageMain {
 
                 // this is cancelled by the time it hits here, probably..
                 /*
-                if (event.source != null && event.source.getEntity() instanceof LivingEntity caster) {
-                    event.damage = DamageConversion.tryConvert(event.source, caster, event.mob, event.damage);
-                }
-
+                 * if (event.source != null && event.source.getEntity() instanceof LivingEntity
+                 * caster) {
+                 * event.damage = DamageConversion.tryConvert(event.source, caster, event.mob,
+                 * event.damage);
+                 * }
+                 * 
                  */
             }
         });
@@ -51,8 +53,7 @@ public class NewDamageMain {
 
             @Override
             public void accept(ExileEvents.OnDamageEntity event) {
-                if (event.source != null) {
-                    var duck = (DamageSourceDuck) event.source;
+                if (event.source != null && event.source instanceof DamageSourceDuck duck) {
                     duck.tryOverrideDmgWithMns(event);
                 }
             }
@@ -66,8 +67,7 @@ public class NewDamageMain {
 
             @Override
             public void accept(ExileEvents.OnDamageEntity event) {
-                if (event.source != null) {
-                    var duck = (DamageSourceDuck) event.source;
+                if (event.source != null && event.source instanceof DamageSourceDuck duck) {
                     duck.tryOverrideDmgWithMns(event);
                 }
             }

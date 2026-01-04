@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeftRight, IAlertScreen {
-    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/asc_classes/background.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/asc_classes/background.png");
 
     static int sizeX = 250;
     static int sizeY = 233;
@@ -73,8 +74,13 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
         this.clearWidgets();
 
         try {
+            var playerData = Load.player(mc.player);
+            if (playerData == null) {
+                return;
+            }
 
-            var all = Load.player(mc.player).ascClass.school().stream().map(x -> ExileDB.SpellSchools().get(x)).collect(Collectors.toList());
+            var all = playerData.ascClass.school().stream().map(x -> ExileDB.SpellSchools().get(x))
+                    .collect(Collectors.toList());
 
             LEFT_SCHOOL = new SchoolButton(this, guiLeft + 41, guiTop + 13);
             RIGHT_SCHOOL = new SchoolButton(this, guiLeft + 185, guiTop + 13);
@@ -89,12 +95,12 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
                 RIGHT_SCHOOL.school = all.get(1);
             }
 
-
             addRenderableWidget(new BigSchoolButton(this, guiLeft + 107, guiTop + 8));
 
-
-            addRenderableWidget(new LeftRightButton(this, guiLeft + 100 - LeftRightButton.xSize - 5, guiTop + 25 - LeftRightButton.ySize / 2, true));
-            addRenderableWidget(new LeftRightButton(this, guiLeft + 150 + 5, guiTop + 25 - LeftRightButton.ySize / 2, false));
+            addRenderableWidget(new LeftRightButton(this, guiLeft + 100 - LeftRightButton.xSize - 5,
+                    guiTop + 25 - LeftRightButton.ySize / 2, true));
+            addRenderableWidget(
+                    new LeftRightButton(this, guiLeft + 150 + 5, guiTop + 25 - LeftRightButton.ySize / 2, false));
 
             addRenderableWidget(new PointsDisplayButton(PlayerPointsType.SPELLS, guiLeft + 8, guiTop + 206));
             addRenderableWidget(new PointsDisplayButton(PlayerPointsType.PASSIVES, guiLeft + 148, guiTop + 206));
@@ -105,7 +111,6 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
                         PointData point = e.getValue();
                         Perk perk = ExileDB.Perks().get(e.getKey());
 
-
                         if (perk != null && ExileDB.Perks().isRegistered(e.getKey())) {
                             int x = this.guiLeft + 12 + (point.x * SLOT_SPACING);
                             int y = this.guiTop + 178 - (point.y * SLOT_SPACING);
@@ -115,7 +120,6 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
                             // todo add a differently shaped button for passive stats
                         }
                     });
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,10 +136,10 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
     public void mnsRenderBG(GuiGraphics gui) {
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(BACKGROUND, mc.getWindow()
-                        .getGuiScaledWidth() / 2 - sizeX / 2,
+                .getGuiScaledWidth() / 2 - sizeX / 2,
                 mc.getWindow()
-                        .getGuiScaledHeight() / 2 - sizeY / 2, 0, 0, sizeX, sizeY
-        );
+                        .getGuiScaledHeight() / 2 - sizeY / 2,
+                0, 0, sizeX, sizeY);
     }
 
     @Override
@@ -145,7 +149,8 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
             mnsRenderBG(gui);
 
             gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            // gui.blit(currentSchool().getIconLoc(), guiLeft + 107, guiTop + 8, 36, 36, 36, 36, 36, 36);
+            // gui.blit(currentSchool().getIconLoc(), guiLeft + 107, guiTop + 8, 36, 36, 36,
+            // 36, 36, 36);
 
             // background
             gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -155,16 +160,21 @@ public class SpellSchoolScreen extends BaseScreen implements INamedScreen, ILeft
 
             super.render(gui, x, y, ticks);
 
-
             /*
-            String txt = Gui.SPELL_POINTS.locName().append(String.valueOf(PlayerPointsType.SPELLS.getFreePoints(mc.player))).getString();
-            GuiUtils.renderScaledText(gui, guiLeft + 50, guiTop + 215, 1, txt, ChatFormatting.WHITE);
-
-            String tx2 = Gui.PASSIVE_POINTS.locName().append(String.valueOf(PlayerPointsType.PASSIVES.getFreePoints(mc.player))).getString();
-            GuiUtils.renderScaledText(gui, guiLeft + 195, guiTop + 215, 1, tx2, ChatFormatting.WHITE);
-
+             * String txt =
+             * Gui.SPELL_POINTS.locName().append(String.valueOf(PlayerPointsType.SPELLS.
+             * getFreePoints(mc.player))).getString();
+             * GuiUtils.renderScaledText(gui, guiLeft + 50, guiTop + 215, 1, txt,
+             * ChatFormatting.WHITE);
+             * 
+             * String tx2 =
+             * Gui.PASSIVE_POINTS.locName().append(String.valueOf(PlayerPointsType.PASSIVES.
+             * getFreePoints(mc.player))).getString();
+             * GuiUtils.renderScaledText(gui, guiLeft + 195, guiTop + 215, 1, tx2,
+             * ChatFormatting.WHITE);
+             * 
              */
-            //buttons.forEach(b -> b.renderToolTip(matrix, x, y));
+            // buttons.forEach(b -> b.renderToolTip(matrix, x, y));
         } catch (Exception e) {
             e.printStackTrace();
         }

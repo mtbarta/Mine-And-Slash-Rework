@@ -28,16 +28,20 @@ public class FavorButton extends ImageButton {
 
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        setModTooltip();
-        ResourceLocation tex = Load.player(mc.player).favor.getTexture();
+        var playerData = Load.player(mc.player);
+        if (playerData == null) {
+            return;
+        }
+        setModTooltip(playerData);
+        ResourceLocation tex = playerData.favor.getTexture();
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         gui.blit(tex, getX(), getY(), FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X,
                 FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_X);
 
     }
 
-    public void setModTooltip() {
-        this.setTooltip(Tooltip.create(TextUTIL.mergeList(Load.player(mc.player).favor.getTooltip())));
+    public void setModTooltip(com.robertx22.mine_and_slash.capability.player.PlayerData playerData) {
+        this.setTooltip(Tooltip.create(TextUTIL.mergeList(playerData.favor.getTooltip())));
 
     }
 

@@ -24,13 +24,18 @@ import java.util.Locale;
 public class SpellOnHotbarRender {
     static int CHARGE_SIZE = 20;
 
-    private static final ResourceLocation CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/full_charges.png");
-    private static final ResourceLocation LOW_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/low_charges.png");
-    private static final ResourceLocation NO_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/charges/no_charges.png");
-    private static final ResourceLocation KEY_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/keybind_bg.png");
-    private static final ResourceLocation MOD_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/modbg.png");
-    private static final ResourceLocation COOLDOWN_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/spells/cooldown.png");
-
+    private static final ResourceLocation CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/charges/full_charges.png");
+    private static final ResourceLocation LOW_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/charges/low_charges.png");
+    private static final ResourceLocation NO_CHARGE = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/charges/no_charges.png");
+    private static final ResourceLocation KEY_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/keybind_bg.png");
+    private static final ResourceLocation MOD_BG = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/modbg.png");
+    private static final ResourceLocation COOLDOWN_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/spells/cooldown.png");
 
     public int place;
     public GuiGraphics gui;
@@ -74,13 +79,18 @@ public class SpellOnHotbarRender {
             }
         }
 
-        this.spell = Load.player(ClientOnly.getPlayer()).getSkillGemInventory().getHotbarGem(place).getSpell();
+        // Safely get spell - player data may be null during early loading
+        var playerData = Load.player(ClientOnly.getPlayer());
+        if (playerData != null) {
+            var gem = playerData.getSkillGemInventory().getHotbarGem(place);
+            this.spell = gem != null ? gem.getSpell() : null;
+        } else {
+            this.spell = null;
+        }
     }
-
 
     public void render() {
         var mc = Minecraft.getInstance();
-
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -94,7 +104,6 @@ public class SpellOnHotbarRender {
             int xs = (int) (x);
             int ys = (int) (y);
 
-
             if (spell != null) {
                 gui.blit(spell.getIconLoc(), xs, ys, 0, 0, 16, 16, 16, 16);
 
@@ -102,23 +111,28 @@ public class SpellOnHotbarRender {
                     drawCharge(xs, ys);
                 } else {
 
-                    CooldownsData cds = Load.Unit(mc.player).getCooldowns();
-                    float percent = (float) cds.getCooldownTicks(spell.GUID()) / (float) cds.getNeededTicks(spell.GUID());
-                    drawCooldown(gui, percent, xs, ys);
+                    var unitData = Load.Unit(mc.player);
+                    if (unitData != null) {
+                        CooldownsData cds = unitData.getCooldowns();
+                        float percent = (float) cds.getCooldownTicks(spell.GUID())
+                                / (float) cds.getNeededTicks(spell.GUID());
+                        drawCooldown(gui, percent, xs, ys);
+                    }
 
                 }
 
-                SummonedData summonedData = Load.player(mc.player).getSummonedData();
-                if (summonedData.getSummonedAmount(spell.GUID()) > 0) {
-                    drawSummoned(xs + 3, ys + 3, summonedData.getSummonedAmount(spell.GUID()));
+                var playerData = Load.player(mc.player);
+                if (playerData != null) {
+                    SummonedData summonedData = playerData.getSummonedData();
+                    if (summonedData.getSummonedAmount(spell.GUID()) > 0) {
+                        drawSummoned(xs + 3, ys + 3, summonedData.getSummonedAmount(spell.GUID()));
+                    }
                 }
-
 
                 int xkey = xs + 15;
                 int ykey = y + 14;
 
                 drawKey(xkey, ykey);
-
 
             }
         } catch (Exception e) {
@@ -127,8 +141,11 @@ public class SpellOnHotbarRender {
     }
 
     private void drawCharge(int xs, int ys) {
-
-        int charges = Load.player(ClientOnly.getPlayer()).spellCastingData.charges.getCharges(spell.config.charge_name);
+        var playerData = Load.player(ClientOnly.getPlayer());
+        if (playerData == null) {
+            return;
+        }
+        int charges = playerData.spellCastingData.charges.getCharges(spell.config.charge_name);
 
         ResourceLocation chargeTex = CHARGE;
 
@@ -141,10 +158,10 @@ public class SpellOnHotbarRender {
             }
         }
 
-        if (charges == 0) {
+        if (charges == 0 && playerData != null) {
             float needed = (float) spell.config.charge_regen;
-            float currentticks = (float) Load.player(mc.player)
-                    .spellCastingData.charges.getCurrentTicksChargingOf(spell.config.charge_name);
+            float currentticks = (float) playerData.spellCastingData.charges
+                    .getCurrentTicksChargingOf(spell.config.charge_name);
 
             float ticksleft = needed - currentticks;
 
@@ -172,14 +189,14 @@ public class SpellOnHotbarRender {
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1);
 
-
-        String txt = CLOC.translate(KeybindsRegister.getSpellHotbar(keyNum).key.getKey().getDisplayName()).toUpperCase(Locale.ROOT);
+        String txt = CLOC.translate(KeybindsRegister.getSpellHotbar(keyNum).key.getKey().getDisplayName())
+                .toUpperCase(Locale.ROOT);
         txt = txt.substring(0, 1);
         if (KeybindsRegister.getSpellHotbar(keyNum).key.isUnbound()) {
             if (disableKeyRender) {
                 txt = "";
             } else {
-                //txt = "UNBOUND KEY";
+                // txt = "UNBOUND KEY";
                 txt = "";
             }
         }
@@ -198,14 +215,16 @@ public class SpellOnHotbarRender {
             GuiUtils.renderScaledText(gui, xkey - 11, ykey, 0.6F, modtext, ChatFormatting.YELLOW);
         }
 
-
         RenderSystem.disableBlend(); // enables transparency
     }
 
     private void drawCooldown(GuiGraphics gui, float percent, int xs, int ys) {
         percent = Mth.clamp(percent, 0, 1F);
-
-        CooldownsData cds = Load.Unit(mc.player).getCooldowns();
+        var unitData = Load.Unit(mc.player);
+        if (unitData == null) {
+            return;
+        }
+        CooldownsData cds = unitData.getCooldowns();
 
         if (cds.getCooldownTicks(spell.GUID()) > 1) {
             gui.blit(COOLDOWN_TEX, this.x, this.y, 0, 0, 16, (int) (16 * percent), 16, 16);
@@ -216,7 +235,8 @@ public class SpellOnHotbarRender {
         int cdsec = cds.getCooldownTicks(spell.GUID()) / 20;
         if (cdsec > 1) {
             String stext = cdsec + "s";
-            //  GuiUtils.renderScaledText(gui, xs + 27, ys + 10, 0.75F, stext, ChatFormatting.YELLOW);
+            // GuiUtils.renderScaledText(gui, xs + 27, ys + 10, 0.75F, stext,
+            // ChatFormatting.YELLOW);
         }
     }
 
@@ -227,7 +247,6 @@ public class SpellOnHotbarRender {
         gui.blit(KEY_BG, x - 6, y - 6, 0, 0, bgsize, bgsize, bgsize, bgsize);
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1);
-
 
         String txt = String.valueOf(summonedAmount);
         // todo renderScaledText doesnt do push and pop but does antiscale.. FIX THIS

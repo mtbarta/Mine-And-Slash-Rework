@@ -3,7 +3,7 @@
   "required": true,
   "refmap": "${mod_id}.refmap.json",
   "package": "com.robertx22.mine_and_slash.mixins",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ArrowShootMixin",
     "AttributeMixin",
@@ -28,7 +28,6 @@
     "MixinServerWorldInfo",
     "MouseHandlerMixin",
     "NeatRenderMixin",
-    "StopOffhandRenderMixin",
     "TooltipMixin",
     "WorldRendererMixin"
   ],

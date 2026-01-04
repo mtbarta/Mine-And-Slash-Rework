@@ -16,12 +16,12 @@ import net.minecraft.world.level.ChunkPos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.robertx22.dungeon_realm.main.DungeonMain.DIMENSION_KEY;
 
 public class DungeonMapStructure extends DungeonStructure {
-
 
     @Override
     public String guid() {
@@ -30,17 +30,18 @@ public class DungeonMapStructure extends DungeonStructure {
 
     @Override
     public DungeonBuilder getMap(ChunkPos cp) {
-        var serverLevel = DungeonMain.server.getLevel(ResourceKey.create(Registries.DIMENSION, DIMENSION_KEY));
+        var serverLevel = DungeonMain.server
+                .getLevel(ResourceKey.create(Registries.DIMENSION, java.util.Objects.requireNonNull(DIMENSION_KEY)));
         AtomicReference<String> mapDungeon = new AtomicReference<>();
         var start = getStartChunkPos(cp);
         DungeonMain.ifMapData(serverLevel, cp.getMiddleBlockPosition(5)).ifPresentOrElse(
                 (x) -> mapDungeon.set(x.dungeon),
                 () -> {
                     var rand = MapGenerationUTIL.createRandom(start);
-                    String randomDungeon = RandomUtils.weightedRandom(DungeonDatabase.Dungeons().getFilterWrapped(i -> true).list, rand.nextDouble()).id;
+                    String randomDungeon = RandomUtils.weightedRandom(
+                            DungeonDatabase.Dungeons().getFilterWrapped(i -> true).list, rand.nextDouble()).id;
                     mapDungeon.set(randomDungeon);
-                }
-        );
+                });
 
         DungeonBuilder b = new DungeonBuilder(dungeonSettings(start, mapDungeon.get()));
         return b;
@@ -51,17 +52,18 @@ public class DungeonMapStructure extends DungeonStructure {
 
         List<Dungeon> dungeons = new ArrayList<>(DungeonDatabase.Dungeons().getFilterWrapped(x -> true).list);
         var dungeon = dungeons.stream().filter(x -> x.id.equals(mapDungeon)).findFirst();
-        IDungeon mapFinalDungeon = dungeon.orElseGet(() -> RandomUtils.weightedRandom(dungeons, rand.nextDouble()));;
+        IDungeon mapFinalDungeon = dungeon.orElseGet(() -> RandomUtils.weightedRandom(dungeons, rand.nextDouble()));
+        ;
 
         var settings = new DungeonBuilder.Settings(
-            rand,
-            DungeonConfig.get().MIN_MAP_ROOMS.get(),
-            DungeonConfig.get().MAX_MAP_ROOMS.get(),
-            mapFinalDungeon
-        );
+                rand,
+                DungeonConfig.get().MIN_MAP_ROOMS.get(),
+                DungeonConfig.get().MAX_MAP_ROOMS.get(),
+                mapFinalDungeon);
 
         // todo
-        // settings.possibleDungeons = Arrays.asList(DungeonDungeons.INSTANCE.NIGHT_TERROR.get());
+        // settings.possibleDungeons =
+        // Arrays.asList(DungeonDungeons.INSTANCE.NIGHT_TERROR.get());
 
         return settings;
     }

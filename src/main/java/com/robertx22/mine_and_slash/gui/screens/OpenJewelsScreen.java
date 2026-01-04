@@ -31,6 +31,9 @@ public class OpenJewelsScreen implements IContainerNamedScreen, IAlertScreen {
     @Override
     public boolean shouldAlert() {
         var data = Load.player(ClientOnly.getPlayer());
+        if (data == null) {
+            return false;
+        }
         return data.getJewels().hasFreeJewelSlots(ClientOnly.getPlayer());
     }
 }

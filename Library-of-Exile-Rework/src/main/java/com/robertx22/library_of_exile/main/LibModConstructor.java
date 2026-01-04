@@ -54,15 +54,21 @@ public class LibModConstructor extends OrderedModConstructor {
 
     @Override
     public void registerDeferredContainers(IEventBus bus) {
-        bus.addListener(CommonInit::initDeferred);
+        CommonInit.initDeferred(bus);
         bus.addListener(this::registerPayloads);
     }
 
     public void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) {
         Packets.setRegistrar(event.registrar(Ref.MODID));
-        // Register packets now that registrar is set
-        // C2SPacketRegister.register();
-        // S2CPacketRegister.register();
+        // Register server-to-client packets for library_of_exile
+        int i = 0;
+        Packets.registerServerToClient(new com.robertx22.library_of_exile.packets.registry.EfficientRegistryPacket<>(),
+                i++);
+        Packets.registerServerToClient(new com.robertx22.library_of_exile.packets.TileUpdatePacket(), i++);
+        Packets.registerServerToClient(
+                new com.robertx22.library_of_exile.packets.registry.TellClientToRegisterFromPackets(), i++);
+        // Register client-to-server packets for library_of_exile
+        Packets.registerClientToServerPacket(new com.robertx22.library_of_exile.packets.RequestTilePacket(), i++);
     }
 
     @Override

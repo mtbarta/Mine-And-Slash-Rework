@@ -1,6 +1,5 @@
 package com.robertx22.the_harvest.main;
 
-import com.google.common.collect.Lists;
 import com.robertx22.library_of_exile.config.map_dimension.MapDimensionConfigDefaults;
 import com.robertx22.library_of_exile.config.map_dimension.MapRegisterBuilder;
 import com.robertx22.library_of_exile.database.init.LibDatabase;
@@ -65,9 +64,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
 
 @Mod("the_harvest")
 public class HarvestMain {
@@ -134,25 +131,30 @@ public class HarvestMain {
             var output = event.getGenerator().getPackOutput();
             var chestsLootTables = new LootTableProvider.SubProviderEntry(HarvestLootTables.Provider::new,
                     LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+            var internalProvider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
                     event.getLookupProvider());
-            event.getGenerator().addProvider(true, provider);
+
+            event.getGenerator().addProvider(true, new net.minecraft.data.DataProvider() {
+                @Override
+                public java.util.concurrent.CompletableFuture<?> run(net.minecraft.data.CachedOutput pOutput) {
+                    return internalProvider.run(pOutput);
+                }
+
+                @Override
+                public String getName() {
+                    return "Loot Tables (" + MODID + ")";
+                }
+            });
 
             if (RUN_DEV_TOOLS) {
                 // todo this doesnt seem to gen here? ObeliskDatabase.generateJsons();
             }
-
-            try {
-                // .. why does this not work otherwise?
-                event.getGenerator().run();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
 
-        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
-        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
-        // HarvestConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                HarvestConfig.SPEC, "the_harvest.toml");
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                MAP.config.spec, "the_harvest_dimension.toml");
 
         bus.addListener(this::commonSetupEvent);
 
@@ -250,7 +252,7 @@ public class HarvestMain {
     }
 
     private static List<Integer> mygetEmptySlotsRandomized(Container inventory, Random rand) {
-        List<Integer> list = Lists.newArrayList();
+        List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             if (inventory.getItem(i)

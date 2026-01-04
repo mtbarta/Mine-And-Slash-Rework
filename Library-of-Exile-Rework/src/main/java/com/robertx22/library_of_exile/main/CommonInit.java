@@ -6,6 +6,7 @@ import com.robertx22.library_of_exile.events.ExileLibEvents;
 import com.robertx22.library_of_exile.events.base.ExileEvents;
 
 import com.robertx22.library_of_exile.registry.Database;
+import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.registry.ExileRegistryEvent;
 import com.robertx22.library_of_exile.registry.ExileRegistryType;
 import com.robertx22.library_of_exile.registry.SyncTime;
@@ -64,12 +65,12 @@ public class CommonInit {
 
     public static boolean RUN_DEV_TOOLS = false;
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Ref.MODID);
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, Ref.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, Ref.MODID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, Ref.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
-            .create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Ref.MODID);
+            .create(Registries.BLOCK_ENTITY_TYPE, Ref.MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TAB = DeferredRegister
-            .create(BuiltInRegistries.CREATIVE_MODE_TAB, Ref.MODID);
+            .create(Registries.CREATIVE_MODE_TAB, Ref.MODID);
 
     public static void initDeferred(IEventBus bus) {
         ITEMS.register(bus);
@@ -96,7 +97,7 @@ public class CommonInit {
     }
 
     public CommonInit(IEventBus bus) {
-        // LibAttachments.register(bus);
+        LibAttachments.register(bus);
         OrderedModConstructor.register(new LibModConstructor(Ref.MODID), bus);
 
         OrbsOfCraftingMain.init(bus);

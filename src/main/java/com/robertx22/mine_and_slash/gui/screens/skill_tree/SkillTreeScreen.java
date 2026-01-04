@@ -42,7 +42,8 @@ import java.awt.*;
 import java.util.*;
 
 public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen, IAlertScreen {
-    static ResourceLocation BIG_PANEL = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/skill_tree/bar.png");
+    static ResourceLocation BIG_PANEL = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/skill_tree/bar.png");
 
     public SchoolType schoolType;
 
@@ -252,6 +253,12 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         buttonConnections = new HashSet<>(3000);
 
         HashSet<PerkPointPair> integers = new HashSet(3000);
+
+        // Skip if playerData is null
+        if (this.playerData == null) {
+            return;
+        }
+
         children().forEach(b -> {
             if (b instanceof PerkButton pb) {
 

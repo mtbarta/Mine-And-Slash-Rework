@@ -21,18 +21,23 @@ public class CachedPlayerStats {
 
     public List<StatContext> statContexts = new ArrayList<>();
 
-
     public StatContext enchantCompat = null;
 
     private StatContext statCompat;
 
     public DirtySync ENCHANT_COMPAT = new DirtySync("enchant_compat", x -> {
-        this.enchantCompat = GearItemData.getEnchantCompatStats(p, Load.Unit(p).equipmentCache.getGear());
+        var data = Load.Unit(p);
+        if (data != null) {
+            this.enchantCompat = GearItemData.getEnchantCompatStats(p, data.equipmentCache.getGear());
+        }
     });
 
     public DirtySync STAT_COMPAT = new DirtySync("stat_compat", x -> {
         recalcStatCompat();
-        Load.Unit(p).equipmentCache.STAT_CALC.setDirty();
+        var data = Load.Unit(p);
+        if (data != null) {
+            data.equipmentCache.STAT_CALC.setDirty();
+        }
     });
     public StatContext omenStats;
 
@@ -47,12 +52,15 @@ public class CachedPlayerStats {
         this.statCompat = CommonStatUtils.addStatCompat(p);
     }
 
-    // I guess these could be all stats that don't change often, fine to set these to recalc everything
+    // I guess these could be all stats that don't change often, fine to set these
+    // to recalc everything
     public DirtySync ALLOCATED = new DirtySync("misc_player", x -> {
         recalcAllocated();
         EntityData unit = Load.Unit(p);
-        unit.equipmentCache.STAT_CALC.setDirty();
-        unit.getResources().capAll(p);
+        if (unit != null) {
+            unit.equipmentCache.STAT_CALC.setDirty();
+            unit.getResources().capAll(p);
+        }
     }) {
         @Override
         public void setDirty() {
@@ -93,7 +101,6 @@ public class CachedPlayerStats {
             playerData.aurasOn.add(aura.id);
         }
 
-
         statContexts.addAll(PlayerStatUtils.addToolStats(p)); // todo this needs fixing
 
         statContexts.add(PlayerStatUtils.addBonusExpPerCharacters(p));
@@ -104,11 +111,13 @@ public class CachedPlayerStats {
         statContexts.addAll(playerData.jewelData.getStatAndContext(p));
         statContexts.addAll(playerData.statPoints.getStatAndContext(p));
 
-        statContexts.addAll(PlayerStatUtils.addNewbieElementalResists(Load.Unit(p)));
+        var entityData = Load.Unit(p);
+        if (entityData != null) {
+            statContexts.addAll(PlayerStatUtils.addNewbieElementalResists(entityData));
+        }
         statContexts.addAll(playerData.talents.getStatAndContext(p));
         statContexts.addAll(playerData.ascClass.getStatAndContext(p));
         statContexts.addAll(playerData.prophecy.getStatAndContext(p));
-
 
     }
 }

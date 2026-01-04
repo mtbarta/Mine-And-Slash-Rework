@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 // Place it right at start of mod constructor
 public abstract class OrderedModConstructor {
 
-    //  public static HashMap<String, OrderedModConstructor> all = new HashMap<>();
+    // public static HashMap<String, OrderedModConstructor> all = new HashMap<>();
 
     String modid;
 
@@ -26,11 +26,23 @@ public abstract class OrderedModConstructor {
         try {
             lock.lock();
 
-            c.registerDeferredContainers(modbus);
-            c.registerDeferredEntries();
+            // NeoForge 1.21: All entries must be added to DeferredRegisters BEFORE
+            // register(bus) is called. The correct order is:
+            // 1. Register databases first (holders may access them during init)
+            // 2. Initialize all ExileKeyHolders (which add Items to DeferredRegisters)
+            // 3. Register entries from registerDeferredEntries()
+            // 4. Call registerDeferredContainers() which calls register(bus)
+
             c.registerDatabases();
 
-            final boolean[] done = {false};
+            for (ExileKeyHolder holder : c.getAllKeyHolders()) {
+                holder.init();
+            }
+
+            c.registerDeferredEntries();
+            c.registerDeferredContainers(modbus);
+
+            final boolean[] done = { false };
             ExileEvents.EXILE_REGISTRY_GATHER.register(new EventConsumer<ExileRegistryEvent>() {
                 @Override
                 public void accept(ExileRegistryEvent e) {
@@ -44,12 +56,6 @@ public abstract class OrderedModConstructor {
             for (ExileRegistryEventClass event : c.getRegisterEvents()) {
                 event.register();
             }
-            //registerDatabaseEntries();
-
-            for (ExileKeyHolder holder : c.getAllKeyHolders()) {
-                holder.init();
-            }
-            // all.put(modid, this);
         } finally {
             lock.unlock();
         }

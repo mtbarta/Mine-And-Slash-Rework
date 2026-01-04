@@ -43,8 +43,12 @@ public class MainProphecyButton extends ImageButton {
     }
 
     public void setModTooltip() {
+        var playerData = Load.player(mc.player);
+        if (playerData == null) {
+            return;
+        }
 
-        var data = Load.player(mc.player).prophecy;
+        var data = playerData.prophecy;
 
         List<MutableComponent> list = new ArrayList<>();
 

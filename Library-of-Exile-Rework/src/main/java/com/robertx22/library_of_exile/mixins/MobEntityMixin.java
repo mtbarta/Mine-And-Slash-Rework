@@ -1,7 +1,6 @@
 package com.robertx22.library_of_exile.mixins;
 
 import com.robertx22.library_of_exile.components.EntityInfoComponent;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -17,7 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MobEntityMixin {
 
     @Inject(method = "finalizeSpawn", at = @At("HEAD"))
-    private void hook(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag, CallbackInfoReturnable<SpawnGroupData> cir) {
+    private void hook(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason,
+            SpawnGroupData pSpawnData, CallbackInfoReturnable<SpawnGroupData> cir) {
 
         try {
             LivingEntity en = (LivingEntity) (Object) this;

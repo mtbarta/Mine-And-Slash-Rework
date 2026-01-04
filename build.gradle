@@ -21,6 +21,21 @@ minecraft {
     }
 }
 
+// Configure run configurations to include all subproject mods
+runs {
+    configureEach {
+        modSource project.sourceSets.main
+        modSource project(':Library-of-Exile-Rework').sourceSets.main
+        modSource project(':dungeon_realm').sourceSets.main
+        modSource project(':the_harvest').sourceSets.main
+        modSource project(':ancient_obelisks').sourceSets.main
+    }
+
+    data {
+        programArguments '--mod', 'mmorpg', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude '.cache/**'

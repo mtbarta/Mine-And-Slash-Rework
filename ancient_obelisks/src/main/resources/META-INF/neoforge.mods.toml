@@ -1,5 +1,5 @@
 modLoader = "javafml" #mandatory
-loaderVersion = "[36,)"
+loaderVersion = "[1,)"
 license = "All rights reserved"
 issueTrackerURL = "${mod_issues_link}"
 [[mods]]
@@ -13,6 +13,8 @@ authors = "mcrobertx22"
 description = '''
 Obelisks of the Ancients spawn across the world, can you conquer them?
 '''
+[[mixins]]
+config = "ancient_obelisks-mixins.json"
 [[dependencies.${mod_id}]]
 modId = "neoforge"
 mandatory = true

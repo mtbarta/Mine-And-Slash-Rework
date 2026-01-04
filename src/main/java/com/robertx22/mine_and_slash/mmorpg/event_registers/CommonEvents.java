@@ -164,7 +164,7 @@ public class CommonEvents {
             }
         });
 
-        ForgeEvents.registerForgeEvent(ItemEntityPickupEvent.class, event ->
+        ForgeEvents.registerForgeEvent(ItemEntityPickupEvent.Pre.class, event ->
 
         {
             if (event.getPlayer() instanceof ServerPlayer player) {

@@ -28,7 +28,8 @@ public class ExilePotionEvent extends EffectEvent {
 
     CalculatedSpellData calc;
 
-    public ExilePotionEvent(CalculatedSpellData calc, int lvl, ExileEffect effect, GiveOrTake2 giveOrTake, LivingEntity caster, LivingEntity target, int tickDuration, boolean infinite) {
+    public ExilePotionEvent(CalculatedSpellData calc, int lvl, ExileEffect effect, GiveOrTake2 giveOrTake,
+            LivingEntity caster, LivingEntity target, int tickDuration, boolean infinite) {
         super(1, caster, target);
         this.lvl = lvl;
         this.calc = calc;
@@ -59,16 +60,17 @@ public class ExilePotionEvent extends EffectEvent {
 
         boolean applied = extraData.stacks == 0;
 
-
         if (action == GiveOrTake2.take) {
 
             extraData.stacks -= stacks;
             extraData.stacks = Mth.clamp(extraData.stacks, 0, effect.getMaxCharges(this.targetData));
             extraData.str_multi = data.getNumber();
 
-            Load.Unit(target).equipmentCache.STATUS.setDirty();
+            var targetData = Load.Unit(target);
+            if (targetData != null) {
+                targetData.equipmentCache.STATUS.setDirty();
+            }
         } else {
-
 
             extraData.stacks += stacks;
             extraData.stacks = Mth.clamp(extraData.stacks, 1, effect.getMaxCharges(this.targetData));
@@ -84,15 +86,20 @@ public class ExilePotionEvent extends EffectEvent {
         extraData.is_infinite = data.getBoolean(EventData.EFFECT_IS_INFINITE);
 
         if (extraData.stacks < 1) {
-            Load.Unit(target).getStatusEffectsData().delete(effect);
+            var delData = Load.Unit(target);
+            if (delData != null) {
+                delData.getStatusEffectsData().delete(effect);
+            }
         }
 
         if (applied) {
             effect.onApply(target);
         }
 
-        Load.Unit(target).equipmentCache.STATUS.setDirty();
+        var dirtyData = Load.Unit(target);
+        if (dirtyData != null) {
+            dirtyData.equipmentCache.STATUS.setDirty();
+        }
     }
-
 
 }

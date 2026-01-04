@@ -42,7 +42,7 @@ public class ClientInit {
 
     public static void onInitializeClient(final FMLClientSetupEvent event) {
 
-        ForgeEvents.registerForgeEvent(ScreenEvent.Init.class, x -> {
+        ForgeEvents.registerForgeEvent(ScreenEvent.Init.Post.class, x -> {
             BackpackQuickLootButton.addLootButton(x);
         });
 
@@ -138,7 +138,7 @@ public class ClientInit {
 
         });
 
-        ForgeEvents.registerForgeEvent(RenderLivingEvent.class, x -> {
+        ForgeEvents.registerForgeEvent(RenderLivingEvent.Post.class, x -> {
             for (DamageParticle p : DamageParticleRenderer.PARTICLES) {
                 Minecraft mc = Minecraft.getInstance();
                 DamageParticleRenderer.renderNameTag(mc.getEntityRenderDispatcher().camera, p.renderString, p,

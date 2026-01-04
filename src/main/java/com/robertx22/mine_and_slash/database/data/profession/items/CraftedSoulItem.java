@@ -51,7 +51,7 @@ public class CraftedSoulItem extends AutoItem implements ICreativeTabTiered, IRa
     public StatSoulData getSoul(ItemStack stack) {
         StatSoulData data = StatSoulData.ofFamily(ExileDB.GearRarities().get(rar), LeveledItem.getTier(stack), fam);
 
-        String force = stack.get(StackSaving.FORCE_TAG);
+        String force = stack.get(StackSaving.FORCE_TAG());
         if (force != null && !force.isEmpty()) {
             data.force_tag = force;
         }

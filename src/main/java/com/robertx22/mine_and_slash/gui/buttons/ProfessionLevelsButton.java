@@ -51,20 +51,26 @@ public class ProfessionLevelsButton extends ImageButton {
     }
 
     public void setModTooltip() {
+        var playerData = Load.player(ClientOnly.getPlayer());
+        if (playerData == null) {
+            return;
+        }
 
         List<Component> list = new ArrayList<>();
         list.add(Words.PROFESSIONS.locName().withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
         list.add(Component.empty());
 
         for (Profession prof : ExileDB.Professions().getList()) {
-            var lvl = Load.player(ClientOnly.getPlayer()).professions.getLevel(prof.GUID());
-            int exp = Load.player(ClientOnly.getPlayer()).professions.getExp(prof.GUID());
-            int maxexp = Load.player(ClientOnly.getPlayer()).professions.getMaxExp(prof.GUID());
+            var lvl = playerData.professions.getLevel(prof.GUID());
+            int exp = playerData.professions.getExp(prof.GUID());
+            int maxexp = playerData.professions.getMaxExp(prof.GUID());
+
+            var unit = Load.Unit(ClientOnly.getPlayer());
+            int unitLevel = unit != null ? unit.getLevel() : 0;
 
             class cappedChecker {
                 private MutableComponent check() {
-                    if (Load.player(ClientOnly.getPlayer()).professions.getLevel(prof.GUID()) >= Load
-                            .Unit(ClientOnly.getPlayer()).getLevel()) {
+                    if (playerData.professions.getLevel(prof.GUID()) >= unitLevel) {
                         return Words.CAPPED_TO_LVL.locName();
                     } else {
                         return Component.literal("");
@@ -82,9 +88,9 @@ public class ProfessionLevelsButton extends ImageButton {
         }
         list.add(Component.empty());
 
-        list.add(Gui.RESTED_COMBAT_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusCombatExp))
+        list.add(Gui.RESTED_COMBAT_EXP.locName().append(String.valueOf(playerData.rested_xp.bonusCombatExp))
                 .withStyle(ChatFormatting.WHITE));
-        list.add(Gui.RESTED_PROF_EXP.locName().append(String.valueOf(Load.player(mc.player).rested_xp.bonusProfExp))
+        list.add(Gui.RESTED_PROF_EXP.locName().append(String.valueOf(playerData.rested_xp.bonusProfExp))
                 .withStyle(ChatFormatting.WHITE));
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(list)));

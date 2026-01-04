@@ -66,9 +66,7 @@ import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
 
 @Mod("dungeon_realm")
 public class DungeonMain {
@@ -143,20 +141,26 @@ public class DungeonMain {
             var output = event.getGenerator().getPackOutput();
             var chestsLootTables = new LootTableProvider.SubProviderEntry(
                     DungeonLootTables.DungeonLootTableProvider::new, LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+            var internalProvider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
                     event.getLookupProvider());
-            event.getGenerator().addProvider(true, provider);
 
-            try {
-                // .. why does this not work otherwise?
-                event.getGenerator().run();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            event.getGenerator().addProvider(true, new net.minecraft.data.DataProvider() {
+                @Override
+                public java.util.concurrent.CompletableFuture<?> run(net.minecraft.data.CachedOutput pOutput) {
+                    return internalProvider.run(pOutput);
+                }
+
+                @Override
+                public String getName() {
+                    return "Loot Tables (" + MODID + ")";
+                }
+            });
         });
 
-        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
-        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER, DungeonConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                DungeonConfig.SPEC, "dungeon_realm.toml");
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                MAP.config.spec, "dungeon_realm_dimension.toml");
 
         bus.addListener(this::commonSetupEvent);
 

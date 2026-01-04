@@ -29,13 +29,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class MapChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<MapChunkGenerator> CODEC = RecordCodecBuilder.create((b) -> {
-        var group = b.group(
+    public static final MapCodec<MapChunkGenerator> MAP_CODEC = RecordCodecBuilder.mapCodec((b) -> {
+        return b.group(
                 FlatLevelGeneratorSettings.CODEC.fieldOf("settings").forGetter(x -> x.settings),
-                ExtraCodecs.NON_EMPTY_STRING.fieldOf("map_id").forGetter(x -> x.mapId));
-
-        return group.apply(b, b.stable((x, y) -> new MapChunkGenerator(x, y)));
+                ExtraCodecs.NON_EMPTY_STRING.fieldOf("map_id").forGetter(x -> x.mapId))
+                .apply(b, MapChunkGenerator::new);
     });
+
+    public static final Codec<MapChunkGenerator> CODEC = MAP_CODEC.codec();
 
     public final FlatLevelGeneratorSettings settings;
 
@@ -46,8 +47,6 @@ public class MapChunkGenerator extends ChunkGenerator {
         this.settings = set;
         this.mapId = mapid;
     }
-
-    public static final MapCodec<MapChunkGenerator> MAP_CODEC = CODEC.fieldOf("generator");
 
     @Override
     protected MapCodec<? extends ChunkGenerator> codec() {

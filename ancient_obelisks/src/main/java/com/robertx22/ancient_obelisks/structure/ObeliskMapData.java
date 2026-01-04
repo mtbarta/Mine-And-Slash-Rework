@@ -12,7 +12,7 @@ import com.robertx22.library_of_exile.utils.RandomUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -51,7 +51,10 @@ public class ObeliskMapData {
 
     public List<LivingEntity> getAllLivingMobs(Level world, BlockPos pos) {
         return world.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 35, 30, 35)).stream()
-                .filter(x -> ObeliskEntityCapability.get(x).data.isObeSpawn).collect(Collectors.toList());
+                .filter(x -> {
+                    var cap = ObeliskEntityCapability.get(x);
+                    return cap != null && cap.data.isObeSpawn;
+                }).collect(Collectors.toList());
     }
 
     public void tryStartNewWave(Level world, BlockPos pos) {
@@ -134,21 +137,24 @@ public class ObeliskMapData {
 
     }
 
-    public void spawnMob(Level world, BlockPos pos, EntityType type) {
+    public void spawnMob(Level world, BlockPos pos, EntityType<?> type) {
 
         this.mobsLeftForWave--;
 
-        LivingEntity en = (LivingEntity) type.create(world);
-        en.setPos(pos.getX(), pos.getY(), pos.getZ());
+        Entity entity = type.create(world);
+        if (entity instanceof LivingEntity en) {
+            en.setPos(pos.getX(), pos.getY(), pos.getZ());
 
-        if (en instanceof Mob mob) {
-            mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND,
-                    (SpawnGroupData) null);
+            if (en instanceof Mob mob) {
+                mob.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.COMMAND, null);
+            }
+
+            world.addFreshEntity(en);
+
+            var cap = ObeliskEntityCapability.get(en);
+            if (cap != null) {
+                cap.data.isObeSpawn = true;
+            }
         }
-
-        world.addFreshEntity(en);
-
-        ObeliskEntityCapability.get(en).data.isObeSpawn = true;
-
     }
 }

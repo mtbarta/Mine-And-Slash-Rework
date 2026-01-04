@@ -1,7 +1,5 @@
 package com.robertx22.ancient_obelisks.main;
 
-import com.google.common.collect.Lists;
-import com.robertx22.ancient_obelisks.capability.ObeliskEntityCapability;
 import com.robertx22.ancient_obelisks.configs.ObeliskConfig;
 import com.robertx22.ancient_obelisks.database.ObeliskDatabase;
 import com.robertx22.ancient_obelisks.item.ObeliskItemNbt;
@@ -38,8 +36,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -47,11 +44,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.common.NeoForge;
+
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 // AttachCapabilitiesEvent removed
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -59,12 +55,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
 @Mod("ancient_obelisks")
 public class ObelisksMain {
@@ -133,26 +128,30 @@ public class ObelisksMain {
             var output = event.getGenerator().getPackOutput();
             var chestsLootTables = new LootTableProvider.SubProviderEntry(
                     ObeliskLootTables.ObeliskLootTableProvider::new, LootContextParamSets.CHEST);
-            var provider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
+            var internalProvider = new LootTableProvider(output, Set.of(), List.of(chestsLootTables),
                     event.getLookupProvider());
-            event.getGenerator().addProvider(true, provider);
+
+            event.getGenerator().addProvider(true, new net.minecraft.data.DataProvider() {
+                @Override
+                public java.util.concurrent.CompletableFuture<?> run(@Nonnull net.minecraft.data.CachedOutput pOutput) {
+                    return internalProvider.run(pOutput);
+                }
+
+                @Override
+                public String getName() {
+                    return "Loot Tables (" + MODID + ")";
+                }
+            });
 
             if (RUN_DEV_TOOLS) {
                 // todo this doesnt seem to gen here? ObeliskDatabase.generateJsons();
             }
-
-            try {
-                // .. why does this not work otherwise?
-                event.getGenerator().run();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
 
-        // In NeoForge 1.21, registerConfig is on ModContainer, not ModLoadingContext
-        // The mod should register config using ModContainer from constructor
-        // ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
-        // ObeliskConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                ObeliskConfig.SPEC, "ancient_obelisks.toml");
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER,
+                MAP.config.spec, "ancient_obelisks_dimension.toml");
 
         bus.addListener(this::commonSetupEvent);
 
@@ -176,7 +175,7 @@ public class ObelisksMain {
             }
         });
 
-        ApiForgeEvents.registerForgeEvent(MobSpawnEvent.class, event -> {
+        ApiForgeEvents.registerForgeEvent(FinalizeSpawnEvent.class, event -> {
             var en = event.getEntity();
             if (!en.level().isClientSide) {
                 ifMapData(event.getEntity().level(), event.getEntity().blockPosition()).ifPresent(x -> {
@@ -244,7 +243,7 @@ public class ObelisksMain {
     }
 
     private static List<Integer> mygetEmptySlotsRandomized(Container inventory, Random rand) {
-        List<Integer> list = Lists.newArrayList();
+        List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             if (inventory.getItem(i)

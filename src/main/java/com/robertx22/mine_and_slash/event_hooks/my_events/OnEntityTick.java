@@ -17,7 +17,6 @@ import java.util.Map;
 
 public class OnEntityTick {
 
-
     public static void onTick(LivingEntity entity) {
 
         try {
@@ -38,7 +37,6 @@ public class OnEntityTick {
 
             data.immuneTicks--;
 
-
             data.ailments.onTick(entity);
 
             data.getStatusEffectsData().tick(entity);
@@ -49,8 +47,8 @@ public class OnEntityTick {
                 data.leech.onSecondUseLeeches(data);
             }
 
-
-            // todo lets see if this works fine, no need to lag if mobs anyway recalculate stats when needed
+            // todo lets see if this works fine, no need to lag if mobs anyway recalculate
+            // stats when needed
             if (entity instanceof Player) {
                 checkGearChanged(entity);
 
@@ -69,7 +67,8 @@ public class OnEntityTick {
                 if (!rar.spells.isEmpty()) {
                     for (String id : rar.spells) {
 
-                        // todo this is just a quick workaround, ideally mobs should be using the same cast code as players
+                        // todo this is just a quick workaround, ideally mobs should be using the same
+                        // cast code as players
                         var spell = ExileDB.Spells().get(id);
 
                         if (!data.getCooldowns().isOnCooldown(id)) {
@@ -105,6 +104,10 @@ public class OnEntityTick {
         }
 
         EntityData data = Load.Unit(entity);
+
+        if (data == null) {
+            return;
+        }
 
         EntityGears gears = data.getCurrentGears();
 

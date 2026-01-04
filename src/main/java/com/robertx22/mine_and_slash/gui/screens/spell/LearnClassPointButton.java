@@ -97,7 +97,8 @@ public class LearnClassPointButton extends ImageButton {
         gui.blit(OVERLAY, getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
                 BUTTON_SIZE_X);
 
-        int currentlvl = Load.player(mc.player).ascClass.getLevel(perk.GUID());
+        var playerData = Load.player(mc.player);
+        int currentlvl = playerData != null ? playerData.ascClass.getLevel(perk.GUID()) : 0;
 
         ChatFormatting color = ChatFormatting.GRAY;
 

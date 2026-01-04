@@ -21,14 +21,18 @@ import java.util.Objects;
 
 public class CommonStatUtils {
 
-
     // no idea about perf impact lets keep this player only for now
     public static StatContext addStatCompat(LivingEntity en) {
         List<ExactStatData> list = new ArrayList<>();
 
+        var unit = Load.Unit(en);
+        if (unit == null) {
+            return new SimpleStatCtx(StatContext.StatCtxType.VANILLA_STAT_COMPAT, list);
+        }
+
         for (StatCompat c : ExileDB.StatCompat().getList()) {
             if (c.isAttributeCompat()) {
-                var data = c.getResult(en, Load.Unit(en).getLevel());
+                var data = c.getResult(en, unit.getLevel());
                 if (data != null) {
                     list.add(data);
                 }
@@ -39,7 +43,11 @@ public class CommonStatUtils {
     }
 
     public static List<StatContext> addExactCustomStats(LivingEntity en) {
-        return Load.Unit(en)
+        var unit = Load.Unit(en);
+        if (unit == null) {
+            return new ArrayList<>();
+        }
+        return unit
                 .getCustomExactStats()
                 .getStatAndContext(en);
     }
@@ -70,12 +78,13 @@ public class CommonStatUtils {
 
     public static List<StatContext> addMapAffixStats(LivingEntity en) {
 
-
         var list = new ArrayList<StatContext>();
 
         // todo make this CONNECTED to other mods if they spawn in there.
-        // an obelisk that spawned in a map should also have map stats in it and count as a map
-        // ALSO, obelisks shouldnt be able to take more than 1 map per block, inside these dimensions
+        // an obelisk that spawned in a map should also have map stats in it and count
+        // as a map
+        // ALSO, obelisks shouldnt be able to take more than 1 map per block, inside
+        // these dimensions
 
         WorldUtils.ifMapData(en.level(), en.blockPosition()).ifPresent(map -> {
             MapItemData data = map.map;

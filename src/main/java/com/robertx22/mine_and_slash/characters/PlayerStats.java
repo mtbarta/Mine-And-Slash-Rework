@@ -5,17 +5,15 @@ import com.robertx22.mine_and_slash.database.data.stats.types.resources.energy.E
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.health.Health;
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.magic_shield.MagicShield;
 import com.robertx22.mine_and_slash.database.data.stats.types.resources.mana.Mana;
-import com.robertx22.mine_and_slash.mmorpg.ForgeEvents;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import net.minecraft.core.registries.Registries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,11 +32,15 @@ public class PlayerStats {
         public final List<ResourceLocation> customStats = new ArrayList<>();
 
         @SubscribeEvent
-        public void commonSetup(FMLCommonSetupEvent event) {
-            event.enqueueWork(() -> customStats.forEach(it -> {
-                Registry.register(BuiltInRegistries.CUSTOM_STAT, it.getPath(), it);
-                Stats.CUSTOM.get(it, StatFormatter.DEFAULT);
-            }));
+        public void register(RegisterEvent event) {
+            if (event.getRegistryKey().equals(Registries.CUSTOM_STAT)) {
+                event.register(Registries.CUSTOM_STAT, helper -> {
+                    customStats.forEach(it -> {
+                        helper.register(it, it);
+                    });
+                });
+                customStats.forEach(it -> Stats.CUSTOM.get(it, StatFormatter.DEFAULT));
+            }
         }
     }
 

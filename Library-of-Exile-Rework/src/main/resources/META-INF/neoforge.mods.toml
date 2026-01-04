@@ -1,5 +1,5 @@
 modLoader = "javafml" #mandatory
-loaderVersion = "[36,)"
+loaderVersion = "[1,)"
 license = "All rights reserved"
 issueTrackerURL = "${mod_issues_link}"
 [[mods]]
@@ -13,6 +13,8 @@ authors = "mcrobertx22"
 description = '''
 Library mod for Mine and Slash and mine and slash accessories.
 '''
+[[mixins]]
+config = "library_of_exile.mixins.json"
 [[dependencies.library_of_exile]]
 modId = "neoforge"
 mandatory = true

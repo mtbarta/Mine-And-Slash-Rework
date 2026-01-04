@@ -44,11 +44,11 @@ public class AutoItem implements JsonExileRegistry<AutoItem>, IAutoGson<AutoItem
     public static void tryInsertTo(ItemStack stack, Player p) {
         if (!StackSaving.GEARS.has(stack)) {
             // Check if the item is already "free_souled" using data components
-            if (!stack.getOrDefault(StackSaving.FREE_SOULED, false)) {
+            if (!stack.getOrDefault(StackSaving.FREE_SOULED(), false)) {
                 var auto = AutoItem.getRandom(stack.getItem());
                 if (auto != null) {
                     // Mark as free_souled
-                    stack.set(StackSaving.FREE_SOULED, true);
+                    stack.set(StackSaving.FREE_SOULED(), true);
 
                     var data = auto.create(p);
                     var ex = ExileStack.of(stack);

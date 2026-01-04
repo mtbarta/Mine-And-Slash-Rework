@@ -45,7 +45,8 @@ public class SpellButton extends ImageButton {
 
         // super.renderWidget(gui, mouseX, mouseY, delta);
 
-        boolean flicker = Load.player(ClientOnly.getPlayer()).spellCastingData.learnedSpellButHotbarIsEmpty();
+        var playerData = Load.player(ClientOnly.getPlayer());
+        boolean flicker = playerData != null && playerData.spellCastingData.learnedSpellButHotbarIsEmpty();
 
         var mc = Minecraft.getInstance();
 
@@ -66,7 +67,12 @@ public class SpellButton extends ImageButton {
     }
 
     public SkillGemData getSpell() {
-        return Load.player(ClientOnly.getPlayer()).spellCastingData.getSpellData(slot).getData();
+        var playerData = Load.player(ClientOnly.getPlayer());
+        if (playerData == null) {
+            return null;
+        }
+        var spellData = playerData.spellCastingData.getSpellData(slot);
+        return spellData != null ? spellData.getData() : null;
     }
 
     public boolean hasSpell() {

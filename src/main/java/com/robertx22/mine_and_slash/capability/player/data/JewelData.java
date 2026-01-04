@@ -26,14 +26,21 @@ public class JewelData implements IStatCtx {
     private transient List<String> wearingUniqueJewel = new ArrayList<>();
 
     public JewelData(Player player) {
-        this((int) Load.Unit(player).getUnit().getCalculatedStat(JewelSocketStat.getInstance()).getValue(), player);
+        // When player is null (during attachment initialization), use default size 0
+        // The inventory will be resized properly when player data is attached to actual
+        // player
+        this(player == null ? 0
+                : (int) Load.Unit(player).getUnit().getCalculatedStat(JewelSocketStat.getInstance()).getValue(),
+                player);
     }
 
     public JewelData(int size, Player player) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            //this is horrible but I don't know why this could be null.
-            //also smth is using new PlayerData() on client every tick but I can't find the source
-            if (player == null) this.player = ClientOnly.getPlayer();
+            // this is horrible but I don't know why this could be null.
+            // also smth is using new PlayerData() on client every tick but I can't find the
+            // source
+            if (player == null)
+                this.player = ClientOnly.getPlayer();
         } else {
             this.player = player;
         }
@@ -44,21 +51,22 @@ public class JewelData implements IStatCtx {
         });
     }
 
-    public static boolean updatePlayerData(Player player){
-        if (player instanceof ServerPlayer){
+    public static boolean updatePlayerData(Player player) {
+        if (player instanceof ServerPlayer) {
             Load.player(player).cachedStats.ALLOCATED.setDirty();
         }
         return false;
     }
 
     public void recalc(Player player) {
-        //check if all jewels are wearable.
+        // check if all jewels are wearable.
         wearingUniqueJewel.clear();
         for (int i = 0; i < jewelInventory.getContainerSize(); i++) {
-            if (!isWearableWithUniqueRegistry(jewelInventory.getItem(i), player)) unequip(player, i);
+            if (!isWearableWithUniqueRegistry(jewelInventory.getItem(i), player))
+                unequip(player, i);
         }
         int jewelSocketsMaxStat = getJewelSocketsMaxStat(player);
-        //if the size is change, make a new inventory.
+        // if the size is change, make a new inventory.
         if (this.jewelInventory.getContainerSize() != jewelSocketsMaxStat) {
             MyInventory newInventory = new MyInventory(jewelSocketsMaxStat);
 
@@ -75,11 +83,10 @@ public class JewelData implements IStatCtx {
 
         }
 
-
     }
 
     public boolean isWearable(ItemStack itemStack, Player player) {
-        //why the player member in JewelData could be null??
+        // why the player member in JewelData could be null??
         JewelItemData jewelItemData = StackSaving.JEWEL.loadFrom(itemStack);
         if (jewelItemData == null || player == null) {
             return false;
@@ -126,7 +133,6 @@ public class JewelData implements IStatCtx {
         }
     }
 
-
     public void socket(ItemStack stack) {
         for (int i = 0; i < jewelInventory.getTotalSlots(); i++) {
             if (jewelInventory.getItem(i).isEmpty()) {
@@ -141,10 +147,9 @@ public class JewelData implements IStatCtx {
     }
 
     public boolean hasFreeJewelSlots(Player p) {
-        //considering 1 slot for 1 jewel, use hasFreeSlots() is ok
+        // considering 1 slot for 1 jewel, use hasFreeSlots() is ok
         return this.jewelInventory.hasFreeSlots();
     }
-
 
     public List<JewelItemData> getAllJewels() {
         List<JewelItemData> list = new ArrayList<>();
@@ -166,7 +171,6 @@ public class JewelData implements IStatCtx {
                 list.add(stac);
             }
         }
-
 
         return list;
     }

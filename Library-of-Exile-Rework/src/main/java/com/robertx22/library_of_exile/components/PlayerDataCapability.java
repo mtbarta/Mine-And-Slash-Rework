@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 
 public class PlayerDataCapability {
 
-
     public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "player");
 
     public static PlayerDataCapability get(Player p) {
@@ -19,7 +18,6 @@ public class PlayerDataCapability {
 
     private static final String MAP_TPS = "map_tps";
 
-
     transient Player player;
 
     public SavedPlayerMapTeleports mapTeleports = new SavedPlayerMapTeleports();
@@ -27,7 +25,6 @@ public class PlayerDataCapability {
     public PlayerDataCapability(Player player) {
         this.player = player;
     }
-
 
     public DelayedTeleportData delayedTeleportData = null;
 
@@ -49,7 +46,8 @@ public class PlayerDataCapability {
     public void deserializeNBT(CompoundTag nbt) {
 
         try {
-            this.mapTeleports = LoadSave.Load(SavedPlayerMapTeleports.class, new SavedPlayerMapTeleports(), nbt, MAP_TPS);
+            this.mapTeleports = LoadSave.Load(SavedPlayerMapTeleports.class, new SavedPlayerMapTeleports(), nbt,
+                    MAP_TPS);
             if (mapTeleports == null) {
                 mapTeleports = new SavedPlayerMapTeleports();
             }
@@ -60,12 +58,14 @@ public class PlayerDataCapability {
 
     public void syncToClient(Player player) {
         // dont sync backpacks to client
-        //  Packets.sendToClient(player, new SyncPlayerCapToClient(player, this.getCapIdForSyncing()));
+        // Packets.sendToClient(player, new SyncPlayerCapToClient(player,
+        // this.getCapIdForSyncing()));
     }
 
+    public static final String CAP_ID = "player_data";
 
     public String getCapIdForSyncing() {
-        return "player_data";
+        return CAP_ID;
     }
 
 }

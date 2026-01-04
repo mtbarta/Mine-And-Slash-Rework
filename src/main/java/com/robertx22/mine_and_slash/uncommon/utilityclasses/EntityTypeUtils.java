@@ -29,7 +29,8 @@ public class EntityTypeUtils {
     }
 
     public static EntityClassification getType(LivingEntity entity) {
-
+        if (entity == null)
+            return EntityClassification.OTHER;
 
         if (isMob(entity)) {
             return EntityClassification.MOB;
@@ -39,7 +40,8 @@ public class EntityTypeUtils {
             return EntityClassification.NPC;
         } else if (entity instanceof Player) {
             return EntityClassification.PLAYER;
-        } else if (entity instanceof AmbientCreature || entity.getType().getCategory() == MobCategory.AMBIENT || entity.getType().getCategory() == MobCategory.WATER_AMBIENT) {
+        } else if (entity instanceof AmbientCreature || entity.getType().getCategory() == MobCategory.AMBIENT
+                || entity.getType().getCategory() == MobCategory.WATER_AMBIENT) {
             return EntityClassification.AMBIENT;
         } else {
             return EntityClassification.OTHER;
@@ -48,6 +50,8 @@ public class EntityTypeUtils {
     }
 
     public static boolean isMob(Entity en) {
+        if (en == null)
+            return false;
         if (en instanceof Enemy) {
             return true;
         }

@@ -15,13 +15,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 public class ProphecyScreen extends BaseScreen implements INamedScreen {
-    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/prophecy.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/prophecy/prophecy.png");
 
     static int sizeX = 177;
     static int sizeY = 180;
 
     Minecraft mc = Minecraft.getInstance();
-
 
     public ProphecyScreen() {
         super(sizeX, sizeY);
@@ -45,8 +45,12 @@ public class ProphecyScreen extends BaseScreen implements INamedScreen {
         this.clearWidgets();
 
         try {
+            var playerData = Load.player(mc.player);
+            if (playerData == null) {
+                return;
+            }
 
-            var data = Load.player(mc.player).prophecy;
+            var data = playerData.prophecy;
 
             int i = 0;
             int yc = 0;
@@ -67,30 +71,31 @@ public class ProphecyScreen extends BaseScreen implements INamedScreen {
             }
 
             i = 0;
-/*
-            if (data.numMobAffixesCanAdd > 0) {
-                for (String id : data.affixOffers) {
-                    MapAffix affix = ExileDB.MapAffixes().get(id);
-                    int x = this.guiLeft + 9 + (i * SLOT_SPACING);
-                    int y = this.guiTop + 107;
-                    this.addRenderableWidget(new ProphecyAffixButton(affix, ProphecyAffixButton.Info.IS_OFFER, true, x, y));
-                    i++;
-                }
-            }
-
- */
+            /*
+             * if (data.numMobAffixesCanAdd > 0) {
+             * for (String id : data.affixOffers) {
+             * MapAffix affix = ExileDB.MapAffixes().get(id);
+             * int x = this.guiLeft + 9 + (i * SLOT_SPACING);
+             * int y = this.guiTop + 107;
+             * this.addRenderableWidget(new ProphecyAffixButton(affix,
+             * ProphecyAffixButton.Info.IS_OFFER, true, x, y));
+             * i++;
+             * }
+             * }
+             * 
+             */
             i = 0;
             for (String id : data.affixesTaken) {
                 MapAffix affix = ExileDB.MapAffixes().get(id);
                 int x = this.guiLeft + 9 + (i * SLOT_SPACING);
                 int y = this.guiTop + 153;
-                this.addRenderableWidget(new ProphecyAffixButton(affix, ProphecyAffixButton.Info.IS_TAKEN, false, x, y));
+                this.addRenderableWidget(
+                        new ProphecyAffixButton(affix, ProphecyAffixButton.Info.IS_TAKEN, false, x, y));
                 i++;
             }
 
-
-            this.addRenderableWidget(new MainProphecyButton(guiLeft + sizeX / 2 - MainProphecyButton.FAVOR_BUTTON_SIZE_X / 2, guiTop + 0));
-
+            this.addRenderableWidget(new MainProphecyButton(
+                    guiLeft + sizeX / 2 - MainProphecyButton.FAVOR_BUTTON_SIZE_X / 2, guiTop + 0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,18 +114,21 @@ public class ProphecyScreen extends BaseScreen implements INamedScreen {
         try {
             gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             gui.blit(BACKGROUND, mc.getWindow()
-                            .getGuiScaledWidth() / 2 - sizeX / 2,
+                    .getGuiScaledWidth() / 2 - sizeX / 2,
                     mc.getWindow()
-                            .getGuiScaledHeight() / 2 - sizeY / 2, 0, 0, sizeX, sizeY
-            );
+                            .getGuiScaledHeight() / 2 - sizeY / 2,
+                    0, 0, sizeX, sizeY);
 
             super.render(gui, x, y, ticks);
 
-            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 35, 1, Words.REWARD_OFFERS.locName().getString(), ChatFormatting.LIGHT_PURPLE);
-            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 98, 1, Words.CURSE_OFFERS.locName().getString(), ChatFormatting.RED);
-            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 144, 1, Words.ACCEPTED_CURSES.locName().getString(), ChatFormatting.YELLOW);
+            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 35, 1, Words.REWARD_OFFERS.locName().getString(),
+                    ChatFormatting.LIGHT_PURPLE);
+            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 98, 1, Words.CURSE_OFFERS.locName().getString(),
+                    ChatFormatting.RED);
+            GuiUtils.renderScaledText(gui, guiLeft + 88, guiTop + 144, 1, Words.ACCEPTED_CURSES.locName().getString(),
+                    ChatFormatting.YELLOW);
 
-            //buttons.forEach(b -> b.renderToolTip(matrix, x, y));
+            // buttons.forEach(b -> b.renderToolTip(matrix, x, y));
         } catch (Exception e) {
             e.printStackTrace();
         }
