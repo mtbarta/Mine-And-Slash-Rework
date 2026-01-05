@@ -10,14 +10,12 @@ import net.minecraft.ChatFormatting;
 
 public abstract class StatNameRegex {
 
-
     public static StatNameRegex BASIC = new BasicStatRegex();
     public static StatNameRegex JUST_NAME = new JustNameRegex();
 
     public static String VALUE = "[VALUE]";
     public static String PLUS_MINUS = "[PLUS_MINUS]";
     public static String NAME = "[STAT_NAME]";
-
 
     public boolean addPlus = true;
 
@@ -66,7 +64,6 @@ public abstract class StatNameRegex {
         }
         String add = "";
 
-
         if (type == ModType.MORE) {
             if (v1 > 0) {
                 add = stat.getMultiUseType().prefixWord.locName().getString();
@@ -87,17 +84,16 @@ public abstract class StatNameRegex {
         if (stat.is_long) {
             String txt = stat.locName().getString();
 
-            txt = txt.replace(Stat.VAL1, plusminus + v1s); // todo dont think i need to add % here because i add it whenever needed in the manual long tooltip
+            txt = txt.replace(Stat.VAL1, plusminus + v1s); // todo dont think i need to add % here because i add it
+                                                           // whenever needed in the manual long tooltip
 
             return txt;
         }
 
-
         String str = statColor(stat) + getStatNameRegex(format, type, stat, v1);
 
-
-        str = str.replace(VALUE, numberColor(format, stat, v1) + plusminus + v1s + perc + VALUEAndNAMESeparator + ChatFormatting.RESET + statColor(stat));
-
+        str = str.replace(VALUE, numberColor(format, stat, v1) + plusminus + v1s + perc + VALUEAndNAMESeparator
+                + ChatFormatting.RESET + statColor(stat));
 
         String[] processedReplacement = StringUTIL.joinWithoutEmpty(add, stat.locName().getString());
 

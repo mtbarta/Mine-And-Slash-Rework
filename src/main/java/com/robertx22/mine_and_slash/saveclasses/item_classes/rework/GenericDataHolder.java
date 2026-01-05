@@ -7,7 +7,6 @@ public class GenericDataHolder {
 
     private HashMap<String, String> map = new HashMap<>();
 
-
     public <T> void set(DataKey<T> key, T obj) {
         String saved = key.objectToString(obj);
         map.put(key.key, saved);
@@ -29,5 +28,20 @@ public class GenericDataHolder {
             return def;
         }
         return o;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GenericDataHolder that = (GenericDataHolder) o;
+        return java.util.Objects.equals(map, that.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(map);
     }
 }

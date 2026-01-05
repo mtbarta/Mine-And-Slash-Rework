@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class UniqueStatsData implements IGearPartTooltip, IRerollable, IStatsContainer {
 
     public UniqueStatsData() {
@@ -61,7 +60,6 @@ public class UniqueStatsData implements IGearPartTooltip, IRerollable, IStatsCon
 
     }
 
-
     @Override
     public List<Component> GetTooltipString(StatRangeInfo info, ExileStack stack) {
 
@@ -78,12 +76,13 @@ public class UniqueStatsData implements IGearPartTooltip, IRerollable, IStatsCon
 
     @Override
     public MinMax getMinMax(GearItemData gear) {
-        //gear.getRarity().stat_percents)
+        // gear.getRarity().stat_percents)
         return new MinMax(0, 100);
     }
 
     public UniqueGear getUnique(ExileStack stack) {
-        return ExileDB.UniqueGears().get(stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.UNIQUE_ID));
+        return ExileDB.UniqueGears()
+                .get(stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.UNIQUE_ID));
     }
 
     @Override
@@ -97,7 +96,8 @@ public class UniqueStatsData implements IGearPartTooltip, IRerollable, IStatsCon
         int i = 0;
         for (StatMod mod : getUnique(stack).uniqueStats()) {
             ExactStatData exact = mod.ToExactStat(perc.get(i), gear.getLevel());
-            list.add(new TooltipStatWithContext(new TooltipStatInfo(exact, perc.get(i), info), mod, (int) gear.getLevel()));
+            list.add(new TooltipStatWithContext(new TooltipStatInfo(exact, perc.get(i), info), mod,
+                    (int) gear.getLevel()));
             i++;
         }
         return list;
@@ -119,5 +119,20 @@ public class UniqueStatsData implements IGearPartTooltip, IRerollable, IStatsCon
         }
         return list;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UniqueStatsData that = (UniqueStatsData) o;
+        return java.util.Objects.equals(perc, that.perc);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(perc);
     }
 }

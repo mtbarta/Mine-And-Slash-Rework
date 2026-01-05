@@ -14,4 +14,19 @@ public class PotentialData {
         this.potential = MathHelper.clamp(potential - num, 0, 1000000);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        PotentialData that = (PotentialData) o;
+        return potential == that.potential;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(potential);
+    }
+
 }

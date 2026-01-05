@@ -95,6 +95,9 @@ public class CachedPlayerStats {
         statContexts = new ArrayList<>();
 
         var playerData = Load.player(p);
+        if (playerData == null) {
+            return;
+        }
 
         playerData.aurasOn = new ArrayList<>();
         for (SkillGemData aura : playerData.getSkillGemInventory().getAurasGems()) {

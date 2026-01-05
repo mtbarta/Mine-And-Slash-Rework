@@ -193,10 +193,24 @@ public class PlayerData implements ICap {
 
         // todo this code sucks, we need Codec
         this.jewelData = new JewelData(this.player);
-        this.jewelData.jewelInventory.fromTag(nbt.getList(JEWELS, 10), player.level().registryAccess());
 
-        skillGemInv.fromTag(nbt.getList(GEMS, 10), player.level().registryAccess()); // todo
-        auraInv.fromTag(nbt.getList(AURAS, 10), player.level().registryAccess()); // todo
+        // Fix for JewelData initializing with size 0 when player is null (during
+        // deserialization)
+        // We scan the NBT to find the maximum slot index used and resize the inventory
+        // accordingly to prevent data loss.
+        net.minecraft.nbt.ListTag jewelList = nbt.getList(JEWELS, 10);
+        int maxSlot = -1;
+        for (int i = 0; i < jewelList.size(); i++) {
+            maxSlot = Math.max(maxSlot, jewelList.getCompound(i).getByte("Slot") & 255);
+        }
+        if (maxSlot >= this.jewelData.jewelInventory.getContainerSize()) {
+            this.jewelData.jewelInventory = new MyInventory(maxSlot + 1);
+        }
+
+        this.jewelData.jewelInventory.fromTag(jewelList, provider);
+
+        skillGemInv.fromTag(nbt.getList(GEMS, 10), provider); // todo
+        auraInv.fromTag(nbt.getList(AURAS, 10), provider); // todo
         // jewelsInv.fromTag(nbt.getList(JEWELS, 10));
 
         this.bonusTalents = nbt.getInt(BONUS_TALENTS);

@@ -26,9 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 public class AffixData implements IRerollable, IStatsContainer {
-
 
     // perc
     public Integer p = -1;
@@ -37,11 +35,9 @@ public class AffixData implements IRerollable, IStatsContainer {
     public String rar = IRarity.COMMON_ID;
     public Affix.AffixSlot ty;
 
-
     public GearRarity getRarity() {
         return ExileDB.GearRarities().get(rar);
     }
-
 
     public void upgradeRarity() {
 
@@ -69,14 +65,14 @@ public class AffixData implements IRerollable, IStatsContainer {
 
         var r = getRarity();
 
-        Optional<GearRarity> opt = ExileDB.GearRarities().getList().stream().filter(x -> x.getHigherRarity() == r).findAny();
+        Optional<GearRarity> opt = ExileDB.GearRarities().getList().stream().filter(x -> x.getHigherRarity() == r)
+                .findAny();
 
         if (opt.isPresent()) {
             this.rar = opt.get().GUID();
         }
         RerollNumbers();
     }
-
 
     public MinMax getMinMax() {
         return getRarity().stat_percents;
@@ -85,7 +81,6 @@ public class AffixData implements IRerollable, IStatsContainer {
     public AffixData(Affix.AffixSlot type) {
         this.ty = type;
     }
-
 
     private AffixData() {
     }
@@ -98,12 +93,10 @@ public class AffixData implements IRerollable, IStatsContainer {
         return ty;
     }
 
-
     public Affix getAffix() {
         return ExileDB.Affixes()
                 .get(this.id);
     }
-
 
     @Override
     public void RerollNumbers(GearItemData gear) {
@@ -174,8 +167,8 @@ public class AffixData implements IRerollable, IStatsContainer {
         RerollNumbers(gear);
     }
 
-
-    // todo this needs an entire blueprint part to allow stuff like.. x affixes are more common, etc
+    // todo this needs an entire blueprint part to allow stuff like.. x affixes are
+    // more common, etc
     @Override
     public void RerollFully(GearItemData gear) {
 
@@ -201,9 +194,7 @@ public class AffixData implements IRerollable, IStatsContainer {
 
     }
 
-
     // this is kinda simplified.. but might be fine
-
 
     public void randomizeTier(GearRarity rar) {
 
@@ -214,6 +205,23 @@ public class AffixData implements IRerollable, IStatsContainer {
 
         this.rar = RandomUtils.weightedRandom(list).obj.GUID();
 
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AffixData affixData = (AffixData) o;
+        return java.util.Objects.equals(p, affixData.p) &&
+                java.util.Objects.equals(id, affixData.id) &&
+                java.util.Objects.equals(rar, affixData.rar) &&
+                ty == affixData.ty;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(p, id, rar, ty);
     }
 }

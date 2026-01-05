@@ -16,9 +16,7 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartTooltip {
-
 
     public Integer p = 0;
 
@@ -31,7 +29,6 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
     public void RerollNumbers(GearItemData gear) {
         RerollFully(gear);
     }
-
 
     @Override
     public List<Component> GetTooltipString(StatRangeInfo info, ExileStack stack) {
@@ -61,7 +58,6 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
 
         return list;
 
-
     }
 
     @Override
@@ -77,7 +73,6 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
     // this can run on client
     public List<TooltipStatWithContext> getAllStatsWithCtx(ExileStack ex) {
 
-
         List<TooltipStatWithContext> list = new ArrayList<>();
 
         var gear = ex.get(StackKeys.GEAR).get();
@@ -89,8 +84,9 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
         gear.GetBaseGearType().baseStats()
                 .forEach(x -> {
                     ExactStatData exact = x.ToExactStat(p, lvl);
-                    TooltipStatInfo confo = new TooltipStatInfo(exact, p, new StatRangeInfo(ModRange.of(getMinMax(gear))));
-                    //confo.affix_rarity = this.getRarity();
+                    TooltipStatInfo confo = new TooltipStatInfo(exact, p,
+                            new StatRangeInfo(ModRange.of(getMinMax(gear))));
+                    // confo.affix_rarity = this.getRarity();
                     list.add(new TooltipStatWithContext(confo, x, (int) lvl));
                 });
         return list;
@@ -113,7 +109,6 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
                     baseStats.add(exact);
                 });
 
-
         try {
             var list = gear.GetAllStatContainersExceptBase();
 
@@ -128,13 +123,13 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
                     for (ExactStatData baseStat : baseStats) {
                         if (mod.canModifyBaseStat(baseStat.getStat())) {
                             if (affixStatData.getType() == ModType.FLAT) {
-                                baseStat.add(ExactStatData.noScaling(affixStatData.getValue(), ModType.FLAT, baseStat.getStatId()));
+                                baseStat.add(ExactStatData.noScaling(affixStatData.getValue(), ModType.FLAT,
+                                        baseStat.getStatId()));
                             }
                         }
                     }
                 }
             }
-
 
             for (ExactStatData affixStatData : allstats) {
                 if (affixStatData.getStat() instanceof IBaseStatModifier mod) {
@@ -150,27 +145,42 @@ public class BaseStatsData implements IRerollable, IStatsContainer, IGearPartToo
                 }
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return baseStats;
     }
 
     /*
-    @Override
-    public List<ExactStatData> GetAllStats(GearItemData gear) {
-
-        return getBaseItemStats(gear).stream().map(x -> ExactStatData.noScaling(x.getFirstValue(), x.getType(), x.getStatId())).collect(Collectors.toList());
-
-    }
-
-
+     * @Override
+     * public List<ExactStatData> GetAllStats(GearItemData gear) {
+     * 
+     * return getBaseItemStats(gear).stream().map(x ->
+     * ExactStatData.noScaling(x.getFirstValue(), x.getType(),
+     * x.getStatId())).collect(Collectors.toList());
+     * 
+     * }
+     * 
+     * 
      */
     @Override
     public Part getPart() {
         return Part.BASE_STATS;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        BaseStatsData that = (BaseStatsData) o;
+        return java.util.Objects.equals(p, that.p);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(p);
     }
 }

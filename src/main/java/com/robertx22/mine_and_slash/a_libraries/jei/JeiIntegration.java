@@ -23,6 +23,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 
+import com.robertx22.mine_and_slash.database.data.profession.LeveledItem;
+import com.robertx22.mine_and_slash.database.data.profession.all.ProfessionProductItems;
+import com.robertx22.mine_and_slash.saveclasses.stat_soul.StatSoulItem;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import java.util.*;
 
 @JeiPlugin
@@ -34,12 +38,12 @@ public class JeiIntegration implements IModPlugin {
     }
 
     public static HashMap<String, RecipeType<ProfessionRecipe>> map = new HashMap<>();
-    public static RecipeType<RunewordRecipe> runewordsRecipeType = RecipeType.create(SlashRef.MODID, "runewords", RunewordRecipe.class);
+    public static RecipeType<RunewordRecipe> runewordsRecipeType = RecipeType.create(SlashRef.MODID, "runewords",
+            RunewordRecipe.class);
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
-
 
         init();
 
@@ -100,6 +104,41 @@ public class JeiIntegration implements IModPlugin {
         registration.addRecipeClickArea(CookingScreen.class, 76, 1, 25, 14, map.get(Professions.COOKING));
         registration.addRecipeClickArea(InfusingScreen.class, 76, 1, 25, 14, map.get(Professions.INFUSING));
 
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        init();
+
+        IIngredientSubtypeInterpreter<ItemStack> tieredInterpreter = (stack, context) -> {
+            return String.valueOf(LeveledItem.getLevel(stack));
+        };
+
+        ProfessionProductItems.POTIONS.values().forEach(h -> h.map.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter)));
+
+        ProfessionProductItems.FOODS.values().forEach(h -> h.map.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter)));
+
+        ProfessionProductItems.SEAFOOD.values().forEach(h -> h.map.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter)));
+
+        ProfessionProductItems.CRAFTED_SOULS.values().forEach(h -> h.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter)));
+
+        ProfessionProductItems.CRAFTED_ENCHANTS.values().forEach(h -> h.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter)));
+
+        SlashItems.COINS.values().forEach(
+                reg -> registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, reg.get(), tieredInterpreter));
+
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, SlashItems.STAT_SOUL.get(),
+                (stack, context) -> {
+                    var data = StatSoulItem.getSoul(stack);
+                    if (data == null)
+                        return "";
+                    return data.rar + ":" + data.slot + ":" + data.tier;
+                });
     }
 
     @Override

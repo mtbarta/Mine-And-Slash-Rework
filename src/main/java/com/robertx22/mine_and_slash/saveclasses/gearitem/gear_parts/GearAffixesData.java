@@ -16,9 +16,7 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GearAffixesData implements IGearPartTooltip {
-
 
     public List<AffixData> suf = new ArrayList<>();
 
@@ -30,16 +28,20 @@ public class GearAffixesData implements IGearPartTooltip {
         return !cor.isEmpty();
     }
 
-/*
-    public List<TooltipStatWithContext> getAllStatsWithCtx(GearItemData gear, StatRangeInfo info) {
-        List<TooltipStatWithContext> list = new ArrayList<>();
-        this.suf.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(), gear.getRarity())));
-        this.pre.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(), gear.getRarity())));
-        this.cor.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(), gear.getRarity())));
-        return list;
-    }
-
- */
+    /*
+     * public List<TooltipStatWithContext> getAllStatsWithCtx(GearItemData gear,
+     * StatRangeInfo info) {
+     * List<TooltipStatWithContext> list = new ArrayList<>();
+     * this.suf.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(),
+     * gear.getRarity())));
+     * this.pre.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(),
+     * gear.getRarity())));
+     * this.cor.forEach(x -> list.addAll(x.getAllStatsWithCtx(gear.getLevel(),
+     * gear.getRarity())));
+     * return list;
+     * }
+     * 
+     */
 
     public List<TooltipStatWithContext> getSufStatsWithCtx(GearItemData gear, StatRangeInfo info) {
         List<TooltipStatWithContext> list = new ArrayList<>();
@@ -63,7 +65,6 @@ public class GearAffixesData implements IGearPartTooltip {
     public List<Component> GetTooltipString(StatRangeInfo info, ExileStack stack) {
         List<Component> list = new ArrayList<Component>();
 
-
         var gear = stack.get(StackKeys.GEAR).get();
 
         if (!getCorStatsWithCtx(gear, info).isEmpty()) {
@@ -73,7 +74,6 @@ public class GearAffixesData implements IGearPartTooltip {
             TooltipUtils.addEmpty(list);
         }
 
-
         var color = ChatFormatting.BLUE;
         if (!getPreStatsWithCtx(gear, info).isEmpty()) {
             TooltipUtils.addEmpty(list);
@@ -82,14 +82,12 @@ public class GearAffixesData implements IGearPartTooltip {
             TooltipUtils.addEmpty(list);
         }
 
-
         if (!getSufStatsWithCtx(gear, info).isEmpty()) {
             TooltipUtils.addEmpty(list);
             list.add(Itemtips.SUFFIX_STATS.locName().withStyle(color));
             getSufStatsWithCtx(gear, info).forEach(x -> list.addAll(x.GetTooltipString()));
             TooltipUtils.addEmpty(list);
         }
-
 
         return list;
     }
@@ -108,7 +106,6 @@ public class GearAffixesData implements IGearPartTooltip {
             pre.add(affix);
         }
     }
-
 
     public int getNumberOfPrefixes() {
         return pre.size();
@@ -202,5 +199,22 @@ public class GearAffixesData implements IGearPartTooltip {
     @Override
     public Part getPart() {
         return Part.AFFIX;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GearAffixesData that = (GearAffixesData) o;
+        return java.util.Objects.equals(suf, that.suf) &&
+                java.util.Objects.equals(pre, that.pre) &&
+                java.util.Objects.equals(cor, that.cor);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(suf, pre, cor);
     }
 }

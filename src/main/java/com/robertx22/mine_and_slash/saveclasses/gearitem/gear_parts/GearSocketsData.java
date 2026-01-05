@@ -21,9 +21,7 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GearSocketsData implements IStatsContainer, IGearPartTooltip {
-
 
     // socketed gems
     private List<SocketData> so = new ArrayList<>();
@@ -75,7 +73,6 @@ public class GearSocketsData implements IStatsContainer, IGearPartTooltip {
         }
         return -1;
     }
-
 
     public void addSocket() {
         sl++;
@@ -132,7 +129,6 @@ public class GearSocketsData implements IStatsContainer, IGearPartTooltip {
         return list;
     }
 
-
     @Override
     public List<Component> GetTooltipString(StatRangeInfo info, ExileStack stack) {
         var gear = stack.get(StackKeys.GEAR).get();
@@ -173,5 +169,23 @@ public class GearSocketsData implements IStatsContainer, IGearPartTooltip {
     @Override
     public Part getPart() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GearSocketsData that = (GearSocketsData) o;
+        return sl == that.sl &&
+                rp == that.rp &&
+                java.util.Objects.equals(so, that.so) &&
+                java.util.Objects.equals(rw, that.rw);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(so, sl, rw, rp);
     }
 }

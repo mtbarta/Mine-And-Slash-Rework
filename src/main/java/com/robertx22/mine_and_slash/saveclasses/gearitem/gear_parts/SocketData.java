@@ -17,18 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SocketData implements IStatsContainer {
-
 
     // gem id
     public String g = "";
     public int p = 0;
 
-
     public SocketData() {
     }
-
 
     public boolean isEmpty() {
         return getGem() == null && getRune() == null;
@@ -60,7 +56,6 @@ public class SocketData implements IStatsContainer {
         }
         return list;
     }
-
 
     public Gem getGem() {
         if (ExileDB.Gems().isRegistered(g)) {
@@ -114,6 +109,21 @@ public class SocketData implements IStatsContainer {
 
         return stats;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        SocketData that = (SocketData) o;
+        return p == that.p && java.util.Objects.equals(g, that.g);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(g, p);
     }
 
 }

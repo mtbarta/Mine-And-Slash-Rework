@@ -67,6 +67,7 @@ public class LibModConstructor extends OrderedModConstructor {
         Packets.registerServerToClient(new com.robertx22.library_of_exile.packets.TileUpdatePacket(), i++);
         Packets.registerServerToClient(
                 new com.robertx22.library_of_exile.packets.registry.TellClientToRegisterFromPackets(), i++);
+        Packets.registerServerToClient(new com.robertx22.library_of_exile.packets.SyncPlayerCapToClient(), i++);
         // Register client-to-server packets for library_of_exile
         Packets.registerClientToServerPacket(new com.robertx22.library_of_exile.packets.RequestTilePacket(), i++);
     }

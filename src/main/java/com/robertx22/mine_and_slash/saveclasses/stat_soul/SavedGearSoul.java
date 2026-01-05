@@ -27,5 +27,21 @@ public class SavedGearSoul {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        SavedGearSoul that = (SavedGearSoul) o;
+        return java.util.Objects.equals(gear, that.gear) &&
+                java.util.Objects.equals(potential, that.potential) &&
+                java.util.Objects.equals(custom, that.custom);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(gear, potential, custom);
+    }
 
 }

@@ -22,7 +22,6 @@ public class GearInfusionData implements IStatsContainer, IGearPartTooltip {
     public String en = "";
     public String rar = IRarity.COMMON_ID;
 
-
     public boolean isEmpty() {
         return !ExileDB.Affixes().isRegistered(en);
     }
@@ -46,7 +45,9 @@ public class GearInfusionData implements IStatsContainer, IGearPartTooltip {
 
         GearRarity rarity = ExileDB.GearRarities().get(rar);
 
-        list.add(Itemtips.INFUSED.locName(Component.literal(stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.ENCHANT_TIMES) + "").withStyle(rarity.textFormatting())).withStyle(rarity.textFormatting()));
+        list.add(Itemtips.INFUSED.locName(Component
+                .literal(stack.get(StackKeys.CUSTOM).getOrCreate().data.get(CustomItemData.KEYS.ENCHANT_TIMES) + "")
+                .withStyle(rarity.textFormatting())).withStyle(rarity.textFormatting()));
 
         for (ExactStatData stat : GetAllStats(stack)) {
             list.addAll(stat.GetTooltipString());
@@ -55,13 +56,28 @@ public class GearInfusionData implements IStatsContainer, IGearPartTooltip {
         return list;
     }
 
-
     public int getPercent() {
         return ExileDB.GearRarities().get(rar).stat_percents.max;
     }
 
-    @Override
     public List<ExactStatData> GetAllStats(ExileStack stack) {
-        return ExileDB.Affixes().get(en).getStats().stream().map(x -> x.ToExactStat(getPercent(), stack.get(StackKeys.GEAR).get().lvl)).collect(Collectors.toList());
+        return ExileDB.Affixes().get(en).getStats().stream()
+                .map(x -> x.ToExactStat(getPercent(), stack.get(StackKeys.GEAR).get().lvl))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GearInfusionData that = (GearInfusionData) o;
+        return java.util.Objects.equals(en, that.en) && java.util.Objects.equals(rar, that.rar);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(en, rar);
     }
 }

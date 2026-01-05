@@ -24,16 +24,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsContainer {
-
 
     public Integer p = 0;
     public String imp = "";
 
     @Override
     public void RerollFully(GearItemData gear) {
-        var opt = ExileDB.Affixes().getFilterWrapped(x -> x.type == Affix.AffixSlot.implicit && x.meetsRequirements(new GearRequestedFor(gear)));
+        var opt = ExileDB.Affixes().getFilterWrapped(
+                x -> x.type == Affix.AffixSlot.implicit && x.meetsRequirements(new GearRequestedFor(gear)));
         if (!opt.list.isEmpty()) {
             this.imp = opt.random().GUID();
         }
@@ -43,7 +42,8 @@ public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsC
 
     @Override
     public void RerollNumbers(GearItemData gear) {
-        p = getMinMax(gear).random();;
+        p = getMinMax(gear).random();
+        ;
     }
 
     @Override
@@ -54,7 +54,6 @@ public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsC
 
         List<ExactStatData> stats = GetAllStats(stack);
 
-
         if (!stats.isEmpty()) {
             list.add(Words.IMPLICIT_STATS.locName().withStyle(ChatFormatting.BLUE));
 
@@ -64,7 +63,6 @@ public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsC
         }
         return list;
     }
-
 
     public Affix get() {
         return ExileDB.Affixes().get(imp);
@@ -87,7 +85,8 @@ public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsC
             get().getStats()
                     .forEach(x -> {
                         ExactStatData exact = x.ToExactStat(p, gear.getLevel());
-                        list.add(new TooltipStatWithContext(new TooltipStatInfo(exact, p, info), x, (int) gear.getLevel()));
+                        list.add(new TooltipStatWithContext(new TooltipStatInfo(exact, p, info), x,
+                                (int) gear.getLevel()));
                     });
         }
         return list;
@@ -104,5 +103,20 @@ public class ImplicitStatsData implements IGearPartTooltip, IRerollable, IStatsC
                     .collect(Collectors.toList());
         }
         return Arrays.asList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ImplicitStatsData that = (ImplicitStatsData) o;
+        return java.util.Objects.equals(p, that.p) && java.util.Objects.equals(imp, that.imp);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(p, imp);
     }
 }

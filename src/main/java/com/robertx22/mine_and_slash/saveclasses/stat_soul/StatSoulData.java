@@ -348,4 +348,26 @@ public class StatSoulData implements ICommonDataItem<GearRarity>, ISettableLevel
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {
         return ToggleAutoSalvageRarity.SalvageType.GEAR;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        StatSoulData that = (StatSoulData) o;
+        return tier == that.tier &&
+                can_sal == that.can_sal &&
+                java.util.Objects.equals(slot, that.slot) &&
+                java.util.Objects.equals(rar, that.rar) &&
+                fam == that.fam &&
+                java.util.Objects.equals(uniq, that.uniq) &&
+                java.util.Objects.equals(force_tag, that.force_tag) &&
+                java.util.Objects.equals(gear, that.gear);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(tier, slot, rar, fam, uniq, force_tag, can_sal, gear);
+    }
 }

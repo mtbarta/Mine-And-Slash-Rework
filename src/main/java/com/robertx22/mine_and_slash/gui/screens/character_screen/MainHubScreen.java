@@ -457,8 +457,6 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
             setTooltipMod();
 
-            super.render(gui, x, y, f);
-
             Minecraft mc = Minecraft.getInstance();
 
             String txt = ((int) Load.Unit(mc.player)

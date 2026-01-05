@@ -423,4 +423,26 @@ public class GearItemData implements ICommonDataItem<GearRarity> {
         return false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GearItemData that = (GearItemData) o;
+        return lvl == that.lvl &&
+                java.util.Objects.equals(baseStats, that.baseStats) &&
+                java.util.Objects.equals(imp, that.imp) &&
+                java.util.Objects.equals(affixes, that.affixes) &&
+                java.util.Objects.equals(sockets, that.sockets) &&
+                java.util.Objects.equals(uniqueStats, that.uniqueStats) &&
+                java.util.Objects.equals(ench, that.ench) &&
+                java.util.Objects.equals(rar, that.rar) &&
+                java.util.Objects.equals(gtype, that.gtype);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(baseStats, imp, affixes, sockets, uniqueStats, ench, rar, lvl, gtype);
+    }
 }
