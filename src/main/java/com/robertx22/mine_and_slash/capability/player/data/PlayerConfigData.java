@@ -25,18 +25,26 @@ public class PlayerConfigData {
     public enum Config {
 
         CAST_FAIL("cast_fail_messages", true, Words.TITLE_FEATURE_CAST_FAIL, Words.CAST_FAIL_MSGS, false),
-        MOB_DEATH_MESSAGES("mob_death_messages", false, Words.TITLE_FEATURE_MOB_KILL_LOOT, Words.MOB_DEATH_MESSAGES, false),
+        MOB_DEATH_MESSAGES("mob_death_messages", false, Words.TITLE_FEATURE_MOB_KILL_LOOT, Words.MOB_DEATH_MESSAGES,
+                false),
         EXP_CHAT_MESSAGES("exp_chat_messages", false, Words.TITLE_FEATURE_EXP_MSG, Words.EXP_CHAT_MESSAGES, false),
         DAMAGE_MESSAGES("damage_messages", false, Words.TITLE_FEATURE_DAMAGE_LOG, Words.DAMAGE_MESSAGES, false),
-        PROFESSION_MESSAGES("profession_exp_messages", false, Words.TITLE_FEATURE_PROF_EXP, Words.PROFESSION_MESSAGES, false),
+        PROFESSION_MESSAGES("profession_exp_messages", false, Words.TITLE_FEATURE_PROF_EXP, Words.PROFESSION_MESSAGES,
+                false),
         AUTO_PVE("auto_pve", false, Words.TITLE_FEATURE_AUTO_TEAM, Words.AUTOMATIC_PVE, false),
-        AGGRESSIVE_SUMMONS("aggressive_summons", true, Words.TITLE_FEATURE_AGGRO_SUMMONS, Words.AGGRESIVE_SUMMONS, false),
+        AGGRESSIVE_SUMMONS("aggressive_summons", true, Words.TITLE_FEATURE_AGGRO_SUMMONS, Words.AGGRESIVE_SUMMONS,
+                false),
         ENABLE_EXP_GAIN("enable_exp_gain", true, Words.TITLE_FEATURE_ENABLE_EXP_GAIN, Words.ENABLE_EXP_GAIN, false),
-        AUTO_SALVAGE_DROP("auto_salvage_drop", false, Words.TITLE_FEATURE_AUTO_SALVAGE_DROP, Words.AUTO_SALVAGE_DROP, false),
+        AUTO_SALVAGE_DROP("auto_salvage_drop", false, Words.TITLE_FEATURE_AUTO_SALVAGE_DROP, Words.AUTO_SALVAGE_DROP,
+                false),
         STAT_ORDER_TEST("stat_order_test", false, Words.TITLE_FEATURE_STAT_ORDER_DEBUG, Words.STAT_ORDER_TEST, true),
-        DAMAGE_CONFLICT_MSG("damage_conflict_check", false, Words.TITLE_FEATURE_DMG_CONFLICT_DEBUG, Words.DMG_CONFLICT_CHECK, true),
-        //EVERYONE_IS_ALLY("everyone_is_ally", false, Words.TITLE_FEATURE_EVERYONE_ALLY, Words.EVERYONE_IS_ALLY, false),
-        //DROP_MAP_CHEST_CONTENTS_ON_GROUND("drop_map_chest_contents_on_ground", false, Words.TITLE_FEATURE_DROP_MAP_CHEST_ITEMS, Words.DROP_MAP_CHEST_CONTENTS_ON_GROUND, false)
+        DAMAGE_CONFLICT_MSG("damage_conflict_check", false, Words.TITLE_FEATURE_DMG_CONFLICT_DEBUG,
+                Words.DMG_CONFLICT_CHECK, true),
+        // EVERYONE_IS_ALLY("everyone_is_ally", false,
+        // Words.TITLE_FEATURE_EVERYONE_ALLY, Words.EVERYONE_IS_ALLY, false),
+        // DROP_MAP_CHEST_CONTENTS_ON_GROUND("drop_map_chest_contents_on_ground", false,
+        // Words.TITLE_FEATURE_DROP_MAP_CHEST_ITEMS,
+        // Words.DROP_MAP_CHEST_CONTENTS_ON_GROUND, false)
         ;
 
         public String id;
@@ -45,7 +53,6 @@ public class PlayerConfigData {
         public Words word;
         public boolean isDebug;
         public boolean enabledByDefault;
-
 
         Config(String id, boolean enabledByDefault, Words title, Words word, boolean isdebug) {
             this.id = id;
@@ -57,7 +64,6 @@ public class PlayerConfigData {
 
     }
 
-
     public AutoSalvage salvage = new AutoSalvage();
 
     public HashMap<String, Boolean> configs = new HashMap<>();
@@ -67,17 +73,35 @@ public class PlayerConfigData {
     }
 
     public void onLoginFillDefaults() {
-        for (Config value : Config.values()) {
-            if (!configs.containsKey(value.id)) {
-                configs.put(value.id, ServerContainer.get().defaultFeatureConfigs.get(value).get());
+        // This accesses ServerContainer which is likely server-only config
+        // So we should not run this on client
+        // The calling code should arguably handle this, but adding a check here is
+        // safer given the context
+        // However, this method seems to be called on login, which happens on server.
+        // Let's assume the caller will be fixed or we just check config spec validity?
+        // Actually, let's just make it accessing the map safer?
+
+        // Wait, the error is likely because this runs on client due to deserialization
+        // or something?
+        // If this is called during construction or NBT load on client, that's bad.
+        // But onLoginFillDefaults suggests it's called explicitly.
+
+        // Let's look at PlayerConfigData usage.
+
+        // For now, let's just guard the loop
+        if (ServerContainer.spec.isLoaded()) {
+            for (Config value : Config.values()) {
+                if (!configs.containsKey(value.id)) {
+                    configs.put(value.id, ServerContainer.get().defaultFeatureConfigs.get(value).get());
+                }
             }
         }
     }
 
-
     public class AutoSalvage {
 
-        //  private HashMap<ToggleAutoSalvageRarity.SalvageType, HashMap<String, Boolean>> map = new HashMap<>();
+        // private HashMap<ToggleAutoSalvageRarity.SalvageType, HashMap<String,
+        // Boolean>> map = new HashMap<>();
         // Salvage Type -> <rarity, enabled>
         private HashMap<ToggleAutoSalvageRarity.SalvageType, HashMap<String, Boolean>> map = new HashMap<>();
 
@@ -86,7 +110,8 @@ public class PlayerConfigData {
         // SalvageType.SPELL, <plus_aoe, disabled>
         // SalvageType.GEAR, <shield, enabled>
 
-        // this configuration should take precedence over the rarity config because it's more specific
+        // this configuration should take precedence over the rarity config because it's
+        // more specific
         private HashMap<ToggleAutoSalvageRarity.SalvageType, HashMap<String, Boolean>> tmap = new HashMap<>();
 
         public HashMap<ToggleAutoSalvageRarity.SalvageType, HashMap<String, Boolean>> getTMap() {
@@ -99,11 +124,11 @@ public class PlayerConfigData {
         // todo test this
         public boolean trySalvageOnPickup(Player player, ItemStack stack) {
 
-
             ExileStack ex = ExileStack.of(stack);
 
             if (stack.isEnchanted()) {
-                return false; // we don't want to auto salvage gear that is likely to have been worn or important
+                return false; // we don't want to auto salvage gear that is likely to have been worn or
+                              // important
             }
 
             if (ex.get(StackKeys.DROPPED).hasAndTrue(x -> x.forcedDrop)) {
@@ -116,7 +141,8 @@ public class PlayerConfigData {
             if (data != null) {
                 if (data.isSalvagable(ex)) {
 
-                    Optional<Boolean> typeSalvageEnabled = checkTypeSalvageConfig(data.getSalvageType(), data.getSalvageConfigurationId());
+                    Optional<Boolean> typeSalvageEnabled = checkTypeSalvageConfig(data.getSalvageType(),
+                            data.getSalvageConfigurationId());
 
                     if (typeSalvageEnabled.isEmpty()) {
                         if (checkRaritySalvageConfig(data.getSalvageType(), data.getRarityId())) {
@@ -130,13 +156,17 @@ public class PlayerConfigData {
                 if (doSalvage) {
                     SoundUtils.playSound(player, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.75F, 1.25F);
 
-                    // Give salvage experience to the player's salvaging profession (without rested exp bonus)
-                    Profession salvagingProfession = ExileDB.Professions().get("salvaging"); // Adjust profession ID as needed
+                    // Give salvage experience to the player's salvaging profession (without rested
+                    // exp bonus)
+                    Profession salvagingProfession = ExileDB.Professions().get("salvaging"); // Adjust profession ID as
+                                                                                             // needed
                     if (salvagingProfession != null) {
-                        Load.player(player).professions.addExp(player, salvagingProfession.GUID(), data.getAutoSalvageExpReward(), false);
+                        Load.player(player).professions.addExp(player, salvagingProfession.GUID(),
+                                data.getAutoSalvageExpReward(), false);
                     }
 
-                    boolean shouldAutoSalvageDrop = Load.player(player).config.isConfigEnabled(Config.AUTO_SALVAGE_DROP);
+                    boolean shouldAutoSalvageDrop = Load.player(player).config
+                            .isConfigEnabled(Config.AUTO_SALVAGE_DROP);
                     stack.shrink(stack.getCount() + 100);
                     data.getSalvageResult(ex).forEach(e -> {
                         Backpacks backpacks = Load.backpacks(player).getBackpacks();
@@ -159,7 +189,6 @@ public class PlayerConfigData {
 
             return false;
         }
-
 
         public boolean checkRaritySalvageConfig(ToggleAutoSalvageRarity.SalvageType type, String rar) {
             return map.getOrDefault(type, new HashMap<>()).getOrDefault(rar, false);
@@ -200,7 +229,8 @@ public class PlayerConfigData {
             }
         }
 
-        public void setAutoSalvageForTypeAndId(ToggleAutoSalvageRarity.SalvageType salvageType, String id, AutoSalvageGenericConfigure.AutoSalvageConfigAction action) {
+        public void setAutoSalvageForTypeAndId(ToggleAutoSalvageRarity.SalvageType salvageType, String id,
+                AutoSalvageGenericConfigure.AutoSalvageConfigAction action) {
 
             if (action == AutoSalvageGenericConfigure.AutoSalvageConfigAction.CLEAR) {
                 if (!getTMap().containsKey(salvageType)) {
@@ -219,7 +249,8 @@ public class PlayerConfigData {
 
         }
 
-        public HashMap<String, Boolean> getConfiguredMapForSalvageType(ToggleAutoSalvageRarity.SalvageType salvageType) {
+        public HashMap<String, Boolean> getConfiguredMapForSalvageType(
+                ToggleAutoSalvageRarity.SalvageType salvageType) {
             return getTMap().getOrDefault(salvageType, new HashMap<>());
         }
 

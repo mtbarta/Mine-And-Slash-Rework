@@ -3,12 +3,13 @@ package com.robertx22.library_of_exile.components;
 import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.utils.LoadSave;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.NotNull;
 
-public class LibChunkCap {
+public class LibChunkCap implements ICap {
 
     public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "chunk_data");
 
@@ -24,7 +25,8 @@ public class LibChunkCap {
         this.chunk = chunk;
     }
 
-    public CompoundTag serializeNBT() {
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
 
         CompoundTag nbt = new CompoundTag();
         try {
@@ -36,12 +38,19 @@ public class LibChunkCap {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         try {
-            this.mapGenData = LoadSave.loadOrBlank(MapChunkData.class, new MapChunkData(), nbt, "map", new MapChunkData());
+            this.mapGenData = LoadSave.loadOrBlank(MapChunkData.class, new MapChunkData(), nbt, "map",
+                    new MapChunkData());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public String getCapIdForSyncing() {
+        return "chunk_data";
     }
 }

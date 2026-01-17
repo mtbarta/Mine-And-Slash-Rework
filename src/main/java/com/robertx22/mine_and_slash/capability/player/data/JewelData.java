@@ -22,7 +22,7 @@ import java.util.List;
 public class JewelData implements IStatCtx {
 
     public MyInventory jewelInventory;
-    private transient Player player;
+    public transient Player player;
     private transient List<String> wearingUniqueJewel = new ArrayList<>();
 
     public JewelData(Player player) {

@@ -23,14 +23,14 @@ public class LibAttachments {
                     .serialize(new IAttachmentSerializer<CompoundTag, PlayerDataCapability>() {
                         @Override
                         public CompoundTag write(PlayerDataCapability attachment, HolderLookup.Provider provider) {
-                            return attachment.serializeNBT();
+                            return attachment.serializeNBT(provider);
                         }
 
                         @Override
                         public PlayerDataCapability read(net.neoforged.neoforge.attachment.IAttachmentHolder holder,
                                 CompoundTag tag, HolderLookup.Provider provider) {
                             var cap = new PlayerDataCapability(null);
-                            cap.deserializeNBT(tag);
+                            cap.deserializeNBT(provider, tag);
                             return cap;
                         }
                     })
@@ -42,14 +42,14 @@ public class LibAttachments {
                     .serialize(new IAttachmentSerializer<CompoundTag, LibChunkCap>() {
                         @Override
                         public CompoundTag write(LibChunkCap attachment, HolderLookup.Provider provider) {
-                            return attachment.serializeNBT();
+                            return attachment.serializeNBT(provider);
                         }
 
                         @Override
                         public LibChunkCap read(net.neoforged.neoforge.attachment.IAttachmentHolder holder,
                                 CompoundTag tag, HolderLookup.Provider provider) {
                             var cap = new LibChunkCap(null);
-                            cap.deserializeNBT(tag);
+                            cap.deserializeNBT(provider, tag);
                             return cap;
                         }
                     })
@@ -61,14 +61,14 @@ public class LibAttachments {
                     .serialize(new IAttachmentSerializer<CompoundTag, LibMapCap>() {
                         @Override
                         public CompoundTag write(LibMapCap attachment, HolderLookup.Provider provider) {
-                            return attachment.serializeNBT();
+                            return attachment.serializeNBT(provider);
                         }
 
                         @Override
                         public LibMapCap read(net.neoforged.neoforge.attachment.IAttachmentHolder holder,
                                 CompoundTag tag, HolderLookup.Provider provider) {
                             var cap = new LibMapCap(null);
-                            cap.deserializeNBT(tag);
+                            cap.deserializeNBT(provider, tag);
                             return cap;
                         }
                     })
@@ -81,14 +81,14 @@ public class LibAttachments {
                     .serialize(new IAttachmentSerializer<CompoundTag, EntityInfoComponent>() {
                         @Override
                         public CompoundTag write(EntityInfoComponent attachment, HolderLookup.Provider provider) {
-                            return attachment.serializeNBT();
+                            return attachment.serializeNBT(provider);
                         }
 
                         @Override
                         public EntityInfoComponent read(net.neoforged.neoforge.attachment.IAttachmentHolder holder,
                                 CompoundTag tag, HolderLookup.Provider provider) {
                             var cap = new EntityInfoComponent(null);
-                            cap.deserializeNBT(tag);
+                            cap.deserializeNBT(provider, tag);
                             return cap;
                         }
                     })
@@ -102,14 +102,14 @@ public class LibAttachments {
                     .serialize(new IAttachmentSerializer<CompoundTag, MapConnectionsCap>() {
                         @Override
                         public CompoundTag write(MapConnectionsCap attachment, HolderLookup.Provider provider) {
-                            return attachment.serializeNBT();
+                            return attachment.serializeNBT(provider);
                         }
 
                         @Override
                         public MapConnectionsCap read(net.neoforged.neoforge.attachment.IAttachmentHolder holder,
                                 CompoundTag tag, HolderLookup.Provider provider) {
                             var cap = new MapConnectionsCap(null);
-                            cap.deserializeNBT(tag);
+                            cap.deserializeNBT(provider, tag);
                             return cap;
                         }
                     })

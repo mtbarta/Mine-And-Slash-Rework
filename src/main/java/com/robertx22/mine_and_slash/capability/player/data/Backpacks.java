@@ -30,24 +30,24 @@ public class Backpacks {
 
     public Backpacks(Player player) {
         this.player = player;
-
-        for (BackpackType type : BackpackType.values()) {
-            map.put(type, new BackpackInventory(player, type));
-        }
+        // Note: BackpackInventory objects are created lazily in getInv() to avoid
+        // accessing datapack-dependent config during mod initialization
     }
-
 
     public enum BackpackType {
         GEARS("gear", Words.Gear) {
             @Override
             public boolean isValid(ItemStack stack) {
-                return StackSaving.GEARS.has(stack) || StackSaving.JEWEL.has(stack) || StackSaving.STAT_SOULS.has(stack);
+                return StackSaving.GEARS.has(stack) || StackSaving.JEWEL.has(stack)
+                        || StackSaving.STAT_SOULS.has(stack);
             }
         },
         MAPS("map", Words.Maps) {
             @Override
             public boolean isValid(ItemStack stack) {
-                return StackSaving.MAP.has(stack) || DataSaverCheckUtil.checkForDataSaver("ancient_obelisks" + "_obelisk", stack) || DataSaverCheckUtil.checkForDataSaver("the_harvest" + "_map", stack);
+                return StackSaving.MAP.has(stack)
+                        || DataSaverCheckUtil.checkForDataSaver("ancient_obelisks" + "_obelisk", stack)
+                        || DataSaverCheckUtil.checkForDataSaver("the_harvest" + "_map", stack);
             }
         },
         CURRENCY("currency", Words.Currency) {
@@ -57,7 +57,8 @@ public class Backpacks {
                 if (cur.isPresent()) {
                     return true;
                 }
-                return stack.getItem() instanceof IItemAsCurrency || stack.getItem() instanceof RuneItem || stack.getItem() instanceof RarityStoneItem;
+                return stack.getItem() instanceof IItemAsCurrency || stack.getItem() instanceof RuneItem
+                        || stack.getItem() instanceof RarityStoneItem;
             }
         },
         SKILL_GEMS("skill_gem", Words.SkillGem) {
@@ -109,11 +110,14 @@ public class Backpacks {
 
     private HashMap<BackpackType, BackpackInventory> map = new HashMap<>();
 
-
     public BackpackInventory getInv(BackpackType type) {
+        // Lazy initialization: create inventory on first access to avoid
+        // accessing datapack config during mod loading
+        if (!map.containsKey(type)) {
+            map.put(type, new BackpackInventory(player, type));
+        }
         return map.get(type);
     }
-
 
     public boolean tryAutoPickup(Player p, ItemStack stack, boolean shouldPlaySound) {
 
@@ -128,7 +132,8 @@ public class Backpacks {
                 if (bag.canAddItem(stack)) {
                     bag.addItem(stack.copy());
                     stack.shrink(stack.getCount() + 10); // just in case
-                    if (shouldPlaySound) SoundUtils.playSound(this.player, SoundEvents.ITEM_PICKUP);
+                    if (shouldPlaySound)
+                        SoundUtils.playSound(this.player, SoundEvents.ITEM_PICKUP);
                     result = true;
                     break;
                 }
@@ -144,10 +149,11 @@ public class Backpacks {
         return !backpackItem.isEmpty();
     }
 
-    public boolean tryAutoPickup(Player p, ItemStack stack){
+    public boolean tryAutoPickup(Player p, ItemStack stack) {
         return tryAutoPickup(p, stack, true);
     }
-    // todo every time before you open backpack, it will replace locked slots with blocked slots that cant be clicked on and throw out/give items back
+    // todo every time before you open backpack, it will replace locked slots with
+    // blocked slots that cant be clicked on and throw out/give items back
 
     public void openBackpack(BackpackType type, Player p) {
         if (!p.level().isClientSide) {

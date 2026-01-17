@@ -36,7 +36,6 @@ public class S2CPacketRegister {
         Packets.registerServerToClient(new OpenEntityStatsReplyPacket(), i++);
         Packets.registerServerToClient(new SetBackpackContentPacket(), i++);
         Packets.registerServerToClient(new SetBackpackSlotPacket(), i++);
-        Packets.registerServerToClient(new SyncPlayerDataPacket(), i++);
 
     }
 }

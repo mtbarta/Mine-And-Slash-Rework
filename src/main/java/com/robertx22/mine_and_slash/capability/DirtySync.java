@@ -35,7 +35,7 @@ public class DirtySync {
             onSynced(p);
 
             if (p instanceof Player pl) {
-                //  pl.sendSystemMessage(Component.literal(id));
+                // pl.sendSystemMessage(Component.literal(id));
             }
         }
     }

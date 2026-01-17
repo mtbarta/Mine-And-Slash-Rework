@@ -4,16 +4,20 @@ import com.robertx22.library_of_exile.dimension.teleport.SavedPlayerMapTeleports
 import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.utils.LoadSave;
+
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
-public class PlayerDataCapability {
+public class PlayerDataCapability implements ICap {
 
     public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "player");
 
     public static PlayerDataCapability get(Player p) {
-        return p.getData(LibAttachments.LIB_PLAYER_DATA.get());
+        PlayerDataCapability cap = p.getData(LibAttachments.LIB_PLAYER_DATA.get());
+        cap.player = p;
+        return cap;
     }
 
     private static final String MAP_TPS = "map_tps";
@@ -28,7 +32,8 @@ public class PlayerDataCapability {
 
     public DelayedTeleportData delayedTeleportData = null;
 
-    public CompoundTag serializeNBT() {
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
 
         CompoundTag nbt = new CompoundTag();
 
@@ -43,7 +48,8 @@ public class PlayerDataCapability {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
 
         try {
             this.mapTeleports = LoadSave.Load(SavedPlayerMapTeleports.class, new SavedPlayerMapTeleports(), nbt,

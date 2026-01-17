@@ -104,15 +104,7 @@ public class Load {
             return null;
         }
         PlayerData data = player.getData(SlashAttachments.PLAYER_DATA);
-
-        if (data == null) {
-            return null;
-        }
-
-        // NeoForge attachments are created with null player, so we must set it here
-        if (data.player == null) {
-            data.player = player;
-        }
+        data.player = player;
         return data;
     }
 

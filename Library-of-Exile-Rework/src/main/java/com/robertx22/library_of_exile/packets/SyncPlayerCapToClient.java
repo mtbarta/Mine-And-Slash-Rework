@@ -1,7 +1,7 @@
 package com.robertx22.library_of_exile.packets;
 
 // import com.robertx22.library_of_exile.components.ICap;
-import com.robertx22.library_of_exile.components.PlayerDataCapability;
+import com.robertx22.library_of_exile.components.ICap;
 import com.robertx22.library_of_exile.components.PlayerCapabilities;
 import com.robertx22.library_of_exile.main.MyPacket;
 import com.robertx22.library_of_exile.main.Ref;
@@ -21,7 +21,7 @@ public class SyncPlayerCapToClient extends MyPacket<SyncPlayerCapToClient> {
 
     public SyncPlayerCapToClient(Player player, String capid) {
         this.nbt = PlayerCapabilities.get(player, capid)
-                .serializeNBT();
+                .serializeNBT(player.registryAccess());
         this.capid = capid;
     }
 
@@ -51,9 +51,9 @@ public class SyncPlayerCapToClient extends MyPacket<SyncPlayerCapToClient> {
             Player player = ctx.getPlayer();
 
             if (player.level().isClientSide) { // just an extra check
-                PlayerDataCapability cap = PlayerCapabilities.get(player, capid);
+                ICap cap = PlayerCapabilities.get(player, capid);
                 if (cap != null) {
-                    cap.deserializeNBT(nbt);
+                    cap.deserializeNBT(player.registryAccess(), nbt);
                 }
             }
         } catch (Exception e) {

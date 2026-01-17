@@ -418,23 +418,14 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            System.out.println("[AllocateStatButton] mouseClicked called - active=" + this.active + ", visible="
-                    + this.visible + ", stat=" + (stat != null ? stat.GUID() : "null"));
-            System.out.println("[AllocateStatButton] Button pos: x=" + this.getX() + ", y=" + this.getY() + ", w="
-                    + this.getWidth() + ", h=" + this.getHeight());
-            System.out.println("[AllocateStatButton] Mouse pos: x=" + mouseX + ", y=" + mouseY);
-
             if (this.active && this.visible && stat != null) {
                 boolean bl = this.clicked(mouseX, mouseY);
-                System.out.println("[AllocateStatButton] clicked() returned: " + bl);
                 if (bl) {
                     this.playDownSound(Minecraft.getInstance().getSoundManager());
                     if (button == 0) {
-                        System.out.println("[AllocateStatButton] Sending ALLOCATE packet for stat: " + stat.GUID());
                         Packets.sendToServer(new AllocateStatPacket(stat, AllocateStatPacket.ACTION.ALLOCATE));
                     }
                     if (button == 1) {
-                        System.out.println("[AllocateStatButton] Sending REMOVE packet for stat: " + stat.GUID());
                         Packets.sendToServer(new AllocateStatPacket(stat, AllocateStatPacket.ACTION.REMOVE));
                     }
                     this.onClick(mouseX, mouseY);
@@ -442,7 +433,6 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
                 }
                 return false;
             } else {
-                System.out.println("[AllocateStatButton] Skipping - conditions not met");
                 return false;
             }
         }
@@ -479,6 +469,7 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
                 setTooltipMod();
 
                 var unitData = Load.Unit(mc.player);
+
                 if (unitData != null && unitData.getUnit() != null) {
                     String txt = ((int) unitData.getUnit()
                             .getCalculatedStat(stat)

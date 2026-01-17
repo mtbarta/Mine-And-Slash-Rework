@@ -77,6 +77,7 @@ public class OnServerTick {
                 });
 
                 playerData.spellCastingData.onTimePass(player);
+                // unitdata.equipmentCache.onTick();
                 unitdata.didStatCalcThisTickForPlayer = false;
 
                 int age = player.tickCount;

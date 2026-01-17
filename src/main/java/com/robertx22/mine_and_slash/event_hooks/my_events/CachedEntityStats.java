@@ -27,7 +27,6 @@ public class CachedEntityStats {
         this.entity = entity;
     }
 
-
     private List<GearData> gear = new ArrayList<>();
 
     private GearData weapon;
@@ -39,9 +38,7 @@ public class CachedEntityStats {
 
     private StatContext statusEffects;
 
-
     LazyClass<EntityData> unitdata = new LazyClass<>(() -> Load.Unit(entity));
-
 
     public GearData getWeapon() {
         return weapon;
@@ -88,7 +85,6 @@ public class CachedEntityStats {
         STAT_CALC.setDirty();
     });
 
-
     private void recalcPlayerStuff() {
         if (entity instanceof Player p) {
             Load.player(p).cachedStats.setAllDirty();
@@ -109,7 +105,7 @@ public class CachedEntityStats {
         STATUS.onTickTrySync(entity);
 
         if (entity instanceof Player p) {
-            Load.player(p).cachedStats.tick();
+            Load.player(p).cachedStats.tick(p);
         }
 
         STAT_CALC.onTickTrySync(entity);
@@ -122,7 +118,6 @@ public class CachedEntityStats {
         }
         return all;
     }
-
 
     public StatContext getStatusEffectStats() {
         if (statusEffects == null) {
@@ -170,7 +165,8 @@ public class CachedEntityStats {
 
         List<GearData> list = new ArrayList<>();
 
-        List<EquipmentSlot> ARMORS = Arrays.asList(EquipmentSlot.CHEST, EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.OFFHAND);
+        List<EquipmentSlot> ARMORS = Arrays.asList(EquipmentSlot.CHEST, EquipmentSlot.FEET, EquipmentSlot.LEGS,
+                EquipmentSlot.HEAD, EquipmentSlot.OFFHAND);
 
         for (EquipmentSlot slot : ARMORS) {
             GearData data = getDataFor(slot, entity, unitdata.get());

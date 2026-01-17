@@ -15,13 +15,10 @@ import net.minecraft.world.entity.player.Player;
 
 public class DevCommands {
 
-
     public static void init(CommandDispatcher dis) {
-
 
         // we don't want players having these commands lol
         if (MMORPG.RUN_DEV_TOOLS) {
-
 
             CommandBuilder.of(CommandRefs.ID, dis, x -> {
                 PlayerWrapper enarg = new PlayerWrapper();
@@ -39,7 +36,7 @@ public class DevCommands {
                         Load.Unit(p).setEquipsChanged();
                         Load.Unit(p).didStatCalcThisTickForPlayer = false;
                         Load.Unit(p).equipmentCache.onTick();
-                        Load.player(p).cachedStats.tick();
+                        Load.player(p).cachedStats.tick(p);
                         Load.Unit(p).recalcStats_DONT_CALL();
                     }
 
@@ -50,7 +47,7 @@ public class DevCommands {
                         Load.Unit(p).equipmentCache.WEAPON.setDirty();
                         Load.Unit(p).didStatCalcThisTickForPlayer = false;
                         Load.Unit(p).equipmentCache.onTick();
-                        Load.player(p).cachedStats.tick();
+                        Load.player(p).cachedStats.tick(p);
                         Load.Unit(p).recalcStats_DONT_CALL();
                     }
                     p.sendSystemMessage(Component.literal("calc only weapon " + w2.getPrint()));
@@ -59,7 +56,6 @@ public class DevCommands {
                 });
 
             }, "");
-
 
             CommandBuilder.of(CommandRefs.ID, dis, x -> {
                 PlayerWrapper enarg = new PlayerWrapper();
@@ -77,45 +73,48 @@ public class DevCommands {
                         wiki += c.getWikiString() + "\n\n";
                     }
                     p.sendSystemMessage(Component.literal("Click to copy commands wiki")
-                            .withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, wiki))));
+                            .withStyle(Style.EMPTY
+                                    .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, wiki))));
                 });
 
             }, "Generates a wiki section for all commands using the new CommandBuilder wrapper, their args and descriptions.");
 
             /*
-            CommandBuilder.of(dis, x -> {
-                PlayerWrapper enarg = new PlayerWrapper();
-
-                x.addLiteral("dev", PermWrapper.OP);
-                x.addLiteral("despawn_mobs", PermWrapper.OP);
-
-                x.addArg(enarg);
-
-                x.action(e -> {
-                    Player p = enarg.get(e);
-                    for (LivingEntity en : p.level().getEntitiesOfClass(LivingEntity.class, p.getBoundingBox().inflate(30))) {
-                        en.setRemoved(Entity.RemovalReason.UNLOADED_TO_CHUNK);
-                    }
-                });
-
-            }, "");
-
-            CommandBuilder.of(dis, x -> {
-                PlayerWrapper enarg = new PlayerWrapper();
-
-                x.addLiteral("dev", PermWrapper.OP);
-                x.addLiteral("load_back_mobs", PermWrapper.OP);
-
-                x.addArg(enarg);
-
-                x.action(e -> {
-                    Player p = enarg.get(e);
-                    Load.chunkData((LevelChunk) p.level().getChunk(p.blockPosition())).tryLoadMobs(p.level());
-                });
-
-            }, " todo this doesnt work ??");
-
-
+             * CommandBuilder.of(dis, x -> {
+             * PlayerWrapper enarg = new PlayerWrapper();
+             * 
+             * x.addLiteral("dev", PermWrapper.OP);
+             * x.addLiteral("despawn_mobs", PermWrapper.OP);
+             * 
+             * x.addArg(enarg);
+             * 
+             * x.action(e -> {
+             * Player p = enarg.get(e);
+             * for (LivingEntity en : p.level().getEntitiesOfClass(LivingEntity.class,
+             * p.getBoundingBox().inflate(30))) {
+             * en.setRemoved(Entity.RemovalReason.UNLOADED_TO_CHUNK);
+             * }
+             * });
+             * 
+             * }, "");
+             * 
+             * CommandBuilder.of(dis, x -> {
+             * PlayerWrapper enarg = new PlayerWrapper();
+             * 
+             * x.addLiteral("dev", PermWrapper.OP);
+             * x.addLiteral("load_back_mobs", PermWrapper.OP);
+             * 
+             * x.addArg(enarg);
+             * 
+             * x.action(e -> {
+             * Player p = enarg.get(e);
+             * Load.chunkData((LevelChunk)
+             * p.level().getChunk(p.blockPosition())).tryLoadMobs(p.level());
+             * });
+             * 
+             * }, " todo this doesnt work ??");
+             * 
+             * 
              */
         }
     }

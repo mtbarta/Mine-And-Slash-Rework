@@ -51,42 +51,16 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
 
     @Override
     public void onReceived(ExilePacketContext ctx) {
-        System.out.println("[AllocateStatPacket] Server received packet - stat=" + stat + ", action=" + action);
 
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
 
         PlayerData cap = Load.player(ctx.getPlayer());
-        System.out.println("[AllocateStatPacket] PlayerData loaded: " + (cap != null));
 
         if (action == ACTION.ALLOCATE) {
-            // Debug: Detailed logging to trace free points calculation
-            var entityData = Load.Unit(ctx.getPlayer());
-            int playerLevel = entityData != null ? entityData.getLevel() : -1;
-            var config = PlayerPointsType.STATS.getConfig();
-            int basePoints = config != null ? config.base_points : -1;
-            float pointsPerLvl = config != null ? config.points_per_lvl : -1;
-            int maxTotal = config != null ? config.max_total_points : -1;
-            int spent = PlayerPointsType.STATS.getPointsInUse(ctx.getPlayer());
-            int calculatedTotal = basePoints + (int) (playerLevel * pointsPerLvl);
-            System.out.println("[AllocateStatPacket] DEBUG: playerLevel=" + playerLevel
-                    + ", basePoints=" + basePoints
-                    + ", pointsPerLvl=" + pointsPerLvl
-                    + ", calculatedTotal=" + calculatedTotal
-                    + ", maxTotal=" + maxTotal
-                    + ", spent=" + spent);
-
-            int freePoints = PlayerPointsType.STATS.getFreePoints(ctx.getPlayer());
-            System.out.println("[AllocateStatPacket] Free points: " + freePoints);
-            if (freePoints > 0) {
-                var statObj = ExileDB.Stats().get(stat);
-                System.out.println("[AllocateStatPacket] Stat from DB: "
-                        + (statObj != null ? statObj.getClass().getSimpleName() : "null") + ", isCorestat="
-                        + (statObj instanceof CoreStat));
-                if (statObj instanceof CoreStat) {
+            if (PlayerPointsType.STATS.getFreePoints(ctx.getPlayer()) > 0) {
+                if (ExileDB.Stats().get(stat) instanceof CoreStat) {
                     int oldValue = cap.statPoints.map.getOrDefault(stat, 0);
                     cap.statPoints.map.put(stat, 1 + oldValue);
-                    System.out.println(
-                            "[AllocateStatPacket] Allocated! " + stat + ": " + oldValue + " -> " + (oldValue + 1));
                 }
             }
         } else {
@@ -95,8 +69,6 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
                     int current = cap.statPoints.map.getOrDefault(stat, 0);
                     if (current > 0) {
                         cap.statPoints.map.put(stat, current - 1);
-                        System.out.println(
-                                "[AllocateStatPacket] Removed! " + stat + ": " + current + " -> " + (current - 1));
                     }
                 }
             }
@@ -104,7 +76,8 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
         Load.player(ctx.getPlayer()).cachedStats.setAllDirty();
         cap.playerDataSync.setDirty();
-        System.out.println("[AllocateStatPacket] Marked dirty for sync");
+        System.out.println("[AllocateStatPacket] Stat " + stat + " processed. Action: " + action + ". New Value: "
+                + cap.statPoints.map.getOrDefault(stat, 0) + ". Sync marked dirty.");
     }
 
     @Override

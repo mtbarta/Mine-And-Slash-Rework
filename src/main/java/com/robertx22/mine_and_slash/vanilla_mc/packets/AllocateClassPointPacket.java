@@ -59,17 +59,24 @@ public class AllocateClassPointPacket extends MyPacket<AllocateClassPointPacket>
 
         var data = Load.player(ctx.getPlayer()).ascClass;
 
+        System.out.println(
+                "[AllocateClassPointPacket] Received: Action=" + action + ", ID=" + id + ", SchoolID=" + schoolid);
         if (action == ACTION.ALLOCATE) {
 
             var res = data.canLearn(ctx.getPlayer(), school, perk);
+            System.out.println("[AllocateClassPointPacket] Can learn? " + res.can + " Reason: " + res.answer);
             if (res.can) {
                 data.learn(perk, school);
+                System.out.println("[AllocateClassPointPacket] Learned.");
             } else {
                 ctx.getPlayer().sendSystemMessage(res.answer);
             }
         } else {
-            if (data.canUnlearn(ctx.getPlayer(), school, perk)) {
+            boolean can = data.canUnlearn(ctx.getPlayer(), school, perk);
+            System.out.println("[AllocateClassPointPacket] Can unlearn? " + can);
+            if (can) {
                 data.unlearn(ctx.getPlayer(), perk, school);
+                System.out.println("[AllocateClassPointPacket] Unlearned.");
             }
         }
 

@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class StatPointsData implements IStatCtx {
-
 
     public HashMap<String, Integer> map = new HashMap<>();
 

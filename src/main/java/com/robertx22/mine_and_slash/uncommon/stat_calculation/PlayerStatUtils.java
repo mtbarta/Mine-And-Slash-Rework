@@ -25,7 +25,8 @@ public class PlayerStatUtils {
     public static List<StatContext> addToolStats(Player p) {
         ItemStack stack = p.getMainHandItem();
         if (StackSaving.TOOL.has(stack)) {
-            return Arrays.asList(new SimpleStatCtx(StatContext.StatCtxType.TOOL, StackSaving.TOOL.loadFrom(stack).GetAllStats()));
+            return Arrays.asList(
+                    new SimpleStatCtx(StatContext.StatCtxType.TOOL, StackSaving.TOOL.loadFrom(stack).GetAllStats()));
         } else {
             return Arrays.asList();
         }
@@ -37,15 +38,17 @@ public class PlayerStatUtils {
         var pd = Load.player(p);
         int lvl = data.getLevel();
 
-
-        List<Integer> all = pd.characters.getAllCharacters().stream().filter(x -> !x.name.equals(pd.characters.getCurrent().name)).map(x -> x.lvl).collect(Collectors.toList());
-
+        List<Integer> all = pd.characters.getAllCharacters().stream()
+                .filter(x -> !x.name.equals(pd.characters.getCurrent().name)).map(x -> x.lvl)
+                .collect(Collectors.toList());
 
         int higher = (int) all.stream().filter(x -> x > lvl).count();
 
         if (higher > 0) {
-            return new SimpleStatCtx(StatContext.StatCtxType.BONUS_XP_PER_CHARACTER, Arrays.asList(ExactStatData.noScaling(
-                    ServerContainer.get().BONUS_EXP_PERCENT_PER_HIGHER_LVL_CHARACTERS.get() * higher, ModType.FLAT, BonusExp.getInstance().GUID())));
+            return new SimpleStatCtx(StatContext.StatCtxType.BONUS_XP_PER_CHARACTER,
+                    Arrays.asList(ExactStatData.noScaling(
+                            ServerContainer.get().BONUS_EXP_PERCENT_PER_HIGHER_LVL_CHARACTERS.get() * higher,
+                            ModType.FLAT, BonusExp.getInstance().GUID())));
         }
         return new SimpleStatCtx(StatContext.StatCtxType.BONUS_XP_PER_CHARACTER, Arrays.asList());
     }

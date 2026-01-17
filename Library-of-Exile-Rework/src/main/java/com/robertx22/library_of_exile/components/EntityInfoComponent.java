@@ -4,6 +4,7 @@ import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.utils.LoadSave;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -15,11 +16,9 @@ public class EntityInfoComponent {
 
     public static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Ref.MODID, "entity_info");
 
-
     public static EntityInfoComponent get(LivingEntity entity) {
         return entity.getData(LibAttachments.ENTITY_INFO);
     }
-
 
     private static final String DMG_STATS = "dmg_stats";
     private static final String SPAWN_POS = "spawn_pos";
@@ -40,7 +39,7 @@ public class EntityInfoComponent {
             return spawnPos;
         }
         if (this.owner != null)
-             return this.owner.blockPosition();
+            return this.owner.blockPosition();
         return BlockPos.ZERO;
     }
 
@@ -68,7 +67,7 @@ public class EntityInfoComponent {
         return dmgStats;
     }
 
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag nbt = new CompoundTag();
         try {
             if (dmgStats != null) {
@@ -86,7 +85,7 @@ public class EntityInfoComponent {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
 
         try {
 

@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
 public class MobStatUtils {
 
     public static List<StatContext> addSummonStats(TamableAnimal en) {
@@ -54,7 +53,6 @@ public class MobStatUtils {
         return Arrays.asList(new MiscStatCtx(stats));
 
     }
-
 
     // todo test this
     public static List<StatContext> addMapTierStats(LivingEntity en) {
@@ -115,7 +113,8 @@ public class MobStatUtils {
         float dmg = (float) ((-1F + config.dmg_multi) * 100F);
         float stat = (float) ((-1F + config.stat_multi) * 100F);
 
-        float expo = 100f * (float) (-1F + GameBalanceConfig.get().MOB_HP_POWER_SCALING_BASE * (float) Math.pow(GameBalanceConfig.get().MOB_HP_POWER_SCALING, unitdata.getLevel()));
+        float expo = 100f * (float) (-1F + GameBalanceConfig.get().MOB_HP_POWER_SCALING_BASE
+                * (float) Math.pow(GameBalanceConfig.get().MOB_HP_POWER_SCALING, unitdata.getLevel()));
         stats.add(ExactStatData.noScaling(hp, ModType.MORE, Health.getInstance().GUID()));
         stats.add(ExactStatData.noScaling(expo, ModType.MORE, Health.getInstance().GUID()));
         stats.add(ExactStatData.noScaling(dmg, ModType.FLAT, OffenseStats.TOTAL_DAMAGE.get()
@@ -124,13 +123,13 @@ public class MobStatUtils {
         stats.add(ExactStatData.noScaling(stat, ModType.MORE, DodgeRating.getInstance().GUID()));
         stats.add(ExactStatData.noScaling(stat, ModType.MORE, Armor.getInstance().GUID()));
 
-
         for (Elements ele : Elements.getAllSingle()) {
             if (ele != Elements.Physical) {
                 stats.add(ExactStatData.noScaling(stat, ModType.MORE, new ElementalResist(ele).GUID()));
             }
         }
-        //stats.add(ExactStatData.noScaling(stat, ModType.MORE, new ElementalResist(Elements.Elemental).GUID()));
+        // stats.add(ExactStatData.noScaling(stat, ModType.MORE, new
+        // ElementalResist(Elements.Elemental).GUID()));
         stats.add(ExactStatData.noScaling(stat, ModType.MORE, Health.getInstance().GUID()));
 
         list.add(new MiscStatCtx(stats));
@@ -153,15 +152,17 @@ public class MobStatUtils {
             vanillahp = rar.force_custom_hp;
         }
 
-
         float hpToAdd = vanillahp * rar.ExtraHealthMulti();
 
-        hpToAdd += (ServerContainer.get().EXTRA_MOB_STATS_PER_LEVEL.get() * lvl) * hpToAdd;
+        double extraStats = 0;
+        if (!en.level().isClientSide) {
+            extraStats = ServerContainer.get().EXTRA_MOB_STATS_PER_LEVEL.get();
+        }
+        hpToAdd += (extraStats * lvl) * hpToAdd;
 
         if (hpToAdd < 0) {
             hpToAdd = 0;
         }
-
 
         stats.add(ExactStatData.scaleTo(hpToAdd, ModType.FLAT, Health.getInstance().GUID(), lvl));
 
@@ -172,12 +173,13 @@ public class MobStatUtils {
 
         for (Elements ele : Elements.getAllSingle()) {
             if (ele != Elements.Physical) {
-                stats.add(ExactStatData.noScaling(10 * rar.StatMultiplier(), ModType.FLAT, new ElementalResist(ele).GUID()));
+                stats.add(ExactStatData.noScaling(10 * rar.StatMultiplier(), ModType.FLAT,
+                        new ElementalResist(ele).GUID()));
             }
         }
 
-        // stats.add(ExactStatData.scaleTo(5 * rar.DamageMultiplier(), ModType.FLAT, OffenseStats.CRIT_CHANCE.get().GUID(), lvl));
-
+        // stats.add(ExactStatData.scaleTo(5 * rar.DamageMultiplier(), ModType.FLAT,
+        // OffenseStats.CRIT_CHANCE.get().GUID(), lvl));
 
         list.add(new MiscStatCtx(stats));
 

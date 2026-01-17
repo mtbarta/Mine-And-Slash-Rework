@@ -75,8 +75,8 @@ public class CachedPlayerStats {
         STAT_COMPAT.setDirty();
     }
 
-    public void tick() {
-
+    public void tick(Player p) {
+        this.p = p;
         ALLOCATED.onTickTrySync(p);
         ENCHANT_COMPAT.onTickTrySync(p);
         STAT_COMPAT.onTickTrySync(p);

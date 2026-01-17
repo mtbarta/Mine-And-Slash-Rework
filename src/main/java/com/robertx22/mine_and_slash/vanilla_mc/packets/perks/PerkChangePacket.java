@@ -70,15 +70,23 @@ public class PerkChangePacket extends MyPacket<PerkChangePacket> {
             return;
         }
 
+        System.out.println(
+                "[PerkChangePacket] Received: Action=" + action + ", School=" + school + ", Points=" + x + "," + y);
         PointData point = new PointData(x, y);
         if (action == ACTION.ALLOCATE) {
-            if (playerData.talents.canAllocate(sc, point, Load.Unit(ctx.getPlayer()), ctx.getPlayer())) {
+            boolean can = playerData.talents.canAllocate(sc, point, Load.Unit(ctx.getPlayer()), ctx.getPlayer());
+            System.out.println("[PerkChangePacket] Can allocate? " + can);
+            if (can) {
                 playerData.talents.allocate(ctx.getPlayer(), sc, new PointData(x, y));
+                System.out.println("[PerkChangePacket] Allocated.");
             }
         } else if (action == ACTION.REMOVE) {
-            if (playerData.talents.canRemove(ctx.getPlayer(), sc, point)) {
+            boolean can = playerData.talents.canRemove(ctx.getPlayer(), sc, point);
+            System.out.println("[PerkChangePacket] Can remove? " + can);
+            if (can) {
                 playerData.talents.remove(sc.getSchool_type(), new PointData(x, y));
                 type.reduceResetPoints(ctx.getPlayer(), 1);
+                System.out.println("[PerkChangePacket] Removed.");
             }
         }
 

@@ -4,12 +4,12 @@ import com.google.gson.JsonSyntaxException;
 import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.utils.LoadSave;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-public class MapConnectionsCap {
+public class MapConnectionsCap implements ICap {
 
     public Level world;
 
@@ -26,7 +26,13 @@ public class MapConnectionsCap {
 
     public AllMapConnectionData data = new AllMapConnectionData();
 
-    public CompoundTag serializeNBT() {
+    @Override
+    public String getCapIdForSyncing() {
+        return "map_connections";
+    }
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var nbt = new CompoundTag();
         try {
             LoadSave.Save(data, nbt, "data");
@@ -36,9 +42,11 @@ public class MapConnectionsCap {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         try {
-            this.data = LoadSave.loadOrBlank(AllMapConnectionData.class, new AllMapConnectionData(), nbt, "data", new AllMapConnectionData());
+            this.data = LoadSave.loadOrBlank(AllMapConnectionData.class, new AllMapConnectionData(), nbt, "data",
+                    new AllMapConnectionData());
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

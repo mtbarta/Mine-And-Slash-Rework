@@ -2,8 +2,8 @@ package com.robertx22.mine_and_slash.capability.player;
 
 import com.robertx22.library_of_exile.components.ICap;
 import com.robertx22.library_of_exile.components.PlayerDataCapability;
+import com.robertx22.library_of_exile.packets.SyncPlayerCapToClient;
 import com.robertx22.library_of_exile.main.Packets;
-import com.robertx22.mine_and_slash.vanilla_mc.packets.SyncPlayerDataPacket;
 import com.robertx22.library_of_exile.utils.LoadSave;
 import com.robertx22.mine_and_slash.a_libraries.curios.MyCuriosUtils;
 import com.robertx22.mine_and_slash.a_libraries.curios.RefCurios;
@@ -49,13 +49,14 @@ public class PlayerData implements ICap {
         var cap = entity.getData(SlashAttachments.PLAYER_DATA);
         if (entity instanceof Player player) {
             cap.player = player;
+            if (cap.cachedStats != null) {
+                cap.cachedStats.p = player;
+            }
+            if (cap.jewelData != null) {
+                cap.jewelData.player = player;
+            }
         }
         return cap;
-    }
-
-    @Override
-    public void syncToClient(Player player) {
-
     }
 
     private static final String TEAM_DATA = "teams";
@@ -221,8 +222,14 @@ public class PlayerData implements ICap {
 
     }
 
+    @Override
+    public void syncToClient(Player player) {
+
+    }
+
     private void syncData() {
-        Packets.sendToClient(player, new SyncPlayerDataPacket(player));
+        Packets.sendToClient(player, new SyncPlayerCapToClient(player,
+                this.getCapIdForSyncing()));
     }
 
     transient HashMap<String, Unit> spellUnits = new HashMap<>();
@@ -331,6 +338,16 @@ public class PlayerData implements ICap {
 
     @Override
     public String getCapIdForSyncing() {
-        return PlayerDataCapability.CAP_ID;
+        return "rpg_player_data";
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerData{" +
+                "statPoints=" + (statPoints != null ? statPoints.map : "null") +
+                ", talents=" + (talents != null ? "loaded" : "null") +
+                ", bonusTalents=" + bonusTalents +
+                ", omensFilled=" + omensFilled +
+                '}';
     }
 }

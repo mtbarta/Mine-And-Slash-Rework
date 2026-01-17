@@ -134,9 +134,11 @@ public class PerkButton extends ImageButton {
                         .getSoundManager());
 
                 if (button == 0) {
+                    System.out.println("[PerkButton] Sending ALLOCATE packet for " + perk.GUID());
                     Packets.sendToServer(new PerkChangePacket(school, point, PerkChangePacket.ACTION.ALLOCATE));
                 }
                 if (button == 1) {
+                    System.out.println("[PerkButton] Sending REMOVE packet for " + perk.GUID());
                     Packets.sendToServer(new PerkChangePacket(school, point, PerkChangePacket.ACTION.REMOVE));
                 }
                 this.onClick(mouseX, mouseY);

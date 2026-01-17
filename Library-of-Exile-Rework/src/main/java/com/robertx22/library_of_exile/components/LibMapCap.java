@@ -6,6 +6,7 @@ import com.robertx22.library_of_exile.dimension.MapDimensions;
 import com.robertx22.library_of_exile.main.Ref;
 import com.robertx22.library_of_exile.registry.LibAttachments;
 import com.robertx22.library_of_exile.utils.LoadSave;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -31,7 +32,7 @@ public class LibMapCap {
 
     public LibMapDataSaver data = new LibMapDataSaver();
 
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var nbt = new CompoundTag();
         try {
             LoadSave.Save(data, nbt, "data");
@@ -41,9 +42,10 @@ public class LibMapCap {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         try {
-            this.data = LoadSave.loadOrBlank(LibMapDataSaver.class, new LibMapDataSaver(), nbt, "data", new LibMapDataSaver());
+            this.data = LoadSave.loadOrBlank(LibMapDataSaver.class, new LibMapDataSaver(), nbt, "data",
+                    new LibMapDataSaver());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,6 +62,7 @@ public class LibMapCap {
             return MapDimensions.getInfo(ResourceLocation.parse(Ref.MODID)); // Assuming Ref.MODID is correct context.
         }
     };
+
     public static LibMapData getData(Level level, net.minecraft.core.BlockPos pos) {
         return DATA_GETTER.getData(new MapDataFinder.Pos(level, pos));
     }
