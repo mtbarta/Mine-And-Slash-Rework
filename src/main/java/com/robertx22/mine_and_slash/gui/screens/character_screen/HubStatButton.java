@@ -24,9 +24,13 @@ public class HubStatButton extends ImageButton {
 
     public static int xSize = 41;
     public static int ySize = 20;
-    public static ResourceLocation LEFT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+    // Sprite format for WidgetSprites
+    public static ResourceLocation LEFT = SlashRef.spriteId("main_hub/hub_stat_button_left");
+    public static ResourceLocation RIGHT = SlashRef.spriteId("main_hub/hub_stat_button_right");
+    // Full path for gui.blit() calls
+    public static ResourceLocation LEFT_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/main_hub/hub_stat_button_left.png");
-    public static ResourceLocation RIGHT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+    public static ResourceLocation RIGHT_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
             "textures/gui/main_hub/hub_stat_button_right.png");
 
     StatData stat;
@@ -80,14 +84,8 @@ public class HubStatButton extends ImageButton {
             numY = 11;
         }
 
-        var tex = LEFT;
-
-        if (this.right) {
-            tex = RIGHT;
-        }
-
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(tex, getX(), getY(), 0, 0, xSize, ySize, xSize, ySize);
+        gui.blit(this.right ? RIGHT_TEX : LEFT_TEX, getX(), getY(), 0, 0, xSize, ySize, xSize, ySize);
 
         String stattext = CharacterStatsButtons.getHubStatString(stat.GetStat(), Load.Unit(ClientOnly.getPlayer()));
 

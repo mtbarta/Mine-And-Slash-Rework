@@ -18,7 +18,7 @@ import net.minecraft.world.inventory.Slot;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 
 public class BackpackQuickLootButton extends ImageButton {
-    static ResourceLocation TEXTURE = SlashRef.id("textures/gui/backpack_button.png");
+    static ResourceLocation TEXTURE = SlashRef.spriteId("backpack_button");
 
     public BackpackQuickLootButton(int pX, int pY, ContainerScreen screen) {
         super(pX + ClientConfigs.getConfig().QUICK_LOOT_BUTTON_X_OFFSET.get(),

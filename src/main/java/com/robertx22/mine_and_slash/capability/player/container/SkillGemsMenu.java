@@ -8,6 +8,7 @@ import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import com.robertx22.mine_and_slash.uncommon.datasaving.StackSaving;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.ClientOnly;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
@@ -22,6 +23,9 @@ public class SkillGemsMenu extends AbstractContainerMenu {
     private static final int USE_ROW_SLOT_START = 28;
     private static final int USE_ROW_SLOT_END = 37;
 
+    public SkillGemsMenu(int pContainerId, Inventory pInventory) {
+        this(new PlayerData(ClientOnly.getPlayer()), pContainerId, pInventory);
+    }
 
     public SkillGemsMenu(int pContainerId, Container pContainer) {
         this(new PlayerData(ClientOnly.getPlayer()), pContainerId, pContainer);
@@ -34,7 +38,7 @@ public class SkillGemsMenu extends AbstractContainerMenu {
 
         this.player = rpg.player;
 
-        //this.addDataSlots(pBeaconData);
+        // this.addDataSlots(pBeaconData);
         int x = 36;
         int y = 174;
 
@@ -51,34 +55,33 @@ public class SkillGemsMenu extends AbstractContainerMenu {
             var data = rpg.getSkillGemInventory();
             int index = 0;
 
-
             for (int i = 0; i < GemInventoryHelper.MAX_SKILL_GEMS; i++) {
 
                 int xp = 16 + (i * 25);
                 if (i > 3) {
                     xp += 7;
                 }
-                //  this.addSlot(new GemSlot(SkillGemData.SkillGemType.SKILL, data.getGemsInv(), index, xp, 16));
+                // this.addSlot(new GemSlot(SkillGemData.SkillGemType.SKILL, data.getGemsInv(),
+                // index, xp, 16));
                 index++;
 
                 for (int s = 0; s < GemInventoryHelper.SUPPORT_GEMS_PER_SKILL; s++) {
-                    this.addSlot(new GemSlot(i, s, player, SkillGemData.SkillGemType.SUPPORT, data.getGemsInv(), index, xp, 38 + (s * 18)));
+                    this.addSlot(new GemSlot(i, s, player, SkillGemData.SkillGemType.SUPPORT, data.getGemsInv(), index,
+                            xp, 38 + (s * 18)));
                     index++;
                 }
 
             }
 
-
             for (int i = 0; i < GemInventoryHelper.TOTAL_AURAS; i++) {
-                this.addSlot(new GemSlot(i, 0, player, SkillGemData.SkillGemType.AURA, data.getAuraInv(), i, 36 + (i * 18), 148));
+                this.addSlot(new GemSlot(i, 0, player, SkillGemData.SkillGemType.AURA, data.getAuraInv(), i,
+                        36 + (i * 18), 148));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-
     }
-
 
     public class GemSlot extends Slot {
         SkillGemData.SkillGemType type;
@@ -88,7 +91,8 @@ public class SkillGemsMenu extends AbstractContainerMenu {
         int num;
         int slotIndex;
 
-        public GemSlot(int num, int slotindex, Player p, SkillGemData.SkillGemType type, Container pContainer, int pSlot, int pX, int pY) {
+        public GemSlot(int num, int slotindex, Player p, SkillGemData.SkillGemType type, Container pContainer,
+                int pSlot, int pX, int pY) {
             super(pContainer, pSlot, pX, pY);
             this.type = type;
             this.p = p;
@@ -134,7 +138,6 @@ public class SkillGemsMenu extends AbstractContainerMenu {
             return false;
         }
     }
-
 
     @Override
     public ItemStack quickMoveStack(Player pPlayer, int pIndex) {

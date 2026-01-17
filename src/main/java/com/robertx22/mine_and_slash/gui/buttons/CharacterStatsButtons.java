@@ -46,7 +46,7 @@ public class CharacterStatsButtons extends ImageButton {
         setModTooltip();
 
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.blit(type.getIcon(), getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
+        gui.blit(type.getTexture(), getX(), getY(), BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X, BUTTON_SIZE_X,
                 BUTTON_SIZE_X, BUTTON_SIZE_X);
 
     }

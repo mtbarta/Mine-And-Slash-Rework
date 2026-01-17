@@ -23,34 +23,41 @@ public class PlayerGearButton extends ImageButton {
     public static int xSize = 99;
     public static int ySize = 80;
 
-    static ResourceLocation TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/player_gear.png");
+    static ResourceLocation TEX = SlashRef.spriteId("player_gear");
     BaseScreen screen;
     Player player;
 
     public PlayerGearButton(Player player, BaseScreen screen, int xPos, int yPos) {
-        super(xPos, yPos, xSize, ySize, 
-            new WidgetSprites(TEX, TEX), // Using same sprite for normal and hovered states  
-            (button) -> {
-        });
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(TEX, TEX), // Using same sprite for normal and hovered states
+                (button) -> {
+                });
         this.player = player;
         this.screen = screen;
 
         // todo why is this broken
 
-/*
-        addItemButton(MyCurioUtils.get(RefCurio.NECKLACE, player, 0), this.getX() + 0, this.getY() + 4);
-        addItemButton(MyCurioUtils.get(RefCurio.RING, player, 0), this.getX() + 0, this.getY() + 22);
-        addItemButton(MyCurioUtils.get(RefCurio.RING, player, 1), this.getX() + 0, this.getY() + 40);
-
-        addItemButton(player.getItemBySlot(EquipmentSlot.HEAD), this.getX() + 81, this.getY() + 4);
-        addItemButton(player.getItemBySlot(EquipmentSlot.CHEST), this.getX() + 81, this.getY() + 22);
-        addItemButton(player.getItemBySlot(EquipmentSlot.LEGS), this.getX() + 81, this.getY() + 40);
-        addItemButton(player.getItemBySlot(EquipmentSlot.FEET), this.getX() + 81, this.getY() + 58);
-
-
- */
+        /*
+         * addItemButton(MyCurioUtils.get(RefCurio.NECKLACE, player, 0), this.getX() +
+         * 0, this.getY() + 4);
+         * addItemButton(MyCurioUtils.get(RefCurio.RING, player, 0), this.getX() + 0,
+         * this.getY() + 22);
+         * addItemButton(MyCurioUtils.get(RefCurio.RING, player, 1), this.getX() + 0,
+         * this.getY() + 40);
+         * 
+         * addItemButton(player.getItemBySlot(EquipmentSlot.HEAD), this.getX() + 81,
+         * this.getY() + 4);
+         * addItemButton(player.getItemBySlot(EquipmentSlot.CHEST), this.getX() + 81,
+         * this.getY() + 22);
+         * addItemButton(player.getItemBySlot(EquipmentSlot.LEGS), this.getX() + 81,
+         * this.getY() + 40);
+         * addItemButton(player.getItemBySlot(EquipmentSlot.FEET), this.getX() + 81,
+         * this.getY() + 58);
+         * 
+         * 
+         */
         // addItemButton(player.getEquippedStack(EquipmentSlot.MAINHAND), 58, 69);
-        //addItemButton(player.getEquippedStack(EquipmentSlot.OFFHAND), 179, 69);
+        // addItemButton(player.getEquippedStack(EquipmentSlot.OFFHAND), 179, 69);
 
     }
 
@@ -62,14 +69,13 @@ public class PlayerGearButton extends ImageButton {
 
         Minecraft mc = Minecraft.getInstance();
 
-
         // player 3d view
-            InventoryScreen.renderEntityInInventoryFollowsMouse(gui, this.getX() + 50, this.getY() + 77, 
-                this.getX() + 50, this.getY() + 77, 30, 
+        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, this.getX() + 50, this.getY() + 77,
+                this.getX() + 50, this.getY() + 77, 30,
                 (float) (getX() + 51) - x, (float) (getY() + 75 - 50) - y, 0f, player);
 
-        gui.drawString(mc.font, str, this.getX() + xSize / 2 - mc.font.width(str) / 2, this.getY() + 6, ChatFormatting.YELLOW.getColor());
-
+        gui.drawString(mc.font, str, this.getX() + xSize / 2 - mc.font.width(str) / 2, this.getY() + 6,
+                ChatFormatting.YELLOW.getColor());
 
     }
 

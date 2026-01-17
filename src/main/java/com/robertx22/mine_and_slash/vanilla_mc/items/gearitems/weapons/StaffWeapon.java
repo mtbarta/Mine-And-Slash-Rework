@@ -9,8 +9,7 @@ public class StaffWeapon extends ModWeapon implements IAutoModel {
     VanillaMaterial mat;
 
     public StaffWeapon(VanillaMaterial mat) {
-        super(mat.toolmat, new Properties().durability(250 + mat.toolmat.getUses())
-                , WeaponTypes.staff);
+        super(mat.toolmat, new Properties().durability(250 + mat.toolmat.getUses()), WeaponTypes.staff);
         this.mat = mat;
 
         this.attackSpeed = -3;
@@ -19,8 +18,8 @@ public class StaffWeapon extends ModWeapon implements IAutoModel {
 
     @Override
     public void generateModel(ItemModelManager manager) {
-        manager.handheld(this);
+        // Don't generate - we use custom 3D models from JSON files in
+        // models/item/weapon/staff/
     }
-
 
 }

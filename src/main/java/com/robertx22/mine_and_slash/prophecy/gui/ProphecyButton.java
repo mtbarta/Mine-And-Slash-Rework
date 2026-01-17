@@ -13,7 +13,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
 
 public class ProphecyButton extends ImageButton {
-    static ResourceLocation DEFAULT_ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/icon.png");
+    static ResourceLocation DEFAULT_ID = SlashRef.spriteId("prophecy/icon");
 
     ProphecyData data;
     ResourceLocation iconTexture;

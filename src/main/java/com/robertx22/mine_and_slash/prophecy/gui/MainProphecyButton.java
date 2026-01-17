@@ -29,8 +29,8 @@ public class MainProphecyButton extends ImageButton {
     public MainProphecyButton(int xPos, int yPos) {
         super(xPos, yPos, FAVOR_BUTTON_SIZE_X, FAVOR_BUTTON_SIZE_Y,
                 new WidgetSprites(
-                        ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/main_button.png"),
-                        ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/main_button.png")),
+                        SlashRef.spriteId("prophecy/button"),
+                        SlashRef.spriteId("prophecy/button")),
                 (button) -> {
                 });
 

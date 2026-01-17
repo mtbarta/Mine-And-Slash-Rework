@@ -76,10 +76,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainHubScreen extends BaseScreen implements INamedScreen {
-    private static final ResourceLocation LEFT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
-            "textures/gui/main_hub/buttons_backwards.png");
-    static ResourceLocation RIGHT = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
-            "textures/gui/main_hub/buttons.png");
+    // Sprite format paths for WidgetSprites (used by ImageButton)
+    private static final ResourceLocation LEFT = SlashRef.spriteId("main_hub/buttons_backwards");
+    static ResourceLocation RIGHT = SlashRef.spriteId("main_hub/buttons");
 
     static int sizeX = 256;
     static int sizeY = 219;
@@ -100,8 +99,13 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
             this.id = id;
         }
 
+        // Sprite format for WidgetSprites
         public ResourceLocation getIcon() {
+            return SlashRef.spriteId("stat_groups/" + id);
+        }
 
+        // Full path for gui.blit() calls
+        public ResourceLocation getTexture() {
             return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/stat_groups/" + id + ".png");
         }
     }
@@ -393,14 +397,14 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
     public static class AllocateStatButton extends ImageButton {
         static int SIZEX = 18;
         static int SIZEY = 18;
-        static ResourceLocation BUTTON_TEX = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
-                "textures/gui/plus_button.png");
+        static ResourceLocation BUTTON_TEX = SlashRef.guiId("plus_button");
 
         Stat stat;
 
         public AllocateStatButton(String stat, int xPos, int yPos) {
             super(xPos, yPos, SIZEX, SIZEY,
-                    new WidgetSprites(BUTTON_TEX, BUTTON_TEX),
+                    new WidgetSprites(ResourceLocation.fromNamespaceAndPath("minecraft", "empty"),
+                            ResourceLocation.fromNamespaceAndPath("minecraft", "empty")),
                     (button) -> {
                         // Packets.sendToServer(new AllocateStatPacket(ExileDB.Stats() .get(stat)));
                     });
@@ -414,15 +418,23 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            System.out.println("[AllocateStatButton] mouseClicked called - active=" + this.active + ", visible="
+                    + this.visible + ", stat=" + (stat != null ? stat.GUID() : "null"));
+            System.out.println("[AllocateStatButton] Button pos: x=" + this.getX() + ", y=" + this.getY() + ", w="
+                    + this.getWidth() + ", h=" + this.getHeight());
+            System.out.println("[AllocateStatButton] Mouse pos: x=" + mouseX + ", y=" + mouseY);
 
-            if (this.active && this.visible) {
+            if (this.active && this.visible && stat != null) {
                 boolean bl = this.clicked(mouseX, mouseY);
+                System.out.println("[AllocateStatButton] clicked() returned: " + bl);
                 if (bl) {
                     this.playDownSound(Minecraft.getInstance().getSoundManager());
                     if (button == 0) {
+                        System.out.println("[AllocateStatButton] Sending ALLOCATE packet for stat: " + stat.GUID());
                         Packets.sendToServer(new AllocateStatPacket(stat, AllocateStatPacket.ACTION.ALLOCATE));
                     }
                     if (button == 1) {
+                        System.out.println("[AllocateStatButton] Sending REMOVE packet for stat: " + stat.GUID());
                         Packets.sendToServer(new AllocateStatPacket(stat, AllocateStatPacket.ACTION.REMOVE));
                     }
                     this.onClick(mouseX, mouseY);
@@ -430,6 +442,7 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
                 }
                 return false;
             } else {
+                System.out.println("[AllocateStatButton] Skipping - conditions not met");
                 return false;
             }
         }
@@ -454,21 +467,29 @@ public class MainHubScreen extends BaseScreen implements INamedScreen {
         }
 
         public void renderWidget(GuiGraphics gui, int x, int y, float f) {
-
-            setTooltipMod();
-
             Minecraft mc = Minecraft.getInstance();
 
-            String txt = ((int) Load.Unit(mc.player)
-                    .getUnit()
-                    .getCalculatedStat(stat)
-                    .getValue()) + "";
+            // Render the plus button texture FIRST
+            // plus_button.png is 256x256 with button graphic in top-left corner
+            gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            gui.blit(BUTTON_TEX, this.getX(), this.getY(), 0, 0, SIZEX, SIZEY, 256, 256);
 
-            RenderUtils.render16Icon(gui, stat.getIconForRendering(), this.getX() - 17, this.getY() + 1);
+            // Then handle tooltip and stats (which might be null)
+            if (stat != null) {
+                setTooltipMod();
 
-            gui.drawCenteredString(mc.font, txt, this.getX() + SIZEX + 13, this.getY() + 5,
-                    ChatFormatting.WHITE.getColor());
+                var unitData = Load.Unit(mc.player);
+                if (unitData != null && unitData.getUnit() != null) {
+                    String txt = ((int) unitData.getUnit()
+                            .getCalculatedStat(stat)
+                            .getValue()) + "";
 
+                    RenderUtils.render16Icon(gui, stat.getIconForRendering(), this.getX() - 17, this.getY() + 1);
+
+                    gui.drawCenteredString(mc.font, txt, this.getX() + SIZEX + 13, this.getY() + 5,
+                            ChatFormatting.WHITE.getColor());
+                }
+            }
         }
 
         @Override

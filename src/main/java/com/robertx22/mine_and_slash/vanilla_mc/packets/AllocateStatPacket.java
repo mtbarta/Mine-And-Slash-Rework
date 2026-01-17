@@ -51,15 +51,26 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
 
     @Override
     public void onReceived(ExilePacketContext ctx) {
+        System.out.println("[AllocateStatPacket] Server received packet - stat=" + stat + ", action=" + action);
 
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
 
         PlayerData cap = Load.player(ctx.getPlayer());
+        System.out.println("[AllocateStatPacket] PlayerData loaded: " + (cap != null));
 
         if (action == ACTION.ALLOCATE) {
-            if (PlayerPointsType.STATS.getFreePoints(ctx.getPlayer()) > 0) {
-                if (ExileDB.Stats().get(stat) instanceof CoreStat) {
-                    cap.statPoints.map.put(stat, 1 + cap.statPoints.map.getOrDefault(stat, 0));
+            int freePoints = PlayerPointsType.STATS.getFreePoints(ctx.getPlayer());
+            System.out.println("[AllocateStatPacket] Free points: " + freePoints);
+            if (freePoints > 0) {
+                var statObj = ExileDB.Stats().get(stat);
+                System.out.println("[AllocateStatPacket] Stat from DB: "
+                        + (statObj != null ? statObj.getClass().getSimpleName() : "null") + ", isCorestat="
+                        + (statObj instanceof CoreStat));
+                if (statObj instanceof CoreStat) {
+                    int oldValue = cap.statPoints.map.getOrDefault(stat, 0);
+                    cap.statPoints.map.put(stat, 1 + oldValue);
+                    System.out.println(
+                            "[AllocateStatPacket] Allocated! " + stat + ": " + oldValue + " -> " + (oldValue + 1));
                 }
             }
         } else {
@@ -68,12 +79,15 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
                     int current = cap.statPoints.map.getOrDefault(stat, 0);
                     if (current > 0) {
                         cap.statPoints.map.put(stat, current - 1);
+                        System.out.println(
+                                "[AllocateStatPacket] Removed! " + stat + ": " + current + " -> " + (current - 1));
                     }
                 }
             }
         }
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
         cap.playerDataSync.setDirty();
+        System.out.println("[AllocateStatPacket] Marked dirty for sync");
     }
 
     @Override

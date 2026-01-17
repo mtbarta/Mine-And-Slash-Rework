@@ -13,6 +13,13 @@ public class SlashRef {
         return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/" + id + ".png");
     }
 
+    // For WidgetSprites and blitSprite - expects textures in textures/gui/sprites/
+    // Path format: just the sprite path without "textures/gui/sprites/" prefix or
+    // ".png" extension
+    public static ResourceLocation spriteId(String id) {
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, id);
+    }
+
     public static final String MODID = "mmorpg";
     public static final String MOD_NAME = "Mine and Slash";
 

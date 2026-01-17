@@ -1,5 +1,5 @@
 modLoader = "javafml" #mandatory
-loaderVersion = "[1,)"
+loaderVersion = "[4,)"
 license = "All rights reserved"
 issueTrackerURL = "${mod_issues_link}"
 [[mods]]

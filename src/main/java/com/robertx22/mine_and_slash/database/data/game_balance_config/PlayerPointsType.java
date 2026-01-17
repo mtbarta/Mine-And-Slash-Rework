@@ -157,10 +157,8 @@ public enum PlayerPointsType implements IGUID {
             c = data.max_bonus_points;
         }
 
-
         return c;
     }
-
 
     public abstract Item matItem();
 
