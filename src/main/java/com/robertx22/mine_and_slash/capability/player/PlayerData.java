@@ -3,7 +3,7 @@ package com.robertx22.mine_and_slash.capability.player;
 import com.robertx22.library_of_exile.components.ICap;
 import com.robertx22.library_of_exile.components.PlayerDataCapability;
 import com.robertx22.library_of_exile.main.Packets;
-import com.robertx22.library_of_exile.packets.SyncPlayerCapToClient;
+import com.robertx22.mine_and_slash.vanilla_mc.packets.SyncPlayerDataPacket;
 import com.robertx22.library_of_exile.utils.LoadSave;
 import com.robertx22.mine_and_slash.a_libraries.curios.MyCuriosUtils;
 import com.robertx22.mine_and_slash.a_libraries.curios.RefCurios;
@@ -222,7 +222,7 @@ public class PlayerData implements ICap {
     }
 
     private void syncData() {
-        Packets.sendToClient(player, new SyncPlayerCapToClient(player, this.getCapIdForSyncing()));
+        Packets.sendToClient(player, new SyncPlayerDataPacket(player));
     }
 
     transient HashMap<String, Unit> spellUnits = new HashMap<>();

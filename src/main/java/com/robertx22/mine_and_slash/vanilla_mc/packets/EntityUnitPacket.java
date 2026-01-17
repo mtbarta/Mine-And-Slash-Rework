@@ -22,6 +22,8 @@ public class EntityUnitPacket extends MyPacket<EntityUnitPacket> {
     public EntityUnitPacket(Entity entity) {
         this.id = entity.getId();
         this.nbt = Load.Unit(entity).serializeNBT(entity.level().registryAccess());
+        System.out.println("[EntityUnitPacket] Created packet for " + entity.getName().getString() + " NBT size: "
+                + (nbt != null ? nbt.size() : "null"));
     }
 
     @Override

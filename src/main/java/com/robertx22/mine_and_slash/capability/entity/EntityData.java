@@ -478,6 +478,7 @@ public class EntityData implements ICap, INeededForClient {
 
     private void syncData() {
         if (entity.level().isClientSide) {
+            System.out.println("Client side sync");
             return;
         }
         if (entity instanceof Player p) {
@@ -577,7 +578,7 @@ public class EntityData implements ICap, INeededForClient {
             this.didStatCalcThisTickForPlayer = true;
 
             var data = Load.player(p);
-
+            System.out.println("[EntityData] Recalculating stats for player: " + p.getName().getString());
             data.cachedStats.allStatsWithoutSuppGems = stats;
 
             data.setSpellUnitsDirty();

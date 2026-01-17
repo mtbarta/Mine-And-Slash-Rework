@@ -59,6 +59,22 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
         System.out.println("[AllocateStatPacket] PlayerData loaded: " + (cap != null));
 
         if (action == ACTION.ALLOCATE) {
+            // Debug: Detailed logging to trace free points calculation
+            var entityData = Load.Unit(ctx.getPlayer());
+            int playerLevel = entityData != null ? entityData.getLevel() : -1;
+            var config = PlayerPointsType.STATS.getConfig();
+            int basePoints = config != null ? config.base_points : -1;
+            float pointsPerLvl = config != null ? config.points_per_lvl : -1;
+            int maxTotal = config != null ? config.max_total_points : -1;
+            int spent = PlayerPointsType.STATS.getPointsInUse(ctx.getPlayer());
+            int calculatedTotal = basePoints + (int) (playerLevel * pointsPerLvl);
+            System.out.println("[AllocateStatPacket] DEBUG: playerLevel=" + playerLevel
+                    + ", basePoints=" + basePoints
+                    + ", pointsPerLvl=" + pointsPerLvl
+                    + ", calculatedTotal=" + calculatedTotal
+                    + ", maxTotal=" + maxTotal
+                    + ", spent=" + spent);
+
             int freePoints = PlayerPointsType.STATS.getFreePoints(ctx.getPlayer());
             System.out.println("[AllocateStatPacket] Free points: " + freePoints);
             if (freePoints > 0) {
@@ -86,6 +102,7 @@ public class AllocateStatPacket extends MyPacket<AllocateStatPacket> {
             }
         }
         Load.Unit(ctx.getPlayer()).setEquipsChanged();
+        Load.player(ctx.getPlayer()).cachedStats.setAllDirty();
         cap.playerDataSync.setDirty();
         System.out.println("[AllocateStatPacket] Marked dirty for sync");
     }
