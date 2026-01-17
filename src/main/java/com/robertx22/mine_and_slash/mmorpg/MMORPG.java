@@ -38,6 +38,7 @@ import com.robertx22.mine_and_slash.mmorpg.event_registers.CommonEvents;
 import com.robertx22.mine_and_slash.mmorpg.init.ClientInit;
 import com.robertx22.mine_and_slash.mmorpg.registers.client.KeybindsRegister;
 import com.robertx22.mine_and_slash.mmorpg.registers.client.RenderRegister;
+import com.robertx22.mine_and_slash.mmorpg.registers.client.ContainerGuiRegisters;
 import com.robertx22.mine_and_slash.mmorpg.registers.client.S2CPacketRegister;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.C2SPacketRegister;
 import com.robertx22.mine_and_slash.mmorpg.registers.common.SlashCapabilities;
@@ -137,6 +138,12 @@ public class MMORPG {
 
         // Set the mod bus for ForgeEvents helper class
         ForgeEvents.setModBus(bus);
+
+        // Register menu screen handlers early - RegisterMenuScreensEvent fires before
+        // FMLClientSetupEvent
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ContainerGuiRegisters.reg();
+        }
 
         SchemaTest.run();
 
