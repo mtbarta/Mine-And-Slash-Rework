@@ -345,4 +345,23 @@ public class MapItemData implements ICommonDataItem<GearRarity> {
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {
         return ToggleAutoSalvageRarity.SalvageType.MAP;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        MapItemData that = (MapItemData) o;
+        return lvl == that.lvl &&
+                tier == that.tier &&
+                java.util.Objects.equals(rar, that.rar) &&
+                java.util.Objects.equals(affixes, that.affixes) &&
+                java.util.Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(lvl, tier, rar, affixes, uuid);
+    }
 }

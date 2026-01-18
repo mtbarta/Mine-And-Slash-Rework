@@ -258,4 +258,25 @@ public class JewelItemData implements ICommonDataItem<GearRarity>, IStatCtx {
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {
         return ToggleAutoSalvageRarity.SalvageType.JEWEL;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        JewelItemData that = (JewelItemData) o;
+        return lvl == that.lvl &&
+                java.util.Objects.equals(uniq, that.uniq) &&
+                java.util.Objects.equals(cor, that.cor) &&
+                java.util.Objects.equals(affixes, that.affixes) &&
+                java.util.Objects.equals(auraStats, that.auraStats) &&
+                java.util.Objects.equals(style, that.style) &&
+                java.util.Objects.equals(rar, that.rar);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(uniq, cor, affixes, auraStats, style, lvl, rar);
+    }
 }

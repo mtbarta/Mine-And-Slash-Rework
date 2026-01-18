@@ -150,4 +150,23 @@ public class LootChestData implements ICommonDataItem<GearRarity> {
     public ToggleAutoSalvageRarity.SalvageType getSalvageType() {
         return ToggleAutoSalvageRarity.SalvageType.GEAR;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        LootChestData that = (LootChestData) o;
+        return num == that.num &&
+                lvl == that.lvl &&
+                java.util.Objects.equals(rar, that.rar) &&
+                java.util.Objects.equals(id, that.id) &&
+                java.util.Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(num, rar, lvl, id, key);
+    }
 }

@@ -12,7 +12,6 @@ public class RelicItemData {
 
     public List<RelicAffixData> affixes = new ArrayList<>();
 
-
     public String rar = "common";
 
     public String type = DungeonMain.MODID;
@@ -23,6 +22,23 @@ public class RelicItemData {
 
     public RelicType getType() {
         return LibDatabase.RelicTypes().get(type);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        RelicItemData that = (RelicItemData) o;
+        return java.util.Objects.equals(affixes, that.affixes) &&
+                java.util.Objects.equals(rar, that.rar) &&
+                java.util.Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(affixes, rar, type);
     }
 
 }

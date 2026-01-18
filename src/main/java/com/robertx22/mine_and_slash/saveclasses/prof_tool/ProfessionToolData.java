@@ -41,16 +41,15 @@ public class ProfessionToolData implements ITooltip {
 
     public List<ToolAffix> affixes = new ArrayList<>();
 
-
     public int lvl = 1;
     public int xp = 0;
-
 
     public List<ExactStatData> GetAllStats() {
         List<ExactStatData> list = new ArrayList<>();
         affixes.stream().forEach(x -> {
             try {
-                ExileDB.Affixes().get(x.id).getStats().stream().map(e -> e.ToExactStat(x.p, lvl)).forEach(t -> list.add(t));
+                ExileDB.Affixes().get(x.id).getStats().stream().map(e -> e.ToExactStat(x.p, lvl))
+                        .forEach(t -> list.add(t));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,11 +96,13 @@ public class ProfessionToolData implements ITooltip {
 
                 var newtier = SkillItemTier.fromLevel(lvl);
 
-                p.sendSystemMessage(Chats.TOOL_LEVEL_UP.locName(stack.getHoverName(), lvl).withStyle(ChatFormatting.YELLOW));
+                p.sendSystemMessage(
+                        Chats.TOOL_LEVEL_UP.locName(stack.getHoverName(), lvl).withStyle(ChatFormatting.YELLOW));
 
                 if (tier != newtier) {
                     addStat();
-                    p.sendSystemMessage(Chats.TOOL_ADD_STAT.locName(stack.getHoverName(), getRarity().locName()).withStyle(getRarity().textFormatting()));
+                    p.sendSystemMessage(Chats.TOOL_ADD_STAT.locName(stack.getHoverName(), getRarity().locName())
+                            .withStyle(getRarity().textFormatting()));
                 }
 
                 currentXPNeeded = getExpNeeded();
@@ -116,7 +117,11 @@ public class ProfessionToolData implements ITooltip {
         ToolAffix data = new ToolAffix();
         data.rar = rar.GUID();
         data.p = rar.stat_percents.random();
-        data.id = ExileDB.Affixes().getFilterWrapped(x -> x.type == Affix.AffixSlot.tool && x.getAllTagReq().contains(getProfession().tool_tag) && x.getAllTagReq().contains(SlotTags.tool.GUID())).random().GUID();
+        data.id = ExileDB.Affixes()
+                .getFilterWrapped(
+                        x -> x.type == Affix.AffixSlot.tool && x.getAllTagReq().contains(getProfession().tool_tag)
+                                && x.getAllTagReq().contains(SlotTags.tool.GUID()))
+                .random().GUID();
 
         this.affixes.add(data);
     }
@@ -136,34 +141,35 @@ public class ProfessionToolData implements ITooltip {
     @Override
     public void BuildTooltip(TooltipContext ctx) {
 
-        /*while (ctx.tooltip.get(0).getString().equals(ctx.stack.getHoverName().getString()) || ctx.tooltip.get(0).getString().isBlank()){
-            ctx.tooltip.remove(0);
-        }
-
-        while (ctx.tooltip.get(ctx.tooltip.size() - 1).getString().isBlank()){
-            ctx.tooltip.remove(ctx.tooltip.size() - 1);
-        }*/
+        /*
+         * while
+         * (ctx.tooltip.get(0).getString().equals(ctx.stack.getHoverName().getString())
+         * || ctx.tooltip.get(0).getString().isBlank()){
+         * ctx.tooltip.remove(0);
+         * }
+         * 
+         * while (ctx.tooltip.get(ctx.tooltip.size() - 1).getString().isBlank()){
+         * ctx.tooltip.remove(ctx.tooltip.size() - 1);
+         * }
+         */
         if (Screen.hasControlDown()) {
             return;
         }
 
         ExileTooltips exileTooltips = new ExileTooltips()
                 .accept(new NameBlock(Collections.singletonList(ctx.stack.getHoverName())))
-                //.accept(new AdditionalBlock(ctx.tooltip))
+                // .accept(new AdditionalBlock(ctx.tooltip))
                 .accept(new RarityBlock(getRarity()))
                 .accept(new AdditionalBlock(ImmutableList.of(
                         TooltipUtils.level(lvl).withStyle(ChatFormatting.GREEN),
-                        Itemtips.PROF_TOOL_EXP_TIP.locName(xp, getExpNeeded()).withStyle(ChatFormatting.GREEN)
-                )))
+                        Itemtips.PROF_TOOL_EXP_TIP.locName(xp, getExpNeeded()).withStyle(ChatFormatting.GREEN))))
                 .accept(new SimpleItemStatBlock(new StatRangeInfo(ModRange.hide()))
                         .accept(Itemtips.PROF_TOOL_STATS_TIP.locName(), this.GetAllStats()))
                 .accept(new OperationTipBlock().setCtrl().setAlt());
 
-
         List<Component> tooltip = ctx.tooltip;
-        //tooltip.clear();
+        // tooltip.clear();
         tooltip.addAll(exileTooltips.release());
-
 
     }
 
@@ -172,5 +178,40 @@ public class ProfessionToolData implements ITooltip {
         public String id = "";
         public String rar = "";
         public int p = 0;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            ToolAffix toolAffix = (ToolAffix) o;
+            return p == toolAffix.p &&
+                    java.util.Objects.equals(id, toolAffix.id) &&
+                    java.util.Objects.equals(rar, toolAffix.rar);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(id, rar, p);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ProfessionToolData that = (ProfessionToolData) o;
+        return lvl == that.lvl &&
+                xp == that.xp &&
+                java.util.Objects.equals(prof, that.prof) &&
+                java.util.Objects.equals(affixes, that.affixes);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(prof, affixes, lvl, xp);
     }
 }

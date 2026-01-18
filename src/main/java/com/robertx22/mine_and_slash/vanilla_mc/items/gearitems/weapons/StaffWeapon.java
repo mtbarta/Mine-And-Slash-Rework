@@ -18,8 +18,6 @@ public class StaffWeapon extends ModWeapon implements IAutoModel {
 
     @Override
     public void generateModel(ItemModelManager manager) {
-        // Don't generate - we use custom 3D models from JSON files in
-        // models/item/weapon/staff/
         manager.handheld(this);
     }
 

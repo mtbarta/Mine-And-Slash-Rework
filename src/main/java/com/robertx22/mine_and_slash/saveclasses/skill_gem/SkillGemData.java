@@ -287,4 +287,23 @@ public class SkillGemData implements ICommonDataItem<GearRarity> {
         return SkillGemsItems.get(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        SkillGemData that = (SkillGemData) o;
+        return perc == that.perc &&
+                links == that.links &&
+                java.util.Objects.equals(id, that.id) &&
+                type == that.type &&
+                java.util.Objects.equals(rar, that.rar);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id, type, perc, rar, links);
+    }
+
 }

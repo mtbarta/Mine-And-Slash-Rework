@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class OmenData {
 
-
     public String id = "";
     public int lvl = 1;
 
@@ -30,7 +29,6 @@ public class OmenData {
     public List<OmenSlotReq> slot_req = new ArrayList<>();
 
     public List<AffixData> aff = new ArrayList<>();
-
 
     public Omen getOmen() {
         return ExileDB.Omens().get(id);
@@ -46,7 +44,8 @@ public class OmenData {
 
         for (OmenSlotReq req : slot_req) {
             var rar = req.rtype.word.locName().withStyle(req.rtype.color);
-            all.add(ExileDB.GearSlots().get(req.slot).locName().append(": ").withStyle(ChatFormatting.GREEN).append(rar));
+            all.add(ExileDB.GearSlots().get(req.slot).locName().append(": ").withStyle(ChatFormatting.GREEN)
+                    .append(rar));
         }
         return all;
 
@@ -54,7 +53,8 @@ public class OmenData {
 
     // the more difficult the omen is to assemble, the more stats it provides
     // kinda automatically makes newbie omens weaker and endgame omens harder to get
-    public static int getStatPercent(HashMap<GearRarityType, Integer> rarities, List<OmenSlotReq> slot_req, GearRarity rar) {
+    public static int getStatPercent(HashMap<GearRarityType, Integer> rarities, List<OmenSlotReq> slot_req,
+            GearRarity rar) {
         int num = 0;
         for (Map.Entry<GearRarityType, Integer> en : rarities.entrySet()) {
             num += en.getValue() * 10;
@@ -112,5 +112,40 @@ public class OmenData {
             this.slot = slot;
             this.rtype = rtype;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            OmenSlotReq that = (OmenSlotReq) o;
+            return java.util.Objects.equals(slot, that.slot) && rtype == that.rtype;
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(slot, rtype);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        OmenData omenData = (OmenData) o;
+        return lvl == omenData.lvl &&
+                java.util.Objects.equals(id, omenData.id) &&
+                java.util.Objects.equals(rar, omenData.rar) &&
+                java.util.Objects.equals(rarities, omenData.rarities) &&
+                java.util.Objects.equals(slot_req, omenData.slot_req) &&
+                java.util.Objects.equals(aff, omenData.aff);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id, lvl, rar, rarities, slot_req, aff);
     }
 }

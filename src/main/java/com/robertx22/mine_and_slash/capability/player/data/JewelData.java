@@ -39,7 +39,9 @@ public class JewelData implements IStatCtx {
             // this is horrible but I don't know why this could be null.
             // also smth is using new PlayerData() on client every tick but I can't find the
             // source
-            if (player == null)
+            // Check Minecraft.getInstance() for null - it's null during datagen even on
+            // CLIENT dist
+            if (player == null && net.minecraft.client.Minecraft.getInstance() != null)
                 this.player = ClientOnly.getPlayer();
         } else {
             this.player = player;

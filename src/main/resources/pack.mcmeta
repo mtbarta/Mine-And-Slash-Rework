@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "${description}",
-        "pack_format": ${pack_format}
+        "description": "Turns Minecraft into a hack and slash RPG!",
+        "pack_format": 48
     }
 }
