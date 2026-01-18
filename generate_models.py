@@ -39,21 +39,31 @@ def generate_missing_models():
     }
 
     for model_rel_path in missing_models:
-        # model_rel_path is like "buff_potion/legendary_str" or "food/rare_mana"
+        # model_rel_path is like "buff_potion/legendary_str" or "food/rare_mana" or "weapon/staff/iron"
         
         parts = model_rel_path.split('/')
         if len(parts) > 1:
             category = parts[0]
             filename = parts[-1]
-            subdir = "/".join(parts[:-1])
+            subdir = "/".join(parts[:-1]) # e.g. "weapon/staff"
         else:
             category = ""
             filename = model_rel_path
             subdir = ""
             
         # Determine texture folder
-        texture_category = folder_map.get(category, category)
+        # Map the category (root folder) if needed, but keep the rest of the path structure
+        mapped_category = folder_map.get(category, category)
         
+        if subdir:
+            # Replace the start of the subdir with the mapped category
+            if category and subdir.startswith(category):
+                texture_subdir = mapped_category + subdir[len(category):]
+            else:
+                texture_subdir = subdir
+        else:
+            texture_subdir = ""
+
         # Determine texture name
         # Try to strip rarity prefix
         texture_name = filename
@@ -63,12 +73,11 @@ def generate_missing_models():
                 break
         
         # Check if this texture exists
-        # Construct path: src/main/resources/assets/mmorpg/textures/item/{texture_category}/{texture_name}.png
-        # or if category is empty: .../textures/item/{texture_name}.png
+        # Construct path: src/main/resources/assets/mmorpg/textures/item/{texture_subdir}/{texture_name}.png
         
-        if texture_category:
-            texture_fs_path = os.path.join(textures_root, texture_category, f"{texture_name}.png")
-            texture_ref = f"mmorpg:item/{texture_category}/{texture_name}"
+        if texture_subdir:
+            texture_fs_path = os.path.join(textures_root, texture_subdir, f"{texture_name}.png")
+            texture_ref = f"mmorpg:item/{texture_subdir}/{texture_name}"
         else:
             texture_fs_path = os.path.join(textures_root, f"{texture_name}.png")
             texture_ref = f"mmorpg:item/{texture_name}"
@@ -77,10 +86,10 @@ def generate_missing_models():
         # If mapped texture doesn't exist, maybe keep original name?
         if not os.path.exists(texture_fs_path):
             # Try original name in mapped folder
-            if texture_category:
-                 alt_path = os.path.join(textures_root, texture_category, f"{filename}.png")
+            if texture_subdir:
+                 alt_path = os.path.join(textures_root, texture_subdir, f"{filename}.png")
                  if os.path.exists(alt_path):
-                     texture_ref = f"mmorpg:item/{texture_category}/{filename}"
+                     texture_ref = f"mmorpg:item/{texture_subdir}/{filename}"
                      texture_fs_path = alt_path
             
             # If still not found, we might generate a placeholder or point to a default "missing" texture?
