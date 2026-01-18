@@ -54,12 +54,20 @@ public class LibMapCap {
     public static MapDataFinder<LibMapData> DATA_GETTER = new MapDataFinder<>() {
         @Override
         public LibMapData getData(Pos pos) {
-            return get(pos.level).data.getData(this.getInfo().structure, pos.pos);
+            MapDimensionInfo info = MapDimensions.getInfo(pos.level);
+            if (info == null) {
+                // Fallback to old behavior or handle error
+                info = this.getInfo();
+            }
+            if (info == null) {
+                return new LibMapData(); // Stop crash?
+            }
+            return get(pos.level).data.getData(info.structure, pos.pos);
         }
 
         @Override
         public MapDimensionInfo getInfo() {
-            return MapDimensions.getInfo(ResourceLocation.parse(Ref.MODID)); // Assuming Ref.MODID is correct context.
+            return MapDimensions.getInfo(ResourceLocation.parse(Ref.MODID));
         }
     };
 

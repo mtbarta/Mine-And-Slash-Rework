@@ -20,7 +20,7 @@ public class CardPickButton extends ImageButton {
 
     Minecraft mc = Minecraft.getInstance();
     ICard card;
-    ResourceLocation texture;
+    ResourceLocation texture = SlashRef.guiId("pick_card");
 
     public CardPickButton(ICard card, int xPos, int yPos) {
         super(xPos, yPos, SIZE_X, SIZE_Y,

@@ -12,6 +12,7 @@ import com.robertx22.dungeon_realm.item.DungeonMapGenSettings;
 import com.robertx22.dungeon_realm.item.DungeonMapItem;
 import com.robertx22.dungeon_realm.structure.*;
 import com.robertx22.dungeon_realm.registry.DungeonAttachments;
+import com.robertx22.dungeon_realm.registry.DungeonDataComponentTypes;
 import com.robertx22.library_of_exile.config.map_dimension.MapDimensionConfigDefaults;
 import com.robertx22.library_of_exile.config.map_dimension.MapRegisterBuilder;
 import com.robertx22.library_of_exile.database.init.LibDatabase;
@@ -110,6 +111,7 @@ public class DungeonMain {
     public DungeonMain(IEventBus bus) {
         OrderedModConstructor.register(new DungeonModConstructor(DungeonMain.MODID), bus);
         DungeonAttachments.register(bus);
+        DungeonDataComponentTypes.REGISTRY.register(bus);
 
         // DistExecutor removed
         bus.addListener(this::clientSetup);

@@ -127,7 +127,7 @@ public class HarvestBlock extends BaseEntityBlock {
         if (HarvestItemNbt.HARVEST_MAP.has(stack)) {
             HarvestItemMapData map = HarvestItemNbt.HARVEST_MAP.loadFrom(stack);
 
-            if (!map.relic && isMapWorld) {
+            if (!map.relic() && isMapWorld) {
                 p.sendSystemMessage(HarvestWords.RELIC_MAPS_ONLY.get().withStyle(ChatFormatting.RED));
                 return InteractionResult.SUCCESS;
             }

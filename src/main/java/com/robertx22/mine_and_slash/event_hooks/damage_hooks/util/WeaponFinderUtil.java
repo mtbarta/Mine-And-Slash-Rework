@@ -115,14 +115,9 @@ public class WeaponFinderUtil {
 
             }
 
-            ItemStack tryWholeNbt = ItemStack.parse(registries, nbt).orElse(ItemStack.EMPTY);
-
-            if (tryWholeNbt != null) {
-                GearItemData gear = StackSaving.GEARS.loadFrom(tryWholeNbt);
-                if (gear != null) {
-                    return tryWholeNbt;
-                }
-            }
+            // Note: Removed attempt to parse entire entity NBT as ItemStack since
+            // entity NBT is not valid item data (it doesn't have an item "id" at root
+            // level)
 
             if (stack == null) {
                 stack = ItemStack.EMPTY;
@@ -137,11 +132,17 @@ public class WeaponFinderUtil {
     }
 
     private static ItemStack tryGetStackFromNbt(Tag nbt, HolderLookup.Provider registries) {
-        if (nbt instanceof CompoundTag) {
-            ItemStack s = ItemStack.parse(registries, (CompoundTag) nbt).orElse(ItemStack.EMPTY);
+        if (nbt instanceof CompoundTag tag) {
+            // Only try to parse as ItemStack if it has an "id" key, which is required for
+            // valid item data
+            // This prevents error spam when accidentally trying to parse non-item data like
+            // player attachments
+            if (!tag.contains("id")) {
+                return ItemStack.EMPTY;
+            }
+            ItemStack s = ItemStack.parse(registries, tag).orElse(ItemStack.EMPTY);
             if (s != null && !s.isEmpty()) {
                 return s;
-
             }
         }
 

@@ -13,7 +13,6 @@ public class HarvestClient {
 
     public static void init() {
 
-
         NeoForge.EVENT_BUS.addListener((ItemTooltipEvent event) -> {
             if (event.getItemStack().is(HarvestEntries.HARVEST_MAP_ITEM.get())) {
                 ItemStack stack = event.getItemStack();
@@ -27,7 +26,7 @@ public class HarvestClient {
 
                     tip.add(Component.empty());
 
-                    if (map.relic) {
+                    if (map.relic()) {
                         tip.add(HarvestWords.RELIC_MAP.get().withStyle(ChatFormatting.LIGHT_PURPLE));
                     }
 

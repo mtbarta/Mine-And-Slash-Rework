@@ -8,14 +8,9 @@ public class HarvestMapItem extends Item {
         super(new Properties().stacksTo(1));
     }
 
-
     public static ItemStack blankMap(ItemStack stack, boolean relic) {
 
-
-        var data = new HarvestItemMapData();
-
-   
-        data.relic = relic;
+        var data = new HarvestItemMapData(0, 0, relic);
 
         HarvestItemNbt.HARVEST_MAP.saveTo(stack, data);
 

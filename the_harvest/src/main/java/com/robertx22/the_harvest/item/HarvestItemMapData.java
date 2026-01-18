@@ -5,23 +5,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
-public class HarvestItemMapData {
+public record HarvestItemMapData(int x, int z, boolean relic) {
 
-
-    public int x = 0;
-    public int z = 0;
-
-
-    public boolean relic = false;
+    public HarvestItemMapData() {
+        this(0, 0, false);
+    }
 
     public ChunkPos getOrSetStartPos(Level world, ItemStack stack) {
-
         if (x == 0 && z == 0) {
             var start = HarvestMapCap.get(world).data.counter.getNextAndIncrement();
-            x = start.x;
-            z = start.z;
+            var newData = new HarvestItemMapData(start.x, start.z, this.relic);
+            HarvestItemNbt.HARVEST_MAP.saveTo(stack, newData);
+            return new ChunkPos(start.x, start.z);
         }
         HarvestItemNbt.HARVEST_MAP.saveTo(stack, this);
         return new ChunkPos(x, z);
+    }
+
+    public boolean relic() {
+        return this.relic;
     }
 }

@@ -174,4 +174,25 @@ public class ObeliskItemMapData {
         affixes.get(wave).add(data);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ObeliskItemMapData that = (ObeliskItemMapData) o;
+        return tier == that.tier &&
+                spawn_rate == that.spawn_rate &&
+                x == that.x &&
+                z == that.z &&
+                maxWaves == that.maxWaves &&
+                relic == that.relic &&
+                java.util.Objects.equals(affixes, that.affixes);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(affixes, tier, spawn_rate, x, z, maxWaves, relic);
+    }
+
 }

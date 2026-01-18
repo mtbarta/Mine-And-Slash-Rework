@@ -20,4 +20,21 @@ public class ExileAffixData {
     public ExileMobAffix getAffix() {
         return LibDatabase.MobAffixes().get(affix);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ExileAffixData that = (ExileAffixData) o;
+        return perc == that.perc &&
+                java.util.Objects.equals(affix, that.affix) &&
+                java.util.Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(perc, affix, uuid);
+    }
 }

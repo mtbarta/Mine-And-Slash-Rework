@@ -17,7 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 
 public class ProphecyAffixButton extends ImageButton {
-    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "textures/gui/prophecy/affix.png");
+    static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SlashRef.MODID,
+            "textures/gui/prophecy/affix.png");
 
     MapAffix data;
 
@@ -28,14 +29,14 @@ public class ProphecyAffixButton extends ImageButton {
     Info info;
 
     public ProphecyAffixButton(MapAffix data, Info info, boolean canTake, int x, int y) {
-        super(x, y, 16, 16, 
-            new WidgetSprites(ID, ID), // Using same sprite for normal and hovered states
-            (action) -> {
-            if (canTake) {
-                //Packets.sendToServer(new AcceptProphecyAffixPacket(data.GUID()));
-                //Minecraft.getInstance().setScreen(null);
-            }
-        });
+        super(x, y, 16, 16,
+                new WidgetSprites(ID, ID), // Using same sprite for normal and hovered states
+                (action) -> {
+                    if (canTake) {
+                        // Packets.sendToServer(new AcceptProphecyAffixPacket(data.GUID()));
+                        // Minecraft.getInstance().setScreen(null);
+                    }
+                });
         this.info = info;
         this.data = data;
     }
@@ -59,7 +60,6 @@ public class ProphecyAffixButton extends ImageButton {
             tip.addAll(stat.GetTooltipString());
         }
 
-
         tip.add(Component.empty());
 
         if (info == Info.IS_OFFER) {
@@ -68,9 +68,7 @@ public class ProphecyAffixButton extends ImageButton {
 
         this.setTooltip(Tooltip.create(TextUTIL.mergeList(tip)));
 
-
-        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-
+        super.renderWidget(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
     }
 }
