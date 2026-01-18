@@ -4,6 +4,7 @@ import com.robertx22.ancient_obelisks.configs.ObeliskConfig;
 import com.robertx22.ancient_obelisks.database.ObeliskDatabase;
 import com.robertx22.ancient_obelisks.item.ObeliskItemNbt;
 import com.robertx22.ancient_obelisks.registry.ObeliskAttachments;
+import com.robertx22.ancient_obelisks.registry.ObeliskDataComponents;
 import com.robertx22.ancient_obelisks.item.ObeliskMapItem;
 import com.robertx22.ancient_obelisks.structure.ObeliskMapCapability;
 import com.robertx22.ancient_obelisks.structure.ObeliskMapData;
@@ -100,6 +101,7 @@ public class ObelisksMain {
         OrderedModConstructor.register(new ObeliskModConstructor(ObelisksMain.MODID), bus);
 
         ObeliskAttachments.register(bus);
+        ObeliskDataComponents.REGISTRY.register(bus);
 
         // DistExecutor removed
         bus.addListener(this::clientSetup);

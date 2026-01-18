@@ -4,15 +4,16 @@
     "A",
     "B"
   ],
-  "key": {  
-	"A": {
+  "key": {
+    "A": {
       "item": "minecraft:gold_ingot"
-    }, 
-	"B": {
+    },
+    "B": {
       "item": "minecraft:stone"
     }
   },
   "result": {
-    "item": "ancient_obelisks:obelisk"
+    "id": "ancient_obelisks:obelisk",
+    "count": 1
   }
 }

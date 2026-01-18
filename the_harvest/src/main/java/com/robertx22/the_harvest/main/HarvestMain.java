@@ -28,6 +28,7 @@ import com.robertx22.the_harvest.structure.HarvestMapData;
 import com.robertx22.the_harvest.structure.HarvestMapStructure;
 import com.robertx22.the_harvest.structure.HarvestWorldData;
 import com.robertx22.the_harvest.registry.HarvestAttachments;
+import com.robertx22.the_harvest.registry.HarvestDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.CachedOutput;
@@ -103,6 +104,7 @@ public class HarvestMain {
         OrderedModConstructor.register(new HarvestModConstructor(HarvestMain.MODID), bus);
 
         HarvestAttachments.register(bus);
+        HarvestDataComponents.REGISTRY.register(bus);
 
         // DistExecutor removed, client setup registered directly
         bus.addListener(this::clientSetup);

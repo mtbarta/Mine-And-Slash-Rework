@@ -4,15 +4,16 @@
     "A",
     "B"
   ],
-  "key": {  
-	"A": {
+  "key": {
+    "A": {
       "item": "minecraft:diamond"
-    }, 
-	"B": {
+    },
+    "B": {
       "item": "minecraft:stone"
     }
   },
   "result": {
-    "item": "dungeon_realm:map_device"
+    "id": "dungeon_realm:map_device",
+    "count": 1
   }
 }

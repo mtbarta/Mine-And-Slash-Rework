@@ -5,18 +5,19 @@
     "A",
     "B"
   ],
-  "key": {  
-	"C": {
+  "key": {
+    "C": {
       "item": "minecraft:coal"
-    }, 
-	"A": {
+    },
+    "A": {
       "item": "minecraft:wheat_seeds"
-    }, 
-	"B": {
+    },
+    "B": {
       "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "mmorpg:newbie_gear_bag"
+    "id": "mmorpg:newbie_gear_bag",
+    "count": 1
   }
 }

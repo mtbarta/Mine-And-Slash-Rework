@@ -4,15 +4,16 @@
     "A",
     "B"
   ],
-  "key": {  
-	"A": {
+  "key": {
+    "A": {
       "item": "minecraft:lever"
-    }, 
-	"B": {
+    },
+    "B": {
       "item": "minecraft:stone"
     }
   },
   "result": {
-    "item": "dungeon_realm:relic_key"
+    "id": "dungeon_realm:relic_key",
+    "count": 1
   }
 }

@@ -17,7 +17,6 @@ public class OmenBlueprint extends RarityItemBlueprint implements ITypeBlueprint
         super(info);
     }
 
-
     public OmenPart omen = new OmenPart(this);
 
     @Override
@@ -29,6 +28,11 @@ public class OmenBlueprint extends RarityItemBlueprint implements ITypeBlueprint
         var diff = rar.omens;
 
         var omen = this.omen.get();
+
+        // If no omen available (e.g., level too low), return empty stack
+        if (omen == null) {
+            return ItemStack.EMPTY;
+        }
 
         data.lvl = this.info.level;
 
@@ -52,14 +56,16 @@ public class OmenBlueprint extends RarityItemBlueprint implements ITypeBlueprint
         }
 
         for (int i = 0; i < affixes; i++) {
-            var affix = ExileDB.Affixes().getFilterWrapped(x -> omen.affix_types.contains(x.type)).of(x -> !x.requirements.tag_requirements.stream().allMatch(t -> t.included.contains(SlotTags.weapon_family.GUID()))).random();
+            var affix = ExileDB.Affixes().getFilterWrapped(x -> omen.affix_types.contains(x.type))
+                    .of(x -> !x.requirements.tag_requirements.stream()
+                            .allMatch(t -> t.included.contains(SlotTags.weapon_family.GUID())))
+                    .random();
             var adata = new AffixData(affix.type);
             adata.id = affix.GUID();
             adata.rar = rar.GUID();
             adata.p = OmenData.getStatPercent(data.rarities, data.slot_req, rar);
             data.aff.add(adata);
         }
-
 
         var stack = new ItemStack(SlashItems.OMEN.get());
         StackSaving.OMEN.saveTo(stack, data);
