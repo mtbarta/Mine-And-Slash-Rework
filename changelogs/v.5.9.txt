@@ -1,0 +1,310 @@
+Changelog of recent updates: https://github.com/RobertSkalko/Mine-And-Slash-Rework/blob/1.20-Forge/changelogs/v.5.9.txt
+
+
+v.5.9.0
+
+- tool tooltips no longer clear tooltips..
+- added error msg when trying to repair a non gear item or non souled
+- should fix prophecies dropping bugged unique jewels
+- fixes barrage gem making projectiles merge when looking up/down
+- updated Japanase translation
+- attempt to fix uber maps being killable first tick they spawn
+- should fix phys conversion going over 100%
+- gems can no longer be socketed on runed items
+- rune stats have been slightly nerfed
+- rune and gem extractors are now datapack currencies and were slightly reworked
+- added experimental mob persistence to maps. they will now save and load back if unloaded, so dying/coming back to maps shouldnt mean mobs are gone
+- serverconfig is no longer needed for item compat, now you use "mmorpg:gear_slot_id" item tags. 
+So just list all sword items in the "mmorpg:sword" item tag.
+
+* Map Bosses!
+A lot of you said maps felt aimless and there was nothing to complete, finish etc.
+This update aims to change that in 2 ways.
+
+First, every map now has a boss fight at the end, in their own arena, and to access it, you need to clear 50% of the map at the very least.
+There was a lot of code needed to make this completition counter happen btw.. Like mob saving when they despawn.
+
+Now, if you manage to kill the boss, it will spawn a teleport to the reward room!
+The reward room will have a set amount of chests with added loot multipliers and better loot tables depending on your map completition %,
+that % will be represented in rarities up to mythic.
+
+
+- new datapack, boss arena
+- new fields to mob rarity datapacks
+- new field to gear rar datapack
+- uber frags now only drop from map bosses but have higher dropchance
+
+
+v.5.9.2
+
+- fix phys to ele conversions not working
+- fix commands using perm lvl 3 instead of 2
+
+v.5.9.3
+
+- fix server crash
+
+v.5.9.4
+
+- fix currencies not going into master bag
+- fix spells being castable without being learned
+
+v.5.9.5
+
+- removed mob persistence in maps to attempt to fix lag issues. (delete old map world save to actually test it)
+- fix unique stat ranges showing wrong
+- mobs now despawn more strictly in maps, whenever you are too far away
+- added MOB_DESPAWN_DISTANCE_IN_MAPS config
+- removed mob persistence configs, replaced with despawn distance config
+- remember the mobs are still loaded back with the mob new mob save feature
+- mob hp now has dots
+- fixed unlearning spell schools
+- fixed mob hp being double 
+- fixed mobs having too much resists
+- give points cheatpoints now bypasses caps
+- attempt to fix some spells not hitting enough times
+- fixed infusions
+- fixed passive points showing as ascendancy points under list stat sources command
+
+v.5.9.6
+
+- removed break chest in maps feature
+- melee cooldown no longer applies to spells
+
+
+v.5.9.7
+
+- casting spells now costs main hand durability, but only until the item is considered broken
+- can no longer cast spells with a broken weapon
+- should fix station crafting
+- stations should now show items that are missing  from recipe
+- added some animations to talents and exclamation mark
+
+v.5.9.8
+
+- should fix uber boss maps allowing you to upgrade the next boss map right away
+- map % needed for boss arenas is now by default 30% down from 50%, and is now a server config, will likely go back to 50 after mob saving bug is fixed
+- fixed ubers not dropping loot
+- maps are no longer empty and instead are filled with bedrock, this should hopefully prevent maps from allowing players to teleport outside, and mobs too
+
+v.5.9.9
+
+- attempt to fix map gen lag
+- renamed learn x spell stat to level to spell
+- fixed prof lvls tooltip going off screen
+- removed vanilla_rar_enum  from gear rar datapacks, hardcoded temporarily cus of a lag bug
+
+v.5.9.10
+
+- omens are now repairable
+- spells now show that their support gems also benefit another spell (if they do)
+- fixed pet spells all being called Fire Golem Attack
+
+v.5.9.11
+
+- fixed infusion reroll
+- added if_false field to spell conditions, to flip the condition
+- added is_optional field to spell conditions, optional conditions work as "any"
+3 optionals and 1 passes: works
+2 optionals and 1 non optional, if the non-optional fails, it wont work, even if the optionals pass
+- enchant compat caps are now per player (might be buggy)
+- added per_item_max and min to enchant compat to still be able to cap stuff per item
+- tried to fix map item config bans not working
+- fixed item_mod command to actually work
+- map upgrade screen should show fail reason now correctly 
+- massively increased the cost of mythic gear crafting, open to deleting it if people still say drops are useless
+- attempt to fix boss scroll teleport bug
+- gear now shows base stat % and value when shift is on
+- spells that share supp gems now also share innate spell stats
+- should fix null error on some block mining
+
+v.5.9.12
+
+- magic shield dmg from enviro dmg is now based on post mitigation dmg
+- uber maps now always spawn as mythic rarity (sorry guys no doing easy ubers :P)
+- you can no longer open dispensers in maps
+- should fix vanilla rarities (for loot beams and stuff)
+- omens/codexes stats affix count etc are now dictated in the gear rarity datapack
+- buffed higher rarity omens
+- fixed spells not working
+- new Map Screen! You can now:
+	- see your total map complete % 
+	- see the map item to check affixes etc again
+	- screen is still wip! 
+		
+v.5.9.13
+
+- stop professions from being able to overlevel past level cap
+- fix server crash on stat calc
+
+v.5.9.14
+
+- turned unbound key text into empty string, unsure what's best
+- boss tp is now gui button, not an item
+- map upgrade is now activated through map upgrade gui when outside of a map
+- adjusted lvl distance punishment leeeway code
+
+v.5.9.15
+
+- should fix more prophecy bugs where items are given rarities they shouldn't possibly be able to have
+
+v.5.9.16
+
+    maps are now crafted instead of dropped. Basically instead of getting maps randomly as drops, you now craft a common map for cheap and can upgrade your map for free if you kill the boss in it.
+    you no longer heal in the void
+    map loot chest removed
+
+v.5.9.17
+
+- map device now cant be interacted by low lvl players
+- fix map creator recipe
+
+v.5.9.18
+
+- uniques now have a min_drop_lvl field
+- quality now provides flat bonus to base stats instead of being a multiplier. 
+- should fix mobs spawning with incorrect affix number in maps, mostly fixes bosses having affixes
+- cdr stats now also have an additional effect: reduces charge cd (update the stat/effect datapacks)
+This should mean cdr now works properly on charges
+- station recipes now show up not right
+- attempt fix stations not sometimes saving items
+- try fix map spawning out of world borders
+- map progress no longer needs scouting the entire map, but it's a bit random now
+Each room counts the same, so if you enter a room and it's empty, you would get a boost to your map %
+Other rooms might have tons of mobs or secret chests, and need way longer to finish. 
+Also not a perfect system but probably more enjoyable to see your progress from the start
+- added base_stat_percents to gear rar datapacks
+- added cd to map teleport just in case
+
+v.5.9.19
+
+- rarities that force custom hp now use that hp to determine loot multi
+- reduced default max items when loot generates to 20
+- max mob hp loot multi is now 10
+- destroy item now works correctly as an item mod
+- auto aiming projectiles should be slightly less laggy now
+- redid some error messages so they are less vague, instead of "lvl too low", it will now be: Support gem equip fail: lvl too low. 
+Please tell if any error messages are still vague
+
+v.5.9.20
+
+- uber frags can now only drop 1 per boss. You should need to clear multiple maps to assemble a single uber map
+- bosses and uber mob rarities now have CC resistance spell they auto cast every few seconds, removing a negative effect from themselves
+- higher rar mobs now have chill/slow resistance, for example you can no longer stun a boss with chill
+- fixed remove negative effect spell action
+- very high lvl mobs now show a skull and hide their level
+- Ailment code changed, now ailments are per player/mob. So Each player doing poison damage will have their own poison damages etc. 
+Also, mobs should now be able to do damage with ailments too. Might be buggy, please test
+- ailments are no longer saved to entity nbt, i dont think its needed
+- blocking sound added
+- added new on_death event for stats. Also to make this actually work, all mns stat events now work with dead mobs, this surely won't cause any bugs
+- infusion should no longer reroll on upgrading
+- infusion reroll no longer rerolls rarity
+- only map mobs are now unloaded and loaded in maps
+- added more context to error messages
+
+v.5.9.21
+
+- only legendary and mythic maps now drop uber fragments
+
+
+v.5.9.22
+
+- removed or replaced minus resist map affixes with minux max ele resists
+- dmg reduction can now only reduce 50% of the dmg, down from 75%.
+- dmg supression is now another layer, and also caps at 50% reduction.
+So max dmg reduction you can get now is 0.1x or 0.25x (90% ele resist with overcapped max res or just plain capped res with 75%), 0.5x with dmg reduction and 0.5x with dmg supression
+- block chance now works similar to damage supression chance (reduces dmg by 50%), but now it also blocks ailments
+- "Bonus" elemental dmg that is created from physical to element conversion, or bonus flat damage is no longer considered a 'hit' but 'bonus_dmg' instead.
+This should stop it from being converted into elemental in the case of physical, and should also stop it from being dodged etc, as hit prevention mechanics like dodge, block etc should only work against actual hits
+- added custom bonus stats to dimension datapacks
+- lowered default max stat caps to 100 million so gson doesnt throw errors on higher java version.. (???)
+
+v.5.9.24
+
+- fixed omens not respecting slot requirements completely
+- changed basic atk cooldown to hopefully work better
+- bonus dmg should now work with dmg multipliers, before it wasnt being lowered by attacking too fast for example
+- reworked damage conversion to happen after additive damage layers 
+- bonus phys as elemental dmg now works after flat dmg was added and after conversions
+- so base dmg + flat dmg > converts to x > bonus x as y
+Needs updating the stat layers in stat datapacks, and make sure the priorities are correct
+- ailments can now proc from either hit or bonus dmg
+
+v.5.9.25
+
+- dmg conversion now has better tooltips in chat messages
+- fixed conversion so it can work with multiple conversions
+
+v.5.9.26
+
+- dmg conversion now normalizes past 100%. So 100% physical to fire + 100% physical to frost becomes 50% each
+
+v.5.9.27
+
+- added back scale mob lvl to nearest player in the config, because datapacks are apparently galaxy brain technology
+- started work on the wiki, you can now read the wiki contribution guidelines if you want to know how to contribute!
+- fixed block chance to actually reduce damage
+- ailment proc stats no longer count as black hole spell damage
+
+v.5.9.28
+
+- add crash safety to mob join event
+
+v.5.9.29
+
+- fixed crash
+
+v.5.9.31
+
+- block now works with bonus dmg too
+- offhands now drop if requirements not met too
+
+v.5.9.32
+
+- try fix 0 hp mobs
+- soul modifiers are now currencies
+- players no longer show skull
+- fixed infusions
+
+v.5.9.33
+
+- try again fix 0 hp mobs
+- fix stations only crafting a few times instead of all
+- added allow_self_damage to spell datapack options
+- pressing shift now shows you locked sockets, this is how many more sockets you can add to this item
+
+v.5.9.34
+
+- attempt to fix keybind bugs
+- fix soul modifiers being able to make crazy items
+
+v.5.9.35
+
+- released on modrinth now also!
+- added chance to receive ailment stat
+- map exploration announcements should no longer be dimension wide
+- moved magic shield heal to use value after dmg mods
+- attempt to fix boss multiplication in maps
+
+v.5.9.36
+
+- removed lock button from salvage station
+- downgrade map now has a cooldown of 5 minutes
+- starting a new map also has a cooldown of 3 minutes
+These cooldowns are to stop the abuse of generating tons of maps to search for best layouts.
+They shouldn't really impact genuine play
+- tweaked some tooltips
+- redid code for finding random map spot within worldborders, should hopefully utilize the full dimension border now
+- you should no longer see old maps when you start new maps (this requires a map dimension wipe, just delete the dimensions/mmorpg/dungeon folder)
+
+v.5.9.37
+
+- try fix crash
+
+v.5.9.38
+
+- runed jewel now correctly adds last affix at mythic upgrade
+- changed currency item datapacks slightly, drop req and other mns specific things are in a different datapack now 
+- fixed stat like fire_weapon_damage "+ele dmg on basic atk" being applied twice.
+- lower rar maps now give less xp

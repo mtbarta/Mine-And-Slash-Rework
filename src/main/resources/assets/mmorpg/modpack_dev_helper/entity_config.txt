@@ -5,6 +5,7 @@ mob
 minecraft:polar_bear
 other
 minecraft:zombified_piglin
+ambient
 minecraft:iron_golem
 minecraft:ender_dragon
 minecraft:enderman

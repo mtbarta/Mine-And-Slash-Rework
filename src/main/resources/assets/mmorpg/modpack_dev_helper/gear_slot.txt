@@ -4,12 +4,12 @@ shield
 chest
 pants
 crossbow
+tome
 ring
-scepter
 staff
 necklace
 bow
-axe
 sword
 helmet
+totem
 boots

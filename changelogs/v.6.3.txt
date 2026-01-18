@@ -1,0 +1,28 @@
+Changelog of recent updates: https://github.com/mahjerion/Mine-And-Slash-Rework/blob/1.20-Forge/changelogs/v.6.3.txt
+
+v.6.3.14
+- fix summon crash
+- entity NaN handle
+
+
+v.6.3.13
+- spirally stuff
+- proj stuff
+- backpack stuff
+
+
+v.6.3.10
+- fixed master bag
+- fixed summon issue
+
+
+v.6.3.8
+- jewel ui improvements - WARNING: your jewels will be wiped on this update. remove jewels before updating to ensure safety.
+- new currencies
+- exp gain toggle
+- party improvements
+- master bag uses curio slot now
+- entity stat view
+- casting improvements
+- improve neat bar ui
+- summon improvements

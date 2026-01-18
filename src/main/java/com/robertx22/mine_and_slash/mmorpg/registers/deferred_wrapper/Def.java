@@ -1,0 +1,83 @@
+package com.robertx22.mine_and_slash.mmorpg.registers.deferred_wrapper;
+
+import com.robertx22.library_of_exile.deferred.RegObj;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+
+import java.util.function.Supplier;
+
+public class Def {
+
+    public static <T extends Block> RegObj<T> block(String id, Supplier<T> block) {
+        DeferredHolder<Block, T> reg = SlashDeferred.BLOCKS.register(id, block);
+        RegObj<T> obj = new RegObj<>(reg);
+        return obj;
+    }
+
+    public static <T extends CreativeModeTab> RegObj<T> creativeTab(String id, Supplier<T> block) {
+        DeferredHolder<CreativeModeTab, T> reg = SlashDeferred.TAB.register(id, block);
+        RegObj<T> obj = new RegObj<>(reg);
+        return obj;
+    }
+
+
+    public static <T extends Item> RegObj<T> item(Supplier<T> object, String id) {
+
+        return item(id, object);
+    }
+
+    public static <T extends Item> RegObj<T> item(String id, Supplier<T> object) {
+        DeferredHolder<Item, T> reg = SlashDeferred.ITEMS.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+    public static <T extends ParticleType<?>> RegObj<T> particle(String id, Supplier<T> object) {
+        DeferredHolder<ParticleType<?>, T> reg = SlashDeferred.PARTICLES.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+    public static <T extends MobEffect> RegObj<T> potion(String id, Supplier<T> object) {
+        DeferredHolder<MobEffect, T> reg = SlashDeferred.POTIONS.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+    public static <T extends BlockEntityType<?>> RegObj<T> blockEntity(String id, Supplier<T> object) {
+        DeferredHolder<BlockEntityType<?>, T> reg = SlashDeferred.BLOCK_ENTITIES.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+    public static <T extends EntityType<?>> RegObj<T> entity(String id, Supplier<T> object) {
+        DeferredHolder<EntityType<?>, T> reg = SlashDeferred.ENTITIES.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+
+    public static <T extends MenuType<?>> RegObj<T> container(String id, Supplier<T> object) {
+        DeferredHolder<MenuType<?>, T> reg = SlashDeferred.CONTAINERS.register(id, object);
+        RegObj<T> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+
+
+    public static RegObj<SoundEvent> sound(String id) {
+        Supplier<SoundEvent> sup = () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, id), 16); // todo idk?
+        DeferredHolder<SoundEvent, SoundEvent> reg = SlashDeferred.SOUNDS.register(id, sup);
+        RegObj<SoundEvent> wrapper = new RegObj<>(reg);
+        return wrapper;
+    }
+}

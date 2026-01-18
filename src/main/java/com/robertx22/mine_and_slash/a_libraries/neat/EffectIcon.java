@@ -1,0 +1,43 @@
+package com.robertx22.mine_and_slash.a_libraries.neat;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
+
+import java.util.function.Function;
+
+public record EffectIcon(ResourceLocation location, int stack) {
+
+    public static EffectIcon of(ResourceLocation location, int stack) {
+        return new EffectIcon(location, stack);
+    }
+
+    public void renderOnHealthBar(PoseStack poseStack, MultiBufferSource source, int size) {
+        VertexConsumer buffer = source.getBuffer(NeatRenderType.getHealthBarIconType(location));
+        Matrix4f pose = new Matrix4f(poseStack.last().pose());
+        final int light = 0xF000F0;
+        final int alpha = 200;
+        final int i = 255;
+        Font font = Minecraft.getInstance().font;
+        float fontScale = 0.5f * size / font.lineHeight;
+        buffer.addVertex(pose, 0, 0, 0.01f).setColor(i, i, i, alpha).setUv(0, 0).setLight(light);
+        buffer.addVertex(pose, 0, size, 0.01f).setColor(i, i, i, alpha).setUv(0, 1).setLight(light);
+        buffer.addVertex(pose, size, size, 0.01f).setColor(i, i, i, alpha).setUv(1, 1).setLight(light);
+        buffer.addVertex(pose, size, 0, 0.01f).setColor(i, i, i, alpha).setUv(1, 0).setLight(light);
+        poseStack.pushPose();
+
+        // poseStack.translate(size - font.width(stack + ""), size - font.lineHeight,
+        // 0);
+        poseStack.scale(fontScale, fontScale, 1);
+        font.drawInBatch(stack + "", 0, 0, ChatFormatting.WHITE.getColor(), false,
+                new Matrix4f(poseStack.last().pose()), source, Font.DisplayMode.NORMAL, 0, 15728880);
+        poseStack.popPose();
+
+    }
+}

@@ -1,0 +1,387 @@
+
+> Configure project :
+-------------------------------------
+NeoGradle detected a problem with your project: Run.getProgramArguments()
+Details: The method getProgramArguments() is deprecated and will be removed in the future
+Potential Solution: Use getArguments() instead of getProgramArguments()
+More information: https://github.com/neoforged/NeoGradle/blob/NG_7.1/README.md#common-runs-configuration-types-configure-by-type
+-------------------------------------
+
+> Task :neoFormListLibraries UP-TO-DATE
+> Task :cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :create1.21.1ClientExtraJar UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :neoFormListTransformLibraries UP-TO-DATE
+> Task :neoFormStripClient UP-TO-DATE
+> Task :neoFormStripServer UP-TO-DATE
+> Task :neoFormMerge UP-TO-DATE
+> Task :neoFormMergeMappings UP-TO-DATE
+> Task :neoFormRename UP-TO-DATE
+> Task :neoFormDecompile UP-TO-DATE
+> Task :neoFormInject UP-TO-DATE
+> Task :neoFormPatch UP-TO-DATE
+> Task :neoFormPatchUserDev UP-TO-DATE
+> Task :neoFormTransformSource UP-TO-DATE
+> Task :neoFormRecompile UP-TO-DATE
+> Task :supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.77 UP-TO-DATE
+> Task :ancient_obelisks:neoFormListLibraries UP-TO-DATE
+> Task :ancient_obelisks:cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :ancient_obelisks:cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :ancient_obelisks:cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :ancient_obelisks:cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :ancient_obelisks:cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :ancient_obelisks:create1.21.1ClientExtraJar UP-TO-DATE
+> Task :ancient_obelisks:selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :ancient_obelisks:neoFormListTransformLibraries UP-TO-DATE
+> Task :ancient_obelisks:neoFormStripClient UP-TO-DATE
+> Task :ancient_obelisks:neoFormStripServer UP-TO-DATE
+> Task :ancient_obelisks:neoFormMerge UP-TO-DATE
+> Task :ancient_obelisks:neoFormMergeMappings UP-TO-DATE
+> Task :ancient_obelisks:neoFormRename UP-TO-DATE
+> Task :ancient_obelisks:neoFormDecompile UP-TO-DATE
+> Task :ancient_obelisks:neoFormInject UP-TO-DATE
+> Task :ancient_obelisks:neoFormPatch UP-TO-DATE
+> Task :ancient_obelisks:neoFormPatchUserDev UP-TO-DATE
+> Task :ancient_obelisks:neoFormTransformSource UP-TO-DATE
+> Task :ancient_obelisks:neoFormRecompile UP-TO-DATE
+> Task :ancient_obelisks:supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :ancient_obelisks:selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.77 UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormListLibraries UP-TO-DATE
+> Task :Library-of-Exile-Rework:cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :Library-of-Exile-Rework:cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :Library-of-Exile-Rework:cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :Library-of-Exile-Rework:cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :Library-of-Exile-Rework:cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :Library-of-Exile-Rework:create1.21.1ClientExtraJar UP-TO-DATE
+> Task :Library-of-Exile-Rework:selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormListTransformLibraries UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormStripClient UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormStripServer UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormMerge UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormMergeMappings UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormRename UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormDecompile UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormInject UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormPatch UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormPatchUserDev UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormTransformSource UP-TO-DATE
+> Task :Library-of-Exile-Rework:neoFormRecompile UP-TO-DATE
+> Task :Library-of-Exile-Rework:supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :Library-of-Exile-Rework:selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.77 UP-TO-DATE
+> Task :Library-of-Exile-Rework:compileJava UP-TO-DATE
+> Task :ancient_obelisks:compileJava UP-TO-DATE
+> Task :dungeon_realm:neoFormListLibraries UP-TO-DATE
+> Task :dungeon_realm:cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :dungeon_realm:cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :dungeon_realm:cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :dungeon_realm:cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :dungeon_realm:cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :dungeon_realm:create1.21.1ClientExtraJar UP-TO-DATE
+> Task :dungeon_realm:selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :dungeon_realm:neoFormListTransformLibraries UP-TO-DATE
+> Task :dungeon_realm:neoFormStripClient UP-TO-DATE
+> Task :dungeon_realm:neoFormStripServer UP-TO-DATE
+> Task :dungeon_realm:neoFormMerge UP-TO-DATE
+> Task :dungeon_realm:neoFormMergeMappings UP-TO-DATE
+> Task :dungeon_realm:neoFormRename UP-TO-DATE
+> Task :dungeon_realm:neoFormDecompile UP-TO-DATE
+> Task :dungeon_realm:neoFormInject UP-TO-DATE
+> Task :dungeon_realm:neoFormPatch UP-TO-DATE
+> Task :dungeon_realm:neoFormPatchUserDev UP-TO-DATE
+> Task :dungeon_realm:neoFormTransformSource UP-TO-DATE
+> Task :dungeon_realm:neoFormRecompile UP-TO-DATE
+> Task :dungeon_realm:supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :dungeon_realm:selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.77 UP-TO-DATE
+> Task :dungeon_realm:compileJava UP-TO-DATE
+> Task :the_harvest:neoFormListLibraries UP-TO-DATE
+> Task :the_harvest:cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :the_harvest:cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :the_harvest:cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :the_harvest:cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :the_harvest:cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :the_harvest:create1.21.1ClientExtraJar UP-TO-DATE
+> Task :the_harvest:selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :the_harvest:neoFormListTransformLibraries UP-TO-DATE
+> Task :the_harvest:neoFormStripClient UP-TO-DATE
+> Task :the_harvest:neoFormStripServer UP-TO-DATE
+> Task :the_harvest:neoFormMerge UP-TO-DATE
+> Task :the_harvest:neoFormMergeMappings UP-TO-DATE
+> Task :the_harvest:neoFormRename UP-TO-DATE
+> Task :the_harvest:neoFormDecompile UP-TO-DATE
+> Task :the_harvest:neoFormInject UP-TO-DATE
+> Task :the_harvest:neoFormPatch UP-TO-DATE
+> Task :the_harvest:neoFormPatchUserDev UP-TO-DATE
+> Task :the_harvest:neoFormTransformSource UP-TO-DATE
+> Task :the_harvest:neoFormRecompile UP-TO-DATE
+> Task :the_harvest:supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :the_harvest:selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.77 UP-TO-DATE
+> Task :the_harvest:compileJava UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :neoFormJoined1.21.1-20240808.144430DownloadAssets UP-TO-DATE
+> Task :neoFormJoined1.21.1-20240808.144430ExtractNatives UP-TO-DATE
+> Task :writeMinecraftClasspathData UP-TO-DATE
+> Task :ancient_obelisks:processResources UP-TO-DATE
+> Task :ancient_obelisks:classes UP-TO-DATE
+> Task :ancient_obelisks:jar UP-TO-DATE
+> Task :dungeon_realm:processResources UP-TO-DATE
+> Task :dungeon_realm:classes UP-TO-DATE
+> Task :dungeon_realm:jar UP-TO-DATE
+> Task :Library-of-Exile-Rework:processResources UP-TO-DATE
+> Task :Library-of-Exile-Rework:classes UP-TO-DATE
+> Task :Library-of-Exile-Rework:jar UP-TO-DATE
+> Task :the_harvest:processResources UP-TO-DATE
+> Task :the_harvest:classes UP-TO-DATE
+> Task :the_harvest:jar UP-TO-DATE
+
+> Task :runData
+[32m[21:12:38.555] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher running: args [--mod, mmorpg, --all, --output, /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/src/generated/resources, --existing, /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/src/main/resources, --launchTarget, forgedatauserdev, --assetIndex, asset-index, --assetsDir, /home/mtbarta/.gradle/caches/minecraft/assets, --gameDir, ., --fml.neoForgeVersion, 21.1.77, --fml.fmlVersion, 4.0.31, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430] 
+[m[32m[21:12:38.558] [main/INFO] [Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.9+10-LTS 
+[m[32m[21:12:38.560] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher 11.0.4+main.d2e20e43 starting: java version 21.0.9 by Eclipse Adoptium; OS Linux arch amd64 version 6.6.87.2-microsoft-standard-WSL2 
+[m[32m[21:12:38.680] [main/INFO] [loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev 
+[m[32m[21:12:38.725] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/mtbarta/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%23123!/ Service=ModLauncher Env=CLIENT 
+[m[32m[21:12:38.828] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.77.jar" [locator: neoforge devenv provider ([/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.77/neoforge-21.1.77.jar])] 
+[m[32m[21:12:38.845] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.77.jar" [locator: neoforge devenv provider ([/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.77/neoforge-21.1.77.jar])] 
+[m[32m[21:12:38.861] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "main" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.874] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.77.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.879] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "player-animation-lib-forge-1.0.2-rc1+1.21.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.885] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "ancient_obelisks-1.2.3.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.890] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "the_harvest-1.1.3.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.894] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "dungeon_realm-1.1.7.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.896] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "Library_of_Exile-1.21.1-2.1.5.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.900] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "curios-neoforge-9.5.1+1.21.1.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.904] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "jei-1.21.1-neoforge-19.21.0.247.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[32m[21:12:38.921] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found gamelibrary file "mixinextras-neoforge-0.4.1.jar" [locator: userdev mods and services, reader: mod manifest] 
+[m[33m[21:12:38.998] [main/WARN] [selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: library:mixinextras.neoforge. Using Mod File: /home/mtbarta/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-neoforge/0.4.1/eff97772ecd0dcf8e52cdbafd3b3ccec425f8314/mixinextras-neoforge-0.4.1.jar 
+[m[32m[21:12:38.999] [main/INFO] [loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection 
+[m[32m[21:12:38.999] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found library file "neoforge-coremods-21.1.77.jar" [parent: neoforge-21.1.77.jar, locator: jarinjar, reader: mod manifest] 
+[m[32m[21:12:39.001] [main/INFO] [loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Ancient Obelisks 1.2.3 (ancient_obelisks)
+		Curios API 9.5.1+1.21.1 (curios)
+		Dungeon Realm 1.1.7 (dungeon_realm)
+		Just Enough Items 19.21.0.247 (jei)
+		Library of Exile 2.1.5 (library_of_exile)
+		Mine and Slash 6.3.14 (mmorpg)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.77 (neoforge)
+		Player Animator 1.0.2-rc1+1.21 (playeranimator)
+		The Harvest 1.1.3 (the_harvest) 
+[m[32m[21:12:39.531] [main/INFO] [mixin/]: Compatibility level set to JAVA_21 
+[m[32m[21:12:39.554] [main/INFO] [LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, /home/mtbarta/.gradle/caches/minecraft/assets, --mod, mmorpg, --all, --output, /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/src/generated/resources, --existing, /home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/src/main/resources, --assetIndex, asset-index] 
+[m[33m[21:12:39.617] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[21:12:39.617] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message 
+[mWARN StatusConsoleListener Advanced terminal features are not available in this environment
+[21:12:40] [main/INFO] [ne.ne.ne.da.lo.DatagenModLoader/]: Initializing Data Gatherer for mods [mmorpg]
+[21:12:40] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[21:12:43] [modloading-worker-0/INFO] [Ex.ro.li.re.he.OrderedModConstructor/]: Mod Constructor Registered : mmorpg
+[21:12:43] [modloading-worker-0/INFO] [Ex.ro.li.re.he.OrderedModConstructor/]: Mod Constructor Registered : library_of_exile
+[21:12:43] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.77, for MC 1.21.1
+[21:12:43] [modloading-worker-0/INFO] [Ex.ro.li.re.he.OrderedModConstructor/]: Mod Constructor Registered : dungeon_realm
+[21:12:43] [modloading-worker-0/INFO] [Ex.ro.li.re.he.OrderedModConstructor/]: Mod Constructor Registered : ancient_obelisks
+[21:12:43] [modloading-worker-0/INFO] [Ex.ro.li.re.he.OrderedModConstructor/]: Mod Constructor Registered : the_harvest
+[21:12:43] [modloading-worker-0/INFO] [me.je.li.lo.PluginCaller/]: Sending ConfigManager...
+[21:12:43] [modloading-worker-0/INFO] [me.je.li.lo.PluginCaller/]: Sending ConfigManager took 2.680 ms
+[21:12:43] [modloading-worker-0/INFO] [dungeon_realm/]: Dungeon Realm loaded.
+Ancient Obelisks loaded.
+The Harvest loaded.
+[21:12:44] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.77/neoforge-21.1.77.jar%23177!/assets/.mcassetsroot' uses unexpected schema
+[21:12:44] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.77/neoforge-21.1.77.jar%23177!/data/.mcassetsroot' uses unexpected schema
+[21:12:44] [main/ERROR] [minecraft/AbstractPackResources]: Couldn't load filter metadata
+com.google.gson.JsonParseException: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 4 column 24 path $.pack.pack_format
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:434) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:439) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.parse(GsonHelper.java:503) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.parse(GsonHelper.java:511) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.AbstractPackResources.getMetadataFromStream(AbstractPackResources.java:44) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.AbstractPackResources.getMetadataSection(AbstractPackResources.java:33) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.MultiPackResourceManager.getPackFilterSection(MultiPackResourceManager.java:63) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.MultiPackResourceManager.<init>(MultiPackResourceManager.java:30) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.common.data.ExistingFileHelper.<init>(ExistingFileHelper.java:128) ~[neoforge-21.1.77.jar%23178!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.data.loading.DatagenModLoader.begin(DatagenModLoader.java:61) ~[neoforge-21.1.77.jar%23178!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.Main.main(Main.java:101) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.dataService(CommonLaunchHandler.java:132) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.NeoForgeDataUserdevLaunchHandler.runService(NeoForgeDataUserdevLaunchHandler.java:28) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
+Caused by: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 4 column 24 path $.pack.pack_format
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1659) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.checkLenient(JsonReader.java:1465) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.doPeek(JsonReader.java:602) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.peek(JsonReader.java:433) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:786) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:725) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$34$1.read(TypeAdapters.java:1007) ~[gson-2.10.1.jar%2393!/:?] {}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:432) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	... 25 more
+[21:12:44] [main/ERROR] [minecraft/AbstractPackResources]: Couldn't load filter metadata
+com.google.gson.JsonParseException: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 4 column 24 path $.pack.pack_format
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:434) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:439) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.parse(GsonHelper.java:503) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.parse(GsonHelper.java:511) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.AbstractPackResources.getMetadataFromStream(AbstractPackResources.java:44) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.AbstractPackResources.getMetadataSection(AbstractPackResources.java:33) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.MultiPackResourceManager.getPackFilterSection(MultiPackResourceManager.java:63) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.MultiPackResourceManager.<init>(MultiPackResourceManager.java:30) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.common.data.ExistingFileHelper.<init>(ExistingFileHelper.java:129) ~[neoforge-21.1.77.jar%23178!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.data.loading.DatagenModLoader.begin(DatagenModLoader.java:61) ~[neoforge-21.1.77.jar%23178!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.Main.main(Main.java:101) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.dataService(CommonLaunchHandler.java:132) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.NeoForgeDataUserdevLaunchHandler.runService(NeoForgeDataUserdevLaunchHandler.java:28) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
+Caused by: com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 4 column 24 path $.pack.pack_format
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1659) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.checkLenient(JsonReader.java:1465) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.doPeek(JsonReader.java:602) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.stream.JsonReader.peek(JsonReader.java:433) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:786) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:725) ~[gson-2.10.1.jar%2393!/:?] {}
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TypeAdapters$34$1.read(TypeAdapters.java:1007) ~[gson-2.10.1.jar%2393!/:?] {}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:432) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	... 25 more
+[21:12:44] [main/INFO] [minecraft/DataGenerator]: All providers took: 0 ms
+[21:12:44] [main/INFO] [minecraft/HashCache]: Caching: total files: 1, old count: 1, new count: 2, removed stale: 0, written: 0
+[21:12:44] [main/ERROR] [ne.ne.fm.ja.FMLModContainer/]: Exception caught during firing event: Duplicate provider: Loot Tables
+	Index: 1
+	Listeners:
+		0: com.robertx22.dungeon_realm.main.DungeonMain$$Lambda/0x0000770354d28e40@5e51e250
+		1: com.robertx22.ancient_obelisks.main.ObelisksMain$$Lambda/0x0000770354d47ad8@20c65f3a
+		2: com.robertx22.the_harvest.main.HarvestMain$$Lambda/0x0000770354d50690@745c5cbf
+java.lang.IllegalStateException: Duplicate provider: Loot Tables
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.DataGenerator.addProvider(DataGenerator.java:88)
+	at TRANSFORMER/ancient_obelisks@1.2.3/com.robertx22.ancient_obelisks.main.ObelisksMain.lambda$new$1(ObelisksMain.java:138)
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26)
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350)
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModLoader.runEventGenerator(ModLoader.java:347)
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.data.loading.DatagenModLoader.begin(DatagenModLoader.java:62)
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.Main.main(Main.java:101)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.dataService(CommonLaunchHandler.java:132)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.NeoForgeDataUserdevLaunchHandler.runService(NeoForgeDataUserdevLaunchHandler.java:28)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
+
+[21:12:44] [main/ERROR] [ne.ne.fm.ModContainer/LOADING]: Caught exception during event net.neoforged.neoforge.data.event.GatherDataEvent@355217f3 dispatch for modid library_of_exile
+java.lang.IllegalStateException: Duplicate provider: Loot Tables
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.DataGenerator.addProvider(DataGenerator.java:88) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at TRANSFORMER/ancient_obelisks@1.2.3/com.robertx22.ancient_obelisks.main.ObelisksMain.lambda$new$1(ObelisksMain.java:138) ~[ancient_obelisks-1.2.3.jar%23182!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23135!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23135!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23135!/:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModLoader.runEventGenerator(ModLoader.java:347) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.data.loading.DatagenModLoader.begin(DatagenModLoader.java:62) ~[neoforge-21.1.77.jar%23178!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.Main.main(Main.java:101) ~[neoforge-21.1.77.jar%23177!/:?] {re:classloading}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.dataService(CommonLaunchHandler.java:132) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.NeoForgeDataUserdevLaunchHandler.runService(NeoForgeDataUserdevLaunchHandler.java:28) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23131!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23111!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
+Exception in thread "main" java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:32)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.dataService(CommonLaunchHandler.java:132)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.NeoForgeDataUserdevLaunchHandler.runService(NeoForgeDataUserdevLaunchHandler.java:28)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	... 8 more
+Caused by: net.neoforged.fml.ModLoadingException: Loading errors encountered:
+	- Library of Exile (library_of_exile) encountered an error while dispatching the net.neoforged.neoforge.data.event.GatherDataEvent event
+	  java.lang.IllegalStateException: Duplicate provider: Loot Tables
+
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:181)
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.ModLoader.runEventGenerator(ModLoader.java:347)
+	at TRANSFORMER/neoforge@21.1.77/net.neoforged.neoforge.data.loading.DatagenModLoader.begin(DatagenModLoader.java:62)
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.data.Main.main(Main.java:101)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	... 14 more
+
+> Task :runData FAILED
+
+[Incubating] Problems report is available at: file:///home/mtbarta/minecraft_mods/Mine-And-Slash-Rework/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':runData'.
+> Process 'command '/home/mtbarta/.gradle/jdks/eclipse_adoptium-21-amd64-linux.2/bin/java'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 9s
+128 actionable tasks: 1 executed, 127 up-to-date

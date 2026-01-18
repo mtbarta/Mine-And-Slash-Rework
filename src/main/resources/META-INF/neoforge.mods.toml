@@ -1,0 +1,65 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[4,)"
+license = "All rights reserved"
+issueTrackerURL = "${mod_issues_link}"
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_display_name}"
+displayURL = "${mod_website_link}"
+logoFile = "icon.png"
+credits = ""
+authors = "${mod_author}"
+description = '''${description}'''
+enumExtensions = "META-INF/enumextensions.json"
+[[mixins]]
+config = "mmorpg.mixins.json"
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.mmorpg]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "library_of_exile"
+mandatory = true
+versionRange = "[${exile_library_version},)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "dungeon_realm"
+mandatory = true
+versionRange = "[${dungeon_realm_version},)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "the_harvest"
+mandatory = true
+versionRange = "[${the_harvest_version},)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "ancient_obelisks"
+mandatory = true
+versionRange = "[${ancient_obelisks_version},)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "curios"
+mandatory = true
+versionRange = "[0,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.mmorpg]]
+modId = "playeranimator"
+mandatory = true
+versionRange = "[0,)"
+ordering = "NONE"
+side = "BOTH"

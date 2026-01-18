@@ -1,0 +1,26 @@
+
+publishMods {
+    file = jar.archiveFile
+    changelog = file("CHANGELOG.txt").text
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
+    modLoaders.add("neoforge")
+    displayName = "${mod_archive_name}-${minecraft_version}-v${mod_version}"
+
+    curseforge {
+        if (project.file("key.properties").exists()) {
+            accessToken = file("key.properties").text
+        }
+        projectId = "${curse_id}"
+        minecraftVersions.add("${minecraft_version}")
+        minecraftVersions.add("1.20")
+    }
+	
+    modrinth {
+        if (project.file("modrinth_key.properties").exists()) {
+            accessToken = file("modrinth_key.properties").text
+        }
+        projectId = "${modrinth_id}"
+        minecraftVersions.add("${minecraft_version}")
+        minecraftVersions.add("1.20")
+    }
+}

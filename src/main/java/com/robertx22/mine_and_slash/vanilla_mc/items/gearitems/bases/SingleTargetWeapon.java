@@ -1,0 +1,82 @@
+package com.robertx22.mine_and_slash.vanilla_mc.items.gearitems.bases;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.robertx22.mine_and_slash.uncommon.interfaces.IAutoLocName;
+import com.robertx22.library_of_exile.vanilla_util.main.VanillaUTIL;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.resources.ResourceLocation;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+
+public abstract class SingleTargetWeapon extends Item implements IAutoLocName {
+
+    public SingleTargetWeapon(Tiers mat, Properties settings, String locname) {
+
+        super(settings);
+        this.locname = locname;
+
+    }
+
+    // 1.21: canApplyAtEnchantingTable removed - enchanting is now fully data-driven
+    // Configure enchanting behavior via datapack if needed
+
+    String locname;
+    public float attackSpeed = -2.4F;
+
+    @Override
+    public boolean hurtEnemy(ItemStack p_77644_1_, LivingEntity p_77644_2_, LivingEntity p_77644_3_) {
+        p_77644_1_.hurtAndBreak(1, p_77644_3_, EquipmentSlot.MAINHAND);
+        return true;
+    }
+
+    @Override
+    public final String locNameForLangFile() {
+        return locname;
+    }
+
+    @Override
+    public AutoLocGroup locNameGroup() {
+        return AutoLocGroup.Gear_Items;
+    }
+
+    @Override
+    public String locNameLangFileGUID() {
+        return VanillaUTIL.REGISTRY.items().getKey(this)
+                .toString();
+    }
+
+    @Override
+    public String GUID() {
+        return "";
+    }
+
+    // 1.21: AttributeModifier constructor now takes ResourceLocation instead of
+    // UUID + name
+    @Override
+    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+        return ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE,
+                        new AttributeModifier(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "weapon_damage"), 6,
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED,
+                        new AttributeModifier(ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "weapon_speed"),
+                                (double) this.attackSpeed,
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND)
+                .build();
+    }
+
+}

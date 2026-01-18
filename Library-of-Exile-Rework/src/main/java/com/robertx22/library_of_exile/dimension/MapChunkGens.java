@@ -1,0 +1,35 @@
+package com.robertx22.library_of_exile.dimension;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.robertx22.library_of_exile.events.base.EventConsumer;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
+
+public class MapChunkGens {
+
+    public static void init() {
+
+    }
+
+    // Simple empty chunk gen all my small map-dimension mods can use
+    // the map stuff is generated in the event
+    // In NeoForge 1.21, the mod event bus must be passed from the mod constructor
+    public static void registerMapChunkGenerator(IEventBus modEventBus, ResourceLocation id,
+            EventConsumer<MapChunkGenEvent> e) {
+        DeferredRegister<MapCodec<? extends ChunkGenerator>> DEF = DeferredRegister.create(Registries.CHUNK_GENERATOR,
+                id.getNamespace());
+
+        DEF.register(modEventBus);
+
+        DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> CHUNK_GEN = DEF
+                .register(id.getPath(), () -> MapChunkGenerator.MAP_CODEC);
+
+        MapGenEvents.MAP_CHUNK_GEN.register(e);
+
+    }
+}

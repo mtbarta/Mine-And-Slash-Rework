@@ -1,0 +1,45 @@
+
+minecraft {
+
+    mappings channel: "${mapping_channel}", version: "${mapping_version}-${minecraft_version}"
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config=${mod_id}-mixins.json"
+            // This makes dependencies with mixins work
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            // This makes dependencies with mixins work
+            mods {
+                modid {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config=${mod_id}-mixins.json"
+            // This makes dependencies with mixins work
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            // This makes dependencies with mixins work
+            mods {
+                modid {
+                    source sourceSets.main
+                }
+            }
+        }
+        data {
+            workingDirectory project.file('run')
+            arg "-mixin.config=${mod_id}-mixins.json"
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', '${mod_id}', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                modid {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}

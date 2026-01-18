@@ -1,0 +1,48 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.gradle.userdev'
+    id "me.modmuss50.mod-publish-plugin"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+minecraft {
+    // accessTransformers { ... }
+}
+
+repositories {
+    maven { url = "https://maven.theillusivec4.top/" } // curios
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup "mezz.jei"
+        }
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    compileOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
+    runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${project.jei_version}") 
+
+    implementation project(':Library-of-Exile-Rework')
+}
+
+apply from: file('../gradle/scripts/meta.gradle')
+apply from: file('../gradle/scripts/publishing.gradle')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

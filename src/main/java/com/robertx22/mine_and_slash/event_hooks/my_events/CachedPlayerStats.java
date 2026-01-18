@@ -1,0 +1,126 @@
+package com.robertx22.mine_and_slash.event_hooks.my_events;
+
+import com.robertx22.mine_and_slash.capability.DirtySync;
+import com.robertx22.mine_and_slash.capability.entity.EntityData;
+import com.robertx22.mine_and_slash.saveclasses.item_classes.GearItemData;
+import com.robertx22.mine_and_slash.saveclasses.skill_gem.SkillGemData;
+import com.robertx22.mine_and_slash.saveclasses.unit.stat_ctx.StatContext;
+import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
+import com.robertx22.mine_and_slash.uncommon.stat_calculation.CommonStatUtils;
+import com.robertx22.mine_and_slash.uncommon.stat_calculation.PlayerStatUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CachedPlayerStats {
+
+    public Player p;
+    public List<StatContext> allStatsWithoutSuppGems = new ArrayList<>();
+
+    public List<StatContext> statContexts = new ArrayList<>();
+
+    public StatContext enchantCompat = null;
+
+    private StatContext statCompat;
+
+    public DirtySync ENCHANT_COMPAT = new DirtySync("enchant_compat", x -> {
+        var data = Load.Unit(p);
+        if (data != null) {
+            this.enchantCompat = GearItemData.getEnchantCompatStats(p, data.equipmentCache.getGear());
+        }
+    });
+
+    public DirtySync STAT_COMPAT = new DirtySync("stat_compat", x -> {
+        recalcStatCompat();
+        var data = Load.Unit(p);
+        if (data != null) {
+            data.equipmentCache.STAT_CALC.setDirty();
+        }
+    });
+    public StatContext omenStats;
+
+    public StatContext getStatCompatStats() {
+        if (statCompat == null) {
+            recalcStatCompat();
+        }
+        return statCompat;
+    }
+
+    private void recalcStatCompat() {
+        this.statCompat = CommonStatUtils.addStatCompat(p);
+    }
+
+    // I guess these could be all stats that don't change often, fine to set these
+    // to recalc everything
+    public DirtySync ALLOCATED = new DirtySync("misc_player", x -> {
+        recalcAllocated();
+        EntityData unit = Load.Unit(p);
+        if (unit != null) {
+            unit.equipmentCache.STAT_CALC.setDirty();
+            unit.getResources().capAll(p);
+        }
+    }) {
+        @Override
+        public void setDirty() {
+            super.setDirty();
+        }
+
+    };
+
+    public void setAllDirty() {
+        ALLOCATED.setDirty();
+        ENCHANT_COMPAT.setDirty();
+        STAT_COMPAT.setDirty();
+    }
+
+    public void tick(Player p) {
+        this.p = p;
+        ALLOCATED.onTickTrySync(p);
+        ENCHANT_COMPAT.onTickTrySync(p);
+        STAT_COMPAT.onTickTrySync(p);
+
+    }
+
+    public CachedPlayerStats(Player p) {
+        this.p = p;
+    }
+
+    private void recalcAllocated() {
+
+        if (false) {
+            p.sendSystemMessage(Component.literal("Re calcing player stuff"));
+        }
+        statContexts = new ArrayList<>();
+
+        var playerData = Load.player(p);
+        if (playerData == null) {
+            return;
+        }
+
+        playerData.aurasOn = new ArrayList<>();
+        for (SkillGemData aura : playerData.getSkillGemInventory().getAurasGems()) {
+            playerData.aurasOn.add(aura.id);
+        }
+
+        statContexts.addAll(PlayerStatUtils.addToolStats(p)); // todo this needs fixing
+
+        statContexts.add(PlayerStatUtils.addBonusExpPerCharacters(p));
+
+        statContexts.addAll(playerData.buff.getStatAndContext(p));
+
+        statContexts.addAll(playerData.getSkillGemInventory().getAuraStats(p));
+        statContexts.addAll(playerData.jewelData.getStatAndContext(p));
+        statContexts.addAll(playerData.statPoints.getStatAndContext(p));
+
+        var entityData = Load.Unit(p);
+        if (entityData != null) {
+            statContexts.addAll(PlayerStatUtils.addNewbieElementalResists(entityData));
+        }
+        statContexts.addAll(playerData.talents.getStatAndContext(p));
+        statContexts.addAll(playerData.ascClass.getStatAndContext(p));
+        statContexts.addAll(playerData.prophecy.getStatAndContext(p));
+
+    }
+}

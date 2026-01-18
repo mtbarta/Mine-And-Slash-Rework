@@ -1,0 +1,72 @@
+package com.robertx22.mine_and_slash.gui.screens.stat_gui;
+
+import com.robertx22.mine_and_slash.gui.buttons.CharacterStatsButtons;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import com.robertx22.mine_and_slash.saveclasses.unit.StatData;
+import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
+import com.robertx22.library_of_exile.utils.GuiUtils;
+import com.robertx22.library_of_exile.utils.RenderUtils;
+import com.robertx22.library_of_exile.utils.TextUTIL;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class StatIconAndNumberButton extends ImageButton {
+
+    public static int xSize = 19;
+    public static int ySize = 19;
+
+    private StatData stat;
+    private LivingEntity target;
+
+    public StatIconAndNumberButton(StatScreen screen, StatData stat, int xPos, int yPos) {
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(SlashRef.guiId("stat_gui/stat_icon"), SlashRef.guiId("stat_gui/stat_icon")),
+                (button) -> {
+                    screen.setInfo(stat);
+                });
+
+        this.stat = stat;
+        this.target = screen.getTarget();
+    }
+
+    @Override
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
+        if (stat == null || stat.GetStat() == null) {
+            return;
+        }
+
+        if (this.isHoveredOrFocused()) {
+            List<Component> tooltip = new ArrayList<>();
+            var text = stat.GetStat().locName()
+                    .append(": " + CharacterStatsButtons.getStatString(stat.GetStat(), Load.Unit(target)));
+            tooltip.add(text);
+
+            tooltip.addAll(stat.GetStat().getCutDescTooltip());
+
+            this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
+        }
+
+        int iconX = 5;
+        int iconY = 5;
+
+        int numX = 10;
+        int numY = 16;
+
+        String stattext = ((int) stat.getValue()) + "";
+
+        RenderUtils.render16Icon(gui, stat.GetStat().getIconForRenderingInGroup(), getX() + iconX - 4,
+                getY() + iconY - 3);
+
+        GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 1F, stattext,
+                stat.GetStat().getStatGuiTooltipNumberColor(stat));
+
+    }
+
+}

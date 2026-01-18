@@ -1,0 +1,49 @@
+{
+    "entries": [
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "MMORPG_LEGENDARY",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                "field": "LEGENDARY_PROXY"
+            }
+        },
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "MMORPG_MYTHIC",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                "field": "MYTHIC_PROXY"
+            }
+        },
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "MMORPG_UNIQUE",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                "field": "UNIQUE_PROXY"
+            }
+        },
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "MMORPG_RUNED",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                "field": "RUNED_PROXY"
+            }
+        },
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "MMORPG_UNCOMMON",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "com/robertx22/mine_and_slash/uncommon/interfaces/data_items/VanillaRarities",
+                "field": "UNCOMMON_PROXY"
+            }
+        }
+    ]
+}

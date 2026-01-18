@@ -1,0 +1,61 @@
+package com.robertx22.mine_and_slash.vanilla_mc.packets;
+
+import com.robertx22.mine_and_slash.gui.inv_gui.GuiItemData;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import com.robertx22.library_of_exile.main.MyPacket;
+import com.robertx22.library_of_exile.packets.ExilePacketContext;
+import com.robertx22.library_of_exile.utils.LoadSave;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+
+public class InvGuiPacket extends MyPacket<InvGuiPacket> {
+
+    GuiItemData data;
+
+    public InvGuiPacket() {
+
+    }
+
+    Object extra;
+
+    public InvGuiPacket(GuiItemData data) {
+        this.data = data;
+    }
+
+    @Override
+    public void loadFromData(RegistryFriendlyByteBuf buf) {
+
+        data = LoadSave.Load(GuiItemData.class, new GuiItemData(), buf.readNbt(), "inv");
+
+        this.extra = data.getAction().loadExtraData(buf);
+
+    }
+
+    @Override
+    public void saveToData(RegistryFriendlyByteBuf buf) {
+        CompoundTag nbt = new CompoundTag();
+        LoadSave.Save(data, nbt, "inv");
+        buf.writeNbt(nbt);
+        data.getAction().saveExtraData(buf);
+
+    }
+
+    @Override
+    public void onReceived(ExilePacketContext ctx) {
+
+        data.onServer(ctx.getPlayer(), extra);
+
+    }
+
+    @Override
+    public MyPacket<InvGuiPacket> newInstance() {
+        return new InvGuiPacket();
+    }
+
+    @Override
+    public ResourceLocation getIdentifier() {
+        return ResourceLocation.fromNamespaceAndPath(SlashRef.MODID, "invgui");
+    }
+
+}

@@ -1,0 +1,30 @@
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+archivesBaseName = "${mod_archive_name}-${minecraft_version}"
+version = project.mod_version
+group = project.maven_group
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+
+    minecraft([
+            group  : "net.minecraftforge",
+            name   : 'forge',
+            version: "$project.minecraft_version-${project.forgeversion}"
+    ])
+
+    if (System.getProperty("idea.sync.active") != "true") {
+        annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+jar {
+    finalizedBy 'reobfJar'
+}

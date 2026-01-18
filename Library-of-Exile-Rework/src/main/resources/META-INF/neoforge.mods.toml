@@ -1,0 +1,30 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[1,)"
+license = "All rights reserved"
+issueTrackerURL = "${mod_issues_link}"
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_display_name}"
+displayURL="${mod_website_link}"
+logoFile = "icon.png"
+credits = ""
+authors = "mcrobertx22"
+description = '''
+Library mod for Mine and Slash and mine and slash accessories.
+'''
+[[mixins]]
+config = "library_of_exile.mixins.json"
+[[dependencies.library_of_exile]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.library_of_exile]]
+modId = "minecraft"
+mandatory = true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"

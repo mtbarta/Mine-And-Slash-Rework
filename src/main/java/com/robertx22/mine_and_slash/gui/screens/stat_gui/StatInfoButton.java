@@ -1,0 +1,238 @@
+package com.robertx22.mine_and_slash.gui.screens.stat_gui;
+
+import com.robertx22.library_of_exile.tooltip.ExileTooltipUtils;
+import com.robertx22.library_of_exile.utils.GuiUtils;
+import com.robertx22.library_of_exile.utils.RenderUtils;
+import com.robertx22.library_of_exile.utils.TextUTIL;
+import com.robertx22.mine_and_slash.capability.entity.EntityData;
+import com.robertx22.mine_and_slash.database.data.stats.IUsableStat;
+import com.robertx22.mine_and_slash.database.data.stats.Stat;
+import com.robertx22.mine_and_slash.database.data.stats.datapacks.test.DataPackStatEffect;
+import com.robertx22.mine_and_slash.database.data.stats.datapacks.test.DatapackStat;
+import com.robertx22.mine_and_slash.mmorpg.MMORPG;
+import com.robertx22.mine_and_slash.mmorpg.SlashRef;
+import com.robertx22.mine_and_slash.saveclasses.unit.StatData;
+import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
+import com.robertx22.mine_and_slash.uncommon.localization.Words;
+import com.robertx22.mine_and_slash.uncommon.utilityclasses.NumberUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class StatInfoButton extends ImageButton implements IStatInfoButton {
+
+    public static int xSize = 20;
+    public static int ySize = 20;
+
+    private StatData stat;
+    private StatInfoType type;
+    private LivingEntity target;
+
+    public StatInfoButton(StatScreen screen, StatInfoType type, StatData stat, int xPos, int yPos) {
+        super(xPos, yPos, xSize, ySize,
+                new WidgetSprites(SlashRef.guiId("stat_gui/info_button"), SlashRef.guiId("stat_gui/info_button")),
+                (button) -> {
+                });
+
+        this.type = type;
+        this.stat = stat;
+        this.target = screen.getTarget();
+    }
+
+    @Override
+    public void renderWidget(GuiGraphics gui, int x, int y, float ticks) {
+        if (stat == null || stat.GetStat() == null) {
+            return;
+        }
+
+        if (this.isHoveredOrFocused()) {
+            List<MutableComponent> tooltip = type.getTooltip(stat);
+            this.setTooltip(Tooltip.create(TextUTIL.mergeList(tooltip)));
+        }
+
+        int iconX = 5;
+        int iconY = 5;
+
+        int numX = 10;
+        int numY = 28;
+
+        if (type.hasIcon) {
+            RenderUtils.render16Icon(gui, this.type.getIcon(), getX() + iconX - 3, getY() + iconY - 3);
+        }
+        var text = type.getRenderText(stat, Load.Unit(target));
+
+        if (text != null) {
+            GuiUtils.renderScaledText(gui, getX() + numX, getY() + numY, 0.8F, text.getString(), ChatFormatting.YELLOW);
+        }
+    }
+
+    public enum StatInfoType {
+
+        CURRENT_VALUE("current_value", true) {
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                String p = data.GetStat().IsPercent() ? "%" : "";
+                return Component.literal(MMORPG.DECIMAL_FORMAT.format(data.getValue()) + p);
+            }
+
+            @Override
+            public boolean shouldShow(StatData data) {
+                return true;
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return Arrays.asList(Words.CurrentValueInfo.locName());
+            }
+        },
+        DMG_MULTI("dmg_multi", true) {
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                String p = "x" + MMORPG.DECIMAL_FORMAT.format(data.getMoreStatTypeMulti());
+                return Component.literal(p);
+            }
+
+            @Override
+            public boolean shouldShow(StatData data) {
+                return data.getMoreStatTypeMulti() != 1
+                        && data.GetStat().getMultiUseType() == Stat.MultiUseType.MULTIPLICATIVE_DAMAGE;
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return Arrays.asList(Words.DmgMultiInfo.locName());
+            }
+        },
+        USABLE_VALUE("usable_value", true) {
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                return Component.literal(data.GetStat() instanceof IUsableStat u
+                        ? NumberUtils.singleDigitFloat(
+                                u.getUsableValue(unit.getUnit(), (int) data.getValue(), unit.getLevel()) * 100F) + "%"
+                        : "");
+            }
+
+            @Override
+            public boolean shouldShow(StatData data) {
+                return data.GetStat() instanceof IUsableStat;
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return ExileTooltipUtils.splitLongText(Words.UsableValueInfo.locName());
+            }
+        },
+        MIN_VAL("min", true) {
+            @Override
+            public boolean shouldShow(StatData data) {
+                return true;
+            }
+
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                return Component
+                        .literal(data.GetStat().getMinCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return Arrays.asList(Words.MincapInfo.locName());
+            }
+        },
+        SOFTCAP("softcap", true) {
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return Arrays.asList(Words.SoftcapInfo.locName());
+            }
+
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                return Component
+                        .literal(data.GetStat().getDefaultSoftCap() + "" + (data.GetStat().IsPercent() ? "%" : ""));
+            }
+
+            @Override
+            public boolean shouldShow(StatData data) {
+                return data.GetStat().hasSoftCap();
+            }
+        },
+        HARD_CAP("hardcap", true) {
+            @Override
+            public boolean shouldShow(StatData data) {
+                return true;
+            }
+
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                return Component
+                        .literal(data.GetStat().getHardCapTooltipText() + (data.GetStat().IsPercent() ? "%" : ""));
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+                return Arrays.asList(Words.HardcapInfo.locName());
+            }
+        },
+
+        INFO("info", true) {
+            @Override
+            public boolean shouldShow(StatData data) {
+                return true;
+            }
+
+            @Override
+            public MutableComponent getRenderText(StatData data, EntityData unit) {
+                return null;
+            }
+
+            @Override
+            public List<MutableComponent> getTooltip(StatData data) {
+
+                List<MutableComponent> t = new ArrayList<>();
+
+                Stat stat = data.GetStat();
+
+                t.add(Component.literal("Id: ").append(stat.GUID()));
+
+                // todo ideally all stats should be reworked into this one or similar
+
+                if (stat instanceof DatapackStat d) {
+                    for (DataPackStatEffect ef : d.effect) {
+                        t.addAll(ef.getTooltip());
+                    }
+                }
+
+                return t;
+            }
+        };
+
+        public String id;
+        public boolean hasIcon = false;
+
+        StatInfoType(String id, boolean hasIcon) {
+            this.id = id;
+            this.hasIcon = hasIcon;
+        }
+
+        public abstract boolean shouldShow(StatData data);
+
+        public abstract MutableComponent getRenderText(StatData data, EntityData unit);
+
+        public abstract List<MutableComponent> getTooltip(StatData data);
+
+        public ResourceLocation getIcon() {
+            return SlashRef.guiId("stat_gui/info_button_icons/" + id);
+        }
+    }
+
+}

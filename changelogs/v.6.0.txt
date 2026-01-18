@@ -1,0 +1,97 @@
+Changelog of recent updates: https://github.com/RobertSkalko/Mine-And-Slash-Rework/blob/1.20-Forge/changelogs/v.6.0.txt
+
+
+v.6.0.0
+
+[WARNING: these features will require the Compatibility addon, which will take a while to release! Maybe a few days to get approved on curseforge/modrinth!
+
+EXTREMELY EXPERIMENTAL UPDATE! 
+It's probably buggy, and maybe I missed some incompatibility problem, report please!
+
+New Compatibility Features and an Addon!!!
+Mine and Slash will now by default play the same as always, but you can now install the Compatibility Addon, making it suitable to place in any modpack as it will try not to invalidate other mod's damage.
+
+- With the addon installed Mns damage will just be on top of normal vanilla damage, instead of replacing or nullifying it. 
+Now Mns dmg can act as bonus damage, still within it's own systems but will now let you for example deal damage with other spell mods.
+- allows choosing to use vanilla hearts instead of imaginary mns health
+- Allows choosing which game balance datapack is used from the config 
+- option to disable newbie bonus resists and high lvl minus resists 
+- option to cap item durability loss
+- new client option to only render bars if not filled, this means at full hp mana etc your bars hide
+- added option to not disable vanilla hp regen mechanic
+- added option to choose which player base stat datapack is used, the compat option has less base stats, because the stat scaling is lower too
+- added MOB_PERCENT_DAMAGE_AS_BONUS and MOB_FLAT_DAMAGE_BONUS configs which will be lowered on the compat version of the default config
+- added option to ignore weapon spell casting requirements for compat mode
+- added stat requirement multi config
+- added config for disabling mob iframes
+- damage number particles wont show by default on compat mode
+
+I contemplated between making the "compat mode" just a config, or an addon.
+I decided on addon because that way Mine and slash on its own will be the intended experience, and installing the addon is a clear way of changing how it works, as opposed to just toggling a config and wondering what the hell is happening.
+It's also probably easier to install the addon than to dig into configs.
+I'm not totally convinced either way yet but this should do for now.
+
+Other:
+- procced spell stats now actually use mana cost
+- fixed dots dealing dmg 1 extra time, effectively making dot builds.. about 30% better sometimes
+- loot chests can no longer be salvaged
+- merged clefal's PR to reduce talent tree lag
+
+v.6.0.1
+- fixed 1 hp mobs
+
+v.6.0.2
+- fixed sweeping
+
+v.6.0.3
+- reverted sweeping because it caused one shotting mobs bug
+
+v.6.0.4
+- added soul cleaner item blacklist
+- new experimental feature, damage conversion compatibility
+If you have the Compatibility addon installed, you can now play with other mod's spells having their damage turned into Mns damage
+- the compat presets are now 3 and renamed: Original, Compatible and Lite.
+Original is the original mns, Compatible is nearly the same as original except other mod's spells are scaled and turned to mns damage, and Lite is toned down mod to better fit into more vanilla modpacks
+- will no longer heal mobs to full at spawn, apparently some bosses dont like that
+- the compat addon is now required to use the compatibility config
+
+v.6.0.5
+- learning method 3x > 2x xp
+- fixed ailment resistance, was reducing instead of increasing damage when in minus
+- block chance now requires shield
+- attempt fix auto items
+- tweaked the dmg code
+
+v.6.1.0
+
+- big refactor to a lot of code, specifically currencies, now called crafting orbs.
+Orbs of Crafting is now a separate dependency mod and will be used in my other mods, hopefully coming soon
+- fixed soul cleaner config
+- set scale to nearest player true by default
+- fixed leech cap stat scaling: normal > none
+- maybe fix compat config resetting
+- hp bars now show magic shield
+- should check some 'is teamed' methods to work even when far away, so friendly traps dont turn on you as soon as the friend teleports away
+- if youre lacking resists in map you'll now take 10% of your hp as damage per second and you wont regenerate any resource
+- spectators now dont count as nearest players
+- messed with recipe gen code, report if any recipes are missing please
+- one of a kind should now work for effects
+- tp to caster spell action added
+
+Please report any weird things or bugs!
+
+v.6.1.1
+
+- fix soul modifiers
+- fixed default invalid dmg conversion being 10 instead of 0%
+
+v.6.1.2
+
+- try fix visual talent connection bug
+- new currency, orb of relief
+- fix effects not applying.. damn one of a kind code deleted them all
+
+v.6.1.2
+
+- special drops like uber frags and watchers eyes are no longer affected by item caps and generate separately
+- should fix compat mode dmg override 
