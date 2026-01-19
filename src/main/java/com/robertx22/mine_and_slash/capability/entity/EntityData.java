@@ -578,7 +578,6 @@ public class EntityData implements ICap, INeededForClient {
             this.didStatCalcThisTickForPlayer = true;
 
             var data = Load.player(p);
-            System.out.println("[EntityData] Recalculating stats for player: " + p.getName().getString());
             data.cachedStats.allStatsWithoutSuppGems = stats;
 
             data.setSpellUnitsDirty();

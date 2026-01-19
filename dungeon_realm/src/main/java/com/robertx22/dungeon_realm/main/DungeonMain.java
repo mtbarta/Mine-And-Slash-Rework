@@ -109,6 +109,9 @@ public class DungeonMain {
     };
 
     public DungeonMain(IEventBus bus) {
+        // Set the mod event bus first so IModBusEvent events are registered correctly
+        ApiForgeEvents.setModEventBus(bus);
+
         OrderedModConstructor.register(new DungeonModConstructor(DungeonMain.MODID), bus);
         DungeonAttachments.register(bus);
         DungeonDataComponentTypes.REGISTRY.register(bus);

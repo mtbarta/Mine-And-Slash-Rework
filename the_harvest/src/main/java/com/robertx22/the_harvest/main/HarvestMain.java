@@ -101,6 +101,9 @@ public class HarvestMain {
     }
 
     public HarvestMain(IEventBus bus) {
+        // Set the mod event bus first so IModBusEvent events are registered correctly
+        ApiForgeEvents.setModEventBus(bus);
+
         OrderedModConstructor.register(new HarvestModConstructor(HarvestMain.MODID), bus);
 
         HarvestAttachments.register(bus);

@@ -3,6 +3,9 @@
     "minecraft:player"
   ],
   "slots": [
-    "master_bag"
+    "master_bag",
+    "ring",
+    "necklace",
+    "omen"
   ]
 }

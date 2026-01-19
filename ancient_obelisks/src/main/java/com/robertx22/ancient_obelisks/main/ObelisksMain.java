@@ -98,6 +98,9 @@ public class ObelisksMain {
     }
 
     public ObelisksMain(IEventBus bus) {
+        // Set the mod event bus first so IModBusEvent events are registered correctly
+        ApiForgeEvents.setModEventBus(bus);
+        
         OrderedModConstructor.register(new ObeliskModConstructor(ObelisksMain.MODID), bus);
 
         ObeliskAttachments.register(bus);
