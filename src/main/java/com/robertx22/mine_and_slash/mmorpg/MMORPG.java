@@ -74,6 +74,9 @@ import net.neoforged.api.distmarker.Dist;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.Consumer;
+import net.neoforged.fml.InterModComms;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import com.robertx22.mine_and_slash.a_libraries.curios.RefCurios;
 
 @Mod(SlashRef.MODID)
 public class MMORPG {
@@ -256,14 +259,13 @@ public class MMORPG {
 
     public void interMod(InterModEnqueueEvent event) {
 
-        /*
-         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
-         * SlotTypeMessage.Builder(RefCurio.RING).size(2).build());
-         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
-         * SlotTypeMessage.Builder(RefCurio.NECKLACE).size(1).build());
-         * InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new
-         * SlotTypeMessage.Builder(RefCurio.OMEN).size(1).build());
-         */
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> new SlotTypeMessage.Builder(RefCurios.RING).size(2).build());
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> new SlotTypeMessage.Builder(RefCurios.NECKLACE).size(1).build());
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> new SlotTypeMessage.Builder(RefCurios.OMEN).size(1).build());
+
         // 1.21: registerConfig on ModContainer is stored during construction, not in
         // interMod
         // Move this to constructor if needed, or use a static ModContainer reference

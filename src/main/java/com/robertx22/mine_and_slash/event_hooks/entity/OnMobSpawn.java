@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 public class OnMobSpawn {
 
     public static void onLoad(Entity entity) {
+        System.out.println("DEBUG: OnMobSpawn onLoad called for " + entity.getName().getString());
 
         if (entity == null) {
             return;
@@ -29,7 +30,6 @@ public class OnMobSpawn {
         Load.Unit(entity).immuneTicks = 10;
 
         setupNewMobOnSpawn((LivingEntity) entity);
-
 
     }
 
@@ -51,7 +51,7 @@ public class OnMobSpawn {
 
             if (endata.needsToBeGivenStats()) {
                 setupNewMob(entity, endata, nearestPlayer);
-                //entity.heal(Integer.MAX_VALUE);
+                // entity.heal(Integer.MAX_VALUE);
             } else {
                 if (endata.getUnit() == null) {
                     endata.setUnit(new Unit());
@@ -79,7 +79,6 @@ public class OnMobSpawn {
         if (config.hasSpecificRarity()) {
             rar = config.set_rar;
         }
-
 
         endata.setRarity(rar);
 
