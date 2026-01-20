@@ -1,0 +1,15 @@
+{
+    "weight": 1000,
+    "min_lvl": 1,
+    "dmg_multi": 1.5,
+    "extra_hp_multi": 1.5,
+    "stat_multi": 1.5,
+    "loot_multi": 1.0,
+    "exp_multi": 1.0,
+    "affixes": 2,
+    "text_format": "AQUA",
+    "spells": [
+        "mmorpg:fireball",
+        "mmorpg:frostbolt"
+    ]
+}

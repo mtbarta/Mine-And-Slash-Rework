@@ -29,6 +29,7 @@ runs {
         modSource project(':dungeon_realm').sourceSets.main
         modSource project(':the_harvest').sourceSets.main
         modSource project(':ancient_obelisks').sourceSets.main
+        modSource project(':compat_minecolonies').sourceSets.main
     }
 
     data {
