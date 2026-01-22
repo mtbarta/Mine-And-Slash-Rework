@@ -1,0 +1,11 @@
+{
+    "type": "mmorpg:mob_gear_drop",
+    "conditions": [
+        {
+            "condition": "minecraft:killed_by_player"
+        }
+    ],
+    "base_chance": 0.10,
+    "level_multiplier": 0.01,
+    "min_level": 1
+}

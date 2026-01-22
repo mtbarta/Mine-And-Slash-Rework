@@ -53,6 +53,9 @@ public class SlashDeferred {
 
                 // Register data component types for item data storage
                 DataComponentTypes.REGISTRY.register(bus);
+
+                // Register global loot modifier serializers
+                SlashLootModifiers.REGISTRY.register(bus);
         }
 
         public static void registerEntries() {

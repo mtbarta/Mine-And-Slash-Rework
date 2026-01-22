@@ -15,8 +15,6 @@ import net.minecraft.world.entity.player.Player;
 public class OnMobSpawn {
 
     public static void onLoad(Entity entity) {
-        System.out.println("DEBUG: OnMobSpawn onLoad called for " + entity.getName().getString());
-
         if (entity == null) {
             return;
         }
