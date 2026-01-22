@@ -70,6 +70,9 @@ public class OnMobSpawn {
 
         endata.SetMobLevelAtSpawn(nearestPlayer);
 
+        // Sync level to Dynamic Difficulty if present
+        com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat.setLevel(entity, endata.getInternalLevel());
+
         String rar = endata.getRarity();
 
         rar = mob.randomRarity(endata.getLevel(), endata);

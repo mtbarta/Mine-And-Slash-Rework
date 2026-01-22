@@ -56,6 +56,10 @@ repositories {
     maven {
         url = "https://api.modrinth.com/maven"
     }
+    // Dynamic Difficulty (optional dependency for level sync)
+    maven {
+        url = "https://maven.muon.rip/releases/"
+    }
     exclusiveContent {
         forRepository {
             maven {
@@ -81,6 +85,10 @@ dependencies {
     implementation project(':ancient_obelisks')
     implementation project(':the_harvest')
     implementation project(':dungeon_realm')
+
+    // Dynamic Difficulty - optional compile-only dependency for level sync
+    // Using local jar since maven.muon.rip is currently unavailable
+    compileOnly files('libs/dynamic_difficulty-neoforge-1.1.0+1.21.1.jar')
 }
 
 jar {

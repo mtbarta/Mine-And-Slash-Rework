@@ -281,6 +281,9 @@ public class MMORPG {
 
         ProfessionRecipes.init();
 
+        // Register player level provider with Dynamic Difficulty (if present)
+        com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat.registerPlayerLevelProvider();
+
     }
 
 }

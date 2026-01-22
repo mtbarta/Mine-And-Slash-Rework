@@ -888,6 +888,21 @@ public class EntityData implements ICap, INeededForClient {
     }
 
     public int getLevel() {
+        // For mobs, check Dynamic Difficulty first if available
+        if (!(entity instanceof Player) && entity != null) {
+            int ddLevel = com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat.getLevel(entity);
+            if (ddLevel > 0) {
+                return ddLevel;
+            }
+        }
+        return level;
+    }
+
+    /**
+     * Get the internal level field directly, bypassing Dynamic Difficulty check.
+     * Used by player level provider to avoid recursion.
+     */
+    public int getInternalLevel() {
         return level;
     }
 
