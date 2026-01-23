@@ -6,18 +6,18 @@ import com.robertx22.mns_cobblemon.core.KobblemonAffixes;
 import com.robertx22.mns_cobblemon.core.KobblemonGearSlots;
 import com.robertx22.mns_cobblemon.core.KobblemonGearTypes;
 import com.robertx22.mns_cobblemon.core.stats.KobblemonStats;
-import com.robertx22.mns_cobblemon.events.CobblemonSpawning;
+import com.robertx22.mns_cobblemon.events.PokemonInteractionHandler;
 import com.robertx22.mns_cobblemon.gui.KobblemonContainer;
 import com.robertx22.mns_cobblemon.gui.KobblemonEquipmentScreen;
 import com.robertx22.mns_cobblemon.items.KobblemonItems;
 import com.robertx22.mns_cobblemon.network.PacketOpenKobblemonGui;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -52,6 +52,9 @@ public class MnSCobblemonCompat {
         // Register Screens
         modBus.addListener(this::registerScreens);
 
+        // Register Client Setup (for interaction wheel handler)
+        modBus.addListener(this::onClientSetup);
+
         // Register Exile Registries (GearSlots, GearTypes, Affixes, Stats, Abilities)
         new KobblemonGearSlots().registerAll();
         new KobblemonGearTypes().registerAll();
@@ -60,9 +63,17 @@ public class MnSCobblemonCompat {
         new KobblemonAbilities().registerAll();
     }
 
+    private void onClientSetup(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            // Register the Pokemon interaction wheel handler
+            PokemonInteractionHandler.register();
+        });
+    }
+
     private void registerNetwork(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(MODID);
-        registrar.playToClient(PacketOpenKobblemonGui.TYPE, PacketOpenKobblemonGui.STREAM_CODEC,
+        // Changed to playToServer: client sends packet to server to open equipment menu
+        registrar.playToServer(PacketOpenKobblemonGui.TYPE, PacketOpenKobblemonGui.STREAM_CODEC,
                 PacketOpenKobblemonGui::handle);
     }
 
