@@ -75,7 +75,7 @@ public enum GuiPosition {
         public List<GuiPartConfig> getGuiConfig(EntityData data, Player p) {
             List<GuiPartConfig> topleft = new ArrayList<>();
             int x = 12;
-            int y = 5;
+            int y = 50;
 
             int yHeight = 11;
 
@@ -95,7 +95,6 @@ public enum GuiPosition {
             return new PointData(0, 0);
         }
     };
-
 
     public abstract List<GuiPartConfig> getGuiConfig(EntityData data, Player p);
 

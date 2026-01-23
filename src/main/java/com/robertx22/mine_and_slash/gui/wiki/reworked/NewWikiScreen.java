@@ -125,11 +125,10 @@ public class NewWikiScreen extends Screen implements INamedScreen {
     }
 
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.list.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.searchBox.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         pGuiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 16777215);
-        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
     }
 
     private void setupGroupButtons() {

@@ -423,6 +423,11 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
     public PerkScreenContext ctx = new PerkScreenContext(this);
 
     @Override
+    public void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        // do nothing
+    }
+
+    @Override
     public void render(GuiGraphics gui, int x, int y, float ticks) {
 
         Watch watch = new Watch();
@@ -436,8 +441,7 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
 
         renderBackgroundDirt(gui, this, 0);
         zoom = Mth.lerp(ClientConfigs.getConfig().SKILL_TREE_ZOOM_SPEED.get().floatValue(), zoom, targetZoom);
-        renderPanels(gui);
-        tips.render(gui, x, y, ticks);
+
         gui.pose().scale(zoom, zoom, zoom);
 
         try {
@@ -479,6 +483,9 @@ public abstract class SkillTreeScreen extends BaseScreen implements INamedScreen
         }
 
         gui.pose().scale(1F / zoom, 1F / zoom, 1F / zoom);
+
+        renderPanels(gui);
+        tips.render(gui, x, y, ticks);
 
         this.msstring = watch.getPrint();
 
