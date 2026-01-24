@@ -28,7 +28,7 @@ side="BOTH"
 modId="mmorpg"
 type="required"
 versionRange="${mod_version}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.mns_cobblemon]]

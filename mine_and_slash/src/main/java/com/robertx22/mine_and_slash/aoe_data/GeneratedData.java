@@ -36,6 +36,7 @@ import com.robertx22.mine_and_slash.database.data.game_balance_config.PlayerPoin
 import com.robertx22.mine_and_slash.database.data.game_balance_config.PlayerPointsType;
 import com.robertx22.mine_and_slash.database.data.map_affix.MapAffixes;
 import com.robertx22.mine_and_slash.database.data.omen.Omens;
+import com.robertx22.mine_and_slash.database.data.profession.all.ProfessionRecipes;
 import com.robertx22.mine_and_slash.database.data.profession.all.Professions;
 import com.robertx22.mine_and_slash.database.data.profession.buffs.StatBuffs;
 import com.robertx22.mine_and_slash.database.data.stats.layers.StatLayers;
@@ -45,12 +46,11 @@ import com.robertx22.mine_and_slash.uncommon.enumclasses.WeaponTypes;
 
 public class GeneratedData {
 
-
     // as these only add serizables.
     // They shouldn't be needed at all to play the game.
-    // If it errors without them, then that means i hardcoded something i shouldn't have
+    // If it errors without them, then that means i hardcoded something i shouldn't
+    // have
     public static void addAllObjectsToGenerate() {
-
 
         AuraGems.initKeys();
 
@@ -61,12 +61,11 @@ public class GeneratedData {
         new Stats().registerAll();
         new DatapackStats().registerAll();
 
-        //new GearRaritiesAdder().registerAll();
+        // new GearRaritiesAdder().registerAll();
 
         SpellCalcs.init();
         new Spells().registerAll();
         new SpellSchoolsAdder().registerAll();
-
 
         new GearSlots().registerAll();
         new BaseGearsAdder().registerAll();
@@ -97,8 +96,8 @@ public class GeneratedData {
 
         new Runewords().registerAll();
 
-
         Professions.init();
+        ProfessionRecipes.init();
         StatBuffs.init();
 
         MapAffixes.init();
@@ -112,10 +111,13 @@ public class GeneratedData {
         GameBalanceConfig orig = new GameBalanceConfig();
         orig.id = GameBalanceConfig.BalanceEnum.ORIGINAL_BALANCE.id;
 
-        orig.player_points.put(PlayerPointsType.TALENTS, new PlayerPointsConfig(PlayerPointsType.TALENTS, 1, 1, 30, 200));
-        orig.player_points.put(PlayerPointsType.ASCENDANCY, new PlayerPointsConfig(PlayerPointsType.ASCENDANCY, 0, 0.1F, 0, 9));
+        orig.player_points.put(PlayerPointsType.TALENTS,
+                new PlayerPointsConfig(PlayerPointsType.TALENTS, 1, 1, 30, 200));
+        orig.player_points.put(PlayerPointsType.ASCENDANCY,
+                new PlayerPointsConfig(PlayerPointsType.ASCENDANCY, 0, 0.1F, 0, 9));
         orig.player_points.put(PlayerPointsType.SPELLS, new PlayerPointsConfig(PlayerPointsType.SPELLS, 0, 1, 10, 150));
-        orig.player_points.put(PlayerPointsType.PASSIVES, new PlayerPointsConfig(PlayerPointsType.PASSIVES, 0, 1, 10, 150));
+        orig.player_points.put(PlayerPointsType.PASSIVES,
+                new PlayerPointsConfig(PlayerPointsType.PASSIVES, 0, 1, 10, 150));
         orig.player_points.put(PlayerPointsType.STATS, new PlayerPointsConfig(PlayerPointsType.STATS, 0, 2, 50, 300));
 
         for (BackpackType type : BackpackType.values()) {
@@ -128,7 +130,6 @@ public class GeneratedData {
         com.id = GameBalanceConfig.BalanceEnum.COMPAT_BALANCE.id;
         com.editForCompat();
         com.addToSerializables(MMORPG.SERIAZABLE_REGISTRATION_INFO);
-
 
         Omens.init();
 

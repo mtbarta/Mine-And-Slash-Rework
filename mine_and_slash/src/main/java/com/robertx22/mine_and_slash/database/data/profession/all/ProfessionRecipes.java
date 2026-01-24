@@ -12,18 +12,17 @@ import com.robertx22.temp.SkillItemTier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.robertx22.library_of_exile.main.ExileLog;
 
 public class ProfessionRecipes {
 
     public static void init() {
-
         buffConsumes();
         gearCrafting();
         enchanting();
     }
 
     private static void enchanting() {
-
 
         for (SlotFamily fam : SlotFamily.values()) {
             if (fam != SlotFamily.NONE) {
@@ -34,8 +33,12 @@ public class ProfessionRecipes {
                 for (String rar : IRarity.NORMAL_GEAR_RARITIES) {
                     float finalRarnumMulti = rarnumMulti;
 
-                    var b = ProfessionRecipe.TierBuilder.of(x -> ProfessionProductItems.CRAFTED_ENCHANTS.get(fam).get(rar).get(), Professions.INFUSING, 3)
-                            .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(), (int) ((x.tier + 1) * finalRarnumMulti)))
+                    var b = ProfessionRecipe.TierBuilder
+                            .of(x -> ProfessionProductItems.CRAFTED_ENCHANTS.get(fam).get(rar).get(),
+                                    Professions.INFUSING, 3)
+                            .onlyOnTier(x -> new ItemStack(
+                                    ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(),
+                                    (int) ((x.tier + 1) * finalRarnumMulti)))
                             .onTierOrAbove(SkillItemTier.TIER0, RarityItems.RARITY_STONE.get(rar).get(), 2 + rarnum)
                             .onTierOrAbove(SkillItemTier.TIER0, Items.PAPER, 1)
                             .onTierOrAbove(SkillItemTier.TIER0, fam.craftItem.get(), 1);
@@ -49,9 +52,7 @@ public class ProfessionRecipes {
 
         }
 
-
     }
-
 
     private static void buffPotion(String prof, String matprof, RarityItemHolder holder, Item mat) {
         for (String rar : IRarity.NORMAL_GEAR_RARITIES) {
@@ -64,9 +65,7 @@ public class ProfessionRecipes {
         }
     }
 
-
     private static void buffConsumes() {
-
 
         // buff pots
         buffPotion(Professions.ALCHEMY, Professions.FARMING, StatBuffs.INT.getHolder(), Items.GOLDEN_APPLE);
@@ -75,7 +74,6 @@ public class ProfessionRecipes {
         buffPotion(Professions.ALCHEMY, Professions.FARMING, StatBuffs.CRIT.getHolder(), Items.ENCHANTED_GOLDEN_APPLE);
         buffPotion(Professions.ALCHEMY, Professions.FARMING, StatBuffs.ARCANE.getHolder(), Items.BEETROOT);
         buffPotion(Professions.ALCHEMY, Professions.FARMING, StatBuffs.MIGHT.getHolder(), Items.APPLE);
-
 
         // buff meat
         buffPotion(Professions.COOKING, Professions.HUSBANDRY, StatBuffs.HEALTH.getHolder(), Items.COOKED_BEEF);
@@ -87,11 +85,11 @@ public class ProfessionRecipes {
         buffPotion(Professions.COOKING, Professions.FISHING, StatBuffs.EXP.getHolder(), Items.TROPICAL_FISH);
         buffPotion(Professions.COOKING, Professions.FISHING, StatBuffs.LOOT.getHolder(), Items.PUFFERFISH);
 
-
         for (String rar : IRarity.NORMAL_GEAR_RARITIES) {
 
             ProfessionRecipe.TierBuilder.of(x -> RarityItems.HEALTH_POTIONS.get(rar).get(), Professions.ALCHEMY, 16)
-                    .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.FARMING).get(x).get(), 5))
+                    .onlyOnTier(x -> new ItemStack(
+                            ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.FARMING).get(x).get(), 5))
                     .onTierOrAbove(SkillItemTier.TIER0, RarityItems.RARITY_STONE.get(rar).get(), 1)
                     .onTierOrAbove(SkillItemTier.TIER0, Items.MELON_SLICE, 1)
                     .onTierOrAbove(SkillItemTier.TIER1, Items.NETHER_WART, 1)
@@ -99,19 +97,17 @@ public class ProfessionRecipes {
                     .buildEachTier();
 
             ProfessionRecipe.TierBuilder.of(x -> RarityItems.RESOURCE_POTIONS.get(rar).get(), Professions.ALCHEMY, 16)
-                    .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.FARMING).get(x).get(), 5))
+                    .onlyOnTier(x -> new ItemStack(
+                            ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.FARMING).get(x).get(), 5))
                     .onTierOrAbove(SkillItemTier.TIER0, RarityItems.RARITY_STONE.get(rar).get(), 1)
                     .onTierOrAbove(SkillItemTier.TIER0, Items.CARROT, 1)
                     .onTierOrAbove(SkillItemTier.TIER1, Items.BEETROOT, 1)
                     .exp(100)
                     .buildEachTier();
 
-
         }
 
-
     }
-
 
     private static void gearCrafting() {
 
@@ -133,9 +129,14 @@ public class ProfessionRecipes {
                         famMulti = 2;
                     }
 
-                    var b = ProfessionRecipe.TierBuilder.of(x -> ProfessionProductItems.CRAFTED_SOULS.get(fam).get(rar).get(), Professions.GEAR_CRAFTING, 1)
-                            .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(), (int) ((x.tier + 1) * finalRarnumMulti)))
-                            .onTierOrAbove(SkillItemTier.TIER0, RarityItems.RARITY_STONE.get(rar).get(), (int) (3 + (rarnum * 1.5F) * famMulti))
+                    var b = ProfessionRecipe.TierBuilder
+                            .of(x -> ProfessionProductItems.CRAFTED_SOULS.get(fam).get(rar).get(),
+                                    Professions.GEAR_CRAFTING, 1)
+                            .onlyOnTier(x -> new ItemStack(
+                                    ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(),
+                                    (int) ((x.tier + 1) * finalRarnumMulti)))
+                            .onTierOrAbove(SkillItemTier.TIER0, RarityItems.RARITY_STONE.get(rar).get(),
+                                    (int) (3 + (rarnum * 1.5F) * famMulti))
                             .onTierOrAbove(SkillItemTier.TIER0, fam.craftItem.get(), 1);
 
                     b.exp(250);
@@ -149,20 +150,27 @@ public class ProfessionRecipes {
 
         }
 
-        /* todo
-        ProfessionRecipe.TierBuilder.of(x -> ExileCurrencies.INSTANCE.getItem(e -> e.)
-        new ProfDropTierPickerCurrency(x).getCurrencyItem(), Professions.GEAR_CRAFTING, 1)
-                .onlyOnTier(x -> new ItemStack(RarityItems.RARITY_STONE.get(x.rar).get(), 1 * (x.tier + 1)))
-                .onTierOrAbove(SkillItemTier.TIER0, Items.PAPER, 1)
-                .onTierOrAbove(SkillItemTier.TIER0, Items.INK_SAC, 1)
-                .exp(5)
-                .custom(x -> x.recipe.tier = SkillItemTier.TIER0.tier)
-                .buildEachTier();
-
+        /*
+         * todo
+         * ProfessionRecipe.TierBuilder.of(x -> ExileCurrencies.INSTANCE.getItem(e ->
+         * e.)
+         * new ProfDropTierPickerCurrency(x).getCurrencyItem(),
+         * Professions.GEAR_CRAFTING, 1)
+         * .onlyOnTier(x -> new ItemStack(RarityItems.RARITY_STONE.get(x.rar).get(), 1 *
+         * (x.tier + 1)))
+         * .onTierOrAbove(SkillItemTier.TIER0, Items.PAPER, 1)
+         * .onTierOrAbove(SkillItemTier.TIER0, Items.INK_SAC, 1)
+         * .exp(5)
+         * .custom(x -> x.recipe.tier = SkillItemTier.TIER0.tier)
+         * .buildEachTier();
+         * 
          */
 
-        ProfessionRecipe.TierBuilder.of(x -> ExileCurrencies.INSTANCE.SHARPEN_STONE_QUALITY.get(new SkillItemTierKey(x)).getItem(), Professions.GEAR_CRAFTING, 1)
-                .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(), 3 * (x.tier + 1)))
+        ProfessionRecipe.TierBuilder
+                .of(x -> ExileCurrencies.INSTANCE.SHARPEN_STONE_QUALITY.get(new SkillItemTierKey(x)).getItem(),
+                        Professions.GEAR_CRAFTING, 1)
+                .onlyOnTier(x -> new ItemStack(ProfessionMatItems.TIERED_MAIN_MATS.get(Professions.MINING).get(x).get(),
+                        3 * (x.tier + 1)))
                 .onTierOrAbove(SkillItemTier.TIER0, Items.COAL, 1)
                 .onTierOrAbove(SkillItemTier.TIER1, Items.COPPER_INGOT, 1)
                 .onTierOrAbove(SkillItemTier.TIER2, Items.IRON_INGOT, 1)
@@ -173,6 +181,5 @@ public class ProfessionRecipes {
                 .buildEachTier();
 
     }
-
 
 }

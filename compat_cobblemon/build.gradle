@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
+    compileOnly "net.neoforged:neoforge:${neo_version}"
     
     // Cobblemon Dependency (Local Jar)
     compileOnly files('../libs/Cobblemon-neoforge-1.7.0+1.21.1.jar.jar')
@@ -38,7 +38,7 @@ dependencies {
     // Kotlin stdlib required for Cobblemon interop
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.23"
 
-    implementation project(':') // Depends on the main mod
+    implementation project(':mine_and_slash') // Depends on the main mod
     implementation project(':Library-of-Exile-Rework')
 }
 

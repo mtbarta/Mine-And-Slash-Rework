@@ -1,30 +1,26 @@
 package com.robertx22.mns_cobblemon.gui;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.robertx22.mine_and_slash.gui.bases.BaseScreen;
 import com.robertx22.mine_and_slash.gui.bases.INamedScreen;
 import com.robertx22.mine_and_slash.mmorpg.SlashRef;
 import com.robertx22.mine_and_slash.uncommon.localization.Words;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class KobblemonEquipmentScreen extends BaseScreen implements INamedScreen, MenuAccess<KobblemonContainer> {
+public class KobblemonEquipmentScreen extends AbstractContainerScreen<KobblemonContainer> implements INamedScreen {
 
-    private final KobblemonContainer menu;
     private final PokemonEntity pokemon;
 
     public KobblemonEquipmentScreen(KobblemonContainer menu, Inventory playerInventory, Component title) {
-        super(176, 166);
-        this.menu = menu;
+        super(menu, playerInventory, title);
         this.pokemon = menu.getPokemon();
-    }
-
-    @Override
-    public KobblemonContainer getMenu() {
-        return menu;
+        this.imageWidth = 176;
+        this.imageHeight = 166;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -40,33 +36,36 @@ public class KobblemonEquipmentScreen extends BaseScreen implements INamedScreen
     @Override
     protected void init() {
         super.init();
-        // Add buttons, stat displays here
+        // Add additional buttons/widgets here if needed
     }
 
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(gui, mouseX, mouseY, partialTick);
-
-        // Draw background texture
-        // gui.blit(TEXTURE, this.guiLeft, this.guiTop, 0, 0, this.imageWidth,
-        // this.imageHeight);
-
         super.render(gui, mouseX, mouseY, partialTick);
+        this.renderTooltip(gui, mouseX, mouseY);
+    }
 
-        gui.drawCenteredString(this.font, pokemon.getDisplayName(), this.width / 2, this.guiTop + 10, 0xFFFFFF);
+    @Override
+    protected void renderBg(GuiGraphics gui, float partialTick, int mouseX, int mouseY) {
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+        gui.blit(InventoryScreen.INVENTORY_LOCATION, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 
-        // Render stats (example)
-        gui.drawString(this.font, "Level: " + pokemon.getPokemon().getLevel(), this.guiLeft + 8, this.guiTop + 6,
-                0xFFFFFF);
+        // Render Pokemon
+        int paperDollX = relX + 51;
+        int paperDollY = relY + 75;
+        float mouseOffsetX = (float) (paperDollX - mouseX);
+        float mouseOffsetY = (float) (paperDollY - 50 - mouseY);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, paperDollX - 30, paperDollY - 30, paperDollX + 30,
+                paperDollY + 30, 30, 0.0625F, mouseOffsetX, mouseOffsetY, this.pokemon);
+    }
 
-        // Slot Labels
-        // Held (80, 20)
-        gui.drawCenteredString(this.font, "Held", this.guiLeft + 80 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
-        // Battle (44, 20)
-        gui.drawCenteredString(this.font, "Battle", this.guiLeft + 44 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
-        // Training (116, 20)
-        gui.drawCenteredString(this.font, "Train", this.guiLeft + 116 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
-        // Mega (80, 52)
-        gui.drawCenteredString(this.font, "Mega", this.guiLeft + 80 + 8, this.guiTop + 52 - 10, 0xAAAAAA);
+    @Override
+    protected void renderLabels(GuiGraphics gui, int mouseX, int mouseY) {
+        // Pokemon Name and Level can be displayed in a more discreet way or via
+        // tooltips
+        titleLabelX = (imageWidth - font.width(title)) / 2;
+        super.renderLabels(gui, mouseX, mouseY);
     }
 }

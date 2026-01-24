@@ -34,6 +34,6 @@ side="BOTH"
 [[dependencies.mns_minecolonies]]
 modId="minecolonies"
 type="required"
-versionRange="[1.21.1-RELEASE,)"
+versionRange="[1.1.1213-1.21.1-snapshot,)"
 ordering="NONE"
 side="BOTH"

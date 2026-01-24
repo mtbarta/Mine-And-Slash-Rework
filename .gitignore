@@ -7,7 +7,7 @@ classes/
 src/generated
 runs/
 # eclipse
-
+libs/
 *.launch
 
 # idea
@@ -38,4 +38,5 @@ run
 ignore/
 remappedSrc
 remappedSrc/
-/libs
+.cache/
+generated/

@@ -3,6 +3,7 @@ package com.robertx22.mine_and_slash.saveclasses.unit.stat_calc;
 import com.robertx22.mine_and_slash.capability.entity.EntityData;
 import com.robertx22.mine_and_slash.capability.player.PlayerData;
 import com.robertx22.mine_and_slash.capability.player.helper.GemInventoryHelper;
+import com.robertx22.mine_and_slash.event_hooks.my_events.GatherEntityStatsEvent;
 import com.robertx22.mine_and_slash.database.data.spells.components.Spell;
 import com.robertx22.mine_and_slash.database.data.stats.datapacks.stats.AddPerPercentOfOther;
 import com.robertx22.mine_and_slash.database.data.stats.datapacks.stats.AttributeStat;
@@ -22,6 +23,7 @@ import com.robertx22.mine_and_slash.uncommon.stat_calculation.CommonStatUtils;
 import com.robertx22.mine_and_slash.uncommon.stat_calculation.MobStatUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
+import net.neoforged.neoforge.common.NeoForge;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 
@@ -230,6 +232,8 @@ public class StatCalculation {
                 statContexts.addAll(MobStatUtils.getMobConfigStats(entity, data));
             }
         }
+
+        NeoForge.EVENT_BUS.post(new GatherEntityStatsEvent(entity, statContexts));
 
         return statContexts;
     }

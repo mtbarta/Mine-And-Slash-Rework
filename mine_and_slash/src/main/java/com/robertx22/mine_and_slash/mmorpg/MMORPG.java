@@ -7,6 +7,7 @@ import com.robertx22.library_of_exile.events.base.ExileEvents;
 import com.robertx22.library_of_exile.localization.ExileLangFile;
 import com.robertx22.library_of_exile.localization.ExileTranslation;
 import com.robertx22.library_of_exile.localization.TranslationBuilder;
+import com.robertx22.library_of_exile.registry.ExileRegistryEvent;
 import com.robertx22.library_of_exile.registry.ExileRegistryType;
 import com.robertx22.library_of_exile.registry.helpers.OrderedModConstructor;
 import com.robertx22.library_of_exile.registry.register_info.HardcodedRegistration;
@@ -234,6 +235,7 @@ public class MMORPG {
             @Override
             public void accept(GatherDataEvent x) {
                 for (ExileRegistryType type : ExileRegistryType.getAllInRegisterOrder()) {
+                    ExileEvents.EXILE_REGISTRY_GATHER.callEvents(new ExileRegistryEvent(type));
                     x.getGenerator().addProvider(true, type.getDatapackGenerator());
                 }
             }
@@ -278,8 +280,6 @@ public class MMORPG {
     }
 
     public void commonSetupEvent(FMLCommonSetupEvent event) {
-
-        ProfessionRecipes.init();
 
         // Register player level provider with Dynamic Difficulty (if present)
         com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat.registerPlayerLevelProvider();

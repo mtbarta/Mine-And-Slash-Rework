@@ -27,19 +27,20 @@ public class KobblemonContainer extends AbstractContainerMenu {
         KobblemonData data = pokemon.getData(MnSCobblemonCompat.KOBBLEMON_DATA);
 
         // Add slots
-        // Held Item (Center-ish)
-        this.addSlot(new SlotItemHandler(data.getInventory(), 0, 80, 20));
+        // Using positions similar to vanilla armor slots
+        // Slot 0: Top (Helmet position-ish)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 0, 8, 8));
 
-        // Battle Item (Left)
-        this.addSlot(new SlotItemHandler(data.getInventory(), 1, 44, 20));
+        // Slot 1: Mid-Top (Chestplate position-ish)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 1, 8, 26));
 
-        // Training Item (Right)
-        this.addSlot(new SlotItemHandler(data.getInventory(), 2, 116, 20));
+        // Slot 2: Mid-Bottom (Leggings position-ish)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 2, 8, 44));
 
-        // Mega Stone (Top/Special) - visual placement TBD, putting below specific slot
-        this.addSlot(new SlotItemHandler(data.getInventory(), 3, 80, 52));
+        // Slot 3: Bottom (Boots position-ish)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 3, 8, 62));
 
-        layoutPlayerInventory(playerInv, 8, 140);
+        layoutPlayerInventory(playerInv, 8, 84);
     }
 
     private void layoutPlayerInventory(Inventory playerInv, int x, int y) {

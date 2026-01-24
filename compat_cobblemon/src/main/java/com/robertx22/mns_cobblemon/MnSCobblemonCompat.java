@@ -57,6 +57,8 @@ public class MnSCobblemonCompat {
             return null; // Should not happen
         });
         MENU_TYPES.register("kobblemon_equipment", () -> KobblemonContainer.TYPE);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS
+                .register(com.robertx22.mns_cobblemon.core.stats.PokemonStatSync.class);
 
         // Register Network
         modBus.addListener(this::registerNetwork);
@@ -66,13 +68,18 @@ public class MnSCobblemonCompat {
 
         // Register Client Setup (for interaction wheel handler)
         modBus.addListener(this::onClientSetup);
+        modBus.addListener(this::commonSetup);
+    }
 
+    private void commonSetup(final net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) {
         // Register Exile Registries (GearSlots, GearTypes, Affixes, Stats, Abilities)
-        new KobblemonGearSlots().registerAll();
-        new KobblemonGearTypes().registerAll();
-        new KobblemonAffixes().registerAll();
-        new KobblemonStats().registerAll();
-        new KobblemonAbilities().registerAll();
+        event.enqueueWork(() -> {
+            new KobblemonGearSlots().registerAll();
+            new KobblemonGearTypes().registerAll();
+            new KobblemonAffixes().registerAll();
+            new KobblemonStats().registerAll();
+            new KobblemonAbilities().registerAll();
+        });
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
