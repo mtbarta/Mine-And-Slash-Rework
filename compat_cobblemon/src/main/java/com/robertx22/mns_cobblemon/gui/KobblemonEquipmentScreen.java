@@ -56,7 +56,17 @@ public class KobblemonEquipmentScreen extends BaseScreen implements INamedScreen
         gui.drawCenteredString(this.font, pokemon.getDisplayName(), this.width / 2, this.guiTop + 10, 0xFFFFFF);
 
         // Render stats (example)
-        gui.drawString(this.font, "Level: " + pokemon.getPokemon().getLevel(), this.guiLeft + 10, this.guiTop + 30,
+        gui.drawString(this.font, "Level: " + pokemon.getPokemon().getLevel(), this.guiLeft + 8, this.guiTop + 6,
                 0xFFFFFF);
+
+        // Slot Labels
+        // Held (80, 20)
+        gui.drawCenteredString(this.font, "Held", this.guiLeft + 80 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
+        // Battle (44, 20)
+        gui.drawCenteredString(this.font, "Battle", this.guiLeft + 44 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
+        // Training (116, 20)
+        gui.drawCenteredString(this.font, "Train", this.guiLeft + 116 + 8, this.guiTop + 20 - 10, 0xAAAAAA);
+        // Mega (80, 52)
+        gui.drawCenteredString(this.font, "Mega", this.guiLeft + 80 + 8, this.guiTop + 52 - 10, 0xAAAAAA);
     }
 }

@@ -10,6 +10,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import com.robertx22.mns_cobblemon.capability.KobblemonData;
+import com.robertx22.mns_cobblemon.MnSCobblemonCompat;
 
 public class KobblemonContainer extends AbstractContainerMenu {
 
@@ -21,10 +23,21 @@ public class KobblemonContainer extends AbstractContainerMenu {
         super(TYPE, id);
         this.pokemon = pokemon;
 
-        // Held Item Slot (Custom slot logic would be needed to actually bind to
-        // Pokemon's held item)
-        // For now, simple placeholder
-        // this.addSlot(new SlotItemHandler(pokemon.getInventory(), 0, 80, 50));
+        // Fetch data
+        KobblemonData data = pokemon.getData(MnSCobblemonCompat.KOBBLEMON_DATA);
+
+        // Add slots
+        // Held Item (Center-ish)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 0, 80, 20));
+
+        // Battle Item (Left)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 1, 44, 20));
+
+        // Training Item (Right)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 2, 116, 20));
+
+        // Mega Stone (Top/Special) - visual placement TBD, putting below specific slot
+        this.addSlot(new SlotItemHandler(data.getInventory(), 3, 80, 52));
 
         layoutPlayerInventory(playerInv, 8, 140);
     }

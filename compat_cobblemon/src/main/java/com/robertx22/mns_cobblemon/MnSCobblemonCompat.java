@@ -23,16 +23,28 @@ import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import java.util.function.Supplier;
+import com.robertx22.mns_cobblemon.capability.KobblemonData;
 
 @Mod(MnSCobblemonCompat.MODID)
 public class MnSCobblemonCompat {
     public static final String MODID = "mns_cobblemon";
 
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, MODID);
+    public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
+            .create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, MODID);
+
+    public static final Supplier<AttachmentType<KobblemonData>> KOBBLEMON_DATA = ATTACHMENT_TYPES.register(
+            "kobblemon_data",
+            () -> AttachmentType.serializable(() -> new KobblemonData(null))
+                    .build());
 
     public MnSCobblemonCompat(IEventBus modBus) {
         // Register Items
         KobblemonItems.ITEMS.register(modBus);
+        ATTACHMENT_TYPES.register(modBus);
 
         // Register Menu Types
         MENU_TYPES.register(modBus);
