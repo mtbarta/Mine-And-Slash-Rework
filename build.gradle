@@ -42,6 +42,10 @@ allprojects {
         maven {
             url = "https://maven.muon.rip/releases/"
         }
+        maven {
+            name = 'Kotlin for Forge'
+            url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        }
         exclusiveContent {
             forRepository {
                 maven {

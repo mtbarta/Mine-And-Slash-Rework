@@ -2,7 +2,7 @@ package com.robertx22.mns_cobblemon.core.stats;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
-import com.cobblemon.mod.common.api.stats.Stats;
+import com.cobblemon.mod.common.api.pokemon.stats.Stats;
 import com.robertx22.mine_and_slash.aoe_data.database.stats.SpellChangeStats;
 import com.robertx22.mine_and_slash.aoe_data.database.stats.old.DatapackStats;
 import com.robertx22.mine_and_slash.database.data.stats.types.defense.Armor;
@@ -35,7 +35,7 @@ public class PokemonStatSync {
 
             // HP IVs (0-31) -> Vitality (mapping to "vitality" GUID)
             // Scale so 31 feels "tanky"
-            int hpIv = pokemon.getIvs().getOrDefault(Stats.HP, 0);
+            int hpIv = pokemon.getIvs().getOrDefault(Stats.HP);
             baseStats.add(ExactStatData.noScaling(hpIv * 2.0f, ModType.FLAT, "vitality"));
             // Fallback for HP if vitality not recognized
             baseStats.add(ExactStatData.noScaling(hpIv * 1.5f, ModType.PERCENT, Health.getInstance().GUID()));

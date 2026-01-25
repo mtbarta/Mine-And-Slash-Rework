@@ -29,8 +29,8 @@ runs {
         modSource project(':dungeon_realm').sourceSets.main
         modSource project(':the_harvest').sourceSets.main
         modSource project(':ancient_obelisks').sourceSets.main
-        modSource project(':compat_minecolonies').sourceSets.main
-        modSource project(':compat_cobblemon').sourceSets.main
+        // modSource project(':compat_minecolonies').sourceSets.main
+        // modSource project(':compat_cobblemon').sourceSets.main
     }
 
     data {
@@ -58,22 +58,24 @@ dependencies {
     implementation project(':dungeon_realm')
 
     // Cobblemon & Compat Dependencies
-    implementation files('../libs/Cobblemon-neoforge-1.7.0+1.21.1.jar.jar')
-    implementation files('../libs/kotlinforforge-5.10.0-all.jar')
+    // implementation files('../libs/Cobblemon-neoforge-1.7.0+1.21.1.jar.jar')
+    // implementation ("thedarkcolour:kotlinforforge-neoforge:5.7.0") {
+    //    exclude group: 'net.neoforged'
+    // }
 
     // Dynamic Difficulty - optional compile-only dependency for level sync
     // Using local jar since maven.muon.rip is currently unavailable
     compileOnly files('../libs/dynamic_difficulty-neoforge-1.1.0+1.21.1.jar')
 
     // minecolonies dependencies
-    implementation files("../libs/blockui-1.0.205-1.21.1.jar")
-    implementation files("../libs/domum-ornamentum-1.0.223-snapshot-main.jar")
-    implementation files("../libs/minecolonies-1.1.1213-1.21.1-snapshot.jar")
-    implementation files("../libs/structurize-1.0.795-1.21.1-snapshot.jar")
+    compileOnly files("../libs/blockui-1.0.205-1.21.1.jar")
+    compileOnly files("../libs/domum-ornamentum-1.0.223-snapshot-main.jar")
+    compileOnly files("../libs/minecolonies-1.1.1213-1.21.1-snapshot.jar")
+    compileOnly files("../libs/structurize-1.0.795-1.21.1-snapshot.jar")
 
     // Runtime dependencies on compat mods (circular dependency avoidance for compilation)
-    runtimeOnly project(':compat_cobblemon')
-    runtimeOnly project(':compat_minecolonies')
+    // runtimeOnly project(':compat_cobblemon')
+    // runtimeOnly project(':compat_minecolonies')
 }
 
 jar {

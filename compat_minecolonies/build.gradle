@@ -36,8 +36,8 @@ dependencies {
     // Project ID: 245506, File ID: 7384176 (1.21.1 Release as of Dec 2025)
     implementation files("../libs/blockui-1.0.205-1.21.1.jar")
     implementation files("../libs/domum-ornamentum-1.0.223-snapshot-main.jar")
-    implementation files("../libs/minecolonies-1.1.1213-1.21.1-snapshot.jar")
-    implementation files("../libs/structurize-1.0.795-1.21.1-snapshot.jar")
+    implementation files("../libs/minecolonies-1.1.1242-1.21.1-snapshot.jar")
+    implementation files("../libs/structurize-1.0.802-1.21.1-snapshot.jar")
 
     implementation project(':mine_and_slash') // Depends on the main mod
     implementation project(':Library-of-Exile-Rework') // Transitive dependency often needed
