@@ -55,6 +55,19 @@ public class PokemonInteractionHandler {
 
         // Add to the next available slot in the wheel
         event.addFillingOption(equipmentOption);
+
+        // Create the minion recruit option
+        InteractWheelOption recruitOption = new InteractWheelOption(
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/lead.png"), // Use lead icon for now
+                null,
+                true,
+                "Recruit/Dismiss Minion",
+                () -> new Vector3f(1.0f, 1.0f, 1.0f),
+                () -> {
+                    toggleMinion(pokemonId);
+                    return kotlin.Unit.INSTANCE;
+                });
+        event.addFillingOption(recruitOption);
     }
 
     /**
@@ -71,6 +84,20 @@ public class PokemonInteractionHandler {
 
             if (!entities.isEmpty()) {
                 PacketDistributor.sendToServer(new PacketOpenKobblemonGui(entities.get(0).getId()));
+            }
+        }
+    }
+
+    private static void toggleMinion(UUID pokemonId) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != null && mc.player != null) {
+            var searchBox = mc.player.getBoundingBox().inflate(20.0);
+            var entities = mc.level.getEntities(mc.player, searchBox,
+                    entity -> entity.getUUID().equals(pokemonId));
+
+            if (!entities.isEmpty()) {
+                PacketDistributor.sendToServer(
+                        new com.robertx22.mns_cobblemon.network.PacketRecruitMinion(entities.get(0).getId()));
             }
         }
     }

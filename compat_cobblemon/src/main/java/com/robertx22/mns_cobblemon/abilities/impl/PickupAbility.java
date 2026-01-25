@@ -33,7 +33,10 @@ public class PickupAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
+        if (!(entity instanceof Player player)) {
+            return;
+        }
         // Set a persistent data tag on the player indicating they have pickup active
         // This will be checked by a LootModifier to add bonus drops
         player.getPersistentData().putBoolean("mns_cobblemon_pickup", true);

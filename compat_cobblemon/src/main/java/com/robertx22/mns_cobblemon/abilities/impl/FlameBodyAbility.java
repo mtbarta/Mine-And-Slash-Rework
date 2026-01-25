@@ -28,11 +28,11 @@ public class FlameBodyAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         // Apply fire resistance effect
-        if (!player.hasEffect(MobEffects.FIRE_RESISTANCE) ||
-                player.getEffect(MobEffects.FIRE_RESISTANCE).getDuration() < 60) {
-            player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 400, 0, true, false));
+        if (!entity.hasEffect(MobEffects.FIRE_RESISTANCE) ||
+                entity.getEffect(MobEffects.FIRE_RESISTANCE).getDuration() < 60) {
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 400, 0, true, false));
         }
     }
 }

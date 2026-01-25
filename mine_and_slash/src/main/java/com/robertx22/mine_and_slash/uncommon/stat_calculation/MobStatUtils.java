@@ -34,18 +34,35 @@ import java.util.Map;
 
 public class MobStatUtils {
 
-    public static List<StatContext> addSummonStats(TamableAnimal en) {
+    public static List<StatContext> addSummonStats(LivingEntity en) {
         List<ExactStatData> stats = new ArrayList<>();
 
-        LivingEntity caster = en.getOwner();
+        LivingEntity caster = null;
+        if (en instanceof TamableAnimal t) {
+            caster = t.getOwner();
+        } else if (en instanceof net.minecraft.world.entity.OwnableEntity o) {
+            var owner = o.getOwner();
+            if (owner instanceof LivingEntity) {
+                caster = (LivingEntity) owner;
+            }
+        }
 
         if (caster instanceof Player player) {
-            var spell = Load.Unit(en).summonedPetData.getSourceSpell();
+            var dataSrc = Load.Unit(en).summonedPetData;
+            if (dataSrc == null || dataSrc.isEmpty()) {
+                return new ArrayList<>();
+            }
+            var spell = dataSrc.getSourceSpell();
+            if (spell == null) {
+                return new ArrayList<>();
+            }
             var data = Load.player(player).getSpellUnitStats(spell);
 
-            for (Map.Entry<String, StatData> e : data.getStats().stats.entrySet()) {
-                if (e.getValue().GetStat() instanceof SummonStat sstat) {
-                    stats.add(sstat.giveToSummon(e.getValue()));
+            if (data != null) {
+                for (Map.Entry<String, StatData> e : data.getStats().stats.entrySet()) {
+                    if (e.getValue().GetStat() instanceof SummonStat sstat) {
+                        stats.add(sstat.giveToSummon(e.getValue()));
+                    }
                 }
             }
 

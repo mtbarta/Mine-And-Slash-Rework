@@ -28,11 +28,11 @@ public class IlluminateAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         // Apply night vision effect - refresh every second (20 ticks buffer)
-        if (!player.hasEffect(MobEffects.NIGHT_VISION) ||
-                player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 60) {
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
+        if (!entity.hasEffect(MobEffects.NIGHT_VISION) ||
+                entity.getEffect(MobEffects.NIGHT_VISION).getDuration() < 60) {
+            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
         }
     }
 }

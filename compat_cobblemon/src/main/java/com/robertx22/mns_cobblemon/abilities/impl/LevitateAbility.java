@@ -29,11 +29,11 @@ public class LevitateAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         // Apply slow falling effect
-        if (!player.hasEffect(MobEffects.SLOW_FALLING) ||
-                player.getEffect(MobEffects.SLOW_FALLING).getDuration() < 60) {
-            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 0, true, false));
+        if (!entity.hasEffect(MobEffects.SLOW_FALLING) ||
+                entity.getEffect(MobEffects.SLOW_FALLING).getDuration() < 60) {
+            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 0, true, false));
         }
     }
 }

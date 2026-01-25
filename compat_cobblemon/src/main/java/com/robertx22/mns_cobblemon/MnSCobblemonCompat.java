@@ -84,8 +84,9 @@ public class MnSCobblemonCompat {
 
     private void onClientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            // Register the Pokemon interaction wheel handler
+            // Register interaction handlers
             PokemonInteractionHandler.register();
+            com.robertx22.mns_cobblemon.events.PokemonRecruitmentHandler.register();
         });
     }
 
@@ -94,6 +95,9 @@ public class MnSCobblemonCompat {
         // Changed to playToServer: client sends packet to server to open equipment menu
         registrar.playToServer(PacketOpenKobblemonGui.TYPE, PacketOpenKobblemonGui.STREAM_CODEC,
                 PacketOpenKobblemonGui::handle);
+        registrar.playToServer(com.robertx22.mns_cobblemon.network.PacketRecruitMinion.TYPE,
+                com.robertx22.mns_cobblemon.network.PacketRecruitMinion.STREAM_CODEC,
+                com.robertx22.mns_cobblemon.network.PacketRecruitMinion::handle);
     }
 
     private void registerScreens(final RegisterMenuScreensEvent event) {

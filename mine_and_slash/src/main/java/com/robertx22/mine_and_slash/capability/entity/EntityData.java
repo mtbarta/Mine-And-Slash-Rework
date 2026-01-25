@@ -907,6 +907,7 @@ public class EntityData implements ICap, INeededForClient {
     }
 
     public void setLevel(int lvl) {
+        int oldLevel = this.level;
         level = Mth.clamp(lvl, 1, GameBalanceConfig.get().MAX_LEVEL);
 
         if (entity instanceof Player p) {
@@ -916,6 +917,11 @@ public class EntityData implements ICap, INeededForClient {
 
         this.equipmentCache.setAllDirty();
         this.sync.setDirty();
+
+        if (oldLevel != level) {
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS
+                    .post(new com.robertx22.mine_and_slash.event_hooks.my_events.EntityLevelUpEvent(entity, level));
+        }
     }
 
     public int getExp() {

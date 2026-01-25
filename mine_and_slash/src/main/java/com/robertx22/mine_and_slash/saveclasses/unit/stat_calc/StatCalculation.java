@@ -224,7 +224,7 @@ public class StatCalculation {
             statContexts.addAll(MobStatUtils.getMobBaseStats(data, entity));
 
             if (data.isSummon()) {
-                statContexts.addAll(MobStatUtils.addSummonStats((TamableAnimal) entity));
+                statContexts.addAll(MobStatUtils.addSummonStats(entity));
             } else {
                 statContexts.addAll(MobStatUtils.getAffixStats(entity));
                 statContexts.addAll(MobStatUtils.getWorldMultiplierStats(entity));

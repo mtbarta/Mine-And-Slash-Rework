@@ -40,6 +40,7 @@ public class SummonSpells implements ExileRegistryInit {
         public static String RETURN_SUMMONS = "return_summons";
         public static String CHILLING_TOUCH = "chilling_touch";
         public static String EXPLODE_MINIONS = "explode_minions";
+        public static String SUMMON_POKEMON = "summon_pokemon";
 
         @Override
         public void registerAll() {
@@ -222,6 +223,16 @@ public class SummonSpells implements ExileRegistryInit {
                                 .levelReq(1)
                                 .build();
 
+                SpellBuilder.of(SUMMON_POKEMON, PlayStyle.INT, SpellConfiguration.Builder.nonInstant(0, 0, 0)
+                                .setSummonType(SummonType.BEAST),
+                                "Summon Pokemon",
+                                Arrays.asList(SpellTags.summon, SpellTags.damage, SpellTags.beast,
+                                                SpellTags.has_pet_ability, SpellTags.PHYSICAL))
+                                .manualDesc("A recruited Pokemon that aids you in combat.")
+                                .addStat(OffenseStats.SUMMON_DAMAGE.get().mod(0, 50))
+                                .addStat(new SummonHealth().mod(0, 50))
+                                .levelReq(1)
+                                .build();
         }
 
 }

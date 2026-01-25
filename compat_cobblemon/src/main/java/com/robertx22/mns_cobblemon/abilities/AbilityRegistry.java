@@ -56,7 +56,7 @@ public class AbilityRegistry {
     /**
      * Apply ability effects for a Pokemon to a player
      */
-    public static void applyAbilityEffects(Player player, Pokemon pokemon) {
+    public static void applyAbilityEffects(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         if (pokemon == null || pokemon.getAbility() == null) {
             return;
         }
@@ -64,8 +64,8 @@ public class AbilityRegistry {
         String abilityName = pokemon.getAbility().getName();
         PokemonAbility ability = getAbility(abilityName);
 
-        if (ability != null && ability.shouldApply(player, pokemon)) {
-            ability.onTick(player, pokemon);
+        if (ability != null && ability.shouldApply(entity, pokemon)) {
+            ability.onTick(entity, pokemon);
         }
     }
 }

@@ -30,16 +30,16 @@ public interface PokemonAbility {
     /**
      * Called every tick while the player has a Pokemon with this ability
      * 
-     * @param player  The player receiving the ability effect
+     * @param entity  The entity receiving the ability effect
      * @param pokemon The Pokemon that has this ability
      */
-    void onTick(Player player, Pokemon pokemon);
+    void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon);
 
     /**
-     * Whether this ability should affect the player
+     * Whether this ability should affect the entity
      * Can be used to add conditions, like only work in certain dimensions
      */
-    default boolean shouldApply(Player player, Pokemon pokemon) {
+    default boolean shouldApply(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         return true;
     }
 

@@ -28,11 +28,11 @@ public class IntimidateAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         // Apply resistance effect
-        if (!player.hasEffect(MobEffects.DAMAGE_RESISTANCE) ||
-                player.getEffect(MobEffects.DAMAGE_RESISTANCE).getDuration() < 60) {
-            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0, true, false));
+        if (!entity.hasEffect(MobEffects.DAMAGE_RESISTANCE) ||
+                entity.getEffect(MobEffects.DAMAGE_RESISTANCE).getDuration() < 60) {
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0, true, false));
         }
     }
 }

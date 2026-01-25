@@ -25,6 +25,7 @@ public class KobblemonContainer extends AbstractContainerMenu {
 
         // Fetch data
         KobblemonData data = pokemon.getData(MnSCobblemonCompat.KOBBLEMON_DATA);
+        data.setEntity(pokemon);
 
         // Add slots
         // Using positions similar to vanilla armor slots

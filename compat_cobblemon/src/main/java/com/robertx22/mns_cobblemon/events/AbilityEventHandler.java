@@ -48,4 +48,29 @@ public class AbilityEventHandler {
             // Silently ignore errors to prevent crashes during development
         }
     }
+
+    @SubscribeEvent
+    public static void onEntityTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
+        if (event.getEntity().level().isClientSide) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof com.cobblemon.mod.common.entity.pokemon.PokemonEntity pokemonEntity)) {
+            return;
+        }
+
+        // Only process every 20 ticks (1 second) for performance
+        if (pokemonEntity.tickCount % 20 != 0) {
+            return;
+        }
+
+        try {
+            Pokemon pokemon = pokemonEntity.getPokemon();
+            if (pokemon != null && !pokemon.isFainted()) {
+                AbilityRegistry.applyAbilityEffects(pokemonEntity, pokemon);
+            }
+        } catch (Exception e) {
+            // Silently ignore errors
+        }
+    }
 }

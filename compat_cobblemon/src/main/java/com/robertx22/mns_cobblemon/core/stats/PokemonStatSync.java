@@ -78,4 +78,22 @@ public class PokemonStatSync {
             event.addStatContext(new MiscStatCtx(baseStats));
         }
     }
+
+    /**
+     * Sync Mine and Slash Level -> Cobblemon Level
+     */
+    @SubscribeEvent
+    public static void onLevelUp(com.robertx22.mine_and_slash.event_hooks.my_events.EntityLevelUpEvent event) {
+        if (event.getEntity() instanceof PokemonEntity pokemonEntity) {
+            Pokemon pokemon = pokemonEntity.getPokemon();
+            if (pokemon != null) {
+                // If the new M&S level is different from the Pokemon level, update it.
+                // This ensures the "Lv. X" tag above the pokemon matches the M&S level.
+                int newLevel = event.getNewLevel();
+                if (pokemon.getLevel() != newLevel) {
+                    pokemon.setLevel(newLevel);
+                }
+            }
+        }
+    }
 }

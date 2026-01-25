@@ -7,24 +7,29 @@ import java.util.HashMap;
 
 public class EntityGears {
 
-    private HashMap<EquipmentSlot, ItemStack> map = new HashMap<>();
+    private HashMap<String, ItemStack> map = new HashMap<>();
 
     public ItemStack get(EquipmentSlot slot) {
+        return get(slot.getName());
+    }
+
+    public ItemStack get(String slot) {
         if (map.isEmpty()) {
-            for (EquipmentSlot s : EquipmentSlot.values()) {
-                map.put(s, ItemStack.EMPTY);
-            }
+            // Initialization if needed, though lazy init is fine usually
         }
-        return map.get(slot);
+        return map.getOrDefault(slot, ItemStack.EMPTY);
     }
 
     public ItemStack put(EquipmentSlot slot, ItemStack stack) {
-        if (map.isEmpty()) {
-            for (EquipmentSlot s : EquipmentSlot.values()) {
-                map.put(s, ItemStack.EMPTY);
-            }
-        }
+        return put(slot.getName(), stack);
+    }
+
+    public ItemStack put(String slot, ItemStack stack) {
         return map.put(slot, stack);
+    }
+
+    public void setGear(String slot, ItemStack stack) {
+        map.put(slot, stack);
     }
 
 }

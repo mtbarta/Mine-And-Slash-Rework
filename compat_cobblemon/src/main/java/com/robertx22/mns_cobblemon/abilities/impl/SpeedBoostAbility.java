@@ -28,12 +28,12 @@ public class SpeedBoostAbility implements PokemonAbility {
     }
 
     @Override
-    public void onTick(Player player, Pokemon pokemon) {
+    public void onTick(net.minecraft.world.entity.LivingEntity entity, Pokemon pokemon) {
         // Apply speed effect - level scales with Pokemon level
         int amplifier = Math.min(pokemon.getLevel() / 25, 2); // 0, 1, or 2
-        if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) ||
-                player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() < 60) {
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, amplifier, true, false));
+        if (!entity.hasEffect(MobEffects.MOVEMENT_SPEED) ||
+                entity.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() < 60) {
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, amplifier, true, false));
         }
     }
 }
