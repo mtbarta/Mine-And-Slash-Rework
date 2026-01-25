@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.robertx22.mns_cobblemon.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "PokemonMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

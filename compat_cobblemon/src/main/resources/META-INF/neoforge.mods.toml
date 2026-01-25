@@ -37,3 +37,8 @@ type="required"
 versionRange="[1.5,)"
 ordering="NONE"
 side="BOTH"
+
+[[mixins]]
+config="mns_cobblemon.mixins.json"
+
+

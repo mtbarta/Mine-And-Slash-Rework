@@ -31,52 +31,56 @@ public class PokemonStatSync {
     public static void onGatherStats(GatherEntityStatsEvent event) {
         if (event.getEntity() instanceof PokemonEntity pokemonEntity) {
             Pokemon pokemon = pokemonEntity.getPokemon();
-            List<ExactStatData> baseStats = new ArrayList<>();
-
-            // HP IVs (0-31) -> Vitality (mapping to "vitality" GUID)
-            // Scale so 31 feels "tanky"
-            int hpIv = pokemon.getIvs().getOrDefault(Stats.HP);
-            baseStats.add(ExactStatData.noScaling(hpIv * 2.0f, ModType.FLAT, "vitality"));
-            // Fallback for HP if vitality not recognized
-            baseStats.add(ExactStatData.noScaling(hpIv * 1.5f, ModType.PERCENT, Health.getInstance().GUID()));
-
-            // Physical Attack -> Strength
-            int physAtk = pokemon.getStat(Stats.ATTACK);
-            baseStats.add(ExactStatData.noScaling(physAtk / 5.0f, ModType.FLAT, DatapackStats.STR.GUID()));
-
-            // Physical Defense -> Armor
-            int physDef = pokemon.getStat(Stats.DEFENCE);
-            baseStats.add(ExactStatData.noScaling(physDef / 2.0f, ModType.FLAT, Armor.getInstance().GUID()));
-
-            // Special Attack -> Intelligence
-            int spAtk = pokemon.getStat(Stats.SPECIAL_ATTACK);
-            baseStats.add(ExactStatData.noScaling(spAtk / 5.0f, ModType.FLAT, DatapackStats.INT.GUID()));
-
-            // Special Defense -> Elemental Resistances
-            int spDef = pokemon.getStat(Stats.SPECIAL_DEFENCE);
-            float eleRes = spDef / 4.0f;
-            for (Elements ele : Elements.getAllSingle()) {
-                if (ele != Elements.Physical) {
-                    baseStats.add(ExactStatData.noScaling(eleRes, ModType.FLAT, new ElementalResist(ele).GUID()));
-                }
-            }
-
-            // Speed -> Dodge / Cooldown Reduction
-            int speed = pokemon.getStat(Stats.SPEED);
-            baseStats.add(ExactStatData.noScaling(speed / 4.0f, ModType.FLAT, DodgeRating.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(speed / 8.0f, ModType.PERCENT,
-                    SpellChangeStats.COOLDOWN_REDUCTION.getId()));
-
-            // Apply custom Poke-stats if they exist and are relevant
-            baseStats.add(ExactStatData.noScaling(physAtk, ModType.FLAT, PokemonAttack.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(physDef, ModType.FLAT, PokemonDefense.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(spAtk, ModType.FLAT, PokemonSpAtk.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(spDef, ModType.FLAT, PokemonSpDef.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(speed, ModType.FLAT, PokemonSpeed.getInstance().GUID()));
-            baseStats.add(ExactStatData.noScaling(pokemon.getHp(), ModType.FLAT, PokemonHealth.getInstance().GUID()));
-
+            List<ExactStatData> baseStats = getStatsForPokemon(pokemon);
             event.addStatContext(new MiscStatCtx(baseStats));
         }
+    }
+
+    public static List<ExactStatData> getStatsForPokemon(Pokemon pokemon) {
+        List<ExactStatData> baseStats = new ArrayList<>();
+
+        // HP IVs (0-31) -> Vitality (mapping to "vitality" GUID)
+        // Scale so 31 feels "tanky"
+        int hpIv = pokemon.getIvs().getOrDefault(Stats.HP);
+        // Fallback for HP if vitality not recognized
+        baseStats.add(ExactStatData.noScaling(hpIv * 1.5f, ModType.FLAT, Health.getInstance().GUID()));
+
+        // Physical Attack -> Strength
+        int physAtk = pokemon.getStat(Stats.ATTACK);
+        baseStats.add(ExactStatData.noScaling(physAtk / 5.0f, ModType.FLAT, DatapackStats.STR.GUID()));
+
+        // Physical Defense -> Armor
+        int physDef = pokemon.getStat(Stats.DEFENCE);
+        baseStats.add(ExactStatData.noScaling(physDef / 2.0f, ModType.FLAT, Armor.getInstance().GUID()));
+
+        // Special Attack -> Intelligence
+        int spAtk = pokemon.getStat(Stats.SPECIAL_ATTACK);
+        baseStats.add(ExactStatData.noScaling(spAtk / 5.0f, ModType.FLAT, DatapackStats.INT.GUID()));
+
+        // Special Defense -> Elemental Resistances
+        int spDef = pokemon.getStat(Stats.SPECIAL_DEFENCE);
+        float eleRes = spDef / 4.0f;
+        for (Elements ele : Elements.getAllSingle()) {
+            if (ele != Elements.Physical) {
+                baseStats.add(ExactStatData.noScaling(eleRes, ModType.FLAT, new ElementalResist(ele).GUID()));
+            }
+        }
+
+        // Speed -> Dodge / Cooldown Reduction
+        int speed = pokemon.getStat(Stats.SPEED);
+        baseStats.add(ExactStatData.noScaling(speed / 4.0f, ModType.FLAT, DodgeRating.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(speed / 8.0f, ModType.PERCENT,
+                SpellChangeStats.COOLDOWN_REDUCTION.getId()));
+
+        // Apply custom Poke-stats if they exist and are relevant
+        baseStats.add(ExactStatData.noScaling(physAtk, ModType.FLAT, PokemonAttack.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(physDef, ModType.FLAT, PokemonDefense.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(spAtk, ModType.FLAT, PokemonSpAtk.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(spDef, ModType.FLAT, PokemonSpDef.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(speed, ModType.FLAT, PokemonSpeed.getInstance().GUID()));
+        baseStats.add(ExactStatData.noScaling(pokemon.getHp(), ModType.FLAT, PokemonHealth.getInstance().GUID()));
+
+        return baseStats;
     }
 
     /**
