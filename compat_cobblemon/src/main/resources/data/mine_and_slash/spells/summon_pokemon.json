@@ -1,0 +1,63 @@
+{
+    "weight": 1000,
+    "identifier": "summon_pokemon",
+    "config": {
+        "swing_arm": true,
+        "slows_when_casting": true,
+        "castingWeapon": "ANY_WEAPON",
+        "mana_cost": {
+            "min": 0.0,
+            "max": 0.0
+        },
+        "ene_cost": {
+            "min": 0.0,
+            "max": 0.0
+        },
+        "times_to_cast": 1,
+        "charges": 0,
+        "charge_regen": 0,
+        "aggro_radius": 1,
+        "imbues": 0,
+        "summonType": "BEAST",
+        "charge_name": "",
+        "summon_basic_atk": "",
+        "cast_time_ticks": 0,
+        "cooldown_ticks": 0,
+        "style": "int",
+        "tags": [
+            "summon",
+            "damage",
+            "beast",
+            "has_pet_ability",
+            "physical",
+            "magic"
+        ],
+        "tracking_radius": 5,
+        "tracks": "enemies",
+        "use_support_gems_from": ""
+    },
+    "min_lvl": 1,
+    "default_lvl": 0,
+    "lvl_based_on_spell": "",
+    "show_other_spell_tooltip": "",
+    "manual_tip": true,
+    "disabled_dims": [],
+    "effect_tip": "",
+    "max_lvl": 16,
+    "statsForSkillGem": [
+        {
+            "min": 0.0,
+            "max": 50.0,
+            "stat": "summon_damage",
+            "type": "FLAT"
+        },
+        {
+            "min": 0.0,
+            "max": 50.0,
+            "stat": "summon_health",
+            "type": "FLAT"
+        }
+    ],
+    "locDesc": "A recruited Pokemon that aids you in combat.",
+    "loc_name": "Summon Pokemon"
+}

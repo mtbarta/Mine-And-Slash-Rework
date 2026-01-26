@@ -100,4 +100,17 @@ public class PokemonStatSync {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onXpGained(
+            com.cobblemon.mod.common.api.events.pokemon.ExperienceGainedEvent.Post event) {
+        Pokemon pokemon = event.getPokemon();
+        if (pokemon != null && pokemon.getEntity() != null) {
+            com.robertx22.mine_and_slash.capability.entity.EntityData data = com.robertx22.mine_and_slash.uncommon.datasaving.Load
+                    .Unit(pokemon.getEntity());
+            if (data != null && data.getLevel() != pokemon.getLevel()) {
+                data.setLevel(pokemon.getLevel());
+            }
+        }
+    }
 }

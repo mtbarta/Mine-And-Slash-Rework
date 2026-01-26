@@ -79,6 +79,15 @@ public class MnSCobblemonCompat {
             new KobblemonAffixes().registerAll();
             new KobblemonStats().registerAll();
             new KobblemonAbilities().registerAll();
+            new com.robertx22.mns_cobblemon.core.spells.KobblemonSpells().registerAll();
+
+            // Link Pokemon Summon to Basic Attack
+            var spell = com.robertx22.mine_and_slash.database.registry.ExileDB.Spells()
+                    .get(com.robertx22.mine_and_slash.aoe_data.database.spells.schools.SummonSpells.SUMMON_POKEMON);
+            if (spell != null) {
+                spell.getConfig().setSummonBasicAttack(
+                        com.robertx22.mns_cobblemon.core.spells.KobblemonSpells.POKEMON_BASIC_ATTACK);
+            }
         });
     }
 

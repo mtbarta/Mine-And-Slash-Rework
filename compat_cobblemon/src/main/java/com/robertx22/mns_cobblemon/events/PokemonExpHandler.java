@@ -62,12 +62,9 @@ public class PokemonExpHandler {
                 xpGain = 1;
 
             // Award XP to Pokemon
-            // Using generic ExperienceSource if possible, guessing location
-            // If Battle isn't found, I might need to find another one.
-            // I'll try com.cobblemon.mod.common.api.experience.ExperienceSource
-            // pokemon.addExperience(com.cobblemon.mod.common.api.experience.ExperienceSource.BATTLE,
-            // xpGain);
-            // TODO: Uncomment above when ExperienceSource package is found.
+            pokemon.addExperience(
+                    new com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource("mine_and_slash"),
+                    xpGain);
         }
     }
 }

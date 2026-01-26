@@ -18,11 +18,19 @@ public class SummonedPetData {
     public boolean counts_towards_max_summons;
     public int ticks_left_to_check_owner = 0;
 
+    public boolean useOwnStats = false;
+
     public void setup(Spell spell, int ticks, int aggro_radius, boolean counts_towards_max_summons) {
+        setup(spell, ticks, aggro_radius, counts_towards_max_summons, false);
+    }
+
+    public void setup(Spell spell, int ticks, int aggro_radius, boolean counts_towards_max_summons,
+            boolean useOwnStats) {
         this.spell = spell.GUID();
         this.ticks = ticks;
         this.aggro_radius = aggro_radius;
         this.counts_towards_max_summons = counts_towards_max_summons;
+        this.useOwnStats = useOwnStats;
     }
 
     public boolean isEmpty() {
@@ -33,15 +41,12 @@ public class SummonedPetData {
         return ExileDB.Spells().get(spell);
     }
 
-
     public void tick(LivingEntity en) {
         if (!en.level().isClientSide) {
             var registeredWithOwner = registeredWithOwner(en);
 
-            if (
-                ticks != SummonPetAction.INFINITE_DURATION && ticks-- < 1
-                || !registeredWithOwner
-            ) {
+            if (ticks != SummonPetAction.INFINITE_DURATION && ticks-- < 1
+                    || !registeredWithOwner) {
                 SoundUtils.playSound(en, SoundEvents.GENERIC_DEATH);
                 discard(en);
             }
@@ -54,7 +59,8 @@ public class SummonedPetData {
         }
         ticks_left_to_check_owner = 100;
 
-        if (!(en instanceof SummonEntity summonEntity) || summonEntity.getOwner() == null || !(summonEntity.getOwner() instanceof Player player)) {
+        if (!(en instanceof SummonEntity summonEntity) || summonEntity.getOwner() == null
+                || !(summonEntity.getOwner() instanceof Player player)) {
             return false;
         }
 
