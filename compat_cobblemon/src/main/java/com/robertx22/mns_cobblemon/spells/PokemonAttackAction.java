@@ -60,7 +60,7 @@ public class PokemonAttackAction extends SpellAction {
         // We just need to provide a base value or rely on the stats.
 
         // If we want the move's power to matter:
-        int power = selectedMove.getPower();
+        double power = selectedMove.getPower();
         if (power <= 0)
             power = 40; // Default for status moves if they get picked, though usually we might filter
                         // them? Keeping simple.
@@ -76,7 +76,7 @@ public class PokemonAttackAction extends SpellAction {
         // Standard basic attack is often ~100% weapon damage.
         // Let's say Power 100 = 100% effectiveness. Power 40 = 40%.
 
-        float effectiveness = power / 100.0f;
+        float effectiveness = (float) (power / 100.0);
 
         // However, `dmg.data.setupNumber(EventData.DMG_EFFECTIVENESS,
         // dmgEffectiveness)` handles spell scaling.
@@ -106,6 +106,12 @@ public class PokemonAttackAction extends SpellAction {
             // If specific status effects need to be applied, that would go here, but that's
             // complex mapping.
         }
+    }
+
+    public MapHolder create() {
+        MapHolder map = new MapHolder();
+        map.type = GUID();
+        return map;
     }
 
     @Override

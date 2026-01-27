@@ -12,6 +12,7 @@ import com.robertx22.mine_and_slash.capability.player.data.PlayerConfigData;
 import com.robertx22.mine_and_slash.characters.PlayerStats;
 import com.robertx22.mine_and_slash.config.forge.ServerContainer;
 import com.robertx22.mine_and_slash.config.forge.compat.CompatConfig;
+import com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat;
 import com.robertx22.mine_and_slash.database.data.game_balance_config.GameBalanceConfig;
 import com.robertx22.mine_and_slash.database.data.gear_slots.GearSlot;
 import com.robertx22.mine_and_slash.database.data.mob_affixes.MobAffix;
@@ -890,7 +891,7 @@ public class EntityData implements ICap, INeededForClient {
     public int getLevel() {
         // For mobs, check Dynamic Difficulty first if available
         if (!(entity instanceof Player) && entity != null) {
-            int ddLevel = com.robertx22.mine_and_slash.mmorpg.compat.DynamicDifficultyCompat.getLevel(entity);
+            int ddLevel = DynamicDifficultyCompat.getLevel(entity);
             if (ddLevel > 0) {
                 return ddLevel;
             }
@@ -909,6 +910,8 @@ public class EntityData implements ICap, INeededForClient {
     public void setLevel(int lvl) {
         int oldLevel = this.level;
         level = Mth.clamp(lvl, 1, GameBalanceConfig.get().MAX_LEVEL);
+
+        DynamicDifficultyCompat.setLevel(entity, level);
 
         if (entity instanceof Player p) {
             p.resetStat(Stats.CUSTOM.get(PlayerStats.LEVELS_GAINED));

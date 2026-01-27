@@ -52,11 +52,14 @@ public class PokemonRecruitmentHandler {
         if (spell != null) {
             // Infinite duration (-1), count towards limit = false (for now), useOwnStats =
             // true
-            data.summonedPetData.setup(spell, -1, 20, false, true);
+            data.summonedPetData.setup(spell, -1, 20, false);
+            data.summonedPetData.useOwnStats = true;
 
             // Do NOT scale to owner level from M&S side.
             // Level is roughly synced to the Pokemon's actual level.
-            data.setLevel(pokemon.getLevel());
+            int mnsLevel = com.robertx22.mns_cobblemon.events.CobblemonSpawning
+                    .mapPokemonLevelToMnS(pokemon.getLevel());
+            data.setLevel(mnsLevel);
 
             data.mobStatsAreSet();
             data.setAllDirtyOnLoginEtc();

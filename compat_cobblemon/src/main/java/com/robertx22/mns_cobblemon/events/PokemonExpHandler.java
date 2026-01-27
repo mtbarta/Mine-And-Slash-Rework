@@ -65,6 +65,8 @@ public class PokemonExpHandler {
             pokemon.addExperience(
                     new com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource("mine_and_slash"),
                     xpGain);
+
+            com.robertx22.mns_cobblemon.core.stats.PokemonStatSync.syncLevel(pokemon);
         }
     }
 }

@@ -38,47 +38,55 @@ public class PokemonStatSync {
 
     public static List<ExactStatData> getStatsForPokemon(Pokemon pokemon) {
         List<ExactStatData> baseStats = new ArrayList<>();
+        int level = pokemon.getLevel();
+        float fLevel = (float) level;
 
-        // HP IVs (0-31) -> Vitality (mapping to "vitality" GUID)
-        // Scale so 31 feels "tanky"
-        int hpIv = pokemon.getIvs().getOrDefault(Stats.HP);
-        // Fallback for HP if vitality not recognized
-        baseStats.add(ExactStatData.noScaling(hpIv * 1.5f, ModType.FLAT, Health.getInstance().GUID()));
+        // "Power Ratio" approach: We calculate how many points per level the Pokemon
+        // has,
+        // then map that to a Level-1 base value for Mine and Slash to scale up.
+        // This ensures stats are relevant at all levels and avoids arbitrary divisors.
+        // Average Ratio is ~2.0 per stat.
+
+        // HP -> Vitality/Health
+        float hpRatio = pokemon.getStat(Stats.HP) / fLevel;
+        baseStats.add(ExactStatData.levelScaled(hpRatio * 1.5f, Health.getInstance(), ModType.FLAT, level));
 
         // Physical Attack -> Strength
-        int physAtk = pokemon.getStat(Stats.ATTACK);
-        baseStats.add(ExactStatData.noScaling(physAtk / 5.0f, ModType.FLAT, DatapackStats.STR.GUID()));
+        float physAtkRatio = pokemon.getStat(Stats.ATTACK) / fLevel;
+        baseStats.add(ExactStatData.levelScaled(physAtkRatio * 2.0f, DatapackStats.STR, ModType.FLAT, level));
 
         // Physical Defense -> Armor
-        int physDef = pokemon.getStat(Stats.DEFENCE);
-        baseStats.add(ExactStatData.noScaling(physDef / 2.0f, ModType.FLAT, Armor.getInstance().GUID()));
+        float physDefRatio = pokemon.getStat(Stats.DEFENCE) / fLevel;
+        baseStats.add(ExactStatData.levelScaled(physDefRatio * 5.0f, Armor.getInstance(), ModType.FLAT, level));
 
         // Special Attack -> Intelligence
-        int spAtk = pokemon.getStat(Stats.SPECIAL_ATTACK);
-        baseStats.add(ExactStatData.noScaling(spAtk / 5.0f, ModType.FLAT, DatapackStats.INT.GUID()));
+        float spAtkRatio = pokemon.getStat(Stats.SPECIAL_ATTACK) / fLevel;
+        baseStats.add(ExactStatData.levelScaled(spAtkRatio * 2.0f, DatapackStats.INT, ModType.FLAT, level));
 
         // Special Defense -> Elemental Resistances
-        int spDef = pokemon.getStat(Stats.SPECIAL_DEFENCE);
-        float eleRes = spDef / 4.0f;
+        float spDefRatio = pokemon.getStat(Stats.SPECIAL_DEFENCE) / fLevel;
+        float eleResBase = spDefRatio * 0.5f;
         for (Elements ele : Elements.getAllSingle()) {
             if (ele != Elements.Physical) {
-                baseStats.add(ExactStatData.noScaling(eleRes, ModType.FLAT, new ElementalResist(ele).GUID()));
+                baseStats.add(ExactStatData.levelScaled(eleResBase, new ElementalResist(ele), ModType.FLAT, level));
             }
         }
 
         // Speed -> Dodge / Cooldown Reduction
-        int speed = pokemon.getStat(Stats.SPEED);
-        baseStats.add(ExactStatData.noScaling(speed / 4.0f, ModType.FLAT, DodgeRating.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(speed / 8.0f, ModType.PERCENT,
+        float speedRatio = pokemon.getStat(Stats.SPEED) / fLevel;
+        baseStats.add(ExactStatData.levelScaled(speedRatio * 1.0f, DodgeRating.getInstance(), ModType.FLAT, level));
+
+        // CDR is a percent, keep it relatively flat
+        baseStats.add(ExactStatData.noScaling(speedRatio * 2.5f, ModType.PERCENT,
                 SpellChangeStats.COOLDOWN_REDUCTION.getId()));
 
-        // Apply custom Poke-stats if they exist and are relevant
-        baseStats.add(ExactStatData.noScaling(physAtk, ModType.FLAT, PokemonAttack.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(physDef, ModType.FLAT, PokemonDefense.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(spAtk, ModType.FLAT, PokemonSpAtk.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(spDef, ModType.FLAT, PokemonSpDef.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(speed, ModType.FLAT, PokemonSpeed.getInstance().GUID()));
-        baseStats.add(ExactStatData.noScaling(pokemon.getHp(), ModType.FLAT, PokemonHealth.getInstance().GUID()));
+        // Apply custom Poke-stats for specialized modifiers
+        baseStats.add(ExactStatData.levelScaled(physAtkRatio * 10f, PokemonAttack.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(physDefRatio * 10f, PokemonDefense.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(spAtkRatio * 10f, PokemonSpAtk.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(spDefRatio * 10f, PokemonSpDef.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(speedRatio * 10f, PokemonSpeed.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(hpRatio * 10f, PokemonHealth.getInstance(), ModType.FLAT, level));
 
         return baseStats;
     }
@@ -101,10 +109,7 @@ public class PokemonStatSync {
         }
     }
 
-    @SubscribeEvent
-    public static void onXpGained(
-            com.cobblemon.mod.common.api.events.pokemon.ExperienceGainedEvent.Post event) {
-        Pokemon pokemon = event.getPokemon();
+    public static void syncLevel(Pokemon pokemon) {
         if (pokemon != null && pokemon.getEntity() != null) {
             com.robertx22.mine_and_slash.capability.entity.EntityData data = com.robertx22.mine_and_slash.uncommon.datasaving.Load
                     .Unit(pokemon.getEntity());

@@ -32,7 +32,7 @@ public class KobblemonSpells implements ExileRegistryInit {
                 .defaultAndMaxLevel(1)
                 .manualDesc("A dynamic attack based on the Pokemon's moves.")
                 .weaponReq(CastingWeapon.ANY_WEAPON)
-                .onHit(PartBuilder.justAction(POKEMON_ATTACK))
+                .onHit(PartBuilder.justAction(POKEMON_ATTACK.create()))
                 .levelReq(1)
                 .build();
     }

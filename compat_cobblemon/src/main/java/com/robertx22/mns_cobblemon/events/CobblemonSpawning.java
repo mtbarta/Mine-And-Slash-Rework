@@ -10,6 +10,7 @@ import com.robertx22.mine_and_slash.database.registry.ExileDB;
 import com.robertx22.mine_and_slash.saveclasses.unit.Unit;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -21,7 +22,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @EventBusSubscriber
 public class CobblemonSpawning {
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof PokemonEntity pokemonEntity) {
             setupPokemon(pokemonEntity);
@@ -51,6 +52,13 @@ public class CobblemonSpawning {
                 }
                 data.getUnit().initStats();
                 data.setEquipsChanged();
+
+                // Always sync level for Pokemon to handle cases where they leveled up in ball
+                int pokemonLevel = pokemonEntity.getPokemon().getLevel();
+                int mnsLevel = mapPokemonLevelToMnS(pokemonLevel);
+                if (data.getLevel() != mnsLevel) {
+                    data.setLevel(mnsLevel);
+                }
             }
             data.sync.setDirty();
         } catch (Exception e) {
@@ -105,22 +113,7 @@ public class CobblemonSpawning {
      * - Pokemon Level 61-100: MnS Level 51-100 (full scaling, endgame)
      */
     public static int mapPokemonLevelToMnS(int pokemonLevel) {
-        int maxMnsLevel = GameBalanceConfig.get().MAX_LEVEL;
-
-        int mnsLevel;
-        if (pokemonLevel <= 20) {
-            // 1-20: Linear mapping
-            mnsLevel = pokemonLevel;
-        } else if (pokemonLevel <= 60) {
-            // 21-60: Maps to 21-50 (compression factor: 40 -> 30)
-            mnsLevel = 20 + (int) ((pokemonLevel - 20) * 0.75);
-        } else {
-            // 61-100: Maps to 51-100 (expansion factor: 40 -> 50)
-            mnsLevel = 50 + (int) ((pokemonLevel - 60) * 1.25);
-        }
-
-        // Clamp to max level
-        return Math.min(mnsLevel, maxMnsLevel);
+        return pokemonLevel;
     }
 
     /**
