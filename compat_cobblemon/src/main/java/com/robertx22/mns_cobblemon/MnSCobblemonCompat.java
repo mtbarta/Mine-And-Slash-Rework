@@ -88,6 +88,10 @@ public class MnSCobblemonCompat {
                 spell.getConfig().setSummonBasicAttack(
                         com.robertx22.mns_cobblemon.core.spells.KobblemonSpells.POKEMON_BASIC_ATTACK);
             }
+
+            // Register Data Handler
+            com.robertx22.mns_cobblemon.events.PokemonDataHandler
+                    .register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
         });
     }
 

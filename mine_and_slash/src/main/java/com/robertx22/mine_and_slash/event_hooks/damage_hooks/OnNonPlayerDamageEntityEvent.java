@@ -42,14 +42,15 @@ public class OnNonPlayerDamageEntityEvent extends EventConsumer<ExileEvents.OnDa
 
         if (!(event.source.getEntity() instanceof Player)) {
             if (event.source.getEntity() instanceof LivingEntity en && Load.Unit(en).isSummon()) {
-                LivingEntity caster = Load.Unit(en).getSummonClass().getOwner();
-                if (caster != null) {
+                net.minecraft.world.entity.Entity owner = Load.Unit(en).getSummonClass().getOwner();
+                if (owner instanceof LivingEntity caster) {
                     PetAttackUTIL.tryAttack(en, caster, event.mob);
                     event.damage = 0;
                     event.canceled = true;
                 }
             } else {
-                LivingHurtUtils.tryAttack(new AttackInformation(event, AttackInformation.Mitigation.PRE, event.mob, event.source, event.damage));
+                LivingHurtUtils.tryAttack(new AttackInformation(event, AttackInformation.Mitigation.PRE, event.mob,
+                        event.source, event.damage));
 
                 var duck = (DamageSourceDuck) event.source;
                 duck.tryOverrideDmgWithMns(event);

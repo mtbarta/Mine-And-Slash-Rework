@@ -59,7 +59,7 @@ public class SummonedPetData {
         }
         ticks_left_to_check_owner = 100;
 
-        if (!(en instanceof SummonEntity summonEntity) || summonEntity.getOwner() == null
+        if (!(en instanceof net.minecraft.world.entity.OwnableEntity summonEntity) || summonEntity.getOwner() == null
                 || !(summonEntity.getOwner() instanceof Player player)) {
             return false;
         }
@@ -70,18 +70,18 @@ public class SummonedPetData {
     public void discard(LivingEntity en) {
         en.discard();
 
-        if (!(en instanceof SummonEntity summonEntity)) {
+        if (!(en instanceof net.minecraft.world.entity.OwnableEntity summonEntity)) {
             return;
         }
 
         onDeath(summonEntity);
     }
 
-    public void onDeath(SummonEntity summonEntity) {
+    public void onDeath(net.minecraft.world.entity.OwnableEntity summonEntity) {
         if (summonEntity.getOwner() == null || !(summonEntity.getOwner() instanceof Player player)) {
             return;
         }
 
-        Load.player(player).removeSummon(spell, summonEntity.getUUID());
+        Load.player(player).removeSummon(spell, ((net.minecraft.world.entity.Entity) summonEntity).getUUID());
     }
 }

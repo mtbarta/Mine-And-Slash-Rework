@@ -27,7 +27,6 @@ public class CommandSummonsAction extends SpellAction {
             return;
         }
 
-
         for (LivingEntity en : EntityFinder.start(ctx.caster, LivingEntity.class, ctx.getBlockPos())
                 .finder(EntityFinder.SelectionType.RADIUS)
                 .searchFor(AllyOrEnemy.pets)
@@ -38,7 +37,8 @@ public class CommandSummonsAction extends SpellAction {
             }
             if (Load.Unit(en).isSummon()) {
                 var sum = Load.Unit(en).getSummonClass();
-                sum.setTarget(ctx.target);
+                // sum.setTarget(ctx.target); // Removed as OwnableEntity doesn't have setTarget
+                // and it's called on Mob already
                 /// todo is this enough
                 if (en instanceof SummonEntity s) {
                     s.focusEntity = ctx.target;
@@ -46,7 +46,6 @@ public class CommandSummonsAction extends SpellAction {
                 }
             }
         }
-
 
     }
 

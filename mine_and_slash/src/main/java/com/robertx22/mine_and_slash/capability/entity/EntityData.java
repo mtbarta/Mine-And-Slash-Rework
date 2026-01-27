@@ -830,11 +830,11 @@ public class EntityData implements ICap, INeededForClient {
     }
 
     public boolean isSummon() {
-        return entity instanceof TamableAnimal && !this.summonedPetData.isEmpty();
+        return entity instanceof net.minecraft.world.entity.OwnableEntity && !this.summonedPetData.isEmpty();
     }
 
-    public TamableAnimal getSummonClass() {
-        return (TamableAnimal) entity;
+    public net.minecraft.world.entity.OwnableEntity getSummonClass() {
+        return (net.minecraft.world.entity.OwnableEntity) entity;
     }
 
     public boolean CheckIfCanLevelUp() {

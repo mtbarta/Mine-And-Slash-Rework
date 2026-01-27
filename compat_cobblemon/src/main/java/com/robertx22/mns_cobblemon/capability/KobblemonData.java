@@ -98,4 +98,16 @@ public class KobblemonData implements INBTSerializable<CompoundTag> {
             inventory.deserializeNBT(provider, nbt.getCompound("Inventory"));
         }
     }
+
+    public void saveToPokemon(com.cobblemon.mod.common.pokemon.Pokemon pokemon) {
+        CompoundTag data = pokemon.getPersistentData();
+        data.put("mns_kobblemon_data", serializeNBT(null));
+    }
+
+    public void loadFromPokemon(com.cobblemon.mod.common.pokemon.Pokemon pokemon) {
+        CompoundTag data = pokemon.getPersistentData();
+        if (data.contains("mns_kobblemon_data")) {
+            deserializeNBT(null, data.getCompound("mns_kobblemon_data"));
+        }
+    }
 }
