@@ -20,6 +20,13 @@ public class SummonedData {
         summonedTypes.put(spell, summons);
     }
 
+    public void addSummon(String spell, UUID uuid) {
+        if (!summonedTypes.containsKey(spell)) {
+            summonedTypes.put(spell, new java.util.ArrayList<>());
+        }
+        summonedTypes.get(spell).add(uuid);
+    }
+
     public boolean isOwnBySpell(String spell, UUID uuid) {
         if (!summonedTypes.containsKey(spell)) {
             return false;

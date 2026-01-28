@@ -33,7 +33,7 @@ public class PokemonAttackAction extends SpellAction {
             return;
         }
 
-        if (!(ctx.caster instanceof PokemonEntity pokemonEntity)) {
+        if (!(ctx.sourceEntity instanceof PokemonEntity pokemonEntity)) {
             return;
         }
 
@@ -85,8 +85,9 @@ public class PokemonAttackAction extends SpellAction {
 
         if (isPhysical) {
             // Use EntityData to get calculated Weapon Damage
+            // pokemonEntity is already cast from ctx.sourceEntity above
             com.robertx22.mine_and_slash.capability.entity.EntityData eData = com.robertx22.mine_and_slash.capability.entity.EntityData
-                    .get(ctx.caster);
+                    .get(pokemonEntity);
             double weaponDmg = 0;
             if (eData != null) {
                 weaponDmg = eData.getUnit()
@@ -96,8 +97,11 @@ public class PokemonAttackAction extends SpellAction {
                         .getValue();
             }
 
-            if (weaponDmg < 1)
+            if (weaponDmg < 1) {
+                // log warning that weapon damage is too low
+                System.out.println("Weapon damage is too low for Pokemon ");
                 weaponDmg = 8;
+            }
 
             // Scale by power
             baseValue = (int) (weaponDmg * effectiveness);

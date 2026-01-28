@@ -310,6 +310,11 @@ public class PlayerData implements ICap {
         this.playerDataSync.setDirty();
     }
 
+    public void addSummon(String spell, UUID uuid) {
+        summonedData.addSummon(spell, uuid);
+        this.playerDataSync.setDirty();
+    }
+
     public void removeSummon(String spell, UUID uuid) {
         if (summonedData.removeSummon(spell, uuid)) {
             this.playerDataSync.setDirty();

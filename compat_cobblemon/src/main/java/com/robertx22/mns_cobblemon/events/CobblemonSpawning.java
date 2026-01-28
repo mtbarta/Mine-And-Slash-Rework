@@ -100,6 +100,24 @@ public class CobblemonSpawning {
         // Finalize setup
         endata.setUnit(unit);
         endata.mobStatsAreSet();
+
+        // Ensure some base stats are present
+        var wdStat = com.robertx22.mine_and_slash.database.data.stats.types.offense.WeaponDamage.getInstance();
+        var wdData = unit.getCalculatedStat(wdStat);
+
+        // Ensure it's in the map so changes persist (if getCalculatedStat didn't verify
+        // that)
+        if (unit.getStats().stats.get(wdStat.GUID()) == null) {
+            wdData = new com.robertx22.mine_and_slash.saveclasses.unit.StatData(wdStat.GUID(), 0, 1);
+            unit.getStats().stats.put(wdStat.GUID(), wdData);
+        } else {
+            wdData = unit.getStats().stats.get(wdStat.GUID());
+        }
+
+        if (wdData.getValue() <= 1) {
+            wdData.setValue(10f);
+        }
+
         endata.setEquipsChanged();
     }
 

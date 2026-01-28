@@ -55,6 +55,15 @@ public class PokemonRecruitmentHandler {
             data.summonedPetData.setup(spell, -1, 20, false);
             data.summonedPetData.useOwnStats = true;
 
+            // Register the summon with the player so it doesn't get discarded
+            var owner = pokemon.getOwnerPlayer();
+            if (owner != null) {
+                var playerData = Load.player(owner);
+                if (playerData != null) {
+                    playerData.addSummon(SummonSpells.SUMMON_POKEMON, pokemonEntity.getUUID());
+                }
+            }
+
             // Do NOT scale to owner level from M&S side.
             // Level is roughly synced to the Pokemon's actual level.
             int mnsLevel = com.robertx22.mns_cobblemon.events.CobblemonSpawning
