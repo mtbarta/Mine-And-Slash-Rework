@@ -24,6 +24,9 @@ public class PokemonDataHandler {
             Pokemon pokemon = pokemonEntity.getPokemon();
             KobblemonData data = pokemonEntity.getData(MnSCobblemonCompat.KOBBLEMON_DATA);
             if (data != null) {
+                // Critical: Set the entity reference so the data object can access the
+                // level/registry
+                data.setEntity(pokemonEntity);
                 data.loadFromPokemon(pokemon);
             }
         }
@@ -38,6 +41,7 @@ public class PokemonDataHandler {
             Pokemon pokemon = pokemonEntity.getPokemon();
             KobblemonData data = pokemonEntity.getData(MnSCobblemonCompat.KOBBLEMON_DATA);
             if (data != null) {
+                data.setEntity(pokemonEntity); // Ensure entity is set
                 data.saveToPokemon(pokemon);
             }
         }

@@ -59,6 +59,46 @@ public class KobblemonEquipmentScreen extends AbstractContainerScreen<KobblemonC
         float mouseOffsetY = (float) (paperDollY - 50 - mouseY);
         InventoryScreen.renderEntityInInventoryFollowsMouse(gui, paperDollX - 30, paperDollY - 30, paperDollX + 30,
                 paperDollY + 30, 30, 0.0625F, mouseOffsetX, mouseOffsetY, this.pokemon);
+
+        // Render Weapon Slot Background
+        // Standard slot size is 18x18
+        // Slot position in container is 80, 26
+        // We can steal a slot texture from the background or draw a box.
+        // Usually, modded GUIs draw a slot texture.
+        // Let's use `gui.blit` to draw a slot from the inventory texture over the
+        // position.
+        // Inventory texture slot is usually at 7, 7 (for a single slot) or we pick an
+        // empty one.
+        // The creative inventory texture has tabs.
+        // Actually, AbstractContainerScreen doesn't usually draw slots for us unless
+        // they are part of the BG texture.
+
+        int slotX = relX + 79; // -1 for border
+        int slotY = relY + 25; // -1 for border
+        // Drawing a simple slot box using blit from the same texture
+        // standard slot texture is at 7, 83 in container.png (example)
+        // Let's just assume we want it to look like a slot.
+        // Using a safe fallback or just drawing a rectangle.
+
+        // Actually, better to just blit a slot from the texture.
+        // 1.21 uses gui graphics.
+        // Let's just try to blit a 18x18 square from a known slot location on the
+        // texture.
+        // The hotbar slots are at 0-8 * 18, so we can grab one.
+        // INVENTORY_LOCATION is "textures/gui/container/inventory.png"
+        // Hotbar slots start at y=166-24?
+        // Let's grab the slot at 7, 7 (top left slot of the 3x3 grid)? No that's empty.
+        // The texture has slots at 7, 17?
+        // Let's look at vanilla ContainerScreen logic or just draw a colored box for
+        // now to be safe/visible,
+        // OR rely on the fact that `Slot` objects are rendered by `super.render` but
+        // the BACKGROUND isn't.
+
+        // Render a slot background at 80, 26
+        // Inventory screen texture:
+        // Main inventory slots start at roughly 8, 84
+        // Let's copy the slot at 8, 84 (first slot of main inventory)
+        gui.blit(InventoryScreen.INVENTORY_LOCATION, relX + 79, relY + 25, 7, 83, 18, 18);
     }
 
     @Override

@@ -41,6 +41,9 @@ public class KobblemonContainer extends AbstractContainerMenu {
         // Slot 3: Bottom (Boots position-ish)
         this.addSlot(new SlotItemHandler(data.getInventory(), 3, 8, 62));
 
+        // Slot 4: Weapon (Right side)
+        this.addSlot(new SlotItemHandler(data.getInventory(), 4, 80, 26));
+
         layoutPlayerInventory(playerInv, 8, 84);
     }
 

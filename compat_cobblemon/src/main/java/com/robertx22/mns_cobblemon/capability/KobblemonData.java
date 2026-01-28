@@ -20,7 +20,8 @@ public class KobblemonData implements INBTSerializable<CompoundTag> {
     // 1: Battle Item -> POKEMON_BATTLE
     // 2: Training Item -> POKEMON_TRAINING
     // 3: Mega Stone -> POKEMON_MEGA
-    public static final int SIZE = 4;
+    // 4: Weapon -> POKEMON_WEAPON
+    public static final int SIZE = 5;
 
     public KobblemonData() {
         this.inventory = new ItemStackHandler(SIZE) {
@@ -64,20 +65,21 @@ public class KobblemonData implements INBTSerializable<CompoundTag> {
             case 3:
                 slotId = KobblemonGearSlots.POKEMON_MEGA;
                 break;
+            case 4:
+                slotId = KobblemonGearSlots.POKEMON_WEAPON;
+                break;
         }
 
         if (slotId != null) {
-            // Update EntityData gears (assuming EntityGears has setItem or similar, or
-            // access
-            // map directly)
-            // EntityGears stores items in a map.
-            // data.getCurrentGears().setGear(slotId, inventory.getStackInSlot(slot));
-            // Checking EntityGears API. It usually has setStack or similar.
-            // Assuming setGear(String slot, ItemStack stack) exists.
+            // Update EntityData gears
             data.getCurrentGears().setGear(slotId, inventory.getStackInSlot(slot));
             data.setEquipsChanged();
-            data.recalcStats_DONT_CALL(); // Trigger recalc? Or dirty sync.
-            // setEquipsChanged should be enough for next tick recalc.
+            data.recalcStats_DONT_CALL();
+        }
+
+        // Robust Persistence: Save to Pokemon NBT immediately on change
+        if (entity instanceof com.cobblemon.mod.common.entity.pokemon.PokemonEntity pokemonEntity) {
+            saveToPokemon(pokemonEntity.getPokemon());
         }
     }
 
@@ -101,13 +103,15 @@ public class KobblemonData implements INBTSerializable<CompoundTag> {
 
     public void saveToPokemon(com.cobblemon.mod.common.pokemon.Pokemon pokemon) {
         CompoundTag data = pokemon.getPersistentData();
-        data.put("mns_kobblemon_data", serializeNBT(null));
+        if (entity != null) {
+            data.put("mns_kobblemon_data", serializeNBT(entity.level().registryAccess()));
+        }
     }
 
     public void loadFromPokemon(com.cobblemon.mod.common.pokemon.Pokemon pokemon) {
         CompoundTag data = pokemon.getPersistentData();
-        if (data.contains("mns_kobblemon_data")) {
-            deserializeNBT(null, data.getCompound("mns_kobblemon_data"));
+        if (data.contains("mns_kobblemon_data") && entity != null) {
+            deserializeNBT(entity.level().registryAccess(), data.getCompound("mns_kobblemon_data"));
         }
     }
 }

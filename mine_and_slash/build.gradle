@@ -30,7 +30,13 @@ runs {
         modSource project(':the_harvest').sourceSets.main
         modSource project(':ancient_obelisks').sourceSets.main
         // modSource project(':compat_minecolonies').sourceSets.main
+        // modSource project(':compat_minecolonies').sourceSets.main
         // modSource project(':compat_cobblemon').sourceSets.main
+    }
+
+    clientAll {
+        configure("client") 
+        modSource project(':compat_cobblemon').sourceSets.main
     }
 
     data {
@@ -58,10 +64,8 @@ dependencies {
     implementation project(':dungeon_realm')
 
     // Cobblemon & Compat Dependencies
-    // implementation files('../libs/Cobblemon-neoforge-1.7.0+1.21.1.jar.jar')
-    // implementation ("thedarkcolour:kotlinforforge-neoforge:5.7.0") {
-    //    exclude group: 'net.neoforged'
-    // }
+    runtimeOnly files('../libs/Cobblemon-neoforge-1.7.0+1.21.1.jar.jar')
+    runtimeOnly files('../libs/kotlinforforge-5.10.0-all.jar')
 
     // Dynamic Difficulty - optional compile-only dependency for level sync
     // Using local jar since maven.muon.rip is currently unavailable

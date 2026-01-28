@@ -76,30 +76,59 @@ public class PokemonAttackAction extends SpellAction {
         // Standard basic attack is often ~100% weapon damage.
         // Let's say Power 100 = 100% effectiveness. Power 40 = 40%.
 
+        // Check Move Category (Physical/Special)
+        // Using toString to avoid import issues with DamageCategory enum
+        boolean isPhysical = "PHYSICAL".equalsIgnoreCase(selectedMove.getDamageCategory().toString());
+
         float effectiveness = (float) (power / 100.0);
+        int baseValue;
 
-        // However, `dmg.data.setupNumber(EventData.DMG_EFFECTIVENESS,
-        // dmgEffectiveness)` handles spell scaling.
-        // And the `value` passed to `ofSpellDamage` is usually the base damage.
-        // If we want it to scale purely off stats, we might want a small base value.
+        if (isPhysical) {
+            // Use EntityData to get calculated Weapon Damage
+            com.robertx22.mine_and_slash.capability.entity.EntityData eData = com.robertx22.mine_and_slash.capability.entity.EntityData
+                    .get(ctx.caster);
+            double weaponDmg = 0;
+            if (eData != null) {
+                weaponDmg = eData.getUnit()
+                        .getCalculatedStat(
+                                com.robertx22.mine_and_slash.database.data.stats.types.offense.WeaponDamage
+                                        .getInstance())
+                        .getValue();
+            }
 
-        int baseValue = (int) (power * 0.1f); // Small base flat damage
+            if (weaponDmg < 1)
+                weaponDmg = 8;
+
+            // Scale by power
+            baseValue = (int) (weaponDmg * effectiveness);
+        } else {
+            // Special attacks
+            baseValue = (int) (power * 0.1f); // Default scaling for spells if not fully implementing Spell Power yet
+        }
 
         for (LivingEntity target : targets) {
-            DamageEvent dmg = EventBuilder
-                    .ofSpellDamage(ctx.caster, target, baseValue, ctx.calculatedSpellData.getSpell()).build();
+            DamageEvent dmg;
 
-            // Set dynamic element
-            dmg.setElement(element);
-
-            // Set effectiveness based on move power
-            dmg.data.setupNumber(EventData.DMG_EFFECTIVENESS, effectiveness);
+            if (isPhysical) {
+                // Physical Hit
+                dmg = EventBuilder
+                        .ofDamage(ctx.caster, target, baseValue)
+                        .setupDamage(com.robertx22.mine_and_slash.uncommon.enumclasses.AttackType.hit,
+                                com.robertx22.mine_and_slash.uncommon.enumclasses.WeaponTypes.none,
+                                com.robertx22.mine_and_slash.uncommon.enumclasses.PlayStyle.STR)
+                        .build();
+                dmg.setElement(element);
+            } else {
+                // Spell/Special
+                dmg = EventBuilder
+                        .ofSpellDamage(ctx.caster, target, baseValue, ctx.calculatedSpellData.getSpell())
+                        .build();
+                dmg.setElement(element);
+                dmg.data.setupNumber(EventData.DMG_EFFECTIVENESS, effectiveness);
+            }
 
             dmg.data.setBoolean(EventData.IS_SUMMON_ATTACK, true);
             dmg.petEntity = pokemonEntity;
-
-            // Log move name for flavor? M&S doesn't easily support arbitrary strings in
-            // damage log log without extra work.
 
             dmg.Activate();
 
