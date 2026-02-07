@@ -12,6 +12,8 @@ import com.robertx22.mine_and_slash.uncommon.enumclasses.PlayStyle;
 import com.robertx22.mns_cobblemon.spells.PokemonAttackAction;
 
 import java.util.Arrays;
+import java.util.List;
+import com.robertx22.mine_and_slash.database.data.spells.components.MapHolder;
 
 public class KobblemonSpells implements ExileRegistryInit {
 
@@ -32,8 +34,16 @@ public class KobblemonSpells implements ExileRegistryInit {
                 .defaultAndMaxLevel(1)
                 .manualDesc("A dynamic attack based on the Pokemon's moves.")
                 .weaponReq(CastingWeapon.ANY_WEAPON)
-                .onHit(PartBuilder.justAction(POKEMON_ATTACK.create()))
+                .onHit(createAttackPart())
                 .levelReq(1)
                 .build();
+    }
+
+    private static com.robertx22.mine_and_slash.database.data.spells.components.ComponentPart createAttackPart() {
+        com.robertx22.mine_and_slash.database.data.spells.components.ComponentPart c = new com.robertx22.mine_and_slash.database.data.spells.components.ComponentPart();
+        c.acts.add(POKEMON_ATTACK.create());
+        c.targets.add(com.robertx22.mine_and_slash.database.data.spells.components.selectors.BaseTargetSelector.TARGET
+                .create());
+        return c;
     }
 }

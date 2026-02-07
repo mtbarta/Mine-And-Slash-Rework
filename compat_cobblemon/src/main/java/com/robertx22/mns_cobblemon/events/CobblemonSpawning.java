@@ -119,6 +119,12 @@ public class CobblemonSpawning {
         }
 
         endata.setEquipsChanged();
+
+        // Force stat recalculation to apply M&S stats
+        endata.recalcStats_DONT_CALL();
+
+        // Sync stats back to Cobblemon for GUI display
+        com.robertx22.mns_cobblemon.core.stats.CobblemonStatSyncBack.forceSync(pokemonEntity);
     }
 
     /**

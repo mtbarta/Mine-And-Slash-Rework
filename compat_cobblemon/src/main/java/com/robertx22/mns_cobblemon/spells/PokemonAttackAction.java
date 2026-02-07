@@ -12,6 +12,8 @@ import com.robertx22.mine_and_slash.uncommon.effectdatas.EventBuilder;
 import com.robertx22.mine_and_slash.uncommon.effectdatas.rework.EventData;
 import com.robertx22.mine_and_slash.uncommon.enumclasses.Elements;
 import com.robertx22.mns_cobblemon.core.types.PokemonTypeMapping;
+import com.robertx22.mine_and_slash.uncommon.utilityclasses.AllyOrEnemy;
+import com.robertx22.mine_and_slash.uncommon.utilityclasses.EntityFinder;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
@@ -37,6 +39,15 @@ public class PokemonAttackAction extends SpellAction {
             return;
         }
 
+        // Fallback if no targets found by selector (safety check)
+        if (targets.isEmpty() && pokemonEntity.getTarget() != null) {
+            targets.add(pokemonEntity.getTarget());
+        }
+
+        if (targets.isEmpty()) {
+            return;
+        }
+
         Pokemon pokemon = pokemonEntity.getPokemon();
         MoveSet moveSet = pokemon.getMoveSet();
         List<Move> availableMoves = moveSet.getMoves();
@@ -45,11 +56,24 @@ public class PokemonAttackAction extends SpellAction {
             return;
         }
 
-        // Pick a random move
-        Move selectedMove = availableMoves.get(itemRand.nextInt(availableMoves.size()));
+        // Filter for damaging moves
+        List<Move> damagingMoves = availableMoves.stream()
+                .filter(move -> !"STATUS".equalsIgnoreCase(move.getDamageCategory().toString()))
+                .toList();
+
+        Move selectedMove;
+        if (!damagingMoves.isEmpty()) {
+            selectedMove = damagingMoves.get(itemRand.nextInt(damagingMoves.size()));
+        } else {
+            // Pick a random move from all moves if no damaging moves are found
+            selectedMove = availableMoves.get(itemRand.nextInt(availableMoves.size()));
+        }
 
         // Determine Element from Move Type
         Elements element = PokemonTypeMapping.getElement(selectedMove.getType());
+
+        // AOE Implementation postponed: Move.getTarget() API is not available.
+        // Defaulting to single target for now.
 
         // Calculate Damage
         // Logic: (Move Power / 20) * (Attack or SpAtk based on move category)
@@ -99,7 +123,6 @@ public class PokemonAttackAction extends SpellAction {
 
             if (weaponDmg < 1) {
                 // log warning that weapon damage is too low
-                System.out.println("Weapon damage is too low for Pokemon ");
                 weaponDmg = 8;
             }
 
@@ -107,7 +130,37 @@ public class PokemonAttackAction extends SpellAction {
             baseValue = (int) (weaponDmg * effectiveness);
         } else {
             // Special attacks
-            baseValue = (int) (power * 0.1f); // Default scaling for spells if not fully implementing Spell Power yet
+            // Use EntityData to get calculated Special Attack
+            com.robertx22.mine_and_slash.capability.entity.EntityData eData = com.robertx22.mine_and_slash.capability.entity.EntityData
+                    .get(pokemonEntity);
+            double spAtk = 0;
+            double physAtk = 0;
+
+            if (eData != null) {
+                spAtk = eData.getUnit()
+                        .getCalculatedStat(
+                                com.robertx22.mns_cobblemon.core.stats.PokemonSpAtk
+                                        .getInstance())
+                        .getValue();
+
+                physAtk = eData.getUnit()
+                        .getCalculatedStat(
+                                com.robertx22.mine_and_slash.database.data.stats.types.offense.WeaponDamage
+                                        .getInstance())
+                        .getValue();
+            }
+
+            if (spAtk < 1)
+                spAtk = 8;
+            if (physAtk < 1)
+                physAtk = 8;
+
+            // Hybrid scaling: Average of SpAtk and PhysAtk (WeaponDmg)
+            // This ensures high physical stat Pokemon still do okay with special moves and
+            // vice versa
+            double hybridStat = (spAtk + physAtk) / 2.0;
+
+            baseValue = (int) (hybridStat * effectiveness);
         }
 
         for (LivingEntity target : targets) {

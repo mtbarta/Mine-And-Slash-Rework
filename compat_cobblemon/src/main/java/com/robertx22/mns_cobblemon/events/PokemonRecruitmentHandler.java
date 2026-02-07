@@ -72,6 +72,8 @@ public class PokemonRecruitmentHandler {
 
             data.mobStatsAreSet();
             data.setAllDirtyOnLoginEtc();
+        } else {
+            System.out.println("Summon spell not found");
         }
     }
 }
