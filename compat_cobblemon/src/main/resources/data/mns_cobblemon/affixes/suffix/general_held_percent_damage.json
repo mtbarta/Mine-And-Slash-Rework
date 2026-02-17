@@ -1,0 +1,25 @@
+{
+    "guid": "mns_cobblemon:general_held_percent_damage",
+    "type": "suffix",
+    "weight": 1000,
+    "requirements": {
+        "tag_requirements": [
+            {
+                "type": "GearSlot",
+                "included": [
+                    "pokemon_held_item"
+                ],
+                "excluded": [],
+                "req_type": "INCLUDES_ANY"
+            }
+        ]
+    },
+    "stats": [
+        {
+            "min": 0.05,
+            "max": 0.15,
+            "stat": "weapon_damage",
+            "type": "PERCENT"
+        }
+    ]
+}

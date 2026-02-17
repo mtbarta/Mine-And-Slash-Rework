@@ -85,7 +85,7 @@ public class PokemonStatSync {
         baseStats.add(ExactStatData.levelScaled(physDefRatio * 10f, PokemonDefense.getInstance(), ModType.FLAT, level));
         baseStats.add(ExactStatData.levelScaled(spAtkRatio * 10f, PokemonSpAtk.getInstance(), ModType.FLAT, level));
         baseStats.add(ExactStatData.levelScaled(spDefRatio * 10f, PokemonSpDef.getInstance(), ModType.FLAT, level));
-        baseStats.add(ExactStatData.levelScaled(speedRatio * 10f, PokemonSpeed.getInstance(), ModType.FLAT, level));
+        baseStats.add(ExactStatData.levelScaled(speedRatio * 30f, PokemonSpeed.getInstance(), ModType.FLAT, level));
         baseStats.add(ExactStatData.levelScaled(hpRatio * 10f, PokemonHealth.getInstance(), ModType.FLAT, level));
 
         return baseStats;

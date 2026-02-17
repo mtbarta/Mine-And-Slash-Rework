@@ -1,6 +1,8 @@
 package com.robertx22.mns_cobblemon.spells;
 
 import com.cobblemon.mod.common.api.moves.Move;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 import com.cobblemon.mod.common.api.moves.MoveSet;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -20,9 +22,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
 
 public class PokemonAttackAction extends SpellAction {
 
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final Random itemRand = new Random();
 
     public PokemonAttackAction() {
@@ -31,6 +36,7 @@ public class PokemonAttackAction extends SpellAction {
 
     @Override
     public void tryActivate(Collection<LivingEntity> targets, SpellCtx ctx, MapHolder data) {
+        LOGGER.info("PokemonAttackAction: tryActivate called for entity {}", ctx.sourceEntity);
         if (ctx.world.isClientSide) {
             return;
         }
@@ -45,9 +51,11 @@ public class PokemonAttackAction extends SpellAction {
         }
 
         if (targets.isEmpty()) {
+            LOGGER.warn("PokemonAttackAction: No targets found for {}", pokemonEntity);
             return;
         }
 
+        LOGGER.info("PokemonAttackAction: Targets found: {}", targets.size());
         Pokemon pokemon = pokemonEntity.getPokemon();
         MoveSet moveSet = pokemon.getMoveSet();
         List<Move> availableMoves = moveSet.getMoves();
@@ -68,6 +76,10 @@ public class PokemonAttackAction extends SpellAction {
             // Pick a random move from all moves if no damaging moves are found
             selectedMove = availableMoves.get(itemRand.nextInt(availableMoves.size()));
         }
+
+        LOGGER.info("PokemonAttackAction: Selected move: {} (Type: {}, Power: {}, Category: {})",
+                selectedMove.getName(), selectedMove.getType(), selectedMove.getPower(),
+                selectedMove.getDamageCategory());
 
         // Determine Element from Move Type
         Elements element = PokemonTypeMapping.getElement(selectedMove.getType());
@@ -128,6 +140,8 @@ public class PokemonAttackAction extends SpellAction {
 
             // Scale by power
             baseValue = (int) (weaponDmg * effectiveness);
+            LOGGER.info("PokemonAttackAction: Physical attack. WeaponDmg: {}, Effectiveness: {}, BaseValue: {}",
+                    weaponDmg, effectiveness, baseValue);
         } else {
             // Special attacks
             // Use EntityData to get calculated Special Attack
@@ -161,9 +175,52 @@ public class PokemonAttackAction extends SpellAction {
             double hybridStat = (spAtk + physAtk) / 2.0;
 
             baseValue = (int) (hybridStat * effectiveness);
+            LOGGER.info("PokemonAttackAction: Special/Hybrid attack. HybridStat: {}, Effectiveness: {}, BaseValue: {}",
+                    hybridStat, effectiveness, baseValue);
         }
 
+        // Check Ability properties
+        String abilityName = pokemon.getAbility().getName();
+        boolean isAoe = com.robertx22.mns_cobblemon.core.spells.PokemonAttackProperties.isAoe(abilityName);
+        boolean isRanged = com.robertx22.mns_cobblemon.core.spells.PokemonAttackProperties.isRanged(abilityName);
+
+        LOGGER.info("PokemonAttackAction: Ability: {}, isAoe: {}, isRanged: {}", abilityName, isAoe, isRanged);
+
+        java.util.Set<LivingEntity> finalTargets = new java.util.HashSet<>();
+
+        // 1. Process initial targets and check Range
         for (LivingEntity target : targets) {
+            double dist = pokemonEntity.distanceTo(target);
+            // Melee range check (allow some leeway, e.g., 5 blocks)
+            if (!isRanged && dist > 5.0) {
+                LOGGER.info("PokemonAttackAction: Target {} skipped (Distance: {}, Melee Limit: 5.0)", target, dist);
+                continue;
+            }
+            finalTargets.add(target);
+        }
+
+        // 2. Apply AOE if applicable
+        if (isAoe) {
+            java.util.Set<LivingEntity> currentTargets = new java.util.HashSet<>(finalTargets);
+            for (LivingEntity center : currentTargets) {
+                // Use EntityFinder to find enemies around the target
+                // Radius 3.0 for AOE splash
+                java.util.List<LivingEntity> aoeFound = EntityFinder
+                        .start(pokemonEntity, LivingEntity.class, center.position())
+                        .radius(3.0)
+                        .searchFor(AllyOrEnemy.enemies)
+                        .build();
+
+                finalTargets.addAll(aoeFound);
+            }
+        }
+
+        if (finalTargets.isEmpty()) {
+            LOGGER.info("PokemonAttackAction: No valid targets after range/AOE checks.");
+            return;
+        }
+
+        for (LivingEntity target : finalTargets) {
             DamageEvent dmg;
 
             if (isPhysical) {
@@ -188,6 +245,7 @@ public class PokemonAttackAction extends SpellAction {
             dmg.petEntity = pokemonEntity;
 
             dmg.Activate();
+            LOGGER.info("PokemonAttackAction: Damage event activated for target {}", target);
 
             // If specific status effects need to be applied, that would go here, but that's
             // complex mapping.

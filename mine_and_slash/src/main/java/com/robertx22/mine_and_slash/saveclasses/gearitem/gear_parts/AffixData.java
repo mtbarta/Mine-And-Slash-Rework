@@ -118,6 +118,8 @@ public class AffixData implements IRerollable, IStatsContainer {
 
     public List<TooltipStatWithContext> getAllStatsWithCtx(int lvl, GearRarity rar) {
         List<TooltipStatWithContext> list = new ArrayList<>();
+        if (!isValid())
+            return list;
         this.BaseAffix()
                 .getStats()
                 .forEach(x -> {
@@ -130,6 +132,8 @@ public class AffixData implements IRerollable, IStatsContainer {
     }
 
     public boolean isValid() {
+        if (this.id == null)
+            return false;
         if (!ExileDB.Affixes()
                 .isRegistered(this.id)) {
             return false;
@@ -163,6 +167,8 @@ public class AffixData implements IRerollable, IStatsContainer {
     }
 
     public void create(GearItemData gear, Affix suffix) {
+        if (suffix == null)
+            return;
         id = suffix.GUID();
         RerollNumbers(gear);
     }
@@ -179,6 +185,7 @@ public class AffixData implements IRerollable, IStatsContainer {
 
             if (list.list.isEmpty()) {
                 ExileLog.get().warn("Gear Type: " + gear.gtype + " affixtype: " + this.ty.name());
+                return;
             }
 
             affix = list.random();

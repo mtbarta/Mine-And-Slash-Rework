@@ -1,0 +1,25 @@
+{
+    "guid": "mns_cobblemon:general_held_suffix",
+    "type": "suffix",
+    "weight": 1000,
+    "requirements": {
+        "tag_requirements": [
+            {
+                "type": "GearSlot",
+                "included": [
+                    "pokemon_held_item"
+                ],
+                "excluded": [],
+                "req_type": "INCLUDES_ANY"
+            }
+        ]
+    },
+    "stats": [
+        {
+            "min": 5.0,
+            "max": 15.0,
+            "stat": "mmorpg:strength",
+            "type": "FLAT"
+        }
+    ]
+}
