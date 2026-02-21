@@ -99,6 +99,12 @@ public class KobblemonData implements INBTSerializable<CompoundTag> {
         if (nbt.contains("Inventory")) {
             inventory.deserializeNBT(provider, nbt.getCompound("Inventory"));
         }
+
+        // Ensure inventory is the correct size, resizing if necessary (e.g. loading old
+        // data)
+        if (inventory.getSlots() < SIZE) {
+            inventory.setSize(SIZE);
+        }
     }
 
     public void saveToPokemon(com.cobblemon.mod.common.pokemon.Pokemon pokemon) {
